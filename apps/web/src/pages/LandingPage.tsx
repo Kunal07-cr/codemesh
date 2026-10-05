@@ -21,6 +21,7 @@ import { ZIP_UPLOAD_LIMIT_MB } from "@codemesh/shared";
 import { AuthPanel } from "../components/AuthPanel";
 import { InteractiveCodeGraph } from "../components/InteractiveCodeGraph";
 import { LivingUniverse } from "../components/LivingUniverse";
+import { EfficiencyCalculator, PlatformFoundations, RetrievalStudio } from "../components/RepositoryExperienceLab";
 
 const capabilities = [
   { icon: Network, title: "Source-linked graph", body: "Navigate files, symbols, imports, calls, and impact paths as one connected system.", tone: "cm-tone-cyan" },
@@ -93,7 +94,10 @@ export function LandingPage() {
           <nav className="cm-page-index sticky top-24" aria-label="On this page">
             <div className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-steel">On this page</div>
             <a href="#repository-model">Repository model</a>
+            <a href="#retrieval-lab">Retrieval lab</a>
             <a href="#how-it-works">How it works</a>
+            <a href="#efficiency">Context efficiency</a>
+            <a href="#platform">Platform foundations</a>
             <a href="#capabilities">Capabilities</a>
             <a href="#questions">Common questions</a>
             <a href="#account">Start exploring</a>
@@ -108,6 +112,15 @@ export function LandingPage() {
               body="Files are only one layer. CodeMesh exposes the relationships between symbols, services, permissions, work, and proposed changes so you can investigate from the system level down to a source range."
             />
             <div className="mt-8"><InteractiveCodeGraph /></div>
+          </section>
+
+          <section id="retrieval-lab" className="scroll-mt-24" data-reveal>
+            <SectionHeading
+              eyebrow="Context retrieval lab"
+              title="Ask once. See exactly how the answer was assembled."
+              body="Compare a broad repository crawl with a graph-guided path, then inspect the source-linked answer produced from the focused context."
+            />
+            <div className="mt-8"><RetrievalStudio /></div>
           </section>
 
           <section id="how-it-works" className="scroll-mt-24" data-reveal>
@@ -129,6 +142,24 @@ export function LandingPage() {
                 </div>
               ))}
             </div>
+          </section>
+
+          <section id="efficiency" className="scroll-mt-24" data-reveal>
+            <SectionHeading
+              eyebrow="Context efficiency"
+              title="Model the cost of repository understanding"
+              body="Explore how question volume and file breadth affect context size. The simulator makes its assumptions visible so the result is useful without pretending to be a universal benchmark."
+            />
+            <div className="mt-8"><EfficiencyCalculator /></div>
+          </section>
+
+          <section id="platform" className="scroll-mt-24" data-reveal>
+            <SectionHeading
+              eyebrow="Platform foundations"
+              title="A complete path from source intake to trusted action"
+              body="The interface, indexing pipeline, permissions, and setup journey expose what is happening instead of hiding important engineering state behind a decorative dashboard."
+            />
+            <div className="mt-8"><PlatformFoundations /></div>
           </section>
 
           <section id="capabilities" className="scroll-mt-24" data-reveal>
