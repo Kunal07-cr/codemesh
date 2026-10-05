@@ -1,0 +1,30 @@
+{
+  "name": "codemesh",
+  "version": "0.1.0",
+  "private": true,
+  "description": "CodeMesh: graph-assisted repository understanding and AI-supported collaborative development.",
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "npm run build && npm run dev -w @codemesh/api",
+    "build": "npm run build -w @codemesh/shared && npm run build -w @codemesh/code-intelligence && npm run build -w @codemesh/ai && npm run build -w @codemesh/api && npm run build -w @codemesh/web && node scripts/build-public-site.mjs",
+    "test": "vitest run --configLoader bundle",
+    "test:watch": "vitest --configLoader runner",
+    "typecheck": "npm run typecheck -w @codemesh/web && npm run typecheck -w @codemesh/api && npm run typecheck -w @codemesh/shared && npm run typecheck -w @codemesh/code-intelligence && npm run typecheck -w @codemesh/ai",
+    "evaluate:retrieval": "node scripts/evaluate-retrieval.mjs",
+    "seed": "npm run seed -w @codemesh/api"
+  },
+  "devDependencies": {
+    "@types/node": "^24.5.2",
+    "concurrently": "^9.2.1",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  }
+}

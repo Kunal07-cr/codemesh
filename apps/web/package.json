@@ -1,0 +1,35 @@
+{
+  "name": "@codemesh/web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --configLoader native --host 0.0.0.0",
+    "build": "tsc -b && vite build --configLoader native",
+    "typecheck": "tsc -b --noEmit",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@codemesh/shared": "0.1.0",
+    "@monaco-editor/react": "^4.7.0",
+    "@tanstack/react-query": "^5.90.2",
+    "@xyflow/react": "^12.8.6",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.544.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-router-dom": "^7.9.1",
+    "socket.io-client": "^4.8.1",
+    "yjs": "^13.6.27"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.13",
+    "@types/react-dom": "^19.1.9",
+    "@vitejs/plugin-react": "^5.0.3",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.7"
+  }
+}

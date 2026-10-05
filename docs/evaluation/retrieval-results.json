@@ -1,0 +1,234 @@
+{
+  "generatedAt": "2026-09-27T10:33:55.645Z",
+  "rows": [
+    {
+      "id": "q-auth-route",
+      "mode": "vector",
+      "question": "How does authentication protect task routes?",
+      "expectedFiles": [
+        "src/server.ts",
+        "src/auth/session.ts"
+      ],
+      "retrievedFiles": [
+        "README.md",
+        "package.json",
+        "src/server.ts",
+        "src/tasks.ts"
+      ],
+      "recallAt5": 0.5,
+      "latencyMs": 1,
+      "chunkIds": [
+        "chunk:README.md:file:0",
+        "chunk:package.json:file:0",
+        "chunk:src/server.ts:task:2",
+        "chunk:src/tasks.ts:listTasks:2",
+        "chunk:src/tasks.ts:task:4"
+      ],
+      "expandedFromChunkIds": []
+    },
+    {
+      "id": "q-login-failure",
+      "mode": "vector",
+      "question": "Where are invalid login credentials handled?",
+      "expectedFiles": [
+        "src/auth/routes.ts",
+        "src/auth/users.ts"
+      ],
+      "retrievedFiles": [
+        "src/auth/routes.ts",
+        "src/server.ts",
+        "src/tasks.ts",
+        "README.md"
+      ],
+      "recallAt5": 0.5,
+      "latencyMs": 1,
+      "chunkIds": [
+        "chunk:src/auth/routes.ts:registerAuthRoutes:0",
+        "chunk:src/server.ts:createApp:0",
+        "chunk:src/tasks.ts:createTask:3",
+        "chunk:README.md:file:0"
+      ],
+      "expandedFromChunkIds": []
+    },
+    {
+      "id": "q-task-create",
+      "mode": "vector",
+      "question": "Which function validates task titles before creation?",
+      "expectedFiles": [
+        "src/tasks.ts"
+      ],
+      "retrievedFiles": [
+        "src/tasks.ts",
+        "src/server.ts",
+        "src/config.ts",
+        "src/auth/users.ts"
+      ],
+      "recallAt5": 1,
+      "latencyMs": 1,
+      "chunkIds": [
+        "chunk:src/tasks.ts:createTask:3",
+        "chunk:src/server.ts:task:2",
+        "chunk:src/config.ts:loadConfig:1",
+        "chunk:src/auth/users.ts:findUserByEmail:2",
+        "chunk:src/server.ts:createApp:0"
+      ],
+      "expandedFromChunkIds": []
+    },
+    {
+      "id": "q-auth-route",
+      "mode": "hybrid",
+      "question": "How does authentication protect task routes?",
+      "expectedFiles": [
+        "src/server.ts",
+        "src/auth/session.ts"
+      ],
+      "retrievedFiles": [
+        "README.md",
+        "src/tasks.ts",
+        "src/server.ts"
+      ],
+      "recallAt5": 0.5,
+      "latencyMs": 1,
+      "chunkIds": [
+        "chunk:README.md:file:0",
+        "chunk:src/tasks.ts:createTask:3",
+        "chunk:src/server.ts:task:2",
+        "chunk:src/tasks.ts:task:4",
+        "chunk:src/tasks.ts:Task:0"
+      ],
+      "expandedFromChunkIds": []
+    },
+    {
+      "id": "q-login-failure",
+      "mode": "hybrid",
+      "question": "Where are invalid login credentials handled?",
+      "expectedFiles": [
+        "src/auth/routes.ts",
+        "src/auth/users.ts"
+      ],
+      "retrievedFiles": [
+        "src/auth/routes.ts",
+        "README.md",
+        "src/server.ts",
+        "src/tasks.ts"
+      ],
+      "recallAt5": 0.5,
+      "latencyMs": 1,
+      "chunkIds": [
+        "chunk:src/auth/routes.ts:registerAuthRoutes:0",
+        "chunk:README.md:file:0",
+        "chunk:src/server.ts:createApp:0",
+        "chunk:src/tasks.ts:createTask:3"
+      ],
+      "expandedFromChunkIds": []
+    },
+    {
+      "id": "q-task-create",
+      "mode": "hybrid",
+      "question": "Which function validates task titles before creation?",
+      "expectedFiles": [
+        "src/tasks.ts"
+      ],
+      "retrievedFiles": [
+        "src/tasks.ts",
+        "src/server.ts"
+      ],
+      "recallAt5": 1,
+      "latencyMs": 1,
+      "chunkIds": [
+        "chunk:src/tasks.ts:createTask:3",
+        "chunk:src/server.ts:createApp:0",
+        "chunk:src/server.ts:task:2",
+        "chunk:src/tasks.ts:task:4",
+        "chunk:src/tasks.ts:Task:0"
+      ],
+      "expandedFromChunkIds": []
+    },
+    {
+      "id": "q-auth-route",
+      "mode": "graph",
+      "question": "How does authentication protect task routes?",
+      "expectedFiles": [
+        "src/server.ts",
+        "src/auth/session.ts"
+      ],
+      "retrievedFiles": [
+        "README.md",
+        "src/tasks.ts",
+        "src/server.ts"
+      ],
+      "recallAt5": 0.5,
+      "latencyMs": 1,
+      "chunkIds": [
+        "chunk:README.md:file:0",
+        "chunk:src/tasks.ts:createTask:3",
+        "chunk:src/server.ts:task:2",
+        "chunk:src/tasks.ts:task:4",
+        "chunk:src/server.ts:createApp:0"
+      ],
+      "expandedFromChunkIds": [
+        "chunk:src/tasks.ts:createTask:3",
+        "chunk:src/server.ts:task:2",
+        "chunk:src/server.ts:task:2",
+        "chunk:src/server.ts:task:2"
+      ]
+    },
+    {
+      "id": "q-login-failure",
+      "mode": "graph",
+      "question": "Where are invalid login credentials handled?",
+      "expectedFiles": [
+        "src/auth/routes.ts",
+        "src/auth/users.ts"
+      ],
+      "retrievedFiles": [
+        "src/auth/routes.ts",
+        "src/config.ts",
+        "src/auth/session.ts",
+        "README.md",
+        "src/server.ts"
+      ],
+      "recallAt5": 0.5,
+      "latencyMs": 1,
+      "chunkIds": [
+        "chunk:src/auth/routes.ts:registerAuthRoutes:0",
+        "chunk:src/config.ts:AppConfig:0",
+        "chunk:src/auth/session.ts:createSessionToken:0",
+        "chunk:README.md:file:0",
+        "chunk:src/server.ts:createApp:0"
+      ],
+      "expandedFromChunkIds": [
+        "chunk:src/auth/routes.ts:registerAuthRoutes:0",
+        "chunk:src/auth/routes.ts:registerAuthRoutes:0",
+        "chunk:src/server.ts:createApp:0"
+      ]
+    },
+    {
+      "id": "q-task-create",
+      "mode": "graph",
+      "question": "Which function validates task titles before creation?",
+      "expectedFiles": [
+        "src/tasks.ts"
+      ],
+      "retrievedFiles": [
+        "src/tasks.ts",
+        "src/server.ts",
+        "src/main.ts"
+      ],
+      "recallAt5": 1,
+      "latencyMs": 1,
+      "chunkIds": [
+        "chunk:src/tasks.ts:createTask:3",
+        "chunk:src/server.ts:createApp:0",
+        "chunk:src/server.ts:task:2",
+        "chunk:src/tasks.ts:task:4",
+        "chunk:src/main.ts:config:0"
+      ],
+      "expandedFromChunkIds": [
+        "chunk:src/server.ts:createApp:0",
+        "chunk:src/server.ts:createApp:0",
+        "chunk:src/server.ts:createApp:0"
+      ]
+    }
+  ]
+}

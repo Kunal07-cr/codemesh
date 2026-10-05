@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "is_synthetic": true,
+  "seed": 42,
+  "snapshot_date": "2026-09-29",
+  "counts": {
+    "repositories": 12,
+    "contributors": 24,
+    "files": 48,
+    "symbols": 48,
+    "edges": 120,
+    "commits": 360,
+    "issues": 144,
+    "pull_requests": 96,
+    "rag_chunks": 48,
+    "qa_examples": 60,
+    "activity": 1080,
+    "collaboration_events": 48
+  },
+  "limitations": [
+    "Not collected from GitHub.",
+    "Repeated code templates: demo fixtures, not a meaningful ML training or benchmarking corpus.",
+    "Metrics and commit histories are simulated; source files represent one snapshot.",
+    "Repository/retrieval splits isolate repository IDs but share templates; do not report generalization scores.",
+    "No embeddings, actual PR diffs, or CRDT updates are included."
+  ]
+}

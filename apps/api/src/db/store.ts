@@ -1,0 +1,1025 @@
+import fs from "node:fs/promises";
+import path from "node:path";
+import bcrypt from "bcryptjs";
+import {
+  analyzeRepository,
+  buildSampleRepoFiles,
+  indexRepository,
+  SAMPLE_COMMIT,
+  type AutonomousChangePlan,
+  type RepositoryIndex,
+  type VirtualSandboxReport
+} from "@codemesh/code-intelligence";
+import type {
+  AiAnswer,
+  CodeAnnotation,
+  Contribution,
+  DiscussionReply,
+  DiscussionThread,
+  PatchProposal,
+  Project,
+  ProjectCreateInput,
+  ProjectMember,
+  ProjectRole,
+  ProjectTask,
+  PublicUser,
+  RepoFile,
+  RetrievalRecord,
+  SourceRange,
+  WorkspaceDoc
+} from "@codemesh/shared";
+
+export type UserRecord = PublicUser & {
+  passwordHash: string;
+  githubUserId?: string;
+};
+
+export type RefreshTokenRecord = {
+  id: string;
+  userId: string;
+  tokenHash: string;
+  expiresAt: string;
+  revokedAt?: string;
+  rotatedFromId?: string;
+};
+
+export type WorkspaceChatMessage = {
+  id: string;
+  projectId: string;
+  workspaceId: string;
+  body: string;
+  authorId: string;
+  createdAt: string;
+};
+
+export type AuditEvent = {
+  id: string;
+  projectId?: string;
+  userId?: string;
+  action: string;
+  metadata: Record<string, unknown>;
+  createdAt: string;
+};
+
+export type WorkspaceRevision = {
+  id: string;
+  projectId: string;
+  workspaceId: string;
+  path: string;
+  content: string;
+  version: number;
+  reason: string;
+  createdAt: string;
+};
+
+export type RepositorySnapshot = {
+  id: string;
+  projectId: string;
+  commitSha: string;
+  source: Project["repositorySource"] | "manual";
+  createdAt: string;
+  files: number;
+  symbols: number;
+  relationships: number;
+  nodeIds: string[];
+  edgeIds: string[];
+};
+
+export type QualitySnapshot = {
+  id: string;
+  projectId: string;
+  commitSha: string;
+  score: number;
+  coverageEstimate: number;
+  criticalFindings: number;
+  warningFindings: number;
+  reason: string;
+  createdAt: string;
+};
+
+export type AutonomousRun = {
+  id: string;
+  projectId: string;
+  userId: string;
+  objective: string;
+  status: "pass" | "attention" | "blocked";
+  plan: AutonomousChangePlan;
+  sandbox: VirtualSandboxReport;
+  createdAt: string;
+};
+
+export type RuntimeTraceRecord = {
+  id: string;
+  projectId: string;
+  name: string;
+  source: "opentelemetry" | "manual";
+  spans: Array<{ id: string; parentId?: string; name: string; durationMs: number; status?: "ok" | "error"; filePath?: string; nodeId?: string; mappedFilePath?: string; confidence: number }>;
+  createdAt: string;
+};
+
+export type ArchitectureDecisionRecord = {
+  id: string;
+  projectId: string;
+  title: string;
+  status: "proposed" | "accepted" | "superseded";
+  context: string;
+  decision: string;
+  consequences: string;
+  evidenceFiles: string[];
+  authorId: string;
+  createdAt: string;
+};
+
+export type AssistantConversation = {
+  id: string;
+  projectId: string;
+  userId: string;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type AssistantMessageRecord = {
+  id: string;
+  conversationId: string;
+  role: "user" | "assistant";
+  content: string;
+  result?: AiAnswer;
+  createdAt: string;
+};
+
+export type StoreState = {
+  users: UserRecord[];
+  refreshTokens: RefreshTokenRecord[];
+  projects: Project[];
+  members: ProjectMember[];
+  files: RepoFile[];
+  workspaceDocs: WorkspaceDoc[];
+  discussions: DiscussionThread[];
+  replies: DiscussionReply[];
+  tasks: ProjectTask[];
+  contributions: Contribution[];
+  patches: PatchProposal[];
+  annotations: CodeAnnotation[];
+  workspaceChat: WorkspaceChatMessage[];
+  retrievals: RetrievalRecord[];
+  auditEvents: AuditEvent[];
+  workspaceRevisions?: WorkspaceRevision[];
+  repositorySnapshots?: RepositorySnapshot[];
+  qualitySnapshots?: QualitySnapshot[];
+  autonomousRuns?: AutonomousRun[];
+  runtimeTraces?: RuntimeTraceRecord[];
+  architectureDecisions?: ArchitectureDecisionRecord[];
+  assistantConversations?: AssistantConversation[];
+  assistantMessages?: AssistantMessageRecord[];
+};
+
+export class JsonStore {
+  private state!: StoreState;
+  private indexes = new Map<string, RepositoryIndex>();
+
+  constructor(private readonly filePath: string) {}
+
+  async init() {
+    await fs.mkdir(path.dirname(this.filePath), { recursive: true });
+    try {
+      const raw = await fs.readFile(this.filePath, "utf8");
+      this.state = JSON.parse(raw) as StoreState;
+      this.state.annotations ??= [];
+      this.state.auditEvents ??= [];
+      this.state.workspaceRevisions ??= [];
+      this.state.repositorySnapshots ??= [];
+      this.state.qualitySnapshots ??= [];
+      this.state.autonomousRuns ??= [];
+      this.state.runtimeTraces ??= [];
+      this.state.architectureDecisions ??= [];
+      this.state.assistantConversations ??= [];
+      this.state.assistantMessages ??= [];
+    } catch {
+      this.state = await seedState();
+      await this.save();
+    }
+    this.rebuildIndexes();
+    if (this.ensureBaselineSnapshots()) await this.save();
+    return this;
+  }
+
+  snapshot() {
+    return structuredClone(this.state);
+  }
+
+  async save() {
+    await fs.writeFile(this.filePath, JSON.stringify(this.state, null, 2), "utf8");
+  }
+
+  async resetWithSeed() {
+    this.state = await seedState();
+    this.rebuildIndexes();
+    this.ensureBaselineSnapshots();
+    await this.save();
+  }
+
+  listUsers() {
+    return this.state.users.map(publicUser);
+  }
+
+  getUser(id: string) {
+    const user = this.state.users.find((candidate) => candidate.id === id);
+    return user ? publicUser(user) : null;
+  }
+
+  getUserRecordByEmail(email: string) {
+    return this.state.users.find((user) => user.email.toLowerCase() === email.toLowerCase()) ?? null;
+  }
+
+  getUserRecord(id: string) {
+    return this.state.users.find((user) => user.id === id) ?? null;
+  }
+
+  async createUser(input: { name: string; email: string; password: string }) {
+    if (this.getUserRecordByEmail(input.email)) {
+      throw new Error("A user with this email already exists.");
+    }
+    const now = new Date().toISOString();
+    const user: UserRecord = {
+      id: crypto.randomUUID(),
+      name: input.name,
+      email: input.email.toLowerCase(),
+      passwordHash: await bcrypt.hash(input.password, 12),
+      createdAt: now
+    };
+    this.state.users.push(user);
+    const sampleProject = this.state.projects.find((project) => project.repositorySource === "sample" && project.published);
+    if (sampleProject && !this.getMember(sampleProject.id, user.id)) {
+      this.state.members.push({
+        projectId: sampleProject.id,
+        userId: user.id,
+        role: "viewer",
+        discussionAllowed: false,
+        joinedAt: now
+      });
+    }
+    await this.save();
+    return publicUser(user);
+  }
+
+  async addRefreshToken(token: RefreshTokenRecord) {
+    this.state.refreshTokens.push(token);
+    await this.save();
+  }
+
+  getRefreshToken(id: string) {
+    return this.state.refreshTokens.find((token) => token.id === id) ?? null;
+  }
+
+  async revokeRefreshToken(id: string) {
+    const token = this.getRefreshToken(id);
+    if (token && !token.revokedAt) {
+      token.revokedAt = new Date().toISOString();
+      await this.save();
+    }
+  }
+
+  listPublicProjects(search = "") {
+    const needle = search.trim().toLowerCase();
+    return this.state.projects.filter((project) => {
+      const visible = project.visibility === "public" && project.published;
+      if (!visible) return false;
+      if (!needle) return true;
+      return [project.name, project.description, project.tags.join(" "), project.languages.join(" ")]
+        .join(" ")
+        .toLowerCase()
+        .includes(needle);
+    });
+  }
+
+  listProjectsForUser(userId: string) {
+    const ids = new Set(this.state.members.filter((member) => member.userId === userId).map((member) => member.projectId));
+    return this.state.projects.filter((project) => ids.has(project.id));
+  }
+
+  getProject(id: string) {
+    return this.state.projects.find((project) => project.id === id) ?? null;
+  }
+
+  getProjectBySlug(slug: string) {
+    return this.state.projects.find((project) => project.slug === slug) ?? null;
+  }
+
+  getRole(projectId: string, userId?: string | null): ProjectRole | null {
+    if (!userId) return null;
+    return this.state.members.find((member) => member.projectId === projectId && member.userId === userId)?.role ?? null;
+  }
+
+  getMember(projectId: string, userId: string) {
+    return this.state.members.find((member) => member.projectId === projectId && member.userId === userId) ?? null;
+  }
+
+  listMembers(projectId: string) {
+    return this.state.members.filter((member) => member.projectId === projectId);
+  }
+
+  async updateMember(projectId: string, userId: string, role: ProjectRole, discussionAllowed = true) {
+    const member = this.getMember(projectId, userId);
+    if (member) {
+      member.role = role;
+      member.discussionAllowed = discussionAllowed;
+    } else {
+      this.state.members.push({
+        projectId,
+        userId,
+        role,
+        discussionAllowed,
+        joinedAt: new Date().toISOString()
+      });
+    }
+    await this.save();
+  }
+
+  async createProject(ownerId: string, input: ProjectCreateInput) {
+    const now = new Date().toISOString();
+    const project: Project = {
+      id: crypto.randomUUID(),
+      name: input.name,
+      slug: slugify(input.name),
+      description: input.description,
+      tags: input.tags,
+      languages: [],
+      visibility: input.visibility,
+      published: input.published,
+      repositorySource: "zip",
+      commitSha: `draft-${Date.now()}`,
+      guidelines: input.guidelines,
+      createdAt: now,
+      updatedAt: now
+    };
+    this.state.projects.push(project);
+    this.state.members.push({
+      projectId: project.id,
+      userId: ownerId,
+      role: "owner",
+      discussionAllowed: true,
+      joinedAt: now
+    });
+    await this.recordAudit({ projectId: project.id, userId: ownerId, action: "project.created", metadata: { name: project.name } });
+    await this.save();
+    return project;
+  }
+
+  async replaceProjectFiles(projectId: string, files: RepoFile[], source: Project["repositorySource"], commitSha: string) {
+    this.state.files = this.state.files.filter((file) => file.projectId !== projectId);
+    this.state.workspaceDocs = this.state.workspaceDocs.filter((doc) => doc.projectId !== projectId);
+    this.state.files.push(...files);
+    for (const file of files) {
+      this.state.workspaceDocs.push({
+        projectId,
+        workspaceId: "main",
+        path: file.path,
+        content: file.content,
+        version: 1,
+        updatedAt: new Date().toISOString()
+      });
+    }
+    const project = this.getProject(projectId);
+    if (project) {
+      project.repositorySource = source;
+      project.commitSha = commitSha;
+      project.languages = [...new Set(files.map((file) => file.language))].sort();
+      project.updatedAt = new Date().toISOString();
+    }
+    this.rebuildIndex(projectId);
+    this.captureRepositorySnapshot(projectId, source);
+    this.captureQualitySnapshot(projectId, "Repository import");
+    await this.save();
+  }
+
+  async updateProjectRepository(projectId: string, repoUrl: string) {
+    const project = this.getProject(projectId);
+    if (!project) return null;
+    project.repoUrl = repoUrl;
+    project.updatedAt = new Date().toISOString();
+    await this.save();
+    return project;
+  }
+
+  listFiles(projectId: string) {
+    return this.state.files.filter((file) => file.projectId === projectId);
+  }
+
+  getFile(projectId: string, filePath: string) {
+    return this.state.files.find((file) => file.projectId === projectId && file.path === filePath) ?? null;
+  }
+
+  getWorkspaceDocs(projectId: string, workspaceId = "main") {
+    return this.state.workspaceDocs.filter((doc) => doc.projectId === projectId && doc.workspaceId === workspaceId);
+  }
+
+  getWorkspaceDoc(projectId: string, workspaceId: string, filePath: string) {
+    return (
+      this.state.workspaceDocs.find(
+        (doc) => doc.projectId === projectId && doc.workspaceId === workspaceId && doc.path === filePath
+      ) ?? null
+    );
+  }
+
+  async upsertWorkspaceDoc(projectId: string, workspaceId: string, filePath: string, content: string) {
+    const now = new Date().toISOString();
+    const existing = this.getWorkspaceDoc(projectId, workspaceId, filePath);
+    if (existing) {
+      const latestRevision = this.listWorkspaceRevisions(projectId, workspaceId, filePath)[0];
+      const shouldSnapshot = existing.content !== content && (!latestRevision || Date.now() - Date.parse(latestRevision.createdAt) > 30_000);
+      if (shouldSnapshot) {
+        this.state.workspaceRevisions!.unshift({
+          id: crypto.randomUUID(),
+          projectId,
+          workspaceId,
+          path: filePath,
+          content: existing.content,
+          version: existing.version,
+          reason: "Collaborative edit snapshot",
+          createdAt: now
+        });
+      }
+      existing.content = content;
+      existing.version += 1;
+      existing.updatedAt = now;
+    } else {
+      this.state.workspaceDocs.push({ projectId, workspaceId, path: filePath, content, version: 1, updatedAt: now });
+    }
+    await this.save();
+    return this.getWorkspaceDoc(projectId, workspaceId, filePath)!;
+  }
+
+  listWorkspaceRevisions(projectId: string, workspaceId: string, filePath: string) {
+    return (this.state.workspaceRevisions ?? [])
+      .filter((revision) => revision.projectId === projectId && revision.workspaceId === workspaceId && revision.path === filePath)
+      .slice(0, 20);
+  }
+
+  async restoreWorkspaceRevision(projectId: string, workspaceId: string, revisionId: string, userId: string) {
+    const revision = (this.state.workspaceRevisions ?? []).find((candidate) => candidate.projectId === projectId && candidate.workspaceId === workspaceId && candidate.id === revisionId);
+    if (!revision) return null;
+    const doc = await this.upsertWorkspaceDoc(projectId, workspaceId, revision.path, revision.content);
+    await this.recordAudit({ projectId, userId, action: "workspace.revision_restored", metadata: { revisionId, path: revision.path, version: revision.version } });
+    await this.save();
+    return { revision, doc };
+  }
+
+  getIndex(projectId: string) {
+    const index = this.indexes.get(projectId);
+    if (index) return index;
+    return this.rebuildIndex(projectId);
+  }
+
+  rebuildIndex(projectId: string) {
+    const project = this.getProject(projectId);
+    const files = this.listFiles(projectId);
+    if (!project) throw new Error(`Project ${projectId} not found`);
+    const index = indexRepository(projectId, project.commitSha, files);
+    this.indexes.set(projectId, index);
+    project.languages = index.languages;
+    return index;
+  }
+
+  rebuildIndexes() {
+    this.indexes.clear();
+    for (const project of this.state.projects) {
+      this.rebuildIndex(project.id);
+    }
+  }
+
+  listRepositorySnapshots(projectId: string) {
+    return (this.state.repositorySnapshots ?? []).filter((snapshot) => snapshot.projectId === projectId).slice(0, 20);
+  }
+
+  listQualitySnapshots(projectId: string) {
+    return (this.state.qualitySnapshots ?? []).filter((snapshot) => snapshot.projectId === projectId).slice(0, 30);
+  }
+
+  getRepositoryEvolution(projectId: string, fromId?: string, toId?: string) {
+    const snapshots = this.listRepositorySnapshots(projectId);
+    const to = snapshots.find((snapshot) => snapshot.id === toId) ?? snapshots[0];
+    const from = snapshots.find((snapshot) => snapshot.id === fromId) ?? snapshots[1] ?? snapshots[0];
+    if (!from || !to) return { snapshots, from: null, to: null, addedNodes: [], removedNodes: [], addedEdges: 0, removedEdges: 0 };
+    const fromNodes = new Set(from.nodeIds);
+    const toNodes = new Set(to.nodeIds);
+    const fromEdges = new Set(from.edgeIds);
+    const toEdges = new Set(to.edgeIds);
+    return {
+      snapshots,
+      from,
+      to,
+      addedNodes: to.nodeIds.filter((id) => !fromNodes.has(id)),
+      removedNodes: from.nodeIds.filter((id) => !toNodes.has(id)),
+      addedEdges: to.edgeIds.filter((id) => !fromEdges.has(id)).length,
+      removedEdges: from.edgeIds.filter((id) => !toEdges.has(id)).length
+    };
+  }
+
+  async captureLabSnapshot(projectId: string, userId: string) {
+    const repository = this.captureRepositorySnapshot(projectId, "manual", true);
+    const quality = this.captureQualitySnapshot(projectId, "Manual engineering baseline");
+    await this.recordAudit({ projectId, userId, action: "labs.baseline_captured", metadata: { repositorySnapshotId: repository.id, qualitySnapshotId: quality.id } });
+    await this.save();
+    return { repository, quality };
+  }
+
+  private ensureBaselineSnapshots() {
+    this.state.repositorySnapshots ??= [];
+    this.state.qualitySnapshots ??= [];
+    let changed = false;
+    for (const project of this.state.projects) {
+      if (!this.state.repositorySnapshots.some((snapshot) => snapshot.projectId === project.id)) {
+        this.captureRepositorySnapshot(project.id, project.repositorySource, true, project.updatedAt);
+        changed = true;
+      }
+      if (!this.state.qualitySnapshots.some((snapshot) => snapshot.projectId === project.id)) {
+        this.captureQualitySnapshot(project.id, "Initial repository baseline", project.updatedAt);
+        changed = true;
+      }
+    }
+    return changed;
+  }
+
+  private captureRepositorySnapshot(projectId: string, source: RepositorySnapshot["source"], force = false, createdAt = new Date().toISOString()) {
+    this.state.repositorySnapshots ??= [];
+    const project = this.getProject(projectId);
+    const index = this.getIndex(projectId);
+    const latest = this.listRepositorySnapshots(projectId)[0];
+    if (!force && latest?.commitSha === project?.commitSha && latest.nodeIds.length === index.graph.nodes.length && latest.edgeIds.length === index.graph.edges.length) return latest;
+    const snapshot: RepositorySnapshot = {
+      id: crypto.randomUUID(),
+      projectId,
+      commitSha: project?.commitSha ?? index.commitSha,
+      source,
+      createdAt,
+      files: index.files.length,
+      symbols: index.symbols.length,
+      relationships: index.graph.edges.length,
+      nodeIds: index.graph.nodes.map((node) => node.id),
+      edgeIds: index.graph.edges.map((edge) => edge.id)
+    };
+    this.state.repositorySnapshots.unshift(snapshot);
+    this.state.repositorySnapshots = this.state.repositorySnapshots.filter((candidate, position, all) => position === all.findIndex((item) => item.id === candidate.id)).slice(0, 80);
+    return snapshot;
+  }
+
+  private captureQualitySnapshot(projectId: string, reason: string, createdAt = new Date().toISOString()) {
+    this.state.qualitySnapshots ??= [];
+    const project = this.getProject(projectId);
+    const health = analyzeRepository(this.getIndex(projectId));
+    const snapshot: QualitySnapshot = {
+      id: crypto.randomUUID(),
+      projectId,
+      commitSha: project?.commitSha ?? "unknown",
+      score: health.score,
+      coverageEstimate: health.coverageEstimate,
+      criticalFindings: health.issues.filter((issue) => issue.severity === "critical").length,
+      warningFindings: health.issues.filter((issue) => issue.severity === "warning").length,
+      reason,
+      createdAt
+    };
+    this.state.qualitySnapshots.unshift(snapshot);
+    this.state.qualitySnapshots = this.state.qualitySnapshots.slice(0, 120);
+    return snapshot;
+  }
+
+  listDiscussions(projectId: string) {
+    return this.state.discussions.filter((thread) => thread.projectId === projectId);
+  }
+
+  listReplies(projectId: string, threadId: string) {
+    return this.state.replies.filter((reply) => reply.projectId === projectId && reply.threadId === threadId);
+  }
+
+  async createDiscussion(projectId: string, authorId: string, title: string, body: string) {
+    const thread: DiscussionThread = {
+      id: crypto.randomUUID(),
+      projectId,
+      authorId,
+      title,
+      body,
+      createdAt: new Date().toISOString(),
+      locked: false
+    };
+    this.state.discussions.unshift(thread);
+    await this.save();
+    return thread;
+  }
+
+  async createReply(projectId: string, threadId: string, authorId: string, body: string) {
+    const reply: DiscussionReply = {
+      id: crypto.randomUUID(),
+      projectId,
+      threadId,
+      authorId,
+      body,
+      createdAt: new Date().toISOString(),
+      moderated: false
+    };
+    this.state.replies.push(reply);
+    await this.save();
+    return reply;
+  }
+
+  listTasks(projectId: string) {
+    return this.state.tasks.filter((task) => task.projectId === projectId);
+  }
+
+  async createTask(projectId: string, title: string, assigneeId?: string) {
+    const task: ProjectTask = {
+      id: crypto.randomUUID(),
+      projectId,
+      title,
+      status: "todo",
+      assigneeId,
+      createdAt: new Date().toISOString()
+    };
+    this.state.tasks.unshift(task);
+    await this.recordAudit({ projectId, action: "task.created", metadata: { taskId: task.id, title: task.title } });
+    await this.save();
+    return task;
+  }
+
+  async updateTask(projectId: string, taskId: string, status: ProjectTask["status"]) {
+    const task = this.state.tasks.find((candidate) => candidate.projectId === projectId && candidate.id === taskId);
+    if (!task) return null;
+    task.status = status;
+    await this.recordAudit({ projectId, action: "task.status_changed", metadata: { taskId, status } });
+    await this.save();
+    return task;
+  }
+
+  async deleteTask(projectId: string, taskId: string) {
+    const index = this.state.tasks.findIndex((task) => task.projectId === projectId && task.id === taskId);
+    if (index < 0) return false;
+    this.state.tasks.splice(index, 1);
+    await this.recordAudit({ projectId, action: "task.deleted", metadata: { taskId } });
+    await this.save();
+    return true;
+  }
+
+  listContributions(projectId: string) {
+    return this.state.contributions.filter((contribution) => contribution.projectId === projectId);
+  }
+
+  getContribution(projectId: string, id: string) {
+    return this.state.contributions.find((contribution) => contribution.projectId === projectId && contribution.id === id) ?? null;
+  }
+
+  async createContribution(input: Omit<Contribution, "id" | "createdAt">) {
+    const contribution: Contribution = {
+      ...input,
+      id: crypto.randomUUID(),
+      createdAt: new Date().toISOString()
+    };
+    this.state.contributions.unshift(contribution);
+    await this.save();
+    return contribution;
+  }
+
+  async savePatch(patch: PatchProposal) {
+    const existing = this.state.patches.findIndex((candidate) => candidate.id === patch.id);
+    if (existing >= 0) this.state.patches[existing] = patch;
+    else this.state.patches.unshift(patch);
+    await this.save();
+    return patch;
+  }
+
+  getPatch(projectId: string, patchId: string) {
+    return this.state.patches.find((patch) => patch.projectId === projectId && patch.id === patchId) ?? null;
+  }
+
+  listPatches(projectId: string) {
+    return this.state.patches.filter((patch) => patch.projectId === projectId);
+  }
+
+  async saveRetrieval(record: RetrievalRecord) {
+    this.state.retrievals.unshift(record);
+    await this.save();
+  }
+
+  listRetrievals(projectId: string, limit = 100) {
+    return this.state.retrievals.filter((record) => record.projectId === projectId).slice(0, limit);
+  }
+
+  listAutonomousRuns(projectId: string) {
+    return (this.state.autonomousRuns ?? []).filter((run) => run.projectId === projectId).slice(0, 20);
+  }
+
+  async saveAutonomousRun(input: Omit<AutonomousRun, "id" | "createdAt">) {
+    const run: AutonomousRun = { ...input, id: crypto.randomUUID(), createdAt: new Date().toISOString() };
+    this.state.autonomousRuns ??= [];
+    this.state.autonomousRuns.unshift(run);
+    this.state.autonomousRuns = this.state.autonomousRuns.slice(0, 100);
+    await this.recordAudit({ projectId: run.projectId, userId: run.userId, action: "advanced.change_run", metadata: { runId: run.id, status: run.status, objective: run.objective } });
+    await this.save();
+    return run;
+  }
+
+  listRuntimeTraces(projectId: string) {
+    return (this.state.runtimeTraces ?? []).filter((trace) => trace.projectId === projectId).slice(0, 20);
+  }
+
+  async saveRuntimeTrace(input: Omit<RuntimeTraceRecord, "id" | "createdAt">, userId: string) {
+    const trace: RuntimeTraceRecord = { ...input, id: crypto.randomUUID(), createdAt: new Date().toISOString() };
+    this.state.runtimeTraces ??= [];
+    this.state.runtimeTraces.unshift(trace);
+    this.state.runtimeTraces = this.state.runtimeTraces.slice(0, 100);
+    await this.recordAudit({ projectId: trace.projectId, userId, action: "advanced.trace_ingested", metadata: { traceId: trace.id, spans: trace.spans.length } });
+    await this.save();
+    return trace;
+  }
+
+  listArchitectureDecisions(projectId: string) {
+    return (this.state.architectureDecisions ?? []).filter((decision) => decision.projectId === projectId).slice(0, 50);
+  }
+
+  async createArchitectureDecision(input: Omit<ArchitectureDecisionRecord, "id" | "createdAt">) {
+    const decision: ArchitectureDecisionRecord = { ...input, id: crypto.randomUUID(), createdAt: new Date().toISOString() };
+    this.state.architectureDecisions ??= [];
+    this.state.architectureDecisions.unshift(decision);
+    await this.recordAudit({ projectId: decision.projectId, userId: decision.authorId, action: "advanced.adr_created", metadata: { decisionId: decision.id, title: decision.title, status: decision.status } });
+    await this.save();
+    return decision;
+  }
+
+  listAssistantConversations(projectId: string, userId: string) {
+    return (this.state.assistantConversations ?? []).filter((conversation) => conversation.projectId === projectId && conversation.userId === userId).slice(0, 50);
+  }
+
+  getAssistantConversation(projectId: string, conversationId: string, userId: string) {
+    const conversation = (this.state.assistantConversations ?? []).find((candidate) => candidate.id === conversationId && candidate.projectId === projectId && candidate.userId === userId) ?? null;
+    if (!conversation) return null;
+    return { conversation, messages: (this.state.assistantMessages ?? []).filter((message) => message.conversationId === conversation.id) };
+  }
+
+  async createAssistantConversation(projectId: string, userId: string, title: string) {
+    const now = new Date().toISOString();
+    const conversation: AssistantConversation = { id: crypto.randomUUID(), projectId, userId, title: title.trim().replace(/\s+/g, " ").slice(0, 64), createdAt: now, updatedAt: now };
+    this.state.assistantConversations ??= [];
+    this.state.assistantConversations.unshift(conversation);
+    await this.save();
+    return conversation;
+  }
+
+  async addAssistantMessage(conversationId: string, role: AssistantMessageRecord["role"], content: string, result?: AiAnswer) {
+    const message: AssistantMessageRecord = { id: crypto.randomUUID(), conversationId, role, content, result, createdAt: new Date().toISOString() };
+    this.state.assistantMessages ??= [];
+    this.state.assistantMessages.push(message);
+    const conversation = (this.state.assistantConversations ?? []).find((candidate) => candidate.id === conversationId);
+    if (conversation) conversation.updatedAt = message.createdAt;
+    await this.save();
+    return message;
+  }
+
+  async deleteAssistantConversation(projectId: string, conversationId: string, userId: string) {
+    const index = (this.state.assistantConversations ?? []).findIndex((conversation) => conversation.id === conversationId && conversation.projectId === projectId && conversation.userId === userId);
+    if (index < 0) return false;
+    this.state.assistantConversations!.splice(index, 1);
+    this.state.assistantMessages = (this.state.assistantMessages ?? []).filter((message) => message.conversationId !== conversationId);
+    await this.save();
+    return true;
+  }
+
+  listAnnotations(projectId: string) {
+    return this.state.annotations.filter((annotation) => annotation.projectId === projectId);
+  }
+
+  async createAnnotation(input: {
+    projectId: string;
+    filePath: string;
+    range: SourceRange;
+    symbolId?: string;
+    body: string;
+    authorId: string;
+    sourceRevision: string;
+  }) {
+    const annotation: CodeAnnotation = {
+      ...input,
+      id: crypto.randomUUID(),
+      outdated: false,
+      createdAt: new Date().toISOString()
+    };
+    this.state.annotations.unshift(annotation);
+    await this.recordAudit({
+      projectId: input.projectId,
+      userId: input.authorId,
+      action: "annotation.created",
+      metadata: { annotationId: annotation.id, filePath: input.filePath, symbolId: input.symbolId }
+    });
+    await this.save();
+    return annotation;
+  }
+
+  async deleteAnnotation(projectId: string, annotationId: string, userId: string, canManage = false) {
+    const index = this.state.annotations.findIndex((annotation) => annotation.projectId === projectId && annotation.id === annotationId);
+    if (index < 0) return false;
+    const annotation = this.state.annotations[index]!;
+    if (annotation.authorId !== userId && !canManage) return false;
+    this.state.annotations.splice(index, 1);
+    await this.recordAudit({ projectId, userId, action: "annotation.deleted", metadata: { annotationId } });
+    await this.save();
+    return true;
+  }
+
+  listAuditEvents(projectId: string, limit = 40) {
+    return this.state.auditEvents.filter((event) => event.projectId === projectId).slice(0, limit);
+  }
+
+  listWorkspaceChat(projectId: string, workspaceId: string) {
+    return this.state.workspaceChat.filter((message) => message.projectId === projectId && message.workspaceId === workspaceId);
+  }
+
+  async addWorkspaceChat(projectId: string, workspaceId: string, authorId: string, body: string) {
+    const message: WorkspaceChatMessage = {
+      id: crypto.randomUUID(),
+      projectId,
+      workspaceId,
+      authorId,
+      body,
+      createdAt: new Date().toISOString()
+    };
+    this.state.workspaceChat.push(message);
+    await this.save();
+    return message;
+  }
+
+  async recordAudit(input: Omit<AuditEvent, "id" | "createdAt">) {
+    this.state.auditEvents.unshift({ ...input, id: crypto.randomUUID(), createdAt: new Date().toISOString() });
+  }
+}
+
+export async function createStore(filePath: string) {
+  return new JsonStore(filePath).init();
+}
+
+function publicUser(user: UserRecord): PublicUser {
+  return {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    avatarUrl: user.avatarUrl,
+    createdAt: user.createdAt
+  };
+}
+
+async function seedState(): Promise<StoreState> {
+  const now = new Date().toISOString();
+  const ownerId = "user-owner";
+  const maintainerId = "user-maintainer";
+  const contributorId = "user-contributor";
+  const viewerId = "user-viewer";
+  const projectId = "project-sample-taskpilot";
+  const files = buildSampleRepoFiles(projectId, now);
+  const project: Project = {
+    id: projectId,
+    name: "TaskPilot Sample",
+    slug: "taskpilot-sample",
+    description: "A seeded Express and TypeScript repository for exploring CodeMesh without external credentials.",
+    tags: ["sample", "typescript", "express", "auth"],
+    languages: [...new Set(files.map((file) => file.language))].sort(),
+    visibility: "public",
+    published: true,
+    repositorySource: "sample",
+    repoUrl: "sample://taskpilot",
+    commitSha: SAMPLE_COMMIT,
+    guidelines:
+      "Keep changes focused, explain verification clearly, and never publish to the upstream repository without maintainer review.",
+    createdAt: now,
+    updatedAt: now
+  };
+  return {
+    users: [
+      {
+        id: ownerId,
+        name: "Olivia Owner",
+        email: "owner@codemesh.dev",
+        passwordHash: await bcrypt.hash("CodeMesh123!", 12),
+        createdAt: now
+      },
+      {
+        id: maintainerId,
+        name: "Mika Maintainer",
+        email: "maintainer@codemesh.dev",
+        passwordHash: await bcrypt.hash("CodeMesh123!", 12),
+        createdAt: now
+      },
+      {
+        id: contributorId,
+        name: "Casey Contributor",
+        email: "contributor@codemesh.dev",
+        passwordHash: await bcrypt.hash("CodeMesh123!", 12),
+        createdAt: now
+      },
+      {
+        id: viewerId,
+        name: "Vera Viewer",
+        email: "viewer@codemesh.dev",
+        passwordHash: await bcrypt.hash("CodeMesh123!", 12),
+        createdAt: now
+      }
+    ],
+    refreshTokens: [],
+    projects: [project],
+    members: [
+      { projectId, userId: ownerId, role: "owner", discussionAllowed: true, joinedAt: now },
+      { projectId, userId: maintainerId, role: "maintainer", discussionAllowed: true, joinedAt: now },
+      { projectId, userId: contributorId, role: "contributor", discussionAllowed: true, joinedAt: now },
+      { projectId, userId: viewerId, role: "viewer", discussionAllowed: false, joinedAt: now }
+    ],
+    files,
+    workspaceDocs: files.map((file) => ({
+      projectId,
+      workspaceId: "main",
+      path: file.path,
+      content: file.content,
+      version: 1,
+      updatedAt: now
+    })),
+    discussions: [
+      {
+        id: "discussion-sample-auth",
+        projectId,
+        title: "Should auth errors expose machine-readable codes?",
+        body:
+          "The sample API currently returns display text for auth errors. A stable code could help clients, logs, and tests.",
+        authorId: maintainerId,
+        createdAt: now,
+        locked: false
+      }
+    ],
+    replies: [
+      {
+        id: "reply-sample-auth-1",
+        threadId: "discussion-sample-auth",
+        projectId,
+        body: "Good first AI patch candidate: keep the behavior unchanged but add a structured code field.",
+        authorId: ownerId,
+        createdAt: now,
+        moderated: false
+      }
+    ],
+    tasks: [
+      {
+        id: "task-sample-1",
+        projectId,
+        title: "Trace the login route and session middleware",
+        status: "doing",
+        assigneeId: contributorId,
+        createdAt: now
+      },
+      {
+        id: "task-sample-2",
+        projectId,
+        title: "Add a reviewable auth error-code patch",
+        status: "todo",
+        assigneeId: maintainerId,
+        createdAt: now
+      }
+    ],
+    contributions: [
+      {
+        id: "contribution-sample-1",
+        projectId,
+        workspaceId: "main",
+        title: "Auth error-code proposal",
+        summary: "Draft contribution created from the seeded demonstration workflow.",
+        authorId: contributorId,
+        status: "draft",
+        createdAt: now
+      }
+    ],
+    patches: [],
+    annotations: [],
+    workspaceChat: [
+      {
+        id: "chat-sample-1",
+        projectId,
+        workspaceId: "main",
+        authorId: maintainerId,
+        body: "Open src/auth/session.ts and ask the assistant for a reviewable auth patch.",
+        createdAt: now
+      }
+    ],
+    retrievals: [],
+    auditEvents: [
+      {
+        id: "audit-seed",
+        projectId,
+        userId: ownerId,
+        action: "project.seeded",
+        metadata: { source: "sample" },
+        createdAt: now
+      }
+    ]
+  };
+}
+
+function slugify(input: string) {
+  return input
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 60);
+}

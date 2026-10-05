@@ -1,0 +1,2594 @@
+[
+  {
+    "id": "r001-issue-1",
+    "repository_id": "r001",
+    "number": 1,
+    "title": "Reject whitespace-only names",
+    "body": "Demo task: reject whitespace-only names. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u001",
+    "assignee_id": null,
+    "related_file_ids": [
+      "r001-f1"
+    ],
+    "created_at": "2026-07-01T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r001-issue-2",
+    "repository_id": "r001",
+    "number": 2,
+    "title": "Replace fixed demo ID",
+    "body": "Demo task: replace fixed demo id. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u002",
+    "assignee_id": "u003",
+    "related_file_ids": [
+      "r001-f2"
+    ],
+    "created_at": "2026-07-06T00:00:00Z",
+    "closed_at": "2026-07-10T00:00:00Z"
+  },
+  {
+    "id": "r001-issue-3",
+    "repository_id": "r001",
+    "number": 3,
+    "title": "Add service error handling",
+    "body": "Demo task: add service error handling. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u003",
+    "assignee_id": "u004",
+    "related_file_ids": [
+      "r001-f3"
+    ],
+    "created_at": "2026-07-11T00:00:00Z",
+    "closed_at": "2026-07-15T00:00:00Z"
+  },
+  {
+    "id": "r001-issue-4",
+    "repository_id": "r001",
+    "number": 4,
+    "title": "Document controller response",
+    "body": "Demo task: document controller response. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u004",
+    "assignee_id": "u001",
+    "related_file_ids": [
+      "r001-f4"
+    ],
+    "created_at": "2026-07-16T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r001-issue-5",
+    "repository_id": "r001",
+    "number": 5,
+    "title": "Reject whitespace-only names",
+    "body": "Demo task: reject whitespace-only names. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u001",
+    "assignee_id": null,
+    "related_file_ids": [
+      "r001-f1"
+    ],
+    "created_at": "2026-07-21T00:00:00Z",
+    "closed_at": "2026-07-25T00:00:00Z"
+  },
+  {
+    "id": "r001-issue-6",
+    "repository_id": "r001",
+    "number": 6,
+    "title": "Replace fixed demo ID",
+    "body": "Demo task: replace fixed demo id. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u002",
+    "assignee_id": "u003",
+    "related_file_ids": [
+      "r001-f2"
+    ],
+    "created_at": "2026-07-26T00:00:00Z",
+    "closed_at": "2026-07-30T00:00:00Z"
+  },
+  {
+    "id": "r001-issue-7",
+    "repository_id": "r001",
+    "number": 7,
+    "title": "Add service error handling",
+    "body": "Demo task: add service error handling. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u003",
+    "assignee_id": "u004",
+    "related_file_ids": [
+      "r001-f3"
+    ],
+    "created_at": "2026-07-31T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r001-issue-8",
+    "repository_id": "r001",
+    "number": 8,
+    "title": "Document controller response",
+    "body": "Demo task: document controller response. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u004",
+    "assignee_id": "u001",
+    "related_file_ids": [
+      "r001-f4"
+    ],
+    "created_at": "2026-08-05T00:00:00Z",
+    "closed_at": "2026-08-09T00:00:00Z"
+  },
+  {
+    "id": "r001-issue-9",
+    "repository_id": "r001",
+    "number": 9,
+    "title": "Reject whitespace-only names",
+    "body": "Demo task: reject whitespace-only names. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u001",
+    "assignee_id": null,
+    "related_file_ids": [
+      "r001-f1"
+    ],
+    "created_at": "2026-08-10T00:00:00Z",
+    "closed_at": "2026-08-14T00:00:00Z"
+  },
+  {
+    "id": "r001-issue-10",
+    "repository_id": "r001",
+    "number": 10,
+    "title": "Replace fixed demo ID",
+    "body": "Demo task: replace fixed demo id. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u002",
+    "assignee_id": "u003",
+    "related_file_ids": [
+      "r001-f2"
+    ],
+    "created_at": "2026-08-15T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r001-issue-11",
+    "repository_id": "r001",
+    "number": 11,
+    "title": "Add service error handling",
+    "body": "Demo task: add service error handling. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u003",
+    "assignee_id": "u004",
+    "related_file_ids": [
+      "r001-f3"
+    ],
+    "created_at": "2026-08-20T00:00:00Z",
+    "closed_at": "2026-08-24T00:00:00Z"
+  },
+  {
+    "id": "r001-issue-12",
+    "repository_id": "r001",
+    "number": 12,
+    "title": "Document controller response",
+    "body": "Demo task: document controller response. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u004",
+    "assignee_id": "u001",
+    "related_file_ids": [
+      "r001-f4"
+    ],
+    "created_at": "2026-08-25T00:00:00Z",
+    "closed_at": "2026-08-29T00:00:00Z"
+  },
+  {
+    "id": "r002-issue-1",
+    "repository_id": "r002",
+    "number": 1,
+    "title": "Reject whitespace-only names",
+    "body": "Demo task: reject whitespace-only names. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u003",
+    "assignee_id": null,
+    "related_file_ids": [
+      "r002-f1"
+    ],
+    "created_at": "2026-07-01T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r002-issue-2",
+    "repository_id": "r002",
+    "number": 2,
+    "title": "Replace fixed demo ID",
+    "body": "Demo task: replace fixed demo id. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u004",
+    "assignee_id": "u005",
+    "related_file_ids": [
+      "r002-f2"
+    ],
+    "created_at": "2026-07-06T00:00:00Z",
+    "closed_at": "2026-07-10T00:00:00Z"
+  },
+  {
+    "id": "r002-issue-3",
+    "repository_id": "r002",
+    "number": 3,
+    "title": "Add service error handling",
+    "body": "Demo task: add service error handling. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u005",
+    "assignee_id": "u006",
+    "related_file_ids": [
+      "r002-f3"
+    ],
+    "created_at": "2026-07-11T00:00:00Z",
+    "closed_at": "2026-07-15T00:00:00Z"
+  },
+  {
+    "id": "r002-issue-4",
+    "repository_id": "r002",
+    "number": 4,
+    "title": "Document controller response",
+    "body": "Demo task: document controller response. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u006",
+    "assignee_id": "u003",
+    "related_file_ids": [
+      "r002-f4"
+    ],
+    "created_at": "2026-07-16T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r002-issue-5",
+    "repository_id": "r002",
+    "number": 5,
+    "title": "Reject whitespace-only names",
+    "body": "Demo task: reject whitespace-only names. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u003",
+    "assignee_id": null,
+    "related_file_ids": [
+      "r002-f1"
+    ],
+    "created_at": "2026-07-21T00:00:00Z",
+    "closed_at": "2026-07-25T00:00:00Z"
+  },
+  {
+    "id": "r002-issue-6",
+    "repository_id": "r002",
+    "number": 6,
+    "title": "Replace fixed demo ID",
+    "body": "Demo task: replace fixed demo id. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u004",
+    "assignee_id": "u005",
+    "related_file_ids": [
+      "r002-f2"
+    ],
+    "created_at": "2026-07-26T00:00:00Z",
+    "closed_at": "2026-07-30T00:00:00Z"
+  },
+  {
+    "id": "r002-issue-7",
+    "repository_id": "r002",
+    "number": 7,
+    "title": "Add service error handling",
+    "body": "Demo task: add service error handling. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u005",
+    "assignee_id": "u006",
+    "related_file_ids": [
+      "r002-f3"
+    ],
+    "created_at": "2026-07-31T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r002-issue-8",
+    "repository_id": "r002",
+    "number": 8,
+    "title": "Document controller response",
+    "body": "Demo task: document controller response. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u006",
+    "assignee_id": "u003",
+    "related_file_ids": [
+      "r002-f4"
+    ],
+    "created_at": "2026-08-05T00:00:00Z",
+    "closed_at": "2026-08-09T00:00:00Z"
+  },
+  {
+    "id": "r002-issue-9",
+    "repository_id": "r002",
+    "number": 9,
+    "title": "Reject whitespace-only names",
+    "body": "Demo task: reject whitespace-only names. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u003",
+    "assignee_id": null,
+    "related_file_ids": [
+      "r002-f1"
+    ],
+    "created_at": "2026-08-10T00:00:00Z",
+    "closed_at": "2026-08-14T00:00:00Z"
+  },
+  {
+    "id": "r002-issue-10",
+    "repository_id": "r002",
+    "number": 10,
+    "title": "Replace fixed demo ID",
+    "body": "Demo task: replace fixed demo id. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u004",
+    "assignee_id": "u005",
+    "related_file_ids": [
+      "r002-f2"
+    ],
+    "created_at": "2026-08-15T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r002-issue-11",
+    "repository_id": "r002",
+    "number": 11,
+    "title": "Add service error handling",
+    "body": "Demo task: add service error handling. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u005",
+    "assignee_id": "u006",
+    "related_file_ids": [
+      "r002-f3"
+    ],
+    "created_at": "2026-08-20T00:00:00Z",
+    "closed_at": "2026-08-24T00:00:00Z"
+  },
+  {
+    "id": "r002-issue-12",
+    "repository_id": "r002",
+    "number": 12,
+    "title": "Document controller response",
+    "body": "Demo task: document controller response. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u006",
+    "assignee_id": "u003",
+    "related_file_ids": [
+      "r002-f4"
+    ],
+    "created_at": "2026-08-25T00:00:00Z",
+    "closed_at": "2026-08-29T00:00:00Z"
+  },
+  {
+    "id": "r003-issue-1",
+    "repository_id": "r003",
+    "number": 1,
+    "title": "Reject whitespace-only names",
+    "body": "Demo task: reject whitespace-only names. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u005",
+    "assignee_id": null,
+    "related_file_ids": [
+      "r003-f1"
+    ],
+    "created_at": "2026-07-01T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r003-issue-2",
+    "repository_id": "r003",
+    "number": 2,
+    "title": "Replace fixed demo ID",
+    "body": "Demo task: replace fixed demo id. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u006",
+    "assignee_id": "u007",
+    "related_file_ids": [
+      "r003-f2"
+    ],
+    "created_at": "2026-07-06T00:00:00Z",
+    "closed_at": "2026-07-10T00:00:00Z"
+  },
+  {
+    "id": "r003-issue-3",
+    "repository_id": "r003",
+    "number": 3,
+    "title": "Add service error handling",
+    "body": "Demo task: add service error handling. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u007",
+    "assignee_id": "u008",
+    "related_file_ids": [
+      "r003-f3"
+    ],
+    "created_at": "2026-07-11T00:00:00Z",
+    "closed_at": "2026-07-15T00:00:00Z"
+  },
+  {
+    "id": "r003-issue-4",
+    "repository_id": "r003",
+    "number": 4,
+    "title": "Document controller response",
+    "body": "Demo task: document controller response. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u008",
+    "assignee_id": "u005",
+    "related_file_ids": [
+      "r003-f4"
+    ],
+    "created_at": "2026-07-16T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r003-issue-5",
+    "repository_id": "r003",
+    "number": 5,
+    "title": "Reject whitespace-only names",
+    "body": "Demo task: reject whitespace-only names. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u005",
+    "assignee_id": null,
+    "related_file_ids": [
+      "r003-f1"
+    ],
+    "created_at": "2026-07-21T00:00:00Z",
+    "closed_at": "2026-07-25T00:00:00Z"
+  },
+  {
+    "id": "r003-issue-6",
+    "repository_id": "r003",
+    "number": 6,
+    "title": "Replace fixed demo ID",
+    "body": "Demo task: replace fixed demo id. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u006",
+    "assignee_id": "u007",
+    "related_file_ids": [
+      "r003-f2"
+    ],
+    "created_at": "2026-07-26T00:00:00Z",
+    "closed_at": "2026-07-30T00:00:00Z"
+  },
+  {
+    "id": "r003-issue-7",
+    "repository_id": "r003",
+    "number": 7,
+    "title": "Add service error handling",
+    "body": "Demo task: add service error handling. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u007",
+    "assignee_id": "u008",
+    "related_file_ids": [
+      "r003-f3"
+    ],
+    "created_at": "2026-07-31T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r003-issue-8",
+    "repository_id": "r003",
+    "number": 8,
+    "title": "Document controller response",
+    "body": "Demo task: document controller response. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u008",
+    "assignee_id": "u005",
+    "related_file_ids": [
+      "r003-f4"
+    ],
+    "created_at": "2026-08-05T00:00:00Z",
+    "closed_at": "2026-08-09T00:00:00Z"
+  },
+  {
+    "id": "r003-issue-9",
+    "repository_id": "r003",
+    "number": 9,
+    "title": "Reject whitespace-only names",
+    "body": "Demo task: reject whitespace-only names. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u005",
+    "assignee_id": null,
+    "related_file_ids": [
+      "r003-f1"
+    ],
+    "created_at": "2026-08-10T00:00:00Z",
+    "closed_at": "2026-08-14T00:00:00Z"
+  },
+  {
+    "id": "r003-issue-10",
+    "repository_id": "r003",
+    "number": 10,
+    "title": "Replace fixed demo ID",
+    "body": "Demo task: replace fixed demo id. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u006",
+    "assignee_id": "u007",
+    "related_file_ids": [
+      "r003-f2"
+    ],
+    "created_at": "2026-08-15T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r003-issue-11",
+    "repository_id": "r003",
+    "number": 11,
+    "title": "Add service error handling",
+    "body": "Demo task: add service error handling. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u007",
+    "assignee_id": "u008",
+    "related_file_ids": [
+      "r003-f3"
+    ],
+    "created_at": "2026-08-20T00:00:00Z",
+    "closed_at": "2026-08-24T00:00:00Z"
+  },
+  {
+    "id": "r003-issue-12",
+    "repository_id": "r003",
+    "number": 12,
+    "title": "Document controller response",
+    "body": "Demo task: document controller response. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u008",
+    "assignee_id": "u005",
+    "related_file_ids": [
+      "r003-f4"
+    ],
+    "created_at": "2026-08-25T00:00:00Z",
+    "closed_at": "2026-08-29T00:00:00Z"
+  },
+  {
+    "id": "r004-issue-1",
+    "repository_id": "r004",
+    "number": 1,
+    "title": "Reject whitespace-only names",
+    "body": "Demo task: reject whitespace-only names. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u007",
+    "assignee_id": null,
+    "related_file_ids": [
+      "r004-f1"
+    ],
+    "created_at": "2026-07-01T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r004-issue-2",
+    "repository_id": "r004",
+    "number": 2,
+    "title": "Replace fixed demo ID",
+    "body": "Demo task: replace fixed demo id. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u008",
+    "assignee_id": "u009",
+    "related_file_ids": [
+      "r004-f2"
+    ],
+    "created_at": "2026-07-06T00:00:00Z",
+    "closed_at": "2026-07-10T00:00:00Z"
+  },
+  {
+    "id": "r004-issue-3",
+    "repository_id": "r004",
+    "number": 3,
+    "title": "Add service error handling",
+    "body": "Demo task: add service error handling. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u009",
+    "assignee_id": "u010",
+    "related_file_ids": [
+      "r004-f3"
+    ],
+    "created_at": "2026-07-11T00:00:00Z",
+    "closed_at": "2026-07-15T00:00:00Z"
+  },
+  {
+    "id": "r004-issue-4",
+    "repository_id": "r004",
+    "number": 4,
+    "title": "Document controller response",
+    "body": "Demo task: document controller response. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u010",
+    "assignee_id": "u007",
+    "related_file_ids": [
+      "r004-f4"
+    ],
+    "created_at": "2026-07-16T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r004-issue-5",
+    "repository_id": "r004",
+    "number": 5,
+    "title": "Reject whitespace-only names",
+    "body": "Demo task: reject whitespace-only names. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u007",
+    "assignee_id": null,
+    "related_file_ids": [
+      "r004-f1"
+    ],
+    "created_at": "2026-07-21T00:00:00Z",
+    "closed_at": "2026-07-25T00:00:00Z"
+  },
+  {
+    "id": "r004-issue-6",
+    "repository_id": "r004",
+    "number": 6,
+    "title": "Replace fixed demo ID",
+    "body": "Demo task: replace fixed demo id. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u008",
+    "assignee_id": "u009",
+    "related_file_ids": [
+      "r004-f2"
+    ],
+    "created_at": "2026-07-26T00:00:00Z",
+    "closed_at": "2026-07-30T00:00:00Z"
+  },
+  {
+    "id": "r004-issue-7",
+    "repository_id": "r004",
+    "number": 7,
+    "title": "Add service error handling",
+    "body": "Demo task: add service error handling. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u009",
+    "assignee_id": "u010",
+    "related_file_ids": [
+      "r004-f3"
+    ],
+    "created_at": "2026-07-31T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r004-issue-8",
+    "repository_id": "r004",
+    "number": 8,
+    "title": "Document controller response",
+    "body": "Demo task: document controller response. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u010",
+    "assignee_id": "u007",
+    "related_file_ids": [
+      "r004-f4"
+    ],
+    "created_at": "2026-08-05T00:00:00Z",
+    "closed_at": "2026-08-09T00:00:00Z"
+  },
+  {
+    "id": "r004-issue-9",
+    "repository_id": "r004",
+    "number": 9,
+    "title": "Reject whitespace-only names",
+    "body": "Demo task: reject whitespace-only names. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u007",
+    "assignee_id": null,
+    "related_file_ids": [
+      "r004-f1"
+    ],
+    "created_at": "2026-08-10T00:00:00Z",
+    "closed_at": "2026-08-14T00:00:00Z"
+  },
+  {
+    "id": "r004-issue-10",
+    "repository_id": "r004",
+    "number": 10,
+    "title": "Replace fixed demo ID",
+    "body": "Demo task: replace fixed demo id. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u008",
+    "assignee_id": "u009",
+    "related_file_ids": [
+      "r004-f2"
+    ],
+    "created_at": "2026-08-15T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r004-issue-11",
+    "repository_id": "r004",
+    "number": 11,
+    "title": "Add service error handling",
+    "body": "Demo task: add service error handling. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u009",
+    "assignee_id": "u010",
+    "related_file_ids": [
+      "r004-f3"
+    ],
+    "created_at": "2026-08-20T00:00:00Z",
+    "closed_at": "2026-08-24T00:00:00Z"
+  },
+  {
+    "id": "r004-issue-12",
+    "repository_id": "r004",
+    "number": 12,
+    "title": "Document controller response",
+    "body": "Demo task: document controller response. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u010",
+    "assignee_id": "u007",
+    "related_file_ids": [
+      "r004-f4"
+    ],
+    "created_at": "2026-08-25T00:00:00Z",
+    "closed_at": "2026-08-29T00:00:00Z"
+  },
+  {
+    "id": "r005-issue-1",
+    "repository_id": "r005",
+    "number": 1,
+    "title": "Reject whitespace-only names",
+    "body": "Demo task: reject whitespace-only names. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u009",
+    "assignee_id": null,
+    "related_file_ids": [
+      "r005-f1"
+    ],
+    "created_at": "2026-07-01T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r005-issue-2",
+    "repository_id": "r005",
+    "number": 2,
+    "title": "Replace fixed demo ID",
+    "body": "Demo task: replace fixed demo id. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u010",
+    "assignee_id": "u011",
+    "related_file_ids": [
+      "r005-f2"
+    ],
+    "created_at": "2026-07-06T00:00:00Z",
+    "closed_at": "2026-07-10T00:00:00Z"
+  },
+  {
+    "id": "r005-issue-3",
+    "repository_id": "r005",
+    "number": 3,
+    "title": "Add service error handling",
+    "body": "Demo task: add service error handling. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u011",
+    "assignee_id": "u012",
+    "related_file_ids": [
+      "r005-f3"
+    ],
+    "created_at": "2026-07-11T00:00:00Z",
+    "closed_at": "2026-07-15T00:00:00Z"
+  },
+  {
+    "id": "r005-issue-4",
+    "repository_id": "r005",
+    "number": 4,
+    "title": "Document controller response",
+    "body": "Demo task: document controller response. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u012",
+    "assignee_id": "u009",
+    "related_file_ids": [
+      "r005-f4"
+    ],
+    "created_at": "2026-07-16T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r005-issue-5",
+    "repository_id": "r005",
+    "number": 5,
+    "title": "Reject whitespace-only names",
+    "body": "Demo task: reject whitespace-only names. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u009",
+    "assignee_id": null,
+    "related_file_ids": [
+      "r005-f1"
+    ],
+    "created_at": "2026-07-21T00:00:00Z",
+    "closed_at": "2026-07-25T00:00:00Z"
+  },
+  {
+    "id": "r005-issue-6",
+    "repository_id": "r005",
+    "number": 6,
+    "title": "Replace fixed demo ID",
+    "body": "Demo task: replace fixed demo id. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u010",
+    "assignee_id": "u011",
+    "related_file_ids": [
+      "r005-f2"
+    ],
+    "created_at": "2026-07-26T00:00:00Z",
+    "closed_at": "2026-07-30T00:00:00Z"
+  },
+  {
+    "id": "r005-issue-7",
+    "repository_id": "r005",
+    "number": 7,
+    "title": "Add service error handling",
+    "body": "Demo task: add service error handling. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u011",
+    "assignee_id": "u012",
+    "related_file_ids": [
+      "r005-f3"
+    ],
+    "created_at": "2026-07-31T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r005-issue-8",
+    "repository_id": "r005",
+    "number": 8,
+    "title": "Document controller response",
+    "body": "Demo task: document controller response. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u012",
+    "assignee_id": "u009",
+    "related_file_ids": [
+      "r005-f4"
+    ],
+    "created_at": "2026-08-05T00:00:00Z",
+    "closed_at": "2026-08-09T00:00:00Z"
+  },
+  {
+    "id": "r005-issue-9",
+    "repository_id": "r005",
+    "number": 9,
+    "title": "Reject whitespace-only names",
+    "body": "Demo task: reject whitespace-only names. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u009",
+    "assignee_id": null,
+    "related_file_ids": [
+      "r005-f1"
+    ],
+    "created_at": "2026-08-10T00:00:00Z",
+    "closed_at": "2026-08-14T00:00:00Z"
+  },
+  {
+    "id": "r005-issue-10",
+    "repository_id": "r005",
+    "number": 10,
+    "title": "Replace fixed demo ID",
+    "body": "Demo task: replace fixed demo id. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u010",
+    "assignee_id": "u011",
+    "related_file_ids": [
+      "r005-f2"
+    ],
+    "created_at": "2026-08-15T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r005-issue-11",
+    "repository_id": "r005",
+    "number": 11,
+    "title": "Add service error handling",
+    "body": "Demo task: add service error handling. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u011",
+    "assignee_id": "u012",
+    "related_file_ids": [
+      "r005-f3"
+    ],
+    "created_at": "2026-08-20T00:00:00Z",
+    "closed_at": "2026-08-24T00:00:00Z"
+  },
+  {
+    "id": "r005-issue-12",
+    "repository_id": "r005",
+    "number": 12,
+    "title": "Document controller response",
+    "body": "Demo task: document controller response. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u012",
+    "assignee_id": "u009",
+    "related_file_ids": [
+      "r005-f4"
+    ],
+    "created_at": "2026-08-25T00:00:00Z",
+    "closed_at": "2026-08-29T00:00:00Z"
+  },
+  {
+    "id": "r006-issue-1",
+    "repository_id": "r006",
+    "number": 1,
+    "title": "Reject whitespace-only names",
+    "body": "Demo task: reject whitespace-only names. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u011",
+    "assignee_id": null,
+    "related_file_ids": [
+      "r006-f1"
+    ],
+    "created_at": "2026-07-01T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r006-issue-2",
+    "repository_id": "r006",
+    "number": 2,
+    "title": "Replace fixed demo ID",
+    "body": "Demo task: replace fixed demo id. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u012",
+    "assignee_id": "u013",
+    "related_file_ids": [
+      "r006-f2"
+    ],
+    "created_at": "2026-07-06T00:00:00Z",
+    "closed_at": "2026-07-10T00:00:00Z"
+  },
+  {
+    "id": "r006-issue-3",
+    "repository_id": "r006",
+    "number": 3,
+    "title": "Add service error handling",
+    "body": "Demo task: add service error handling. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u013",
+    "assignee_id": "u014",
+    "related_file_ids": [
+      "r006-f3"
+    ],
+    "created_at": "2026-07-11T00:00:00Z",
+    "closed_at": "2026-07-15T00:00:00Z"
+  },
+  {
+    "id": "r006-issue-4",
+    "repository_id": "r006",
+    "number": 4,
+    "title": "Document controller response",
+    "body": "Demo task: document controller response. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u014",
+    "assignee_id": "u011",
+    "related_file_ids": [
+      "r006-f4"
+    ],
+    "created_at": "2026-07-16T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r006-issue-5",
+    "repository_id": "r006",
+    "number": 5,
+    "title": "Reject whitespace-only names",
+    "body": "Demo task: reject whitespace-only names. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u011",
+    "assignee_id": null,
+    "related_file_ids": [
+      "r006-f1"
+    ],
+    "created_at": "2026-07-21T00:00:00Z",
+    "closed_at": "2026-07-25T00:00:00Z"
+  },
+  {
+    "id": "r006-issue-6",
+    "repository_id": "r006",
+    "number": 6,
+    "title": "Replace fixed demo ID",
+    "body": "Demo task: replace fixed demo id. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u012",
+    "assignee_id": "u013",
+    "related_file_ids": [
+      "r006-f2"
+    ],
+    "created_at": "2026-07-26T00:00:00Z",
+    "closed_at": "2026-07-30T00:00:00Z"
+  },
+  {
+    "id": "r006-issue-7",
+    "repository_id": "r006",
+    "number": 7,
+    "title": "Add service error handling",
+    "body": "Demo task: add service error handling. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u013",
+    "assignee_id": "u014",
+    "related_file_ids": [
+      "r006-f3"
+    ],
+    "created_at": "2026-07-31T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r006-issue-8",
+    "repository_id": "r006",
+    "number": 8,
+    "title": "Document controller response",
+    "body": "Demo task: document controller response. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u014",
+    "assignee_id": "u011",
+    "related_file_ids": [
+      "r006-f4"
+    ],
+    "created_at": "2026-08-05T00:00:00Z",
+    "closed_at": "2026-08-09T00:00:00Z"
+  },
+  {
+    "id": "r006-issue-9",
+    "repository_id": "r006",
+    "number": 9,
+    "title": "Reject whitespace-only names",
+    "body": "Demo task: reject whitespace-only names. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u011",
+    "assignee_id": null,
+    "related_file_ids": [
+      "r006-f1"
+    ],
+    "created_at": "2026-08-10T00:00:00Z",
+    "closed_at": "2026-08-14T00:00:00Z"
+  },
+  {
+    "id": "r006-issue-10",
+    "repository_id": "r006",
+    "number": 10,
+    "title": "Replace fixed demo ID",
+    "body": "Demo task: replace fixed demo id. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u012",
+    "assignee_id": "u013",
+    "related_file_ids": [
+      "r006-f2"
+    ],
+    "created_at": "2026-08-15T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r006-issue-11",
+    "repository_id": "r006",
+    "number": 11,
+    "title": "Add service error handling",
+    "body": "Demo task: add service error handling. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u013",
+    "assignee_id": "u014",
+    "related_file_ids": [
+      "r006-f3"
+    ],
+    "created_at": "2026-08-20T00:00:00Z",
+    "closed_at": "2026-08-24T00:00:00Z"
+  },
+  {
+    "id": "r006-issue-12",
+    "repository_id": "r006",
+    "number": 12,
+    "title": "Document controller response",
+    "body": "Demo task: document controller response. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u014",
+    "assignee_id": "u011",
+    "related_file_ids": [
+      "r006-f4"
+    ],
+    "created_at": "2026-08-25T00:00:00Z",
+    "closed_at": "2026-08-29T00:00:00Z"
+  },
+  {
+    "id": "r007-issue-1",
+    "repository_id": "r007",
+    "number": 1,
+    "title": "Reject whitespace-only names",
+    "body": "Demo task: reject whitespace-only names. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u013",
+    "assignee_id": null,
+    "related_file_ids": [
+      "r007-f1"
+    ],
+    "created_at": "2026-07-01T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r007-issue-2",
+    "repository_id": "r007",
+    "number": 2,
+    "title": "Replace fixed demo ID",
+    "body": "Demo task: replace fixed demo id. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u014",
+    "assignee_id": "u015",
+    "related_file_ids": [
+      "r007-f2"
+    ],
+    "created_at": "2026-07-06T00:00:00Z",
+    "closed_at": "2026-07-10T00:00:00Z"
+  },
+  {
+    "id": "r007-issue-3",
+    "repository_id": "r007",
+    "number": 3,
+    "title": "Add service error handling",
+    "body": "Demo task: add service error handling. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u015",
+    "assignee_id": "u016",
+    "related_file_ids": [
+      "r007-f3"
+    ],
+    "created_at": "2026-07-11T00:00:00Z",
+    "closed_at": "2026-07-15T00:00:00Z"
+  },
+  {
+    "id": "r007-issue-4",
+    "repository_id": "r007",
+    "number": 4,
+    "title": "Document controller response",
+    "body": "Demo task: document controller response. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u016",
+    "assignee_id": "u013",
+    "related_file_ids": [
+      "r007-f4"
+    ],
+    "created_at": "2026-07-16T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r007-issue-5",
+    "repository_id": "r007",
+    "number": 5,
+    "title": "Reject whitespace-only names",
+    "body": "Demo task: reject whitespace-only names. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u013",
+    "assignee_id": null,
+    "related_file_ids": [
+      "r007-f1"
+    ],
+    "created_at": "2026-07-21T00:00:00Z",
+    "closed_at": "2026-07-25T00:00:00Z"
+  },
+  {
+    "id": "r007-issue-6",
+    "repository_id": "r007",
+    "number": 6,
+    "title": "Replace fixed demo ID",
+    "body": "Demo task: replace fixed demo id. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u014",
+    "assignee_id": "u015",
+    "related_file_ids": [
+      "r007-f2"
+    ],
+    "created_at": "2026-07-26T00:00:00Z",
+    "closed_at": "2026-07-30T00:00:00Z"
+  },
+  {
+    "id": "r007-issue-7",
+    "repository_id": "r007",
+    "number": 7,
+    "title": "Add service error handling",
+    "body": "Demo task: add service error handling. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u015",
+    "assignee_id": "u016",
+    "related_file_ids": [
+      "r007-f3"
+    ],
+    "created_at": "2026-07-31T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r007-issue-8",
+    "repository_id": "r007",
+    "number": 8,
+    "title": "Document controller response",
+    "body": "Demo task: document controller response. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u016",
+    "assignee_id": "u013",
+    "related_file_ids": [
+      "r007-f4"
+    ],
+    "created_at": "2026-08-05T00:00:00Z",
+    "closed_at": "2026-08-09T00:00:00Z"
+  },
+  {
+    "id": "r007-issue-9",
+    "repository_id": "r007",
+    "number": 9,
+    "title": "Reject whitespace-only names",
+    "body": "Demo task: reject whitespace-only names. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u013",
+    "assignee_id": null,
+    "related_file_ids": [
+      "r007-f1"
+    ],
+    "created_at": "2026-08-10T00:00:00Z",
+    "closed_at": "2026-08-14T00:00:00Z"
+  },
+  {
+    "id": "r007-issue-10",
+    "repository_id": "r007",
+    "number": 10,
+    "title": "Replace fixed demo ID",
+    "body": "Demo task: replace fixed demo id. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u014",
+    "assignee_id": "u015",
+    "related_file_ids": [
+      "r007-f2"
+    ],
+    "created_at": "2026-08-15T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r007-issue-11",
+    "repository_id": "r007",
+    "number": 11,
+    "title": "Add service error handling",
+    "body": "Demo task: add service error handling. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u015",
+    "assignee_id": "u016",
+    "related_file_ids": [
+      "r007-f3"
+    ],
+    "created_at": "2026-08-20T00:00:00Z",
+    "closed_at": "2026-08-24T00:00:00Z"
+  },
+  {
+    "id": "r007-issue-12",
+    "repository_id": "r007",
+    "number": 12,
+    "title": "Document controller response",
+    "body": "Demo task: document controller response. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u016",
+    "assignee_id": "u013",
+    "related_file_ids": [
+      "r007-f4"
+    ],
+    "created_at": "2026-08-25T00:00:00Z",
+    "closed_at": "2026-08-29T00:00:00Z"
+  },
+  {
+    "id": "r008-issue-1",
+    "repository_id": "r008",
+    "number": 1,
+    "title": "Reject whitespace-only names",
+    "body": "Demo task: reject whitespace-only names. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u015",
+    "assignee_id": null,
+    "related_file_ids": [
+      "r008-f1"
+    ],
+    "created_at": "2026-07-01T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r008-issue-2",
+    "repository_id": "r008",
+    "number": 2,
+    "title": "Replace fixed demo ID",
+    "body": "Demo task: replace fixed demo id. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u016",
+    "assignee_id": "u017",
+    "related_file_ids": [
+      "r008-f2"
+    ],
+    "created_at": "2026-07-06T00:00:00Z",
+    "closed_at": "2026-07-10T00:00:00Z"
+  },
+  {
+    "id": "r008-issue-3",
+    "repository_id": "r008",
+    "number": 3,
+    "title": "Add service error handling",
+    "body": "Demo task: add service error handling. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u017",
+    "assignee_id": "u018",
+    "related_file_ids": [
+      "r008-f3"
+    ],
+    "created_at": "2026-07-11T00:00:00Z",
+    "closed_at": "2026-07-15T00:00:00Z"
+  },
+  {
+    "id": "r008-issue-4",
+    "repository_id": "r008",
+    "number": 4,
+    "title": "Document controller response",
+    "body": "Demo task: document controller response. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u018",
+    "assignee_id": "u015",
+    "related_file_ids": [
+      "r008-f4"
+    ],
+    "created_at": "2026-07-16T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r008-issue-5",
+    "repository_id": "r008",
+    "number": 5,
+    "title": "Reject whitespace-only names",
+    "body": "Demo task: reject whitespace-only names. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u015",
+    "assignee_id": null,
+    "related_file_ids": [
+      "r008-f1"
+    ],
+    "created_at": "2026-07-21T00:00:00Z",
+    "closed_at": "2026-07-25T00:00:00Z"
+  },
+  {
+    "id": "r008-issue-6",
+    "repository_id": "r008",
+    "number": 6,
+    "title": "Replace fixed demo ID",
+    "body": "Demo task: replace fixed demo id. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u016",
+    "assignee_id": "u017",
+    "related_file_ids": [
+      "r008-f2"
+    ],
+    "created_at": "2026-07-26T00:00:00Z",
+    "closed_at": "2026-07-30T00:00:00Z"
+  },
+  {
+    "id": "r008-issue-7",
+    "repository_id": "r008",
+    "number": 7,
+    "title": "Add service error handling",
+    "body": "Demo task: add service error handling. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u017",
+    "assignee_id": "u018",
+    "related_file_ids": [
+      "r008-f3"
+    ],
+    "created_at": "2026-07-31T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r008-issue-8",
+    "repository_id": "r008",
+    "number": 8,
+    "title": "Document controller response",
+    "body": "Demo task: document controller response. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u018",
+    "assignee_id": "u015",
+    "related_file_ids": [
+      "r008-f4"
+    ],
+    "created_at": "2026-08-05T00:00:00Z",
+    "closed_at": "2026-08-09T00:00:00Z"
+  },
+  {
+    "id": "r008-issue-9",
+    "repository_id": "r008",
+    "number": 9,
+    "title": "Reject whitespace-only names",
+    "body": "Demo task: reject whitespace-only names. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u015",
+    "assignee_id": null,
+    "related_file_ids": [
+      "r008-f1"
+    ],
+    "created_at": "2026-08-10T00:00:00Z",
+    "closed_at": "2026-08-14T00:00:00Z"
+  },
+  {
+    "id": "r008-issue-10",
+    "repository_id": "r008",
+    "number": 10,
+    "title": "Replace fixed demo ID",
+    "body": "Demo task: replace fixed demo id. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u016",
+    "assignee_id": "u017",
+    "related_file_ids": [
+      "r008-f2"
+    ],
+    "created_at": "2026-08-15T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r008-issue-11",
+    "repository_id": "r008",
+    "number": 11,
+    "title": "Add service error handling",
+    "body": "Demo task: add service error handling. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u017",
+    "assignee_id": "u018",
+    "related_file_ids": [
+      "r008-f3"
+    ],
+    "created_at": "2026-08-20T00:00:00Z",
+    "closed_at": "2026-08-24T00:00:00Z"
+  },
+  {
+    "id": "r008-issue-12",
+    "repository_id": "r008",
+    "number": 12,
+    "title": "Document controller response",
+    "body": "Demo task: document controller response. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u018",
+    "assignee_id": "u015",
+    "related_file_ids": [
+      "r008-f4"
+    ],
+    "created_at": "2026-08-25T00:00:00Z",
+    "closed_at": "2026-08-29T00:00:00Z"
+  },
+  {
+    "id": "r009-issue-1",
+    "repository_id": "r009",
+    "number": 1,
+    "title": "Reject whitespace-only names",
+    "body": "Demo task: reject whitespace-only names. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u017",
+    "assignee_id": null,
+    "related_file_ids": [
+      "r009-f1"
+    ],
+    "created_at": "2026-07-01T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r009-issue-2",
+    "repository_id": "r009",
+    "number": 2,
+    "title": "Replace fixed demo ID",
+    "body": "Demo task: replace fixed demo id. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u018",
+    "assignee_id": "u019",
+    "related_file_ids": [
+      "r009-f2"
+    ],
+    "created_at": "2026-07-06T00:00:00Z",
+    "closed_at": "2026-07-10T00:00:00Z"
+  },
+  {
+    "id": "r009-issue-3",
+    "repository_id": "r009",
+    "number": 3,
+    "title": "Add service error handling",
+    "body": "Demo task: add service error handling. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u019",
+    "assignee_id": "u020",
+    "related_file_ids": [
+      "r009-f3"
+    ],
+    "created_at": "2026-07-11T00:00:00Z",
+    "closed_at": "2026-07-15T00:00:00Z"
+  },
+  {
+    "id": "r009-issue-4",
+    "repository_id": "r009",
+    "number": 4,
+    "title": "Document controller response",
+    "body": "Demo task: document controller response. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u020",
+    "assignee_id": "u017",
+    "related_file_ids": [
+      "r009-f4"
+    ],
+    "created_at": "2026-07-16T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r009-issue-5",
+    "repository_id": "r009",
+    "number": 5,
+    "title": "Reject whitespace-only names",
+    "body": "Demo task: reject whitespace-only names. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u017",
+    "assignee_id": null,
+    "related_file_ids": [
+      "r009-f1"
+    ],
+    "created_at": "2026-07-21T00:00:00Z",
+    "closed_at": "2026-07-25T00:00:00Z"
+  },
+  {
+    "id": "r009-issue-6",
+    "repository_id": "r009",
+    "number": 6,
+    "title": "Replace fixed demo ID",
+    "body": "Demo task: replace fixed demo id. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u018",
+    "assignee_id": "u019",
+    "related_file_ids": [
+      "r009-f2"
+    ],
+    "created_at": "2026-07-26T00:00:00Z",
+    "closed_at": "2026-07-30T00:00:00Z"
+  },
+  {
+    "id": "r009-issue-7",
+    "repository_id": "r009",
+    "number": 7,
+    "title": "Add service error handling",
+    "body": "Demo task: add service error handling. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u019",
+    "assignee_id": "u020",
+    "related_file_ids": [
+      "r009-f3"
+    ],
+    "created_at": "2026-07-31T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r009-issue-8",
+    "repository_id": "r009",
+    "number": 8,
+    "title": "Document controller response",
+    "body": "Demo task: document controller response. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u020",
+    "assignee_id": "u017",
+    "related_file_ids": [
+      "r009-f4"
+    ],
+    "created_at": "2026-08-05T00:00:00Z",
+    "closed_at": "2026-08-09T00:00:00Z"
+  },
+  {
+    "id": "r009-issue-9",
+    "repository_id": "r009",
+    "number": 9,
+    "title": "Reject whitespace-only names",
+    "body": "Demo task: reject whitespace-only names. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u017",
+    "assignee_id": null,
+    "related_file_ids": [
+      "r009-f1"
+    ],
+    "created_at": "2026-08-10T00:00:00Z",
+    "closed_at": "2026-08-14T00:00:00Z"
+  },
+  {
+    "id": "r009-issue-10",
+    "repository_id": "r009",
+    "number": 10,
+    "title": "Replace fixed demo ID",
+    "body": "Demo task: replace fixed demo id. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u018",
+    "assignee_id": "u019",
+    "related_file_ids": [
+      "r009-f2"
+    ],
+    "created_at": "2026-08-15T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r009-issue-11",
+    "repository_id": "r009",
+    "number": 11,
+    "title": "Add service error handling",
+    "body": "Demo task: add service error handling. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u019",
+    "assignee_id": "u020",
+    "related_file_ids": [
+      "r009-f3"
+    ],
+    "created_at": "2026-08-20T00:00:00Z",
+    "closed_at": "2026-08-24T00:00:00Z"
+  },
+  {
+    "id": "r009-issue-12",
+    "repository_id": "r009",
+    "number": 12,
+    "title": "Document controller response",
+    "body": "Demo task: document controller response. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u020",
+    "assignee_id": "u017",
+    "related_file_ids": [
+      "r009-f4"
+    ],
+    "created_at": "2026-08-25T00:00:00Z",
+    "closed_at": "2026-08-29T00:00:00Z"
+  },
+  {
+    "id": "r010-issue-1",
+    "repository_id": "r010",
+    "number": 1,
+    "title": "Reject whitespace-only names",
+    "body": "Demo task: reject whitespace-only names. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u019",
+    "assignee_id": null,
+    "related_file_ids": [
+      "r010-f1"
+    ],
+    "created_at": "2026-07-01T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r010-issue-2",
+    "repository_id": "r010",
+    "number": 2,
+    "title": "Replace fixed demo ID",
+    "body": "Demo task: replace fixed demo id. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u020",
+    "assignee_id": "u021",
+    "related_file_ids": [
+      "r010-f2"
+    ],
+    "created_at": "2026-07-06T00:00:00Z",
+    "closed_at": "2026-07-10T00:00:00Z"
+  },
+  {
+    "id": "r010-issue-3",
+    "repository_id": "r010",
+    "number": 3,
+    "title": "Add service error handling",
+    "body": "Demo task: add service error handling. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u021",
+    "assignee_id": "u022",
+    "related_file_ids": [
+      "r010-f3"
+    ],
+    "created_at": "2026-07-11T00:00:00Z",
+    "closed_at": "2026-07-15T00:00:00Z"
+  },
+  {
+    "id": "r010-issue-4",
+    "repository_id": "r010",
+    "number": 4,
+    "title": "Document controller response",
+    "body": "Demo task: document controller response. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u022",
+    "assignee_id": "u019",
+    "related_file_ids": [
+      "r010-f4"
+    ],
+    "created_at": "2026-07-16T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r010-issue-5",
+    "repository_id": "r010",
+    "number": 5,
+    "title": "Reject whitespace-only names",
+    "body": "Demo task: reject whitespace-only names. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u019",
+    "assignee_id": null,
+    "related_file_ids": [
+      "r010-f1"
+    ],
+    "created_at": "2026-07-21T00:00:00Z",
+    "closed_at": "2026-07-25T00:00:00Z"
+  },
+  {
+    "id": "r010-issue-6",
+    "repository_id": "r010",
+    "number": 6,
+    "title": "Replace fixed demo ID",
+    "body": "Demo task: replace fixed demo id. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u020",
+    "assignee_id": "u021",
+    "related_file_ids": [
+      "r010-f2"
+    ],
+    "created_at": "2026-07-26T00:00:00Z",
+    "closed_at": "2026-07-30T00:00:00Z"
+  },
+  {
+    "id": "r010-issue-7",
+    "repository_id": "r010",
+    "number": 7,
+    "title": "Add service error handling",
+    "body": "Demo task: add service error handling. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u021",
+    "assignee_id": "u022",
+    "related_file_ids": [
+      "r010-f3"
+    ],
+    "created_at": "2026-07-31T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r010-issue-8",
+    "repository_id": "r010",
+    "number": 8,
+    "title": "Document controller response",
+    "body": "Demo task: document controller response. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u022",
+    "assignee_id": "u019",
+    "related_file_ids": [
+      "r010-f4"
+    ],
+    "created_at": "2026-08-05T00:00:00Z",
+    "closed_at": "2026-08-09T00:00:00Z"
+  },
+  {
+    "id": "r010-issue-9",
+    "repository_id": "r010",
+    "number": 9,
+    "title": "Reject whitespace-only names",
+    "body": "Demo task: reject whitespace-only names. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u019",
+    "assignee_id": null,
+    "related_file_ids": [
+      "r010-f1"
+    ],
+    "created_at": "2026-08-10T00:00:00Z",
+    "closed_at": "2026-08-14T00:00:00Z"
+  },
+  {
+    "id": "r010-issue-10",
+    "repository_id": "r010",
+    "number": 10,
+    "title": "Replace fixed demo ID",
+    "body": "Demo task: replace fixed demo id. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u020",
+    "assignee_id": "u021",
+    "related_file_ids": [
+      "r010-f2"
+    ],
+    "created_at": "2026-08-15T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r010-issue-11",
+    "repository_id": "r010",
+    "number": 11,
+    "title": "Add service error handling",
+    "body": "Demo task: add service error handling. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u021",
+    "assignee_id": "u022",
+    "related_file_ids": [
+      "r010-f3"
+    ],
+    "created_at": "2026-08-20T00:00:00Z",
+    "closed_at": "2026-08-24T00:00:00Z"
+  },
+  {
+    "id": "r010-issue-12",
+    "repository_id": "r010",
+    "number": 12,
+    "title": "Document controller response",
+    "body": "Demo task: document controller response. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u022",
+    "assignee_id": "u019",
+    "related_file_ids": [
+      "r010-f4"
+    ],
+    "created_at": "2026-08-25T00:00:00Z",
+    "closed_at": "2026-08-29T00:00:00Z"
+  },
+  {
+    "id": "r011-issue-1",
+    "repository_id": "r011",
+    "number": 1,
+    "title": "Reject whitespace-only names",
+    "body": "Demo task: reject whitespace-only names. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u021",
+    "assignee_id": null,
+    "related_file_ids": [
+      "r011-f1"
+    ],
+    "created_at": "2026-07-01T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r011-issue-2",
+    "repository_id": "r011",
+    "number": 2,
+    "title": "Replace fixed demo ID",
+    "body": "Demo task: replace fixed demo id. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u022",
+    "assignee_id": "u023",
+    "related_file_ids": [
+      "r011-f2"
+    ],
+    "created_at": "2026-07-06T00:00:00Z",
+    "closed_at": "2026-07-10T00:00:00Z"
+  },
+  {
+    "id": "r011-issue-3",
+    "repository_id": "r011",
+    "number": 3,
+    "title": "Add service error handling",
+    "body": "Demo task: add service error handling. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u023",
+    "assignee_id": "u024",
+    "related_file_ids": [
+      "r011-f3"
+    ],
+    "created_at": "2026-07-11T00:00:00Z",
+    "closed_at": "2026-07-15T00:00:00Z"
+  },
+  {
+    "id": "r011-issue-4",
+    "repository_id": "r011",
+    "number": 4,
+    "title": "Document controller response",
+    "body": "Demo task: document controller response. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u024",
+    "assignee_id": "u021",
+    "related_file_ids": [
+      "r011-f4"
+    ],
+    "created_at": "2026-07-16T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r011-issue-5",
+    "repository_id": "r011",
+    "number": 5,
+    "title": "Reject whitespace-only names",
+    "body": "Demo task: reject whitespace-only names. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u021",
+    "assignee_id": null,
+    "related_file_ids": [
+      "r011-f1"
+    ],
+    "created_at": "2026-07-21T00:00:00Z",
+    "closed_at": "2026-07-25T00:00:00Z"
+  },
+  {
+    "id": "r011-issue-6",
+    "repository_id": "r011",
+    "number": 6,
+    "title": "Replace fixed demo ID",
+    "body": "Demo task: replace fixed demo id. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u022",
+    "assignee_id": "u023",
+    "related_file_ids": [
+      "r011-f2"
+    ],
+    "created_at": "2026-07-26T00:00:00Z",
+    "closed_at": "2026-07-30T00:00:00Z"
+  },
+  {
+    "id": "r011-issue-7",
+    "repository_id": "r011",
+    "number": 7,
+    "title": "Add service error handling",
+    "body": "Demo task: add service error handling. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u023",
+    "assignee_id": "u024",
+    "related_file_ids": [
+      "r011-f3"
+    ],
+    "created_at": "2026-07-31T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r011-issue-8",
+    "repository_id": "r011",
+    "number": 8,
+    "title": "Document controller response",
+    "body": "Demo task: document controller response. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u024",
+    "assignee_id": "u021",
+    "related_file_ids": [
+      "r011-f4"
+    ],
+    "created_at": "2026-08-05T00:00:00Z",
+    "closed_at": "2026-08-09T00:00:00Z"
+  },
+  {
+    "id": "r011-issue-9",
+    "repository_id": "r011",
+    "number": 9,
+    "title": "Reject whitespace-only names",
+    "body": "Demo task: reject whitespace-only names. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u021",
+    "assignee_id": null,
+    "related_file_ids": [
+      "r011-f1"
+    ],
+    "created_at": "2026-08-10T00:00:00Z",
+    "closed_at": "2026-08-14T00:00:00Z"
+  },
+  {
+    "id": "r011-issue-10",
+    "repository_id": "r011",
+    "number": 10,
+    "title": "Replace fixed demo ID",
+    "body": "Demo task: replace fixed demo id. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u022",
+    "assignee_id": "u023",
+    "related_file_ids": [
+      "r011-f2"
+    ],
+    "created_at": "2026-08-15T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r011-issue-11",
+    "repository_id": "r011",
+    "number": 11,
+    "title": "Add service error handling",
+    "body": "Demo task: add service error handling. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u023",
+    "assignee_id": "u024",
+    "related_file_ids": [
+      "r011-f3"
+    ],
+    "created_at": "2026-08-20T00:00:00Z",
+    "closed_at": "2026-08-24T00:00:00Z"
+  },
+  {
+    "id": "r011-issue-12",
+    "repository_id": "r011",
+    "number": 12,
+    "title": "Document controller response",
+    "body": "Demo task: document controller response. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u024",
+    "assignee_id": "u021",
+    "related_file_ids": [
+      "r011-f4"
+    ],
+    "created_at": "2026-08-25T00:00:00Z",
+    "closed_at": "2026-08-29T00:00:00Z"
+  },
+  {
+    "id": "r012-issue-1",
+    "repository_id": "r012",
+    "number": 1,
+    "title": "Reject whitespace-only names",
+    "body": "Demo task: reject whitespace-only names. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u023",
+    "assignee_id": null,
+    "related_file_ids": [
+      "r012-f1"
+    ],
+    "created_at": "2026-07-01T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r012-issue-2",
+    "repository_id": "r012",
+    "number": 2,
+    "title": "Replace fixed demo ID",
+    "body": "Demo task: replace fixed demo id. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u024",
+    "assignee_id": "u001",
+    "related_file_ids": [
+      "r012-f2"
+    ],
+    "created_at": "2026-07-06T00:00:00Z",
+    "closed_at": "2026-07-10T00:00:00Z"
+  },
+  {
+    "id": "r012-issue-3",
+    "repository_id": "r012",
+    "number": 3,
+    "title": "Add service error handling",
+    "body": "Demo task: add service error handling. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u001",
+    "assignee_id": "u002",
+    "related_file_ids": [
+      "r012-f3"
+    ],
+    "created_at": "2026-07-11T00:00:00Z",
+    "closed_at": "2026-07-15T00:00:00Z"
+  },
+  {
+    "id": "r012-issue-4",
+    "repository_id": "r012",
+    "number": 4,
+    "title": "Document controller response",
+    "body": "Demo task: document controller response. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u002",
+    "assignee_id": "u023",
+    "related_file_ids": [
+      "r012-f4"
+    ],
+    "created_at": "2026-07-16T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r012-issue-5",
+    "repository_id": "r012",
+    "number": 5,
+    "title": "Reject whitespace-only names",
+    "body": "Demo task: reject whitespace-only names. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u023",
+    "assignee_id": null,
+    "related_file_ids": [
+      "r012-f1"
+    ],
+    "created_at": "2026-07-21T00:00:00Z",
+    "closed_at": "2026-07-25T00:00:00Z"
+  },
+  {
+    "id": "r012-issue-6",
+    "repository_id": "r012",
+    "number": 6,
+    "title": "Replace fixed demo ID",
+    "body": "Demo task: replace fixed demo id. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u024",
+    "assignee_id": "u001",
+    "related_file_ids": [
+      "r012-f2"
+    ],
+    "created_at": "2026-07-26T00:00:00Z",
+    "closed_at": "2026-07-30T00:00:00Z"
+  },
+  {
+    "id": "r012-issue-7",
+    "repository_id": "r012",
+    "number": 7,
+    "title": "Add service error handling",
+    "body": "Demo task: add service error handling. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u001",
+    "assignee_id": "u002",
+    "related_file_ids": [
+      "r012-f3"
+    ],
+    "created_at": "2026-07-31T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r012-issue-8",
+    "repository_id": "r012",
+    "number": 8,
+    "title": "Document controller response",
+    "body": "Demo task: document controller response. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u002",
+    "assignee_id": "u023",
+    "related_file_ids": [
+      "r012-f4"
+    ],
+    "created_at": "2026-08-05T00:00:00Z",
+    "closed_at": "2026-08-09T00:00:00Z"
+  },
+  {
+    "id": "r012-issue-9",
+    "repository_id": "r012",
+    "number": 9,
+    "title": "Reject whitespace-only names",
+    "body": "Demo task: reject whitespace-only names. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u023",
+    "assignee_id": null,
+    "related_file_ids": [
+      "r012-f1"
+    ],
+    "created_at": "2026-08-10T00:00:00Z",
+    "closed_at": "2026-08-14T00:00:00Z"
+  },
+  {
+    "id": "r012-issue-10",
+    "repository_id": "r012",
+    "number": 10,
+    "title": "Replace fixed demo ID",
+    "body": "Demo task: replace fixed demo id. Add behavior tests before implementation.",
+    "state": "open",
+    "labels": [
+      "bug"
+    ],
+    "author_id": "u024",
+    "assignee_id": "u001",
+    "related_file_ids": [
+      "r012-f2"
+    ],
+    "created_at": "2026-08-15T00:00:00Z",
+    "closed_at": null
+  },
+  {
+    "id": "r012-issue-11",
+    "repository_id": "r012",
+    "number": 11,
+    "title": "Add service error handling",
+    "body": "Demo task: add service error handling. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "enhancement"
+    ],
+    "author_id": "u001",
+    "assignee_id": "u002",
+    "related_file_ids": [
+      "r012-f3"
+    ],
+    "created_at": "2026-08-20T00:00:00Z",
+    "closed_at": "2026-08-24T00:00:00Z"
+  },
+  {
+    "id": "r012-issue-12",
+    "repository_id": "r012",
+    "number": 12,
+    "title": "Document controller response",
+    "body": "Demo task: document controller response. Add behavior tests before implementation.",
+    "state": "closed",
+    "labels": [
+      "testing"
+    ],
+    "author_id": "u002",
+    "assignee_id": "u023",
+    "related_file_ids": [
+      "r012-f4"
+    ],
+    "created_at": "2026-08-25T00:00:00Z",
+    "closed_at": "2026-08-29T00:00:00Z"
+  }
+]

@@ -1,0 +1,2114 @@
+[
+  {
+    "id": "r001-pr-1",
+    "repository_id": "r001",
+    "number": 13,
+    "title": "Improve validation behavior",
+    "state": "open",
+    "author_id": "u001",
+    "reviewer_ids": [
+      "u002"
+    ],
+    "linked_issue_ids": [
+      "r001-issue-1"
+    ],
+    "changed_file_ids": [
+      "r001-f1"
+    ],
+    "created_at": "2026-07-03T00:00:00Z",
+    "closed_at": null,
+    "merged_at": null,
+    "ci_status": "pending",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r001-pr-2",
+    "repository_id": "r001",
+    "number": 14,
+    "title": "Improve repository behavior",
+    "state": "merged",
+    "author_id": "u002",
+    "reviewer_ids": [
+      "u003"
+    ],
+    "linked_issue_ids": [
+      "r001-issue-2"
+    ],
+    "changed_file_ids": [
+      "r001-f2"
+    ],
+    "created_at": "2026-07-10T00:00:00Z",
+    "closed_at": "2026-07-13T00:00:00Z",
+    "merged_at": "2026-07-13T00:00:00Z",
+    "ci_status": "success",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r001-pr-3",
+    "repository_id": "r001",
+    "number": 15,
+    "title": "Improve service behavior",
+    "state": "closed",
+    "author_id": "u003",
+    "reviewer_ids": [
+      "u004"
+    ],
+    "linked_issue_ids": [
+      "r001-issue-3"
+    ],
+    "changed_file_ids": [
+      "r001-f3"
+    ],
+    "created_at": "2026-07-17T00:00:00Z",
+    "closed_at": "2026-07-20T00:00:00Z",
+    "merged_at": null,
+    "ci_status": "failure",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r001-pr-4",
+    "repository_id": "r001",
+    "number": 16,
+    "title": "Improve controller behavior",
+    "state": "open",
+    "author_id": "u004",
+    "reviewer_ids": [
+      "u001"
+    ],
+    "linked_issue_ids": [
+      "r001-issue-4"
+    ],
+    "changed_file_ids": [
+      "r001-f4"
+    ],
+    "created_at": "2026-07-24T00:00:00Z",
+    "closed_at": null,
+    "merged_at": null,
+    "ci_status": "pending",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r001-pr-5",
+    "repository_id": "r001",
+    "number": 17,
+    "title": "Improve validation behavior",
+    "state": "merged",
+    "author_id": "u001",
+    "reviewer_ids": [
+      "u002"
+    ],
+    "linked_issue_ids": [
+      "r001-issue-5"
+    ],
+    "changed_file_ids": [
+      "r001-f1"
+    ],
+    "created_at": "2026-07-31T00:00:00Z",
+    "closed_at": "2026-08-03T00:00:00Z",
+    "merged_at": "2026-08-03T00:00:00Z",
+    "ci_status": "success",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r001-pr-6",
+    "repository_id": "r001",
+    "number": 18,
+    "title": "Improve repository behavior",
+    "state": "closed",
+    "author_id": "u002",
+    "reviewer_ids": [
+      "u003"
+    ],
+    "linked_issue_ids": [
+      "r001-issue-6"
+    ],
+    "changed_file_ids": [
+      "r001-f2"
+    ],
+    "created_at": "2026-08-07T00:00:00Z",
+    "closed_at": "2026-08-10T00:00:00Z",
+    "merged_at": null,
+    "ci_status": "failure",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r001-pr-7",
+    "repository_id": "r001",
+    "number": 19,
+    "title": "Improve service behavior",
+    "state": "open",
+    "author_id": "u003",
+    "reviewer_ids": [
+      "u004"
+    ],
+    "linked_issue_ids": [
+      "r001-issue-7"
+    ],
+    "changed_file_ids": [
+      "r001-f3"
+    ],
+    "created_at": "2026-08-14T00:00:00Z",
+    "closed_at": null,
+    "merged_at": null,
+    "ci_status": "pending",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r001-pr-8",
+    "repository_id": "r001",
+    "number": 20,
+    "title": "Improve controller behavior",
+    "state": "merged",
+    "author_id": "u004",
+    "reviewer_ids": [
+      "u001"
+    ],
+    "linked_issue_ids": [
+      "r001-issue-8"
+    ],
+    "changed_file_ids": [
+      "r001-f4"
+    ],
+    "created_at": "2026-08-21T00:00:00Z",
+    "closed_at": "2026-08-24T00:00:00Z",
+    "merged_at": "2026-08-24T00:00:00Z",
+    "ci_status": "success",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r002-pr-1",
+    "repository_id": "r002",
+    "number": 13,
+    "title": "Improve validation behavior",
+    "state": "open",
+    "author_id": "u003",
+    "reviewer_ids": [
+      "u004"
+    ],
+    "linked_issue_ids": [
+      "r002-issue-1"
+    ],
+    "changed_file_ids": [
+      "r002-f1"
+    ],
+    "created_at": "2026-07-03T00:00:00Z",
+    "closed_at": null,
+    "merged_at": null,
+    "ci_status": "pending",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r002-pr-2",
+    "repository_id": "r002",
+    "number": 14,
+    "title": "Improve repository behavior",
+    "state": "merged",
+    "author_id": "u004",
+    "reviewer_ids": [
+      "u005"
+    ],
+    "linked_issue_ids": [
+      "r002-issue-2"
+    ],
+    "changed_file_ids": [
+      "r002-f2"
+    ],
+    "created_at": "2026-07-10T00:00:00Z",
+    "closed_at": "2026-07-13T00:00:00Z",
+    "merged_at": "2026-07-13T00:00:00Z",
+    "ci_status": "success",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r002-pr-3",
+    "repository_id": "r002",
+    "number": 15,
+    "title": "Improve service behavior",
+    "state": "closed",
+    "author_id": "u005",
+    "reviewer_ids": [
+      "u006"
+    ],
+    "linked_issue_ids": [
+      "r002-issue-3"
+    ],
+    "changed_file_ids": [
+      "r002-f3"
+    ],
+    "created_at": "2026-07-17T00:00:00Z",
+    "closed_at": "2026-07-20T00:00:00Z",
+    "merged_at": null,
+    "ci_status": "failure",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r002-pr-4",
+    "repository_id": "r002",
+    "number": 16,
+    "title": "Improve controller behavior",
+    "state": "open",
+    "author_id": "u006",
+    "reviewer_ids": [
+      "u003"
+    ],
+    "linked_issue_ids": [
+      "r002-issue-4"
+    ],
+    "changed_file_ids": [
+      "r002-f4"
+    ],
+    "created_at": "2026-07-24T00:00:00Z",
+    "closed_at": null,
+    "merged_at": null,
+    "ci_status": "pending",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r002-pr-5",
+    "repository_id": "r002",
+    "number": 17,
+    "title": "Improve validation behavior",
+    "state": "merged",
+    "author_id": "u003",
+    "reviewer_ids": [
+      "u004"
+    ],
+    "linked_issue_ids": [
+      "r002-issue-5"
+    ],
+    "changed_file_ids": [
+      "r002-f1"
+    ],
+    "created_at": "2026-07-31T00:00:00Z",
+    "closed_at": "2026-08-03T00:00:00Z",
+    "merged_at": "2026-08-03T00:00:00Z",
+    "ci_status": "success",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r002-pr-6",
+    "repository_id": "r002",
+    "number": 18,
+    "title": "Improve repository behavior",
+    "state": "closed",
+    "author_id": "u004",
+    "reviewer_ids": [
+      "u005"
+    ],
+    "linked_issue_ids": [
+      "r002-issue-6"
+    ],
+    "changed_file_ids": [
+      "r002-f2"
+    ],
+    "created_at": "2026-08-07T00:00:00Z",
+    "closed_at": "2026-08-10T00:00:00Z",
+    "merged_at": null,
+    "ci_status": "failure",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r002-pr-7",
+    "repository_id": "r002",
+    "number": 19,
+    "title": "Improve service behavior",
+    "state": "open",
+    "author_id": "u005",
+    "reviewer_ids": [
+      "u006"
+    ],
+    "linked_issue_ids": [
+      "r002-issue-7"
+    ],
+    "changed_file_ids": [
+      "r002-f3"
+    ],
+    "created_at": "2026-08-14T00:00:00Z",
+    "closed_at": null,
+    "merged_at": null,
+    "ci_status": "pending",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r002-pr-8",
+    "repository_id": "r002",
+    "number": 20,
+    "title": "Improve controller behavior",
+    "state": "merged",
+    "author_id": "u006",
+    "reviewer_ids": [
+      "u003"
+    ],
+    "linked_issue_ids": [
+      "r002-issue-8"
+    ],
+    "changed_file_ids": [
+      "r002-f4"
+    ],
+    "created_at": "2026-08-21T00:00:00Z",
+    "closed_at": "2026-08-24T00:00:00Z",
+    "merged_at": "2026-08-24T00:00:00Z",
+    "ci_status": "success",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r003-pr-1",
+    "repository_id": "r003",
+    "number": 13,
+    "title": "Improve validation behavior",
+    "state": "open",
+    "author_id": "u005",
+    "reviewer_ids": [
+      "u006"
+    ],
+    "linked_issue_ids": [
+      "r003-issue-1"
+    ],
+    "changed_file_ids": [
+      "r003-f1"
+    ],
+    "created_at": "2026-07-03T00:00:00Z",
+    "closed_at": null,
+    "merged_at": null,
+    "ci_status": "pending",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r003-pr-2",
+    "repository_id": "r003",
+    "number": 14,
+    "title": "Improve repository behavior",
+    "state": "merged",
+    "author_id": "u006",
+    "reviewer_ids": [
+      "u007"
+    ],
+    "linked_issue_ids": [
+      "r003-issue-2"
+    ],
+    "changed_file_ids": [
+      "r003-f2"
+    ],
+    "created_at": "2026-07-10T00:00:00Z",
+    "closed_at": "2026-07-13T00:00:00Z",
+    "merged_at": "2026-07-13T00:00:00Z",
+    "ci_status": "success",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r003-pr-3",
+    "repository_id": "r003",
+    "number": 15,
+    "title": "Improve service behavior",
+    "state": "closed",
+    "author_id": "u007",
+    "reviewer_ids": [
+      "u008"
+    ],
+    "linked_issue_ids": [
+      "r003-issue-3"
+    ],
+    "changed_file_ids": [
+      "r003-f3"
+    ],
+    "created_at": "2026-07-17T00:00:00Z",
+    "closed_at": "2026-07-20T00:00:00Z",
+    "merged_at": null,
+    "ci_status": "failure",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r003-pr-4",
+    "repository_id": "r003",
+    "number": 16,
+    "title": "Improve controller behavior",
+    "state": "open",
+    "author_id": "u008",
+    "reviewer_ids": [
+      "u005"
+    ],
+    "linked_issue_ids": [
+      "r003-issue-4"
+    ],
+    "changed_file_ids": [
+      "r003-f4"
+    ],
+    "created_at": "2026-07-24T00:00:00Z",
+    "closed_at": null,
+    "merged_at": null,
+    "ci_status": "pending",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r003-pr-5",
+    "repository_id": "r003",
+    "number": 17,
+    "title": "Improve validation behavior",
+    "state": "merged",
+    "author_id": "u005",
+    "reviewer_ids": [
+      "u006"
+    ],
+    "linked_issue_ids": [
+      "r003-issue-5"
+    ],
+    "changed_file_ids": [
+      "r003-f1"
+    ],
+    "created_at": "2026-07-31T00:00:00Z",
+    "closed_at": "2026-08-03T00:00:00Z",
+    "merged_at": "2026-08-03T00:00:00Z",
+    "ci_status": "success",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r003-pr-6",
+    "repository_id": "r003",
+    "number": 18,
+    "title": "Improve repository behavior",
+    "state": "closed",
+    "author_id": "u006",
+    "reviewer_ids": [
+      "u007"
+    ],
+    "linked_issue_ids": [
+      "r003-issue-6"
+    ],
+    "changed_file_ids": [
+      "r003-f2"
+    ],
+    "created_at": "2026-08-07T00:00:00Z",
+    "closed_at": "2026-08-10T00:00:00Z",
+    "merged_at": null,
+    "ci_status": "failure",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r003-pr-7",
+    "repository_id": "r003",
+    "number": 19,
+    "title": "Improve service behavior",
+    "state": "open",
+    "author_id": "u007",
+    "reviewer_ids": [
+      "u008"
+    ],
+    "linked_issue_ids": [
+      "r003-issue-7"
+    ],
+    "changed_file_ids": [
+      "r003-f3"
+    ],
+    "created_at": "2026-08-14T00:00:00Z",
+    "closed_at": null,
+    "merged_at": null,
+    "ci_status": "pending",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r003-pr-8",
+    "repository_id": "r003",
+    "number": 20,
+    "title": "Improve controller behavior",
+    "state": "merged",
+    "author_id": "u008",
+    "reviewer_ids": [
+      "u005"
+    ],
+    "linked_issue_ids": [
+      "r003-issue-8"
+    ],
+    "changed_file_ids": [
+      "r003-f4"
+    ],
+    "created_at": "2026-08-21T00:00:00Z",
+    "closed_at": "2026-08-24T00:00:00Z",
+    "merged_at": "2026-08-24T00:00:00Z",
+    "ci_status": "success",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r004-pr-1",
+    "repository_id": "r004",
+    "number": 13,
+    "title": "Improve validation behavior",
+    "state": "open",
+    "author_id": "u007",
+    "reviewer_ids": [
+      "u008"
+    ],
+    "linked_issue_ids": [
+      "r004-issue-1"
+    ],
+    "changed_file_ids": [
+      "r004-f1"
+    ],
+    "created_at": "2026-07-03T00:00:00Z",
+    "closed_at": null,
+    "merged_at": null,
+    "ci_status": "pending",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r004-pr-2",
+    "repository_id": "r004",
+    "number": 14,
+    "title": "Improve repository behavior",
+    "state": "merged",
+    "author_id": "u008",
+    "reviewer_ids": [
+      "u009"
+    ],
+    "linked_issue_ids": [
+      "r004-issue-2"
+    ],
+    "changed_file_ids": [
+      "r004-f2"
+    ],
+    "created_at": "2026-07-10T00:00:00Z",
+    "closed_at": "2026-07-13T00:00:00Z",
+    "merged_at": "2026-07-13T00:00:00Z",
+    "ci_status": "success",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r004-pr-3",
+    "repository_id": "r004",
+    "number": 15,
+    "title": "Improve service behavior",
+    "state": "closed",
+    "author_id": "u009",
+    "reviewer_ids": [
+      "u010"
+    ],
+    "linked_issue_ids": [
+      "r004-issue-3"
+    ],
+    "changed_file_ids": [
+      "r004-f3"
+    ],
+    "created_at": "2026-07-17T00:00:00Z",
+    "closed_at": "2026-07-20T00:00:00Z",
+    "merged_at": null,
+    "ci_status": "failure",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r004-pr-4",
+    "repository_id": "r004",
+    "number": 16,
+    "title": "Improve controller behavior",
+    "state": "open",
+    "author_id": "u010",
+    "reviewer_ids": [
+      "u007"
+    ],
+    "linked_issue_ids": [
+      "r004-issue-4"
+    ],
+    "changed_file_ids": [
+      "r004-f4"
+    ],
+    "created_at": "2026-07-24T00:00:00Z",
+    "closed_at": null,
+    "merged_at": null,
+    "ci_status": "pending",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r004-pr-5",
+    "repository_id": "r004",
+    "number": 17,
+    "title": "Improve validation behavior",
+    "state": "merged",
+    "author_id": "u007",
+    "reviewer_ids": [
+      "u008"
+    ],
+    "linked_issue_ids": [
+      "r004-issue-5"
+    ],
+    "changed_file_ids": [
+      "r004-f1"
+    ],
+    "created_at": "2026-07-31T00:00:00Z",
+    "closed_at": "2026-08-03T00:00:00Z",
+    "merged_at": "2026-08-03T00:00:00Z",
+    "ci_status": "success",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r004-pr-6",
+    "repository_id": "r004",
+    "number": 18,
+    "title": "Improve repository behavior",
+    "state": "closed",
+    "author_id": "u008",
+    "reviewer_ids": [
+      "u009"
+    ],
+    "linked_issue_ids": [
+      "r004-issue-6"
+    ],
+    "changed_file_ids": [
+      "r004-f2"
+    ],
+    "created_at": "2026-08-07T00:00:00Z",
+    "closed_at": "2026-08-10T00:00:00Z",
+    "merged_at": null,
+    "ci_status": "failure",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r004-pr-7",
+    "repository_id": "r004",
+    "number": 19,
+    "title": "Improve service behavior",
+    "state": "open",
+    "author_id": "u009",
+    "reviewer_ids": [
+      "u010"
+    ],
+    "linked_issue_ids": [
+      "r004-issue-7"
+    ],
+    "changed_file_ids": [
+      "r004-f3"
+    ],
+    "created_at": "2026-08-14T00:00:00Z",
+    "closed_at": null,
+    "merged_at": null,
+    "ci_status": "pending",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r004-pr-8",
+    "repository_id": "r004",
+    "number": 20,
+    "title": "Improve controller behavior",
+    "state": "merged",
+    "author_id": "u010",
+    "reviewer_ids": [
+      "u007"
+    ],
+    "linked_issue_ids": [
+      "r004-issue-8"
+    ],
+    "changed_file_ids": [
+      "r004-f4"
+    ],
+    "created_at": "2026-08-21T00:00:00Z",
+    "closed_at": "2026-08-24T00:00:00Z",
+    "merged_at": "2026-08-24T00:00:00Z",
+    "ci_status": "success",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r005-pr-1",
+    "repository_id": "r005",
+    "number": 13,
+    "title": "Improve validation behavior",
+    "state": "open",
+    "author_id": "u009",
+    "reviewer_ids": [
+      "u010"
+    ],
+    "linked_issue_ids": [
+      "r005-issue-1"
+    ],
+    "changed_file_ids": [
+      "r005-f1"
+    ],
+    "created_at": "2026-07-03T00:00:00Z",
+    "closed_at": null,
+    "merged_at": null,
+    "ci_status": "pending",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r005-pr-2",
+    "repository_id": "r005",
+    "number": 14,
+    "title": "Improve repository behavior",
+    "state": "merged",
+    "author_id": "u010",
+    "reviewer_ids": [
+      "u011"
+    ],
+    "linked_issue_ids": [
+      "r005-issue-2"
+    ],
+    "changed_file_ids": [
+      "r005-f2"
+    ],
+    "created_at": "2026-07-10T00:00:00Z",
+    "closed_at": "2026-07-13T00:00:00Z",
+    "merged_at": "2026-07-13T00:00:00Z",
+    "ci_status": "success",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r005-pr-3",
+    "repository_id": "r005",
+    "number": 15,
+    "title": "Improve service behavior",
+    "state": "closed",
+    "author_id": "u011",
+    "reviewer_ids": [
+      "u012"
+    ],
+    "linked_issue_ids": [
+      "r005-issue-3"
+    ],
+    "changed_file_ids": [
+      "r005-f3"
+    ],
+    "created_at": "2026-07-17T00:00:00Z",
+    "closed_at": "2026-07-20T00:00:00Z",
+    "merged_at": null,
+    "ci_status": "failure",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r005-pr-4",
+    "repository_id": "r005",
+    "number": 16,
+    "title": "Improve controller behavior",
+    "state": "open",
+    "author_id": "u012",
+    "reviewer_ids": [
+      "u009"
+    ],
+    "linked_issue_ids": [
+      "r005-issue-4"
+    ],
+    "changed_file_ids": [
+      "r005-f4"
+    ],
+    "created_at": "2026-07-24T00:00:00Z",
+    "closed_at": null,
+    "merged_at": null,
+    "ci_status": "pending",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r005-pr-5",
+    "repository_id": "r005",
+    "number": 17,
+    "title": "Improve validation behavior",
+    "state": "merged",
+    "author_id": "u009",
+    "reviewer_ids": [
+      "u010"
+    ],
+    "linked_issue_ids": [
+      "r005-issue-5"
+    ],
+    "changed_file_ids": [
+      "r005-f1"
+    ],
+    "created_at": "2026-07-31T00:00:00Z",
+    "closed_at": "2026-08-03T00:00:00Z",
+    "merged_at": "2026-08-03T00:00:00Z",
+    "ci_status": "success",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r005-pr-6",
+    "repository_id": "r005",
+    "number": 18,
+    "title": "Improve repository behavior",
+    "state": "closed",
+    "author_id": "u010",
+    "reviewer_ids": [
+      "u011"
+    ],
+    "linked_issue_ids": [
+      "r005-issue-6"
+    ],
+    "changed_file_ids": [
+      "r005-f2"
+    ],
+    "created_at": "2026-08-07T00:00:00Z",
+    "closed_at": "2026-08-10T00:00:00Z",
+    "merged_at": null,
+    "ci_status": "failure",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r005-pr-7",
+    "repository_id": "r005",
+    "number": 19,
+    "title": "Improve service behavior",
+    "state": "open",
+    "author_id": "u011",
+    "reviewer_ids": [
+      "u012"
+    ],
+    "linked_issue_ids": [
+      "r005-issue-7"
+    ],
+    "changed_file_ids": [
+      "r005-f3"
+    ],
+    "created_at": "2026-08-14T00:00:00Z",
+    "closed_at": null,
+    "merged_at": null,
+    "ci_status": "pending",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r005-pr-8",
+    "repository_id": "r005",
+    "number": 20,
+    "title": "Improve controller behavior",
+    "state": "merged",
+    "author_id": "u012",
+    "reviewer_ids": [
+      "u009"
+    ],
+    "linked_issue_ids": [
+      "r005-issue-8"
+    ],
+    "changed_file_ids": [
+      "r005-f4"
+    ],
+    "created_at": "2026-08-21T00:00:00Z",
+    "closed_at": "2026-08-24T00:00:00Z",
+    "merged_at": "2026-08-24T00:00:00Z",
+    "ci_status": "success",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r006-pr-1",
+    "repository_id": "r006",
+    "number": 13,
+    "title": "Improve validation behavior",
+    "state": "open",
+    "author_id": "u011",
+    "reviewer_ids": [
+      "u012"
+    ],
+    "linked_issue_ids": [
+      "r006-issue-1"
+    ],
+    "changed_file_ids": [
+      "r006-f1"
+    ],
+    "created_at": "2026-07-03T00:00:00Z",
+    "closed_at": null,
+    "merged_at": null,
+    "ci_status": "pending",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r006-pr-2",
+    "repository_id": "r006",
+    "number": 14,
+    "title": "Improve repository behavior",
+    "state": "merged",
+    "author_id": "u012",
+    "reviewer_ids": [
+      "u013"
+    ],
+    "linked_issue_ids": [
+      "r006-issue-2"
+    ],
+    "changed_file_ids": [
+      "r006-f2"
+    ],
+    "created_at": "2026-07-10T00:00:00Z",
+    "closed_at": "2026-07-13T00:00:00Z",
+    "merged_at": "2026-07-13T00:00:00Z",
+    "ci_status": "success",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r006-pr-3",
+    "repository_id": "r006",
+    "number": 15,
+    "title": "Improve service behavior",
+    "state": "closed",
+    "author_id": "u013",
+    "reviewer_ids": [
+      "u014"
+    ],
+    "linked_issue_ids": [
+      "r006-issue-3"
+    ],
+    "changed_file_ids": [
+      "r006-f3"
+    ],
+    "created_at": "2026-07-17T00:00:00Z",
+    "closed_at": "2026-07-20T00:00:00Z",
+    "merged_at": null,
+    "ci_status": "failure",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r006-pr-4",
+    "repository_id": "r006",
+    "number": 16,
+    "title": "Improve controller behavior",
+    "state": "open",
+    "author_id": "u014",
+    "reviewer_ids": [
+      "u011"
+    ],
+    "linked_issue_ids": [
+      "r006-issue-4"
+    ],
+    "changed_file_ids": [
+      "r006-f4"
+    ],
+    "created_at": "2026-07-24T00:00:00Z",
+    "closed_at": null,
+    "merged_at": null,
+    "ci_status": "pending",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r006-pr-5",
+    "repository_id": "r006",
+    "number": 17,
+    "title": "Improve validation behavior",
+    "state": "merged",
+    "author_id": "u011",
+    "reviewer_ids": [
+      "u012"
+    ],
+    "linked_issue_ids": [
+      "r006-issue-5"
+    ],
+    "changed_file_ids": [
+      "r006-f1"
+    ],
+    "created_at": "2026-07-31T00:00:00Z",
+    "closed_at": "2026-08-03T00:00:00Z",
+    "merged_at": "2026-08-03T00:00:00Z",
+    "ci_status": "success",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r006-pr-6",
+    "repository_id": "r006",
+    "number": 18,
+    "title": "Improve repository behavior",
+    "state": "closed",
+    "author_id": "u012",
+    "reviewer_ids": [
+      "u013"
+    ],
+    "linked_issue_ids": [
+      "r006-issue-6"
+    ],
+    "changed_file_ids": [
+      "r006-f2"
+    ],
+    "created_at": "2026-08-07T00:00:00Z",
+    "closed_at": "2026-08-10T00:00:00Z",
+    "merged_at": null,
+    "ci_status": "failure",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r006-pr-7",
+    "repository_id": "r006",
+    "number": 19,
+    "title": "Improve service behavior",
+    "state": "open",
+    "author_id": "u013",
+    "reviewer_ids": [
+      "u014"
+    ],
+    "linked_issue_ids": [
+      "r006-issue-7"
+    ],
+    "changed_file_ids": [
+      "r006-f3"
+    ],
+    "created_at": "2026-08-14T00:00:00Z",
+    "closed_at": null,
+    "merged_at": null,
+    "ci_status": "pending",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r006-pr-8",
+    "repository_id": "r006",
+    "number": 20,
+    "title": "Improve controller behavior",
+    "state": "merged",
+    "author_id": "u014",
+    "reviewer_ids": [
+      "u011"
+    ],
+    "linked_issue_ids": [
+      "r006-issue-8"
+    ],
+    "changed_file_ids": [
+      "r006-f4"
+    ],
+    "created_at": "2026-08-21T00:00:00Z",
+    "closed_at": "2026-08-24T00:00:00Z",
+    "merged_at": "2026-08-24T00:00:00Z",
+    "ci_status": "success",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r007-pr-1",
+    "repository_id": "r007",
+    "number": 13,
+    "title": "Improve validation behavior",
+    "state": "open",
+    "author_id": "u013",
+    "reviewer_ids": [
+      "u014"
+    ],
+    "linked_issue_ids": [
+      "r007-issue-1"
+    ],
+    "changed_file_ids": [
+      "r007-f1"
+    ],
+    "created_at": "2026-07-03T00:00:00Z",
+    "closed_at": null,
+    "merged_at": null,
+    "ci_status": "pending",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r007-pr-2",
+    "repository_id": "r007",
+    "number": 14,
+    "title": "Improve repository behavior",
+    "state": "merged",
+    "author_id": "u014",
+    "reviewer_ids": [
+      "u015"
+    ],
+    "linked_issue_ids": [
+      "r007-issue-2"
+    ],
+    "changed_file_ids": [
+      "r007-f2"
+    ],
+    "created_at": "2026-07-10T00:00:00Z",
+    "closed_at": "2026-07-13T00:00:00Z",
+    "merged_at": "2026-07-13T00:00:00Z",
+    "ci_status": "success",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r007-pr-3",
+    "repository_id": "r007",
+    "number": 15,
+    "title": "Improve service behavior",
+    "state": "closed",
+    "author_id": "u015",
+    "reviewer_ids": [
+      "u016"
+    ],
+    "linked_issue_ids": [
+      "r007-issue-3"
+    ],
+    "changed_file_ids": [
+      "r007-f3"
+    ],
+    "created_at": "2026-07-17T00:00:00Z",
+    "closed_at": "2026-07-20T00:00:00Z",
+    "merged_at": null,
+    "ci_status": "failure",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r007-pr-4",
+    "repository_id": "r007",
+    "number": 16,
+    "title": "Improve controller behavior",
+    "state": "open",
+    "author_id": "u016",
+    "reviewer_ids": [
+      "u013"
+    ],
+    "linked_issue_ids": [
+      "r007-issue-4"
+    ],
+    "changed_file_ids": [
+      "r007-f4"
+    ],
+    "created_at": "2026-07-24T00:00:00Z",
+    "closed_at": null,
+    "merged_at": null,
+    "ci_status": "pending",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r007-pr-5",
+    "repository_id": "r007",
+    "number": 17,
+    "title": "Improve validation behavior",
+    "state": "merged",
+    "author_id": "u013",
+    "reviewer_ids": [
+      "u014"
+    ],
+    "linked_issue_ids": [
+      "r007-issue-5"
+    ],
+    "changed_file_ids": [
+      "r007-f1"
+    ],
+    "created_at": "2026-07-31T00:00:00Z",
+    "closed_at": "2026-08-03T00:00:00Z",
+    "merged_at": "2026-08-03T00:00:00Z",
+    "ci_status": "success",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r007-pr-6",
+    "repository_id": "r007",
+    "number": 18,
+    "title": "Improve repository behavior",
+    "state": "closed",
+    "author_id": "u014",
+    "reviewer_ids": [
+      "u015"
+    ],
+    "linked_issue_ids": [
+      "r007-issue-6"
+    ],
+    "changed_file_ids": [
+      "r007-f2"
+    ],
+    "created_at": "2026-08-07T00:00:00Z",
+    "closed_at": "2026-08-10T00:00:00Z",
+    "merged_at": null,
+    "ci_status": "failure",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r007-pr-7",
+    "repository_id": "r007",
+    "number": 19,
+    "title": "Improve service behavior",
+    "state": "open",
+    "author_id": "u015",
+    "reviewer_ids": [
+      "u016"
+    ],
+    "linked_issue_ids": [
+      "r007-issue-7"
+    ],
+    "changed_file_ids": [
+      "r007-f3"
+    ],
+    "created_at": "2026-08-14T00:00:00Z",
+    "closed_at": null,
+    "merged_at": null,
+    "ci_status": "pending",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r007-pr-8",
+    "repository_id": "r007",
+    "number": 20,
+    "title": "Improve controller behavior",
+    "state": "merged",
+    "author_id": "u016",
+    "reviewer_ids": [
+      "u013"
+    ],
+    "linked_issue_ids": [
+      "r007-issue-8"
+    ],
+    "changed_file_ids": [
+      "r007-f4"
+    ],
+    "created_at": "2026-08-21T00:00:00Z",
+    "closed_at": "2026-08-24T00:00:00Z",
+    "merged_at": "2026-08-24T00:00:00Z",
+    "ci_status": "success",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r008-pr-1",
+    "repository_id": "r008",
+    "number": 13,
+    "title": "Improve validation behavior",
+    "state": "open",
+    "author_id": "u015",
+    "reviewer_ids": [
+      "u016"
+    ],
+    "linked_issue_ids": [
+      "r008-issue-1"
+    ],
+    "changed_file_ids": [
+      "r008-f1"
+    ],
+    "created_at": "2026-07-03T00:00:00Z",
+    "closed_at": null,
+    "merged_at": null,
+    "ci_status": "pending",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r008-pr-2",
+    "repository_id": "r008",
+    "number": 14,
+    "title": "Improve repository behavior",
+    "state": "merged",
+    "author_id": "u016",
+    "reviewer_ids": [
+      "u017"
+    ],
+    "linked_issue_ids": [
+      "r008-issue-2"
+    ],
+    "changed_file_ids": [
+      "r008-f2"
+    ],
+    "created_at": "2026-07-10T00:00:00Z",
+    "closed_at": "2026-07-13T00:00:00Z",
+    "merged_at": "2026-07-13T00:00:00Z",
+    "ci_status": "success",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r008-pr-3",
+    "repository_id": "r008",
+    "number": 15,
+    "title": "Improve service behavior",
+    "state": "closed",
+    "author_id": "u017",
+    "reviewer_ids": [
+      "u018"
+    ],
+    "linked_issue_ids": [
+      "r008-issue-3"
+    ],
+    "changed_file_ids": [
+      "r008-f3"
+    ],
+    "created_at": "2026-07-17T00:00:00Z",
+    "closed_at": "2026-07-20T00:00:00Z",
+    "merged_at": null,
+    "ci_status": "failure",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r008-pr-4",
+    "repository_id": "r008",
+    "number": 16,
+    "title": "Improve controller behavior",
+    "state": "open",
+    "author_id": "u018",
+    "reviewer_ids": [
+      "u015"
+    ],
+    "linked_issue_ids": [
+      "r008-issue-4"
+    ],
+    "changed_file_ids": [
+      "r008-f4"
+    ],
+    "created_at": "2026-07-24T00:00:00Z",
+    "closed_at": null,
+    "merged_at": null,
+    "ci_status": "pending",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r008-pr-5",
+    "repository_id": "r008",
+    "number": 17,
+    "title": "Improve validation behavior",
+    "state": "merged",
+    "author_id": "u015",
+    "reviewer_ids": [
+      "u016"
+    ],
+    "linked_issue_ids": [
+      "r008-issue-5"
+    ],
+    "changed_file_ids": [
+      "r008-f1"
+    ],
+    "created_at": "2026-07-31T00:00:00Z",
+    "closed_at": "2026-08-03T00:00:00Z",
+    "merged_at": "2026-08-03T00:00:00Z",
+    "ci_status": "success",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r008-pr-6",
+    "repository_id": "r008",
+    "number": 18,
+    "title": "Improve repository behavior",
+    "state": "closed",
+    "author_id": "u016",
+    "reviewer_ids": [
+      "u017"
+    ],
+    "linked_issue_ids": [
+      "r008-issue-6"
+    ],
+    "changed_file_ids": [
+      "r008-f2"
+    ],
+    "created_at": "2026-08-07T00:00:00Z",
+    "closed_at": "2026-08-10T00:00:00Z",
+    "merged_at": null,
+    "ci_status": "failure",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r008-pr-7",
+    "repository_id": "r008",
+    "number": 19,
+    "title": "Improve service behavior",
+    "state": "open",
+    "author_id": "u017",
+    "reviewer_ids": [
+      "u018"
+    ],
+    "linked_issue_ids": [
+      "r008-issue-7"
+    ],
+    "changed_file_ids": [
+      "r008-f3"
+    ],
+    "created_at": "2026-08-14T00:00:00Z",
+    "closed_at": null,
+    "merged_at": null,
+    "ci_status": "pending",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r008-pr-8",
+    "repository_id": "r008",
+    "number": 20,
+    "title": "Improve controller behavior",
+    "state": "merged",
+    "author_id": "u018",
+    "reviewer_ids": [
+      "u015"
+    ],
+    "linked_issue_ids": [
+      "r008-issue-8"
+    ],
+    "changed_file_ids": [
+      "r008-f4"
+    ],
+    "created_at": "2026-08-21T00:00:00Z",
+    "closed_at": "2026-08-24T00:00:00Z",
+    "merged_at": "2026-08-24T00:00:00Z",
+    "ci_status": "success",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r009-pr-1",
+    "repository_id": "r009",
+    "number": 13,
+    "title": "Improve validation behavior",
+    "state": "open",
+    "author_id": "u017",
+    "reviewer_ids": [
+      "u018"
+    ],
+    "linked_issue_ids": [
+      "r009-issue-1"
+    ],
+    "changed_file_ids": [
+      "r009-f1"
+    ],
+    "created_at": "2026-07-03T00:00:00Z",
+    "closed_at": null,
+    "merged_at": null,
+    "ci_status": "pending",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r009-pr-2",
+    "repository_id": "r009",
+    "number": 14,
+    "title": "Improve repository behavior",
+    "state": "merged",
+    "author_id": "u018",
+    "reviewer_ids": [
+      "u019"
+    ],
+    "linked_issue_ids": [
+      "r009-issue-2"
+    ],
+    "changed_file_ids": [
+      "r009-f2"
+    ],
+    "created_at": "2026-07-10T00:00:00Z",
+    "closed_at": "2026-07-13T00:00:00Z",
+    "merged_at": "2026-07-13T00:00:00Z",
+    "ci_status": "success",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r009-pr-3",
+    "repository_id": "r009",
+    "number": 15,
+    "title": "Improve service behavior",
+    "state": "closed",
+    "author_id": "u019",
+    "reviewer_ids": [
+      "u020"
+    ],
+    "linked_issue_ids": [
+      "r009-issue-3"
+    ],
+    "changed_file_ids": [
+      "r009-f3"
+    ],
+    "created_at": "2026-07-17T00:00:00Z",
+    "closed_at": "2026-07-20T00:00:00Z",
+    "merged_at": null,
+    "ci_status": "failure",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r009-pr-4",
+    "repository_id": "r009",
+    "number": 16,
+    "title": "Improve controller behavior",
+    "state": "open",
+    "author_id": "u020",
+    "reviewer_ids": [
+      "u017"
+    ],
+    "linked_issue_ids": [
+      "r009-issue-4"
+    ],
+    "changed_file_ids": [
+      "r009-f4"
+    ],
+    "created_at": "2026-07-24T00:00:00Z",
+    "closed_at": null,
+    "merged_at": null,
+    "ci_status": "pending",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r009-pr-5",
+    "repository_id": "r009",
+    "number": 17,
+    "title": "Improve validation behavior",
+    "state": "merged",
+    "author_id": "u017",
+    "reviewer_ids": [
+      "u018"
+    ],
+    "linked_issue_ids": [
+      "r009-issue-5"
+    ],
+    "changed_file_ids": [
+      "r009-f1"
+    ],
+    "created_at": "2026-07-31T00:00:00Z",
+    "closed_at": "2026-08-03T00:00:00Z",
+    "merged_at": "2026-08-03T00:00:00Z",
+    "ci_status": "success",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r009-pr-6",
+    "repository_id": "r009",
+    "number": 18,
+    "title": "Improve repository behavior",
+    "state": "closed",
+    "author_id": "u018",
+    "reviewer_ids": [
+      "u019"
+    ],
+    "linked_issue_ids": [
+      "r009-issue-6"
+    ],
+    "changed_file_ids": [
+      "r009-f2"
+    ],
+    "created_at": "2026-08-07T00:00:00Z",
+    "closed_at": "2026-08-10T00:00:00Z",
+    "merged_at": null,
+    "ci_status": "failure",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r009-pr-7",
+    "repository_id": "r009",
+    "number": 19,
+    "title": "Improve service behavior",
+    "state": "open",
+    "author_id": "u019",
+    "reviewer_ids": [
+      "u020"
+    ],
+    "linked_issue_ids": [
+      "r009-issue-7"
+    ],
+    "changed_file_ids": [
+      "r009-f3"
+    ],
+    "created_at": "2026-08-14T00:00:00Z",
+    "closed_at": null,
+    "merged_at": null,
+    "ci_status": "pending",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r009-pr-8",
+    "repository_id": "r009",
+    "number": 20,
+    "title": "Improve controller behavior",
+    "state": "merged",
+    "author_id": "u020",
+    "reviewer_ids": [
+      "u017"
+    ],
+    "linked_issue_ids": [
+      "r009-issue-8"
+    ],
+    "changed_file_ids": [
+      "r009-f4"
+    ],
+    "created_at": "2026-08-21T00:00:00Z",
+    "closed_at": "2026-08-24T00:00:00Z",
+    "merged_at": "2026-08-24T00:00:00Z",
+    "ci_status": "success",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r010-pr-1",
+    "repository_id": "r010",
+    "number": 13,
+    "title": "Improve validation behavior",
+    "state": "open",
+    "author_id": "u019",
+    "reviewer_ids": [
+      "u020"
+    ],
+    "linked_issue_ids": [
+      "r010-issue-1"
+    ],
+    "changed_file_ids": [
+      "r010-f1"
+    ],
+    "created_at": "2026-07-03T00:00:00Z",
+    "closed_at": null,
+    "merged_at": null,
+    "ci_status": "pending",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r010-pr-2",
+    "repository_id": "r010",
+    "number": 14,
+    "title": "Improve repository behavior",
+    "state": "merged",
+    "author_id": "u020",
+    "reviewer_ids": [
+      "u021"
+    ],
+    "linked_issue_ids": [
+      "r010-issue-2"
+    ],
+    "changed_file_ids": [
+      "r010-f2"
+    ],
+    "created_at": "2026-07-10T00:00:00Z",
+    "closed_at": "2026-07-13T00:00:00Z",
+    "merged_at": "2026-07-13T00:00:00Z",
+    "ci_status": "success",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r010-pr-3",
+    "repository_id": "r010",
+    "number": 15,
+    "title": "Improve service behavior",
+    "state": "closed",
+    "author_id": "u021",
+    "reviewer_ids": [
+      "u022"
+    ],
+    "linked_issue_ids": [
+      "r010-issue-3"
+    ],
+    "changed_file_ids": [
+      "r010-f3"
+    ],
+    "created_at": "2026-07-17T00:00:00Z",
+    "closed_at": "2026-07-20T00:00:00Z",
+    "merged_at": null,
+    "ci_status": "failure",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r010-pr-4",
+    "repository_id": "r010",
+    "number": 16,
+    "title": "Improve controller behavior",
+    "state": "open",
+    "author_id": "u022",
+    "reviewer_ids": [
+      "u019"
+    ],
+    "linked_issue_ids": [
+      "r010-issue-4"
+    ],
+    "changed_file_ids": [
+      "r010-f4"
+    ],
+    "created_at": "2026-07-24T00:00:00Z",
+    "closed_at": null,
+    "merged_at": null,
+    "ci_status": "pending",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r010-pr-5",
+    "repository_id": "r010",
+    "number": 17,
+    "title": "Improve validation behavior",
+    "state": "merged",
+    "author_id": "u019",
+    "reviewer_ids": [
+      "u020"
+    ],
+    "linked_issue_ids": [
+      "r010-issue-5"
+    ],
+    "changed_file_ids": [
+      "r010-f1"
+    ],
+    "created_at": "2026-07-31T00:00:00Z",
+    "closed_at": "2026-08-03T00:00:00Z",
+    "merged_at": "2026-08-03T00:00:00Z",
+    "ci_status": "success",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r010-pr-6",
+    "repository_id": "r010",
+    "number": 18,
+    "title": "Improve repository behavior",
+    "state": "closed",
+    "author_id": "u020",
+    "reviewer_ids": [
+      "u021"
+    ],
+    "linked_issue_ids": [
+      "r010-issue-6"
+    ],
+    "changed_file_ids": [
+      "r010-f2"
+    ],
+    "created_at": "2026-08-07T00:00:00Z",
+    "closed_at": "2026-08-10T00:00:00Z",
+    "merged_at": null,
+    "ci_status": "failure",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r010-pr-7",
+    "repository_id": "r010",
+    "number": 19,
+    "title": "Improve service behavior",
+    "state": "open",
+    "author_id": "u021",
+    "reviewer_ids": [
+      "u022"
+    ],
+    "linked_issue_ids": [
+      "r010-issue-7"
+    ],
+    "changed_file_ids": [
+      "r010-f3"
+    ],
+    "created_at": "2026-08-14T00:00:00Z",
+    "closed_at": null,
+    "merged_at": null,
+    "ci_status": "pending",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r010-pr-8",
+    "repository_id": "r010",
+    "number": 20,
+    "title": "Improve controller behavior",
+    "state": "merged",
+    "author_id": "u022",
+    "reviewer_ids": [
+      "u019"
+    ],
+    "linked_issue_ids": [
+      "r010-issue-8"
+    ],
+    "changed_file_ids": [
+      "r010-f4"
+    ],
+    "created_at": "2026-08-21T00:00:00Z",
+    "closed_at": "2026-08-24T00:00:00Z",
+    "merged_at": "2026-08-24T00:00:00Z",
+    "ci_status": "success",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r011-pr-1",
+    "repository_id": "r011",
+    "number": 13,
+    "title": "Improve validation behavior",
+    "state": "open",
+    "author_id": "u021",
+    "reviewer_ids": [
+      "u022"
+    ],
+    "linked_issue_ids": [
+      "r011-issue-1"
+    ],
+    "changed_file_ids": [
+      "r011-f1"
+    ],
+    "created_at": "2026-07-03T00:00:00Z",
+    "closed_at": null,
+    "merged_at": null,
+    "ci_status": "pending",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r011-pr-2",
+    "repository_id": "r011",
+    "number": 14,
+    "title": "Improve repository behavior",
+    "state": "merged",
+    "author_id": "u022",
+    "reviewer_ids": [
+      "u023"
+    ],
+    "linked_issue_ids": [
+      "r011-issue-2"
+    ],
+    "changed_file_ids": [
+      "r011-f2"
+    ],
+    "created_at": "2026-07-10T00:00:00Z",
+    "closed_at": "2026-07-13T00:00:00Z",
+    "merged_at": "2026-07-13T00:00:00Z",
+    "ci_status": "success",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r011-pr-3",
+    "repository_id": "r011",
+    "number": 15,
+    "title": "Improve service behavior",
+    "state": "closed",
+    "author_id": "u023",
+    "reviewer_ids": [
+      "u024"
+    ],
+    "linked_issue_ids": [
+      "r011-issue-3"
+    ],
+    "changed_file_ids": [
+      "r011-f3"
+    ],
+    "created_at": "2026-07-17T00:00:00Z",
+    "closed_at": "2026-07-20T00:00:00Z",
+    "merged_at": null,
+    "ci_status": "failure",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r011-pr-4",
+    "repository_id": "r011",
+    "number": 16,
+    "title": "Improve controller behavior",
+    "state": "open",
+    "author_id": "u024",
+    "reviewer_ids": [
+      "u021"
+    ],
+    "linked_issue_ids": [
+      "r011-issue-4"
+    ],
+    "changed_file_ids": [
+      "r011-f4"
+    ],
+    "created_at": "2026-07-24T00:00:00Z",
+    "closed_at": null,
+    "merged_at": null,
+    "ci_status": "pending",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r011-pr-5",
+    "repository_id": "r011",
+    "number": 17,
+    "title": "Improve validation behavior",
+    "state": "merged",
+    "author_id": "u021",
+    "reviewer_ids": [
+      "u022"
+    ],
+    "linked_issue_ids": [
+      "r011-issue-5"
+    ],
+    "changed_file_ids": [
+      "r011-f1"
+    ],
+    "created_at": "2026-07-31T00:00:00Z",
+    "closed_at": "2026-08-03T00:00:00Z",
+    "merged_at": "2026-08-03T00:00:00Z",
+    "ci_status": "success",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r011-pr-6",
+    "repository_id": "r011",
+    "number": 18,
+    "title": "Improve repository behavior",
+    "state": "closed",
+    "author_id": "u022",
+    "reviewer_ids": [
+      "u023"
+    ],
+    "linked_issue_ids": [
+      "r011-issue-6"
+    ],
+    "changed_file_ids": [
+      "r011-f2"
+    ],
+    "created_at": "2026-08-07T00:00:00Z",
+    "closed_at": "2026-08-10T00:00:00Z",
+    "merged_at": null,
+    "ci_status": "failure",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r011-pr-7",
+    "repository_id": "r011",
+    "number": 19,
+    "title": "Improve service behavior",
+    "state": "open",
+    "author_id": "u023",
+    "reviewer_ids": [
+      "u024"
+    ],
+    "linked_issue_ids": [
+      "r011-issue-7"
+    ],
+    "changed_file_ids": [
+      "r011-f3"
+    ],
+    "created_at": "2026-08-14T00:00:00Z",
+    "closed_at": null,
+    "merged_at": null,
+    "ci_status": "pending",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r011-pr-8",
+    "repository_id": "r011",
+    "number": 20,
+    "title": "Improve controller behavior",
+    "state": "merged",
+    "author_id": "u024",
+    "reviewer_ids": [
+      "u021"
+    ],
+    "linked_issue_ids": [
+      "r011-issue-8"
+    ],
+    "changed_file_ids": [
+      "r011-f4"
+    ],
+    "created_at": "2026-08-21T00:00:00Z",
+    "closed_at": "2026-08-24T00:00:00Z",
+    "merged_at": "2026-08-24T00:00:00Z",
+    "ci_status": "success",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r012-pr-1",
+    "repository_id": "r012",
+    "number": 13,
+    "title": "Improve validation behavior",
+    "state": "open",
+    "author_id": "u023",
+    "reviewer_ids": [
+      "u024"
+    ],
+    "linked_issue_ids": [
+      "r012-issue-1"
+    ],
+    "changed_file_ids": [
+      "r012-f1"
+    ],
+    "created_at": "2026-07-03T00:00:00Z",
+    "closed_at": null,
+    "merged_at": null,
+    "ci_status": "pending",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r012-pr-2",
+    "repository_id": "r012",
+    "number": 14,
+    "title": "Improve repository behavior",
+    "state": "merged",
+    "author_id": "u024",
+    "reviewer_ids": [
+      "u001"
+    ],
+    "linked_issue_ids": [
+      "r012-issue-2"
+    ],
+    "changed_file_ids": [
+      "r012-f2"
+    ],
+    "created_at": "2026-07-10T00:00:00Z",
+    "closed_at": "2026-07-13T00:00:00Z",
+    "merged_at": "2026-07-13T00:00:00Z",
+    "ci_status": "success",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r012-pr-3",
+    "repository_id": "r012",
+    "number": 15,
+    "title": "Improve service behavior",
+    "state": "closed",
+    "author_id": "u001",
+    "reviewer_ids": [
+      "u002"
+    ],
+    "linked_issue_ids": [
+      "r012-issue-3"
+    ],
+    "changed_file_ids": [
+      "r012-f3"
+    ],
+    "created_at": "2026-07-17T00:00:00Z",
+    "closed_at": "2026-07-20T00:00:00Z",
+    "merged_at": null,
+    "ci_status": "failure",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r012-pr-4",
+    "repository_id": "r012",
+    "number": 16,
+    "title": "Improve controller behavior",
+    "state": "open",
+    "author_id": "u002",
+    "reviewer_ids": [
+      "u023"
+    ],
+    "linked_issue_ids": [
+      "r012-issue-4"
+    ],
+    "changed_file_ids": [
+      "r012-f4"
+    ],
+    "created_at": "2026-07-24T00:00:00Z",
+    "closed_at": null,
+    "merged_at": null,
+    "ci_status": "pending",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r012-pr-5",
+    "repository_id": "r012",
+    "number": 17,
+    "title": "Improve validation behavior",
+    "state": "merged",
+    "author_id": "u023",
+    "reviewer_ids": [
+      "u024"
+    ],
+    "linked_issue_ids": [
+      "r012-issue-5"
+    ],
+    "changed_file_ids": [
+      "r012-f1"
+    ],
+    "created_at": "2026-07-31T00:00:00Z",
+    "closed_at": "2026-08-03T00:00:00Z",
+    "merged_at": "2026-08-03T00:00:00Z",
+    "ci_status": "success",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r012-pr-6",
+    "repository_id": "r012",
+    "number": 18,
+    "title": "Improve repository behavior",
+    "state": "closed",
+    "author_id": "u024",
+    "reviewer_ids": [
+      "u001"
+    ],
+    "linked_issue_ids": [
+      "r012-issue-6"
+    ],
+    "changed_file_ids": [
+      "r012-f2"
+    ],
+    "created_at": "2026-08-07T00:00:00Z",
+    "closed_at": "2026-08-10T00:00:00Z",
+    "merged_at": null,
+    "ci_status": "failure",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r012-pr-7",
+    "repository_id": "r012",
+    "number": 19,
+    "title": "Improve service behavior",
+    "state": "open",
+    "author_id": "u001",
+    "reviewer_ids": [
+      "u002"
+    ],
+    "linked_issue_ids": [
+      "r012-issue-7"
+    ],
+    "changed_file_ids": [
+      "r012-f3"
+    ],
+    "created_at": "2026-08-14T00:00:00Z",
+    "closed_at": null,
+    "merged_at": null,
+    "ci_status": "pending",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  },
+  {
+    "id": "r012-pr-8",
+    "repository_id": "r012",
+    "number": 20,
+    "title": "Improve controller behavior",
+    "state": "merged",
+    "author_id": "u002",
+    "reviewer_ids": [
+      "u023"
+    ],
+    "linked_issue_ids": [
+      "r012-issue-8"
+    ],
+    "changed_file_ids": [
+      "r012-f4"
+    ],
+    "created_at": "2026-08-21T00:00:00Z",
+    "closed_at": "2026-08-24T00:00:00Z",
+    "merged_at": "2026-08-24T00:00:00Z",
+    "ci_status": "success",
+    "note": "Synthetic workflow record; no actual diff or applied patch supplied."
+  }
+]

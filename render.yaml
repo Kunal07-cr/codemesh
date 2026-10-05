@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: codemesh
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/health
+    autoDeployTrigger: commit
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: API_PORT
+        value: 10000
+      - key: DATA_PATH
+        value: /app/storage/codemesh.json
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-2.5-flash
+

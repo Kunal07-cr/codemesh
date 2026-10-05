@@ -1,0 +1,674 @@
+[
+  {
+    "id": "r001-f1",
+    "repository_id": "r001",
+    "path": "src/validation.py",
+    "language": "Python",
+    "content": "def validate_item(item):\n    return isinstance(item, dict) and bool(item.get('name'))\n",
+    "line_count": 2,
+    "sha256": "9a21348f94998ddffca7e6430239f08db37ca5d152b13d4f79258bc1c24fcc76",
+    "metrics": {
+      "demo_complexity": 1,
+      "demo_coverage_percent": 87
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r001-f2",
+    "repository_id": "r001",
+    "path": "src/repository.py",
+    "language": "Python",
+    "content": "from .validation import validate_item\n\ndef save_item(item):\n    if not validate_item(item):\n        raise ValueError('name is required')\n    return dict(item, id='demo-id')\n",
+    "line_count": 6,
+    "sha256": "48983a049b61ad2d197c4811b4541d2b01be09600feba6bb4128f3df4d8d238f",
+    "metrics": {
+      "demo_complexity": 2,
+      "demo_coverage_percent": 57
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r001-f3",
+    "repository_id": "r001",
+    "path": "src/service.py",
+    "language": "Python",
+    "content": "from .repository import save_item\n\ndef create_item(item):\n    return save_item(item)\n",
+    "line_count": 4,
+    "sha256": "cfa327babb0b2e46b67d0731802d16bddaf6fb20538b43d678256136f42b7168",
+    "metrics": {
+      "demo_complexity": 1,
+      "demo_coverage_percent": 55
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r001-f4",
+    "repository_id": "r001",
+    "path": "src/controller.py",
+    "language": "Python",
+    "content": "from .service import create_item\n\ndef handle_request(body):\n    return {'status': 201, 'data': create_item(body)}\n",
+    "line_count": 4,
+    "sha256": "58e2e6f9c00e98f24ffbf0ff9caab884e62b472bbd5069e84f065b546985fde8",
+    "metrics": {
+      "demo_complexity": 1,
+      "demo_coverage_percent": 54
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r002-f1",
+    "repository_id": "r002",
+    "path": "src/validation.js",
+    "language": "JavaScript",
+    "content": "export function validate_item(item) {\n  return Boolean(item && item.name);\n}\n",
+    "line_count": 3,
+    "sha256": "8faa0c4b5f3ab694ccf9a65fe48132160bc905f9d4e69db54de0212a0e3c73b1",
+    "metrics": {
+      "demo_complexity": 1,
+      "demo_coverage_percent": 82
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r002-f2",
+    "repository_id": "r002",
+    "path": "src/repository.js",
+    "language": "JavaScript",
+    "content": "import { validate_item } from './validation.js';\n\nexport function save_item(item) {\n  if (!validate_item(item)) throw new Error('name is required');\n  return { ...item, id: 'demo-id' };\n}\n",
+    "line_count": 6,
+    "sha256": "85f1ad4862f6d0649412a365862b297221176f0161524cae5366c0cc8ae92561",
+    "metrics": {
+      "demo_complexity": 2,
+      "demo_coverage_percent": 54
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r002-f3",
+    "repository_id": "r002",
+    "path": "src/service.js",
+    "language": "JavaScript",
+    "content": "import { save_item } from './repository.js';\n\nexport function create_item(item) {\n  return save_item(item);\n}\n",
+    "line_count": 5,
+    "sha256": "f12a9de9e2db21b2fddd7a706e4c3d6d2db076e2def3c031cd6a16a9b5f5c756",
+    "metrics": {
+      "demo_complexity": 1,
+      "demo_coverage_percent": 89
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r002-f4",
+    "repository_id": "r002",
+    "path": "src/controller.js",
+    "language": "JavaScript",
+    "content": "import { create_item } from './service.js';\n\nexport function handle_request(body) {\n  return { status: 201, data: create_item(body) };\n}\n",
+    "line_count": 5,
+    "sha256": "0556db1befb2eae8dc530a4cbdae33f2abeec0e836b9d3c4ec0702f9f72aba2e",
+    "metrics": {
+      "demo_complexity": 1,
+      "demo_coverage_percent": 58
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r003-f1",
+    "repository_id": "r003",
+    "path": "src/validation.ts",
+    "language": "TypeScript",
+    "content": "export function validate_item(item: Record<string, unknown>) {\n  return Boolean(item && item.name);\n}\n",
+    "line_count": 3,
+    "sha256": "a2e79189bf11acf351af8dbf09db63200de8c3888d3df84e84a256e90d035f3e",
+    "metrics": {
+      "demo_complexity": 1,
+      "demo_coverage_percent": 97
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r003-f2",
+    "repository_id": "r003",
+    "path": "src/repository.ts",
+    "language": "TypeScript",
+    "content": "import { validate_item } from './validation';\n\nexport function save_item(item: Record<string, unknown>) {\n  if (!validate_item(item)) throw new Error('name is required');\n  return { ...item, id: 'demo-id' };\n}\n",
+    "line_count": 6,
+    "sha256": "7633be5f11c9d92b75b09991ab345143dd872a2a79bc2959e1dbc577fc8078c0",
+    "metrics": {
+      "demo_complexity": 2,
+      "demo_coverage_percent": 77
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r003-f3",
+    "repository_id": "r003",
+    "path": "src/service.ts",
+    "language": "TypeScript",
+    "content": "import { save_item } from './repository';\n\nexport function create_item(item: Record<string, unknown>) {\n  return save_item(item);\n}\n",
+    "line_count": 5,
+    "sha256": "9fbca54afdecfd8524691a8088dfb3f3ac8cbfd508ee5b42da8b553639f00fce",
+    "metrics": {
+      "demo_complexity": 1,
+      "demo_coverage_percent": 65
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r003-f4",
+    "repository_id": "r003",
+    "path": "src/controller.ts",
+    "language": "TypeScript",
+    "content": "import { create_item } from './service';\n\nexport function handle_request(body: Record<string, unknown>) {\n  return { status: 201, data: create_item(body) };\n}\n",
+    "line_count": 5,
+    "sha256": "1c6290a5ffc0ecee33e0fae11e17f4a1b4f3e2e2630bd7feaccca0bb0768ecb5",
+    "metrics": {
+      "demo_complexity": 1,
+      "demo_coverage_percent": 63
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r004-f1",
+    "repository_id": "r004",
+    "path": "src/validation.py",
+    "language": "Python",
+    "content": "def validate_item(item):\n    return isinstance(item, dict) and bool(item.get('name'))\n",
+    "line_count": 2,
+    "sha256": "9a21348f94998ddffca7e6430239f08db37ca5d152b13d4f79258bc1c24fcc76",
+    "metrics": {
+      "demo_complexity": 1,
+      "demo_coverage_percent": 55
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r004-f2",
+    "repository_id": "r004",
+    "path": "src/repository.py",
+    "language": "Python",
+    "content": "from .validation import validate_item\n\ndef save_item(item):\n    if not validate_item(item):\n        raise ValueError('name is required')\n    return dict(item, id='demo-id')\n",
+    "line_count": 6,
+    "sha256": "48983a049b61ad2d197c4811b4541d2b01be09600feba6bb4128f3df4d8d238f",
+    "metrics": {
+      "demo_complexity": 2,
+      "demo_coverage_percent": 43
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r004-f3",
+    "repository_id": "r004",
+    "path": "src/service.py",
+    "language": "Python",
+    "content": "from .repository import save_item\n\ndef create_item(item):\n    return save_item(item)\n",
+    "line_count": 4,
+    "sha256": "cfa327babb0b2e46b67d0731802d16bddaf6fb20538b43d678256136f42b7168",
+    "metrics": {
+      "demo_complexity": 1,
+      "demo_coverage_percent": 55
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r004-f4",
+    "repository_id": "r004",
+    "path": "src/controller.py",
+    "language": "Python",
+    "content": "from .service import create_item\n\ndef handle_request(body):\n    return {'status': 201, 'data': create_item(body)}\n",
+    "line_count": 4,
+    "sha256": "58e2e6f9c00e98f24ffbf0ff9caab884e62b472bbd5069e84f065b546985fde8",
+    "metrics": {
+      "demo_complexity": 1,
+      "demo_coverage_percent": 96
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r005-f1",
+    "repository_id": "r005",
+    "path": "src/validation.js",
+    "language": "JavaScript",
+    "content": "export function validate_item(item) {\n  return Boolean(item && item.name);\n}\n",
+    "line_count": 3,
+    "sha256": "8faa0c4b5f3ab694ccf9a65fe48132160bc905f9d4e69db54de0212a0e3c73b1",
+    "metrics": {
+      "demo_complexity": 1,
+      "demo_coverage_percent": 70
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r005-f2",
+    "repository_id": "r005",
+    "path": "src/repository.js",
+    "language": "JavaScript",
+    "content": "import { validate_item } from './validation.js';\n\nexport function save_item(item) {\n  if (!validate_item(item)) throw new Error('name is required');\n  return { ...item, id: 'demo-id' };\n}\n",
+    "line_count": 6,
+    "sha256": "85f1ad4862f6d0649412a365862b297221176f0161524cae5366c0cc8ae92561",
+    "metrics": {
+      "demo_complexity": 2,
+      "demo_coverage_percent": 55
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r005-f3",
+    "repository_id": "r005",
+    "path": "src/service.js",
+    "language": "JavaScript",
+    "content": "import { save_item } from './repository.js';\n\nexport function create_item(item) {\n  return save_item(item);\n}\n",
+    "line_count": 5,
+    "sha256": "f12a9de9e2db21b2fddd7a706e4c3d6d2db076e2def3c031cd6a16a9b5f5c756",
+    "metrics": {
+      "demo_complexity": 1,
+      "demo_coverage_percent": 90
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r005-f4",
+    "repository_id": "r005",
+    "path": "src/controller.js",
+    "language": "JavaScript",
+    "content": "import { create_item } from './service.js';\n\nexport function handle_request(body) {\n  return { status: 201, data: create_item(body) };\n}\n",
+    "line_count": 5,
+    "sha256": "0556db1befb2eae8dc530a4cbdae33f2abeec0e836b9d3c4ec0702f9f72aba2e",
+    "metrics": {
+      "demo_complexity": 1,
+      "demo_coverage_percent": 70
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r006-f1",
+    "repository_id": "r006",
+    "path": "src/validation.ts",
+    "language": "TypeScript",
+    "content": "export function validate_item(item: Record<string, unknown>) {\n  return Boolean(item && item.name);\n}\n",
+    "line_count": 3,
+    "sha256": "a2e79189bf11acf351af8dbf09db63200de8c3888d3df84e84a256e90d035f3e",
+    "metrics": {
+      "demo_complexity": 1,
+      "demo_coverage_percent": 52
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r006-f2",
+    "repository_id": "r006",
+    "path": "src/repository.ts",
+    "language": "TypeScript",
+    "content": "import { validate_item } from './validation';\n\nexport function save_item(item: Record<string, unknown>) {\n  if (!validate_item(item)) throw new Error('name is required');\n  return { ...item, id: 'demo-id' };\n}\n",
+    "line_count": 6,
+    "sha256": "7633be5f11c9d92b75b09991ab345143dd872a2a79bc2959e1dbc577fc8078c0",
+    "metrics": {
+      "demo_complexity": 2,
+      "demo_coverage_percent": 58
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r006-f3",
+    "repository_id": "r006",
+    "path": "src/service.ts",
+    "language": "TypeScript",
+    "content": "import { save_item } from './repository';\n\nexport function create_item(item: Record<string, unknown>) {\n  return save_item(item);\n}\n",
+    "line_count": 5,
+    "sha256": "9fbca54afdecfd8524691a8088dfb3f3ac8cbfd508ee5b42da8b553639f00fce",
+    "metrics": {
+      "demo_complexity": 1,
+      "demo_coverage_percent": 53
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r006-f4",
+    "repository_id": "r006",
+    "path": "src/controller.ts",
+    "language": "TypeScript",
+    "content": "import { create_item } from './service';\n\nexport function handle_request(body: Record<string, unknown>) {\n  return { status: 201, data: create_item(body) };\n}\n",
+    "line_count": 5,
+    "sha256": "1c6290a5ffc0ecee33e0fae11e17f4a1b4f3e2e2630bd7feaccca0bb0768ecb5",
+    "metrics": {
+      "demo_complexity": 1,
+      "demo_coverage_percent": 43
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r007-f1",
+    "repository_id": "r007",
+    "path": "src/validation.py",
+    "language": "Python",
+    "content": "def validate_item(item):\n    return isinstance(item, dict) and bool(item.get('name'))\n",
+    "line_count": 2,
+    "sha256": "9a21348f94998ddffca7e6430239f08db37ca5d152b13d4f79258bc1c24fcc76",
+    "metrics": {
+      "demo_complexity": 1,
+      "demo_coverage_percent": 48
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r007-f2",
+    "repository_id": "r007",
+    "path": "src/repository.py",
+    "language": "Python",
+    "content": "from .validation import validate_item\n\ndef save_item(item):\n    if not validate_item(item):\n        raise ValueError('name is required')\n    return dict(item, id='demo-id')\n",
+    "line_count": 6,
+    "sha256": "48983a049b61ad2d197c4811b4541d2b01be09600feba6bb4128f3df4d8d238f",
+    "metrics": {
+      "demo_complexity": 2,
+      "demo_coverage_percent": 99
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r007-f3",
+    "repository_id": "r007",
+    "path": "src/service.py",
+    "language": "Python",
+    "content": "from .repository import save_item\n\ndef create_item(item):\n    return save_item(item)\n",
+    "line_count": 4,
+    "sha256": "cfa327babb0b2e46b67d0731802d16bddaf6fb20538b43d678256136f42b7168",
+    "metrics": {
+      "demo_complexity": 1,
+      "demo_coverage_percent": 62
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r007-f4",
+    "repository_id": "r007",
+    "path": "src/controller.py",
+    "language": "Python",
+    "content": "from .service import create_item\n\ndef handle_request(body):\n    return {'status': 201, 'data': create_item(body)}\n",
+    "line_count": 4,
+    "sha256": "58e2e6f9c00e98f24ffbf0ff9caab884e62b472bbd5069e84f065b546985fde8",
+    "metrics": {
+      "demo_complexity": 1,
+      "demo_coverage_percent": 96
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r008-f1",
+    "repository_id": "r008",
+    "path": "src/validation.js",
+    "language": "JavaScript",
+    "content": "export function validate_item(item) {\n  return Boolean(item && item.name);\n}\n",
+    "line_count": 3,
+    "sha256": "8faa0c4b5f3ab694ccf9a65fe48132160bc905f9d4e69db54de0212a0e3c73b1",
+    "metrics": {
+      "demo_complexity": 1,
+      "demo_coverage_percent": 42
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r008-f2",
+    "repository_id": "r008",
+    "path": "src/repository.js",
+    "language": "JavaScript",
+    "content": "import { validate_item } from './validation.js';\n\nexport function save_item(item) {\n  if (!validate_item(item)) throw new Error('name is required');\n  return { ...item, id: 'demo-id' };\n}\n",
+    "line_count": 6,
+    "sha256": "85f1ad4862f6d0649412a365862b297221176f0161524cae5366c0cc8ae92561",
+    "metrics": {
+      "demo_complexity": 2,
+      "demo_coverage_percent": 93
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r008-f3",
+    "repository_id": "r008",
+    "path": "src/service.js",
+    "language": "JavaScript",
+    "content": "import { save_item } from './repository.js';\n\nexport function create_item(item) {\n  return save_item(item);\n}\n",
+    "line_count": 5,
+    "sha256": "f12a9de9e2db21b2fddd7a706e4c3d6d2db076e2def3c031cd6a16a9b5f5c756",
+    "metrics": {
+      "demo_complexity": 1,
+      "demo_coverage_percent": 63
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r008-f4",
+    "repository_id": "r008",
+    "path": "src/controller.js",
+    "language": "JavaScript",
+    "content": "import { create_item } from './service.js';\n\nexport function handle_request(body) {\n  return { status: 201, data: create_item(body) };\n}\n",
+    "line_count": 5,
+    "sha256": "0556db1befb2eae8dc530a4cbdae33f2abeec0e836b9d3c4ec0702f9f72aba2e",
+    "metrics": {
+      "demo_complexity": 1,
+      "demo_coverage_percent": 77
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r009-f1",
+    "repository_id": "r009",
+    "path": "src/validation.ts",
+    "language": "TypeScript",
+    "content": "export function validate_item(item: Record<string, unknown>) {\n  return Boolean(item && item.name);\n}\n",
+    "line_count": 3,
+    "sha256": "a2e79189bf11acf351af8dbf09db63200de8c3888d3df84e84a256e90d035f3e",
+    "metrics": {
+      "demo_complexity": 1,
+      "demo_coverage_percent": 47
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r009-f2",
+    "repository_id": "r009",
+    "path": "src/repository.ts",
+    "language": "TypeScript",
+    "content": "import { validate_item } from './validation';\n\nexport function save_item(item: Record<string, unknown>) {\n  if (!validate_item(item)) throw new Error('name is required');\n  return { ...item, id: 'demo-id' };\n}\n",
+    "line_count": 6,
+    "sha256": "7633be5f11c9d92b75b09991ab345143dd872a2a79bc2959e1dbc577fc8078c0",
+    "metrics": {
+      "demo_complexity": 2,
+      "demo_coverage_percent": 96
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r009-f3",
+    "repository_id": "r009",
+    "path": "src/service.ts",
+    "language": "TypeScript",
+    "content": "import { save_item } from './repository';\n\nexport function create_item(item: Record<string, unknown>) {\n  return save_item(item);\n}\n",
+    "line_count": 5,
+    "sha256": "9fbca54afdecfd8524691a8088dfb3f3ac8cbfd508ee5b42da8b553639f00fce",
+    "metrics": {
+      "demo_complexity": 1,
+      "demo_coverage_percent": 56
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r009-f4",
+    "repository_id": "r009",
+    "path": "src/controller.ts",
+    "language": "TypeScript",
+    "content": "import { create_item } from './service';\n\nexport function handle_request(body: Record<string, unknown>) {\n  return { status: 201, data: create_item(body) };\n}\n",
+    "line_count": 5,
+    "sha256": "1c6290a5ffc0ecee33e0fae11e17f4a1b4f3e2e2630bd7feaccca0bb0768ecb5",
+    "metrics": {
+      "demo_complexity": 1,
+      "demo_coverage_percent": 51
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r010-f1",
+    "repository_id": "r010",
+    "path": "src/validation.py",
+    "language": "Python",
+    "content": "def validate_item(item):\n    return isinstance(item, dict) and bool(item.get('name'))\n",
+    "line_count": 2,
+    "sha256": "9a21348f94998ddffca7e6430239f08db37ca5d152b13d4f79258bc1c24fcc76",
+    "metrics": {
+      "demo_complexity": 1,
+      "demo_coverage_percent": 93
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r010-f2",
+    "repository_id": "r010",
+    "path": "src/repository.py",
+    "language": "Python",
+    "content": "from .validation import validate_item\n\ndef save_item(item):\n    if not validate_item(item):\n        raise ValueError('name is required')\n    return dict(item, id='demo-id')\n",
+    "line_count": 6,
+    "sha256": "48983a049b61ad2d197c4811b4541d2b01be09600feba6bb4128f3df4d8d238f",
+    "metrics": {
+      "demo_complexity": 2,
+      "demo_coverage_percent": 40
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r010-f3",
+    "repository_id": "r010",
+    "path": "src/service.py",
+    "language": "Python",
+    "content": "from .repository import save_item\n\ndef create_item(item):\n    return save_item(item)\n",
+    "line_count": 4,
+    "sha256": "cfa327babb0b2e46b67d0731802d16bddaf6fb20538b43d678256136f42b7168",
+    "metrics": {
+      "demo_complexity": 1,
+      "demo_coverage_percent": 59
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r010-f4",
+    "repository_id": "r010",
+    "path": "src/controller.py",
+    "language": "Python",
+    "content": "from .service import create_item\n\ndef handle_request(body):\n    return {'status': 201, 'data': create_item(body)}\n",
+    "line_count": 4,
+    "sha256": "58e2e6f9c00e98f24ffbf0ff9caab884e62b472bbd5069e84f065b546985fde8",
+    "metrics": {
+      "demo_complexity": 1,
+      "demo_coverage_percent": 58
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r011-f1",
+    "repository_id": "r011",
+    "path": "src/validation.js",
+    "language": "JavaScript",
+    "content": "export function validate_item(item) {\n  return Boolean(item && item.name);\n}\n",
+    "line_count": 3,
+    "sha256": "8faa0c4b5f3ab694ccf9a65fe48132160bc905f9d4e69db54de0212a0e3c73b1",
+    "metrics": {
+      "demo_complexity": 1,
+      "demo_coverage_percent": 69
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r011-f2",
+    "repository_id": "r011",
+    "path": "src/repository.js",
+    "language": "JavaScript",
+    "content": "import { validate_item } from './validation.js';\n\nexport function save_item(item) {\n  if (!validate_item(item)) throw new Error('name is required');\n  return { ...item, id: 'demo-id' };\n}\n",
+    "line_count": 6,
+    "sha256": "85f1ad4862f6d0649412a365862b297221176f0161524cae5366c0cc8ae92561",
+    "metrics": {
+      "demo_complexity": 2,
+      "demo_coverage_percent": 48
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r011-f3",
+    "repository_id": "r011",
+    "path": "src/service.js",
+    "language": "JavaScript",
+    "content": "import { save_item } from './repository.js';\n\nexport function create_item(item) {\n  return save_item(item);\n}\n",
+    "line_count": 5,
+    "sha256": "f12a9de9e2db21b2fddd7a706e4c3d6d2db076e2def3c031cd6a16a9b5f5c756",
+    "metrics": {
+      "demo_complexity": 1,
+      "demo_coverage_percent": 91
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r011-f4",
+    "repository_id": "r011",
+    "path": "src/controller.js",
+    "language": "JavaScript",
+    "content": "import { create_item } from './service.js';\n\nexport function handle_request(body) {\n  return { status: 201, data: create_item(body) };\n}\n",
+    "line_count": 5,
+    "sha256": "0556db1befb2eae8dc530a4cbdae33f2abeec0e836b9d3c4ec0702f9f72aba2e",
+    "metrics": {
+      "demo_complexity": 1,
+      "demo_coverage_percent": 69
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r012-f1",
+    "repository_id": "r012",
+    "path": "src/validation.ts",
+    "language": "TypeScript",
+    "content": "export function validate_item(item: Record<string, unknown>) {\n  return Boolean(item && item.name);\n}\n",
+    "line_count": 3,
+    "sha256": "a2e79189bf11acf351af8dbf09db63200de8c3888d3df84e84a256e90d035f3e",
+    "metrics": {
+      "demo_complexity": 1,
+      "demo_coverage_percent": 59
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r012-f2",
+    "repository_id": "r012",
+    "path": "src/repository.ts",
+    "language": "TypeScript",
+    "content": "import { validate_item } from './validation';\n\nexport function save_item(item: Record<string, unknown>) {\n  if (!validate_item(item)) throw new Error('name is required');\n  return { ...item, id: 'demo-id' };\n}\n",
+    "line_count": 6,
+    "sha256": "7633be5f11c9d92b75b09991ab345143dd872a2a79bc2959e1dbc577fc8078c0",
+    "metrics": {
+      "demo_complexity": 2,
+      "demo_coverage_percent": 88
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r012-f3",
+    "repository_id": "r012",
+    "path": "src/service.ts",
+    "language": "TypeScript",
+    "content": "import { save_item } from './repository';\n\nexport function create_item(item: Record<string, unknown>) {\n  return save_item(item);\n}\n",
+    "line_count": 5,
+    "sha256": "9fbca54afdecfd8524691a8088dfb3f3ac8cbfd508ee5b42da8b553639f00fce",
+    "metrics": {
+      "demo_complexity": 1,
+      "demo_coverage_percent": 64
+    },
+    "metrics_provenance": "synthetic, not measured"
+  },
+  {
+    "id": "r012-f4",
+    "repository_id": "r012",
+    "path": "src/controller.ts",
+    "language": "TypeScript",
+    "content": "import { create_item } from './service';\n\nexport function handle_request(body: Record<string, unknown>) {\n  return { status: 201, data: create_item(body) };\n}\n",
+    "line_count": 5,
+    "sha256": "1c6290a5ffc0ecee33e0fae11e17f4a1b4f3e2e2630bd7feaccca0bb0768ecb5",
+    "metrics": {
+      "demo_complexity": 1,
+      "demo_coverage_percent": 94
+    },
+    "metrics_provenance": "synthetic, not measured"
+  }
+]

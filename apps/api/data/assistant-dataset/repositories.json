@@ -1,0 +1,338 @@
+[
+  {
+    "id": "r001",
+    "name": "retail-inventory",
+    "full_name": "codemesh-demo/retail-inventory",
+    "description": "Synthetic retail inventory repository for CodeMesh feature development.",
+    "github_url": null,
+    "language": "Python",
+    "topics": [
+      "retail",
+      "demo",
+      "python"
+    ],
+    "stars": 456,
+    "forks": 6,
+    "default_branch": "main",
+    "is_archived": false,
+    "created_at": "2026-07-01T00:00:00Z",
+    "updated_at": "2026-09-28T00:00:00Z",
+    "contributor_ids": [
+      "u001",
+      "u002",
+      "u003",
+      "u004"
+    ],
+    "split": "train",
+    "open_issues_count": 4,
+    "open_prs_count": 3
+  },
+  {
+    "id": "r002",
+    "name": "journal-search",
+    "full_name": "codemesh-demo/journal-search",
+    "description": "Synthetic journal search repository for CodeMesh feature development.",
+    "github_url": null,
+    "language": "JavaScript",
+    "topics": [
+      "journal",
+      "demo",
+      "javascript"
+    ],
+    "stars": 284,
+    "forks": 11,
+    "default_branch": "main",
+    "is_archived": false,
+    "created_at": "2026-07-01T00:00:00Z",
+    "updated_at": "2026-09-28T00:00:00Z",
+    "contributor_ids": [
+      "u003",
+      "u004",
+      "u005",
+      "u006"
+    ],
+    "split": "train",
+    "open_issues_count": 4,
+    "open_prs_count": 3
+  },
+  {
+    "id": "r003",
+    "name": "portfolio-ledger",
+    "full_name": "codemesh-demo/portfolio-ledger",
+    "description": "Synthetic portfolio ledger repository for CodeMesh feature development.",
+    "github_url": null,
+    "language": "TypeScript",
+    "topics": [
+      "portfolio",
+      "demo",
+      "typescript"
+    ],
+    "stars": 2394,
+    "forks": 109,
+    "default_branch": "main",
+    "is_archived": false,
+    "created_at": "2026-07-01T00:00:00Z",
+    "updated_at": "2026-09-28T00:00:00Z",
+    "contributor_ids": [
+      "u005",
+      "u006",
+      "u007",
+      "u008"
+    ],
+    "split": "train",
+    "open_issues_count": 4,
+    "open_prs_count": 3
+  },
+  {
+    "id": "r004",
+    "name": "task-board",
+    "full_name": "codemesh-demo/task-board",
+    "description": "Synthetic task board repository for CodeMesh feature development.",
+    "github_url": null,
+    "language": "Python",
+    "topics": [
+      "task",
+      "demo",
+      "python"
+    ],
+    "stars": 1486,
+    "forks": 78,
+    "default_branch": "main",
+    "is_archived": false,
+    "created_at": "2026-07-01T00:00:00Z",
+    "updated_at": "2026-09-28T00:00:00Z",
+    "contributor_ids": [
+      "u007",
+      "u008",
+      "u009",
+      "u010"
+    ],
+    "split": "train",
+    "open_issues_count": 4,
+    "open_prs_count": 3
+  },
+  {
+    "id": "r005",
+    "name": "course-catalog",
+    "full_name": "codemesh-demo/course-catalog",
+    "description": "Synthetic course catalog repository for CodeMesh feature development.",
+    "github_url": null,
+    "language": "JavaScript",
+    "topics": [
+      "course",
+      "demo",
+      "javascript"
+    ],
+    "stars": 2338,
+    "forks": 147,
+    "default_branch": "main",
+    "is_archived": false,
+    "created_at": "2026-07-01T00:00:00Z",
+    "updated_at": "2026-09-28T00:00:00Z",
+    "contributor_ids": [
+      "u009",
+      "u010",
+      "u011",
+      "u012"
+    ],
+    "split": "train",
+    "open_issues_count": 4,
+    "open_prs_count": 3
+  },
+  {
+    "id": "r006",
+    "name": "delivery-tracker",
+    "full_name": "codemesh-demo/delivery-tracker",
+    "description": "Synthetic delivery tracker repository for CodeMesh feature development.",
+    "github_url": null,
+    "language": "TypeScript",
+    "topics": [
+      "delivery",
+      "demo",
+      "typescript"
+    ],
+    "stars": 1993,
+    "forks": 39,
+    "default_branch": "main",
+    "is_archived": false,
+    "created_at": "2026-07-01T00:00:00Z",
+    "updated_at": "2026-09-28T00:00:00Z",
+    "contributor_ids": [
+      "u011",
+      "u012",
+      "u013",
+      "u014"
+    ],
+    "split": "train",
+    "open_issues_count": 4,
+    "open_prs_count": 3
+  },
+  {
+    "id": "r007",
+    "name": "support-desk",
+    "full_name": "codemesh-demo/support-desk",
+    "description": "Synthetic support desk repository for CodeMesh feature development.",
+    "github_url": null,
+    "language": "Python",
+    "topics": [
+      "support",
+      "demo",
+      "python"
+    ],
+    "stars": 2072,
+    "forks": 67,
+    "default_branch": "main",
+    "is_archived": false,
+    "created_at": "2026-07-01T00:00:00Z",
+    "updated_at": "2026-09-28T00:00:00Z",
+    "contributor_ids": [
+      "u013",
+      "u014",
+      "u015",
+      "u016"
+    ],
+    "split": "train",
+    "open_issues_count": 4,
+    "open_prs_count": 3
+  },
+  {
+    "id": "r008",
+    "name": "document-index",
+    "full_name": "codemesh-demo/document-index",
+    "description": "Synthetic document index repository for CodeMesh feature development.",
+    "github_url": null,
+    "language": "JavaScript",
+    "topics": [
+      "document",
+      "demo",
+      "javascript"
+    ],
+    "stars": 610,
+    "forks": 139,
+    "default_branch": "main",
+    "is_archived": false,
+    "created_at": "2026-07-01T00:00:00Z",
+    "updated_at": "2026-09-28T00:00:00Z",
+    "contributor_ids": [
+      "u015",
+      "u016",
+      "u017",
+      "u018"
+    ],
+    "split": "train",
+    "open_issues_count": 4,
+    "open_prs_count": 3
+  },
+  {
+    "id": "r009",
+    "name": "event-booking",
+    "full_name": "codemesh-demo/event-booking",
+    "description": "Synthetic event booking repository for CodeMesh feature development.",
+    "github_url": null,
+    "language": "TypeScript",
+    "topics": [
+      "event",
+      "demo",
+      "typescript"
+    ],
+    "stars": 1356,
+    "forks": 7,
+    "default_branch": "main",
+    "is_archived": false,
+    "created_at": "2026-07-01T00:00:00Z",
+    "updated_at": "2026-09-28T00:00:00Z",
+    "contributor_ids": [
+      "u017",
+      "u018",
+      "u019",
+      "u020"
+    ],
+    "split": "validation",
+    "open_issues_count": 4,
+    "open_prs_count": 3
+  },
+  {
+    "id": "r010",
+    "name": "weather-cache",
+    "full_name": "codemesh-demo/weather-cache",
+    "description": "Synthetic weather cache repository for CodeMesh feature development.",
+    "github_url": null,
+    "language": "Python",
+    "topics": [
+      "weather",
+      "demo",
+      "python"
+    ],
+    "stars": 1663,
+    "forks": 140,
+    "default_branch": "main",
+    "is_archived": false,
+    "created_at": "2026-07-01T00:00:00Z",
+    "updated_at": "2026-09-28T00:00:00Z",
+    "contributor_ids": [
+      "u019",
+      "u020",
+      "u021",
+      "u022"
+    ],
+    "split": "validation",
+    "open_issues_count": 4,
+    "open_prs_count": 3
+  },
+  {
+    "id": "r011",
+    "name": "recipe-finder",
+    "full_name": "codemesh-demo/recipe-finder",
+    "description": "Synthetic recipe finder repository for CodeMesh feature development.",
+    "github_url": null,
+    "language": "JavaScript",
+    "topics": [
+      "recipe",
+      "demo",
+      "javascript"
+    ],
+    "stars": 1020,
+    "forks": 31,
+    "default_branch": "main",
+    "is_archived": false,
+    "created_at": "2026-07-01T00:00:00Z",
+    "updated_at": "2026-09-28T00:00:00Z",
+    "contributor_ids": [
+      "u021",
+      "u022",
+      "u023",
+      "u024"
+    ],
+    "split": "test",
+    "open_issues_count": 4,
+    "open_prs_count": 3
+  },
+  {
+    "id": "r012",
+    "name": "habit-tracker",
+    "full_name": "codemesh-demo/habit-tracker",
+    "description": "Synthetic habit tracker repository for CodeMesh feature development.",
+    "github_url": null,
+    "language": "TypeScript",
+    "topics": [
+      "habit",
+      "demo",
+      "typescript"
+    ],
+    "stars": 24,
+    "forks": 90,
+    "default_branch": "main",
+    "is_archived": true,
+    "created_at": "2026-07-01T00:00:00Z",
+    "updated_at": "2026-09-28T00:00:00Z",
+    "contributor_ids": [
+      "u023",
+      "u024",
+      "u001",
+      "u002"
+    ],
+    "split": "test",
+    "open_issues_count": 4,
+    "open_prs_count": 3
+  }
+]

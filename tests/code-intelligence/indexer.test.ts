@@ -1,0 +1,160 @@
+import { describe, expect, it } from "vitest";
+import {
+  applyWholeFilePatch,
+  analyzeSemanticMerge,
+  analyzeArchitecturePolicies,
+  analyzeDependencyUpgrades,
+  analyzeImpact,
+  analyzeRepository,
+  analyzeRepositoryHotspots,
+  buildOnboardingJourney,
+  buildReviewCouncil,
+  buildAiEvaluation,
+  buildPullRequestRisk,
+  buildRuntimeTracePreview,
+  buildSampleRepoFiles,
+  buildSecurityWorkbench,
+  buildTestPlans,
+  hashContent,
+  isIndexableTextFile,
+  isRepositoryTextFile,
+  indexRepository,
+  interpretGraphCommand,
+  generateArchitectureDecisionDraft,
+  mapRuntimeTrace,
+  planAutonomousChange,
+  SAMPLE_COMMIT,
+  searchRepository,
+  traceSecurityFlows,
+  verifyVirtualSandbox
+} from "@codemesh/code-intelligence";
+
+describe("code intelligence", () => {
+  it("keeps safe source paths visible while limiting only oversized semantic parsing", () => {
+    expect(isRepositoryTextFile("dist/generated.js", 250_000)).toBe(true);
+    expect(isIndexableTextFile("dist/generated.js", 250_000)).toBe(true);
+    expect(isRepositoryTextFile("node_modules/package/index.js", 100)).toBe(false);
+    expect(isIndexableTextFile("src/huge.ts", 2_500_000)).toBe(false);
+  });
+
+  it("extracts TypeScript imports and symbols from the sample repo", () => {
+    const files = buildSampleRepoFiles("project-test");
+    const index = indexRepository("project-test", SAMPLE_COMMIT, files);
+
+    expect(index.symbols.some((symbol) => symbol.name === "createApp")).toBe(true);
+    expect(index.graph.edges.some((edge) => edge.type === "imports" && edge.source.includes("src/server.ts"))).toBe(true);
+    expect(index.chunks.length).toBeGreaterThan(3);
+  });
+
+  it("returns graph-expanded retrieval hits", () => {
+    const index = indexRepository("project-test", SAMPLE_COMMIT, buildSampleRepoFiles("project-test"));
+    const result = searchRepository(index, "jwt authentication invalid credentials session middleware", "graph");
+
+    expect(result.hits.length).toBeGreaterThan(0);
+    expect(result.hits.some((hit) => hit.chunk.filePath.includes("auth"))).toBe(true);
+  });
+
+  it("rejects stale patch application", () => {
+    const base = "export const status = 'old';\n";
+    const proposed = "export const status = 'new';\n";
+    const result = applyWholeFilePatch(base, "export const status = 'edited';\n", proposed, hashContent(base));
+
+    expect(result.ok).toBe(false);
+    if (!result.ok) expect(result.reason).toMatch(/changed/);
+  });
+
+  it("indexes resilient Python symbols, imports, and function calls", () => {
+    const now = new Date().toISOString();
+    const index = indexRepository("python-project", "python-commit", [
+      {
+        projectId: "python-project",
+        path: "app.py",
+        language: "python",
+        size: 110,
+        binary: false,
+        sensitive: false,
+        updatedAt: now,
+        content: "from services.orders import create_order\n\ndef checkout(items):\n    return create_order(items)\n"
+      },
+      {
+        projectId: "python-project",
+        path: "services/orders.py",
+        language: "python",
+        size: 80,
+        binary: false,
+        sensitive: false,
+        updatedAt: now,
+        content: "class Order:\n    pass\n\ndef create_order(items):\n    return Order()\n"
+      }
+    ]);
+
+    expect(index.symbols.map((symbol) => symbol.name)).toEqual(expect.arrayContaining(["checkout", "Order", "create_order"]));
+    expect(index.graph.edges.some((edge) => edge.type === "imports" && edge.target.includes("services/orders.py"))).toBe(true);
+    expect(index.graph.edges.some((edge) => edge.type === "references" && edge.label === "calls")).toBe(true);
+  });
+
+  it("reports health findings and graph impact from indexed evidence", () => {
+    const files = buildSampleRepoFiles("project-health").map((file) =>
+      file.path === "src/config.ts"
+        ? { ...file, content: `${file.content}\nconst apiKey = \"hard-coded-demo-secret\";\n`, size: file.size + 45 }
+        : file
+    );
+    const index = indexRepository("project-health", SAMPLE_COMMIT, files);
+    const health = analyzeRepository(index);
+    const createApp = index.graph.nodes.find((node) => node.label === "createApp")!;
+    const impact = analyzeImpact(index, createApp.id);
+
+    expect(health.issues.some((issue) => issue.category === "security")).toBe(true);
+    expect(health.suggestedTests.length).toBeGreaterThan(0);
+    expect(impact?.node.id).toBe(createApp.id);
+    expect(impact?.affectedFiles.length).toBeGreaterThan(0);
+  });
+
+  it("builds evidence-linked engineering lab analyses", () => {
+    const index = indexRepository("project-labs", SAMPLE_COMMIT, buildSampleRepoFiles("project-labs"));
+    const policies = analyzeArchitecturePolicies(index);
+    const securityFlows = traceSecurityFlows(index);
+    const dependencies = analyzeDependencyUpgrades(index);
+    const testPlans = buildTestPlans(index);
+    const graphCommand = interpretGraphCommand(index, "show the authentication flow");
+    const hotspots = analyzeRepositoryHotspots(index);
+    const onboarding = buildOnboardingJourney(index);
+    const council = buildReviewCouncil(index);
+
+    expect(policies.length).toBeGreaterThanOrEqual(4);
+    expect(policies.every((policy) => policy.detail.length > 0)).toBe(true);
+    expect(securityFlows.some((flow) => flow.filePaths.some((filePath) => filePath.includes("auth")))).toBe(true);
+    expect(dependencies.some((dependency) => dependency.name === "react" && dependency.risk === "high")).toBe(true);
+    expect(testPlans.some((plan) => plan.filePath.includes("auth"))).toBe(true);
+    expect(graphCommand.nodes.some((node) => `${node.label} ${node.filePath ?? ""}`.toLowerCase().includes("auth"))).toBe(true);
+    expect(hotspots[0]?.score).toBeGreaterThan(0);
+    expect(onboarding.length).toBeGreaterThanOrEqual(3);
+    expect(council.map((agent) => agent.id)).toEqual(expect.arrayContaining(["architecture", "security", "testing", "maintainability"]));
+  });
+
+  it("builds advanced planning, runtime, security, risk, and governance evidence", () => {
+    const projectId = "project-advanced";
+    const index = indexRepository(projectId, SAMPLE_COMMIT, buildSampleRepoFiles(projectId));
+    const plan = planAutonomousChange(index, "Harden authentication and add focused tests");
+    const sandbox = verifyVirtualSandbox(index, plan);
+    const merge = analyzeSemanticMerge(index, "src/auth/routes.ts");
+    const risk = buildPullRequestRisk(index, ["src/auth/routes.ts"]);
+    const preview = buildRuntimeTracePreview(index);
+    const mapped = mapRuntimeTrace(index, [{ id: "span-1", name: "createApp", durationMs: 18, status: "ok" }]);
+    const security = buildSecurityWorkbench(index);
+    const evaluation = buildAiEvaluation(index, []);
+    const decision = generateArchitectureDecisionDraft(index);
+
+    expect(plan.steps).toHaveLength(4);
+    expect(plan.constraints.some((constraint) => constraint.includes("never executed"))).toBe(true);
+    expect(sandbox.executionMode).toBe("static-isolated");
+    expect(sandbox.executedCommands).toEqual([]);
+    expect(merge?.regions.length).toBeGreaterThan(0);
+    expect(risk.changedFiles).toEqual(["src/auth/routes.ts"]);
+    expect(preview.length).toBeGreaterThan(0);
+    expect(mapped[0]?.confidence).toBeGreaterThan(0);
+    expect(security.sbom.some((component) => component.name === "react")).toBe(true);
+    expect(evaluation.benchmarkCases.length).toBeGreaterThan(0);
+    expect(decision.evidenceFiles.length).toBeGreaterThan(0);
+  });
+});

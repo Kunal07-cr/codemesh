@@ -1,0 +1,638 @@
+[
+  {
+    "id": "r001-qa-1",
+    "repository_id": "r001",
+    "question": "What does validate_item do in retail-inventory?",
+    "reference_answer": "validate_item checks whether the item has a nonempty name.",
+    "relevant_chunk_ids": [
+      "r001-chunk-1"
+    ],
+    "answerable": true,
+    "split": "train"
+  },
+  {
+    "id": "r001-qa-2",
+    "repository_id": "r001",
+    "question": "What does save_item do in retail-inventory?",
+    "reference_answer": "save_item validates the item and returns a copy with a fixed demo ID; it does not persist data.",
+    "relevant_chunk_ids": [
+      "r001-chunk-2"
+    ],
+    "answerable": true,
+    "split": "train"
+  },
+  {
+    "id": "r001-qa-3",
+    "repository_id": "r001",
+    "question": "What does create_item do in retail-inventory?",
+    "reference_answer": "create_item calls save_item and returns its result.",
+    "relevant_chunk_ids": [
+      "r001-chunk-3"
+    ],
+    "answerable": true,
+    "split": "train"
+  },
+  {
+    "id": "r001-qa-4",
+    "repository_id": "r001",
+    "question": "What does handle_request do in retail-inventory?",
+    "reference_answer": "handle_request calls create_item and wraps its result with status 201.",
+    "relevant_chunk_ids": [
+      "r001-chunk-4"
+    ],
+    "answerable": true,
+    "split": "train"
+  },
+  {
+    "id": "r001-qa-unknown",
+    "repository_id": "r001",
+    "question": "What production database credentials does this repository use?",
+    "reference_answer": "The provided source does not contain production database credentials.",
+    "relevant_chunk_ids": [],
+    "answerable": false,
+    "split": "train"
+  },
+  {
+    "id": "r002-qa-1",
+    "repository_id": "r002",
+    "question": "What does validate_item do in journal-search?",
+    "reference_answer": "validate_item checks whether the item has a nonempty name.",
+    "relevant_chunk_ids": [
+      "r002-chunk-1"
+    ],
+    "answerable": true,
+    "split": "train"
+  },
+  {
+    "id": "r002-qa-2",
+    "repository_id": "r002",
+    "question": "What does save_item do in journal-search?",
+    "reference_answer": "save_item validates the item and returns a copy with a fixed demo ID; it does not persist data.",
+    "relevant_chunk_ids": [
+      "r002-chunk-2"
+    ],
+    "answerable": true,
+    "split": "train"
+  },
+  {
+    "id": "r002-qa-3",
+    "repository_id": "r002",
+    "question": "What does create_item do in journal-search?",
+    "reference_answer": "create_item calls save_item and returns its result.",
+    "relevant_chunk_ids": [
+      "r002-chunk-3"
+    ],
+    "answerable": true,
+    "split": "train"
+  },
+  {
+    "id": "r002-qa-4",
+    "repository_id": "r002",
+    "question": "What does handle_request do in journal-search?",
+    "reference_answer": "handle_request calls create_item and wraps its result with status 201.",
+    "relevant_chunk_ids": [
+      "r002-chunk-4"
+    ],
+    "answerable": true,
+    "split": "train"
+  },
+  {
+    "id": "r002-qa-unknown",
+    "repository_id": "r002",
+    "question": "What production database credentials does this repository use?",
+    "reference_answer": "The provided source does not contain production database credentials.",
+    "relevant_chunk_ids": [],
+    "answerable": false,
+    "split": "train"
+  },
+  {
+    "id": "r003-qa-1",
+    "repository_id": "r003",
+    "question": "What does validate_item do in portfolio-ledger?",
+    "reference_answer": "validate_item checks whether the item has a nonempty name.",
+    "relevant_chunk_ids": [
+      "r003-chunk-1"
+    ],
+    "answerable": true,
+    "split": "train"
+  },
+  {
+    "id": "r003-qa-2",
+    "repository_id": "r003",
+    "question": "What does save_item do in portfolio-ledger?",
+    "reference_answer": "save_item validates the item and returns a copy with a fixed demo ID; it does not persist data.",
+    "relevant_chunk_ids": [
+      "r003-chunk-2"
+    ],
+    "answerable": true,
+    "split": "train"
+  },
+  {
+    "id": "r003-qa-3",
+    "repository_id": "r003",
+    "question": "What does create_item do in portfolio-ledger?",
+    "reference_answer": "create_item calls save_item and returns its result.",
+    "relevant_chunk_ids": [
+      "r003-chunk-3"
+    ],
+    "answerable": true,
+    "split": "train"
+  },
+  {
+    "id": "r003-qa-4",
+    "repository_id": "r003",
+    "question": "What does handle_request do in portfolio-ledger?",
+    "reference_answer": "handle_request calls create_item and wraps its result with status 201.",
+    "relevant_chunk_ids": [
+      "r003-chunk-4"
+    ],
+    "answerable": true,
+    "split": "train"
+  },
+  {
+    "id": "r003-qa-unknown",
+    "repository_id": "r003",
+    "question": "What production database credentials does this repository use?",
+    "reference_answer": "The provided source does not contain production database credentials.",
+    "relevant_chunk_ids": [],
+    "answerable": false,
+    "split": "train"
+  },
+  {
+    "id": "r004-qa-1",
+    "repository_id": "r004",
+    "question": "What does validate_item do in task-board?",
+    "reference_answer": "validate_item checks whether the item has a nonempty name.",
+    "relevant_chunk_ids": [
+      "r004-chunk-1"
+    ],
+    "answerable": true,
+    "split": "train"
+  },
+  {
+    "id": "r004-qa-2",
+    "repository_id": "r004",
+    "question": "What does save_item do in task-board?",
+    "reference_answer": "save_item validates the item and returns a copy with a fixed demo ID; it does not persist data.",
+    "relevant_chunk_ids": [
+      "r004-chunk-2"
+    ],
+    "answerable": true,
+    "split": "train"
+  },
+  {
+    "id": "r004-qa-3",
+    "repository_id": "r004",
+    "question": "What does create_item do in task-board?",
+    "reference_answer": "create_item calls save_item and returns its result.",
+    "relevant_chunk_ids": [
+      "r004-chunk-3"
+    ],
+    "answerable": true,
+    "split": "train"
+  },
+  {
+    "id": "r004-qa-4",
+    "repository_id": "r004",
+    "question": "What does handle_request do in task-board?",
+    "reference_answer": "handle_request calls create_item and wraps its result with status 201.",
+    "relevant_chunk_ids": [
+      "r004-chunk-4"
+    ],
+    "answerable": true,
+    "split": "train"
+  },
+  {
+    "id": "r004-qa-unknown",
+    "repository_id": "r004",
+    "question": "What production database credentials does this repository use?",
+    "reference_answer": "The provided source does not contain production database credentials.",
+    "relevant_chunk_ids": [],
+    "answerable": false,
+    "split": "train"
+  },
+  {
+    "id": "r005-qa-1",
+    "repository_id": "r005",
+    "question": "What does validate_item do in course-catalog?",
+    "reference_answer": "validate_item checks whether the item has a nonempty name.",
+    "relevant_chunk_ids": [
+      "r005-chunk-1"
+    ],
+    "answerable": true,
+    "split": "train"
+  },
+  {
+    "id": "r005-qa-2",
+    "repository_id": "r005",
+    "question": "What does save_item do in course-catalog?",
+    "reference_answer": "save_item validates the item and returns a copy with a fixed demo ID; it does not persist data.",
+    "relevant_chunk_ids": [
+      "r005-chunk-2"
+    ],
+    "answerable": true,
+    "split": "train"
+  },
+  {
+    "id": "r005-qa-3",
+    "repository_id": "r005",
+    "question": "What does create_item do in course-catalog?",
+    "reference_answer": "create_item calls save_item and returns its result.",
+    "relevant_chunk_ids": [
+      "r005-chunk-3"
+    ],
+    "answerable": true,
+    "split": "train"
+  },
+  {
+    "id": "r005-qa-4",
+    "repository_id": "r005",
+    "question": "What does handle_request do in course-catalog?",
+    "reference_answer": "handle_request calls create_item and wraps its result with status 201.",
+    "relevant_chunk_ids": [
+      "r005-chunk-4"
+    ],
+    "answerable": true,
+    "split": "train"
+  },
+  {
+    "id": "r005-qa-unknown",
+    "repository_id": "r005",
+    "question": "What production database credentials does this repository use?",
+    "reference_answer": "The provided source does not contain production database credentials.",
+    "relevant_chunk_ids": [],
+    "answerable": false,
+    "split": "train"
+  },
+  {
+    "id": "r006-qa-1",
+    "repository_id": "r006",
+    "question": "What does validate_item do in delivery-tracker?",
+    "reference_answer": "validate_item checks whether the item has a nonempty name.",
+    "relevant_chunk_ids": [
+      "r006-chunk-1"
+    ],
+    "answerable": true,
+    "split": "train"
+  },
+  {
+    "id": "r006-qa-2",
+    "repository_id": "r006",
+    "question": "What does save_item do in delivery-tracker?",
+    "reference_answer": "save_item validates the item and returns a copy with a fixed demo ID; it does not persist data.",
+    "relevant_chunk_ids": [
+      "r006-chunk-2"
+    ],
+    "answerable": true,
+    "split": "train"
+  },
+  {
+    "id": "r006-qa-3",
+    "repository_id": "r006",
+    "question": "What does create_item do in delivery-tracker?",
+    "reference_answer": "create_item calls save_item and returns its result.",
+    "relevant_chunk_ids": [
+      "r006-chunk-3"
+    ],
+    "answerable": true,
+    "split": "train"
+  },
+  {
+    "id": "r006-qa-4",
+    "repository_id": "r006",
+    "question": "What does handle_request do in delivery-tracker?",
+    "reference_answer": "handle_request calls create_item and wraps its result with status 201.",
+    "relevant_chunk_ids": [
+      "r006-chunk-4"
+    ],
+    "answerable": true,
+    "split": "train"
+  },
+  {
+    "id": "r006-qa-unknown",
+    "repository_id": "r006",
+    "question": "What production database credentials does this repository use?",
+    "reference_answer": "The provided source does not contain production database credentials.",
+    "relevant_chunk_ids": [],
+    "answerable": false,
+    "split": "train"
+  },
+  {
+    "id": "r007-qa-1",
+    "repository_id": "r007",
+    "question": "What does validate_item do in support-desk?",
+    "reference_answer": "validate_item checks whether the item has a nonempty name.",
+    "relevant_chunk_ids": [
+      "r007-chunk-1"
+    ],
+    "answerable": true,
+    "split": "train"
+  },
+  {
+    "id": "r007-qa-2",
+    "repository_id": "r007",
+    "question": "What does save_item do in support-desk?",
+    "reference_answer": "save_item validates the item and returns a copy with a fixed demo ID; it does not persist data.",
+    "relevant_chunk_ids": [
+      "r007-chunk-2"
+    ],
+    "answerable": true,
+    "split": "train"
+  },
+  {
+    "id": "r007-qa-3",
+    "repository_id": "r007",
+    "question": "What does create_item do in support-desk?",
+    "reference_answer": "create_item calls save_item and returns its result.",
+    "relevant_chunk_ids": [
+      "r007-chunk-3"
+    ],
+    "answerable": true,
+    "split": "train"
+  },
+  {
+    "id": "r007-qa-4",
+    "repository_id": "r007",
+    "question": "What does handle_request do in support-desk?",
+    "reference_answer": "handle_request calls create_item and wraps its result with status 201.",
+    "relevant_chunk_ids": [
+      "r007-chunk-4"
+    ],
+    "answerable": true,
+    "split": "train"
+  },
+  {
+    "id": "r007-qa-unknown",
+    "repository_id": "r007",
+    "question": "What production database credentials does this repository use?",
+    "reference_answer": "The provided source does not contain production database credentials.",
+    "relevant_chunk_ids": [],
+    "answerable": false,
+    "split": "train"
+  },
+  {
+    "id": "r008-qa-1",
+    "repository_id": "r008",
+    "question": "What does validate_item do in document-index?",
+    "reference_answer": "validate_item checks whether the item has a nonempty name.",
+    "relevant_chunk_ids": [
+      "r008-chunk-1"
+    ],
+    "answerable": true,
+    "split": "train"
+  },
+  {
+    "id": "r008-qa-2",
+    "repository_id": "r008",
+    "question": "What does save_item do in document-index?",
+    "reference_answer": "save_item validates the item and returns a copy with a fixed demo ID; it does not persist data.",
+    "relevant_chunk_ids": [
+      "r008-chunk-2"
+    ],
+    "answerable": true,
+    "split": "train"
+  },
+  {
+    "id": "r008-qa-3",
+    "repository_id": "r008",
+    "question": "What does create_item do in document-index?",
+    "reference_answer": "create_item calls save_item and returns its result.",
+    "relevant_chunk_ids": [
+      "r008-chunk-3"
+    ],
+    "answerable": true,
+    "split": "train"
+  },
+  {
+    "id": "r008-qa-4",
+    "repository_id": "r008",
+    "question": "What does handle_request do in document-index?",
+    "reference_answer": "handle_request calls create_item and wraps its result with status 201.",
+    "relevant_chunk_ids": [
+      "r008-chunk-4"
+    ],
+    "answerable": true,
+    "split": "train"
+  },
+  {
+    "id": "r008-qa-unknown",
+    "repository_id": "r008",
+    "question": "What production database credentials does this repository use?",
+    "reference_answer": "The provided source does not contain production database credentials.",
+    "relevant_chunk_ids": [],
+    "answerable": false,
+    "split": "train"
+  },
+  {
+    "id": "r009-qa-1",
+    "repository_id": "r009",
+    "question": "What does validate_item do in event-booking?",
+    "reference_answer": "validate_item checks whether the item has a nonempty name.",
+    "relevant_chunk_ids": [
+      "r009-chunk-1"
+    ],
+    "answerable": true,
+    "split": "validation"
+  },
+  {
+    "id": "r009-qa-2",
+    "repository_id": "r009",
+    "question": "What does save_item do in event-booking?",
+    "reference_answer": "save_item validates the item and returns a copy with a fixed demo ID; it does not persist data.",
+    "relevant_chunk_ids": [
+      "r009-chunk-2"
+    ],
+    "answerable": true,
+    "split": "validation"
+  },
+  {
+    "id": "r009-qa-3",
+    "repository_id": "r009",
+    "question": "What does create_item do in event-booking?",
+    "reference_answer": "create_item calls save_item and returns its result.",
+    "relevant_chunk_ids": [
+      "r009-chunk-3"
+    ],
+    "answerable": true,
+    "split": "validation"
+  },
+  {
+    "id": "r009-qa-4",
+    "repository_id": "r009",
+    "question": "What does handle_request do in event-booking?",
+    "reference_answer": "handle_request calls create_item and wraps its result with status 201.",
+    "relevant_chunk_ids": [
+      "r009-chunk-4"
+    ],
+    "answerable": true,
+    "split": "validation"
+  },
+  {
+    "id": "r009-qa-unknown",
+    "repository_id": "r009",
+    "question": "What production database credentials does this repository use?",
+    "reference_answer": "The provided source does not contain production database credentials.",
+    "relevant_chunk_ids": [],
+    "answerable": false,
+    "split": "validation"
+  },
+  {
+    "id": "r010-qa-1",
+    "repository_id": "r010",
+    "question": "What does validate_item do in weather-cache?",
+    "reference_answer": "validate_item checks whether the item has a nonempty name.",
+    "relevant_chunk_ids": [
+      "r010-chunk-1"
+    ],
+    "answerable": true,
+    "split": "validation"
+  },
+  {
+    "id": "r010-qa-2",
+    "repository_id": "r010",
+    "question": "What does save_item do in weather-cache?",
+    "reference_answer": "save_item validates the item and returns a copy with a fixed demo ID; it does not persist data.",
+    "relevant_chunk_ids": [
+      "r010-chunk-2"
+    ],
+    "answerable": true,
+    "split": "validation"
+  },
+  {
+    "id": "r010-qa-3",
+    "repository_id": "r010",
+    "question": "What does create_item do in weather-cache?",
+    "reference_answer": "create_item calls save_item and returns its result.",
+    "relevant_chunk_ids": [
+      "r010-chunk-3"
+    ],
+    "answerable": true,
+    "split": "validation"
+  },
+  {
+    "id": "r010-qa-4",
+    "repository_id": "r010",
+    "question": "What does handle_request do in weather-cache?",
+    "reference_answer": "handle_request calls create_item and wraps its result with status 201.",
+    "relevant_chunk_ids": [
+      "r010-chunk-4"
+    ],
+    "answerable": true,
+    "split": "validation"
+  },
+  {
+    "id": "r010-qa-unknown",
+    "repository_id": "r010",
+    "question": "What production database credentials does this repository use?",
+    "reference_answer": "The provided source does not contain production database credentials.",
+    "relevant_chunk_ids": [],
+    "answerable": false,
+    "split": "validation"
+  },
+  {
+    "id": "r011-qa-1",
+    "repository_id": "r011",
+    "question": "What does validate_item do in recipe-finder?",
+    "reference_answer": "validate_item checks whether the item has a nonempty name.",
+    "relevant_chunk_ids": [
+      "r011-chunk-1"
+    ],
+    "answerable": true,
+    "split": "test"
+  },
+  {
+    "id": "r011-qa-2",
+    "repository_id": "r011",
+    "question": "What does save_item do in recipe-finder?",
+    "reference_answer": "save_item validates the item and returns a copy with a fixed demo ID; it does not persist data.",
+    "relevant_chunk_ids": [
+      "r011-chunk-2"
+    ],
+    "answerable": true,
+    "split": "test"
+  },
+  {
+    "id": "r011-qa-3",
+    "repository_id": "r011",
+    "question": "What does create_item do in recipe-finder?",
+    "reference_answer": "create_item calls save_item and returns its result.",
+    "relevant_chunk_ids": [
+      "r011-chunk-3"
+    ],
+    "answerable": true,
+    "split": "test"
+  },
+  {
+    "id": "r011-qa-4",
+    "repository_id": "r011",
+    "question": "What does handle_request do in recipe-finder?",
+    "reference_answer": "handle_request calls create_item and wraps its result with status 201.",
+    "relevant_chunk_ids": [
+      "r011-chunk-4"
+    ],
+    "answerable": true,
+    "split": "test"
+  },
+  {
+    "id": "r011-qa-unknown",
+    "repository_id": "r011",
+    "question": "What production database credentials does this repository use?",
+    "reference_answer": "The provided source does not contain production database credentials.",
+    "relevant_chunk_ids": [],
+    "answerable": false,
+    "split": "test"
+  },
+  {
+    "id": "r012-qa-1",
+    "repository_id": "r012",
+    "question": "What does validate_item do in habit-tracker?",
+    "reference_answer": "validate_item checks whether the item has a nonempty name.",
+    "relevant_chunk_ids": [
+      "r012-chunk-1"
+    ],
+    "answerable": true,
+    "split": "test"
+  },
+  {
+    "id": "r012-qa-2",
+    "repository_id": "r012",
+    "question": "What does save_item do in habit-tracker?",
+    "reference_answer": "save_item validates the item and returns a copy with a fixed demo ID; it does not persist data.",
+    "relevant_chunk_ids": [
+      "r012-chunk-2"
+    ],
+    "answerable": true,
+    "split": "test"
+  },
+  {
+    "id": "r012-qa-3",
+    "repository_id": "r012",
+    "question": "What does create_item do in habit-tracker?",
+    "reference_answer": "create_item calls save_item and returns its result.",
+    "relevant_chunk_ids": [
+      "r012-chunk-3"
+    ],
+    "answerable": true,
+    "split": "test"
+  },
+  {
+    "id": "r012-qa-4",
+    "repository_id": "r012",
+    "question": "What does handle_request do in habit-tracker?",
+    "reference_answer": "handle_request calls create_item and wraps its result with status 201.",
+    "relevant_chunk_ids": [
+      "r012-chunk-4"
+    ],
+    "answerable": true,
+    "split": "test"
+  },
+  {
+    "id": "r012-qa-unknown",
+    "repository_id": "r012",
+    "question": "What production database credentials does this repository use?",
+    "reference_answer": "The provided source does not contain production database credentials.",
+    "relevant_chunk_ids": [],
+    "answerable": false,
+    "split": "test"
+  }
+]

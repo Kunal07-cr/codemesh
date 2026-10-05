@@ -1,0 +1,41 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_DB: codemesh
+      POSTGRES_USER: codemesh
+      POSTGRES_PASSWORD: codemesh
+    ports:
+      - "5432:5432"
+    volumes:
+      - codemesh-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U codemesh -d codemesh"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - codemesh-redis:/data
+
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: codemesh
+      MINIO_ROOT_PASSWORD: codemesh-secret
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - codemesh-minio:/data
+
+volumes:
+  codemesh-postgres:
+  codemesh-redis:
+  codemesh-minio:

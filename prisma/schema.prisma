@@ -1,0 +1,203 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ProjectRole {
+  owner
+  maintainer
+  contributor
+  viewer
+}
+
+enum ProjectVisibility {
+  public
+  private
+}
+
+model User {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  githubUserId String?
+  createdAt    DateTime @default(now())
+
+  memberships ProjectMember[]
+  threads     DiscussionThread[]
+  replies     DiscussionReply[]
+}
+
+model RefreshToken {
+  id            String    @id @default(uuid())
+  userId        String
+  tokenHash     String
+  expiresAt     DateTime
+  revokedAt     DateTime?
+  rotatedFromId String?
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Project {
+  id               String            @id @default(uuid())
+  name             String
+  slug             String            @unique
+  description      String
+  visibility       ProjectVisibility
+  published        Boolean           @default(false)
+  repositorySource String
+  repoUrl          String?
+  commitSha        String
+  guidelines       String
+  languages        String[]
+  tags             String[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+
+  members       ProjectMember[]
+  files         RepoFile[]
+  chunks        CodeChunk[]
+  threads       DiscussionThread[]
+  tasks         ProjectTask[]
+  contributions Contribution[]
+}
+
+model ProjectMember {
+  projectId         String
+  userId            String
+  role              ProjectRole
+  discussionAllowed Boolean   @default(true)
+  joinedAt          DateTime  @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([projectId, userId])
+}
+
+model RepoFile {
+  id        String   @id @default(uuid())
+  projectId String
+  path      String
+  language  String
+  size      Int
+  binary    Boolean
+  sensitive Boolean
+  content   String
+  updatedAt DateTime @updatedAt
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, path])
+}
+
+model CodeChunk {
+  id                  String   @id
+  projectId           String
+  commitSha           String
+  filePath            String
+  language            String
+  symbolId            String?
+  symbolName          String?
+  content             String
+  startLine           Int
+  startColumn         Int
+  endLine             Int
+  endColumn           Int
+  tokenCount          Int
+  embeddingModel      String
+  embeddingDimensions Int
+  embedding           Unsupported("vector")?
+  sourceRevision      String
+  createdAt           DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, commitSha])
+}
+
+model WorkspaceDoc {
+  projectId   String
+  workspaceId String
+  path        String
+  content     String
+  version     Int      @default(1)
+  updatedAt   DateTime @updatedAt
+
+  @@id([projectId, workspaceId, path])
+}
+
+model DiscussionThread {
+  id        String   @id @default(uuid())
+  projectId String
+  title     String
+  body      String
+  authorId  String
+  locked    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  author  User    @relation(fields: [authorId], references: [id])
+  replies DiscussionReply[]
+}
+
+model DiscussionReply {
+  id        String   @id @default(uuid())
+  threadId  String
+  projectId String
+  body      String
+  authorId  String
+  moderated Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  thread  DiscussionThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  author  User             @relation(fields: [authorId], references: [id])
+}
+
+model ProjectTask {
+  id         String   @id @default(uuid())
+  projectId  String
+  title      String
+  status     String
+  assigneeId String?
+  createdAt  DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model Contribution {
+  id          String   @id @default(uuid())
+  projectId   String
+  workspaceId String
+  title       String
+  summary     String
+  authorId    String
+  patchId     String?
+  status      String
+  prUrl       String?
+  createdAt   DateTime @default(now())
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model WebhookDelivery {
+  id          String   @id
+  provider    String
+  event       String
+  receivedAt  DateTime @default(now())
+  processedAt DateTime?
+  status      String
+}
+
+model AuditEvent {
+  id        String   @id @default(uuid())
+  projectId String?
+  userId    String?
+  action    String
+  metadata  Json
+  createdAt DateTime @default(now())
+}

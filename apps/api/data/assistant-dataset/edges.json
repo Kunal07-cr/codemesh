@@ -1,0 +1,842 @@
+[
+  {
+    "id": "r001-contains-0",
+    "repository_id": "r001",
+    "source": "r001-f1",
+    "target": "r001-s1",
+    "type": "contains"
+  },
+  {
+    "id": "r001-contains-1",
+    "repository_id": "r001",
+    "source": "r001-f2",
+    "target": "r001-s2",
+    "type": "contains"
+  },
+  {
+    "id": "r001-import-1",
+    "repository_id": "r001",
+    "source": "r001-f2",
+    "target": "r001-f1",
+    "type": "imports"
+  },
+  {
+    "id": "r001-call-1",
+    "repository_id": "r001",
+    "source": "r001-s2",
+    "target": "r001-s1",
+    "type": "calls"
+  },
+  {
+    "id": "r001-contains-2",
+    "repository_id": "r001",
+    "source": "r001-f3",
+    "target": "r001-s3",
+    "type": "contains"
+  },
+  {
+    "id": "r001-import-2",
+    "repository_id": "r001",
+    "source": "r001-f3",
+    "target": "r001-f2",
+    "type": "imports"
+  },
+  {
+    "id": "r001-call-2",
+    "repository_id": "r001",
+    "source": "r001-s3",
+    "target": "r001-s2",
+    "type": "calls"
+  },
+  {
+    "id": "r001-contains-3",
+    "repository_id": "r001",
+    "source": "r001-f4",
+    "target": "r001-s4",
+    "type": "contains"
+  },
+  {
+    "id": "r001-import-3",
+    "repository_id": "r001",
+    "source": "r001-f4",
+    "target": "r001-f3",
+    "type": "imports"
+  },
+  {
+    "id": "r001-call-3",
+    "repository_id": "r001",
+    "source": "r001-s4",
+    "target": "r001-s3",
+    "type": "calls"
+  },
+  {
+    "id": "r002-contains-0",
+    "repository_id": "r002",
+    "source": "r002-f1",
+    "target": "r002-s1",
+    "type": "contains"
+  },
+  {
+    "id": "r002-contains-1",
+    "repository_id": "r002",
+    "source": "r002-f2",
+    "target": "r002-s2",
+    "type": "contains"
+  },
+  {
+    "id": "r002-import-1",
+    "repository_id": "r002",
+    "source": "r002-f2",
+    "target": "r002-f1",
+    "type": "imports"
+  },
+  {
+    "id": "r002-call-1",
+    "repository_id": "r002",
+    "source": "r002-s2",
+    "target": "r002-s1",
+    "type": "calls"
+  },
+  {
+    "id": "r002-contains-2",
+    "repository_id": "r002",
+    "source": "r002-f3",
+    "target": "r002-s3",
+    "type": "contains"
+  },
+  {
+    "id": "r002-import-2",
+    "repository_id": "r002",
+    "source": "r002-f3",
+    "target": "r002-f2",
+    "type": "imports"
+  },
+  {
+    "id": "r002-call-2",
+    "repository_id": "r002",
+    "source": "r002-s3",
+    "target": "r002-s2",
+    "type": "calls"
+  },
+  {
+    "id": "r002-contains-3",
+    "repository_id": "r002",
+    "source": "r002-f4",
+    "target": "r002-s4",
+    "type": "contains"
+  },
+  {
+    "id": "r002-import-3",
+    "repository_id": "r002",
+    "source": "r002-f4",
+    "target": "r002-f3",
+    "type": "imports"
+  },
+  {
+    "id": "r002-call-3",
+    "repository_id": "r002",
+    "source": "r002-s4",
+    "target": "r002-s3",
+    "type": "calls"
+  },
+  {
+    "id": "r003-contains-0",
+    "repository_id": "r003",
+    "source": "r003-f1",
+    "target": "r003-s1",
+    "type": "contains"
+  },
+  {
+    "id": "r003-contains-1",
+    "repository_id": "r003",
+    "source": "r003-f2",
+    "target": "r003-s2",
+    "type": "contains"
+  },
+  {
+    "id": "r003-import-1",
+    "repository_id": "r003",
+    "source": "r003-f2",
+    "target": "r003-f1",
+    "type": "imports"
+  },
+  {
+    "id": "r003-call-1",
+    "repository_id": "r003",
+    "source": "r003-s2",
+    "target": "r003-s1",
+    "type": "calls"
+  },
+  {
+    "id": "r003-contains-2",
+    "repository_id": "r003",
+    "source": "r003-f3",
+    "target": "r003-s3",
+    "type": "contains"
+  },
+  {
+    "id": "r003-import-2",
+    "repository_id": "r003",
+    "source": "r003-f3",
+    "target": "r003-f2",
+    "type": "imports"
+  },
+  {
+    "id": "r003-call-2",
+    "repository_id": "r003",
+    "source": "r003-s3",
+    "target": "r003-s2",
+    "type": "calls"
+  },
+  {
+    "id": "r003-contains-3",
+    "repository_id": "r003",
+    "source": "r003-f4",
+    "target": "r003-s4",
+    "type": "contains"
+  },
+  {
+    "id": "r003-import-3",
+    "repository_id": "r003",
+    "source": "r003-f4",
+    "target": "r003-f3",
+    "type": "imports"
+  },
+  {
+    "id": "r003-call-3",
+    "repository_id": "r003",
+    "source": "r003-s4",
+    "target": "r003-s3",
+    "type": "calls"
+  },
+  {
+    "id": "r004-contains-0",
+    "repository_id": "r004",
+    "source": "r004-f1",
+    "target": "r004-s1",
+    "type": "contains"
+  },
+  {
+    "id": "r004-contains-1",
+    "repository_id": "r004",
+    "source": "r004-f2",
+    "target": "r004-s2",
+    "type": "contains"
+  },
+  {
+    "id": "r004-import-1",
+    "repository_id": "r004",
+    "source": "r004-f2",
+    "target": "r004-f1",
+    "type": "imports"
+  },
+  {
+    "id": "r004-call-1",
+    "repository_id": "r004",
+    "source": "r004-s2",
+    "target": "r004-s1",
+    "type": "calls"
+  },
+  {
+    "id": "r004-contains-2",
+    "repository_id": "r004",
+    "source": "r004-f3",
+    "target": "r004-s3",
+    "type": "contains"
+  },
+  {
+    "id": "r004-import-2",
+    "repository_id": "r004",
+    "source": "r004-f3",
+    "target": "r004-f2",
+    "type": "imports"
+  },
+  {
+    "id": "r004-call-2",
+    "repository_id": "r004",
+    "source": "r004-s3",
+    "target": "r004-s2",
+    "type": "calls"
+  },
+  {
+    "id": "r004-contains-3",
+    "repository_id": "r004",
+    "source": "r004-f4",
+    "target": "r004-s4",
+    "type": "contains"
+  },
+  {
+    "id": "r004-import-3",
+    "repository_id": "r004",
+    "source": "r004-f4",
+    "target": "r004-f3",
+    "type": "imports"
+  },
+  {
+    "id": "r004-call-3",
+    "repository_id": "r004",
+    "source": "r004-s4",
+    "target": "r004-s3",
+    "type": "calls"
+  },
+  {
+    "id": "r005-contains-0",
+    "repository_id": "r005",
+    "source": "r005-f1",
+    "target": "r005-s1",
+    "type": "contains"
+  },
+  {
+    "id": "r005-contains-1",
+    "repository_id": "r005",
+    "source": "r005-f2",
+    "target": "r005-s2",
+    "type": "contains"
+  },
+  {
+    "id": "r005-import-1",
+    "repository_id": "r005",
+    "source": "r005-f2",
+    "target": "r005-f1",
+    "type": "imports"
+  },
+  {
+    "id": "r005-call-1",
+    "repository_id": "r005",
+    "source": "r005-s2",
+    "target": "r005-s1",
+    "type": "calls"
+  },
+  {
+    "id": "r005-contains-2",
+    "repository_id": "r005",
+    "source": "r005-f3",
+    "target": "r005-s3",
+    "type": "contains"
+  },
+  {
+    "id": "r005-import-2",
+    "repository_id": "r005",
+    "source": "r005-f3",
+    "target": "r005-f2",
+    "type": "imports"
+  },
+  {
+    "id": "r005-call-2",
+    "repository_id": "r005",
+    "source": "r005-s3",
+    "target": "r005-s2",
+    "type": "calls"
+  },
+  {
+    "id": "r005-contains-3",
+    "repository_id": "r005",
+    "source": "r005-f4",
+    "target": "r005-s4",
+    "type": "contains"
+  },
+  {
+    "id": "r005-import-3",
+    "repository_id": "r005",
+    "source": "r005-f4",
+    "target": "r005-f3",
+    "type": "imports"
+  },
+  {
+    "id": "r005-call-3",
+    "repository_id": "r005",
+    "source": "r005-s4",
+    "target": "r005-s3",
+    "type": "calls"
+  },
+  {
+    "id": "r006-contains-0",
+    "repository_id": "r006",
+    "source": "r006-f1",
+    "target": "r006-s1",
+    "type": "contains"
+  },
+  {
+    "id": "r006-contains-1",
+    "repository_id": "r006",
+    "source": "r006-f2",
+    "target": "r006-s2",
+    "type": "contains"
+  },
+  {
+    "id": "r006-import-1",
+    "repository_id": "r006",
+    "source": "r006-f2",
+    "target": "r006-f1",
+    "type": "imports"
+  },
+  {
+    "id": "r006-call-1",
+    "repository_id": "r006",
+    "source": "r006-s2",
+    "target": "r006-s1",
+    "type": "calls"
+  },
+  {
+    "id": "r006-contains-2",
+    "repository_id": "r006",
+    "source": "r006-f3",
+    "target": "r006-s3",
+    "type": "contains"
+  },
+  {
+    "id": "r006-import-2",
+    "repository_id": "r006",
+    "source": "r006-f3",
+    "target": "r006-f2",
+    "type": "imports"
+  },
+  {
+    "id": "r006-call-2",
+    "repository_id": "r006",
+    "source": "r006-s3",
+    "target": "r006-s2",
+    "type": "calls"
+  },
+  {
+    "id": "r006-contains-3",
+    "repository_id": "r006",
+    "source": "r006-f4",
+    "target": "r006-s4",
+    "type": "contains"
+  },
+  {
+    "id": "r006-import-3",
+    "repository_id": "r006",
+    "source": "r006-f4",
+    "target": "r006-f3",
+    "type": "imports"
+  },
+  {
+    "id": "r006-call-3",
+    "repository_id": "r006",
+    "source": "r006-s4",
+    "target": "r006-s3",
+    "type": "calls"
+  },
+  {
+    "id": "r007-contains-0",
+    "repository_id": "r007",
+    "source": "r007-f1",
+    "target": "r007-s1",
+    "type": "contains"
+  },
+  {
+    "id": "r007-contains-1",
+    "repository_id": "r007",
+    "source": "r007-f2",
+    "target": "r007-s2",
+    "type": "contains"
+  },
+  {
+    "id": "r007-import-1",
+    "repository_id": "r007",
+    "source": "r007-f2",
+    "target": "r007-f1",
+    "type": "imports"
+  },
+  {
+    "id": "r007-call-1",
+    "repository_id": "r007",
+    "source": "r007-s2",
+    "target": "r007-s1",
+    "type": "calls"
+  },
+  {
+    "id": "r007-contains-2",
+    "repository_id": "r007",
+    "source": "r007-f3",
+    "target": "r007-s3",
+    "type": "contains"
+  },
+  {
+    "id": "r007-import-2",
+    "repository_id": "r007",
+    "source": "r007-f3",
+    "target": "r007-f2",
+    "type": "imports"
+  },
+  {
+    "id": "r007-call-2",
+    "repository_id": "r007",
+    "source": "r007-s3",
+    "target": "r007-s2",
+    "type": "calls"
+  },
+  {
+    "id": "r007-contains-3",
+    "repository_id": "r007",
+    "source": "r007-f4",
+    "target": "r007-s4",
+    "type": "contains"
+  },
+  {
+    "id": "r007-import-3",
+    "repository_id": "r007",
+    "source": "r007-f4",
+    "target": "r007-f3",
+    "type": "imports"
+  },
+  {
+    "id": "r007-call-3",
+    "repository_id": "r007",
+    "source": "r007-s4",
+    "target": "r007-s3",
+    "type": "calls"
+  },
+  {
+    "id": "r008-contains-0",
+    "repository_id": "r008",
+    "source": "r008-f1",
+    "target": "r008-s1",
+    "type": "contains"
+  },
+  {
+    "id": "r008-contains-1",
+    "repository_id": "r008",
+    "source": "r008-f2",
+    "target": "r008-s2",
+    "type": "contains"
+  },
+  {
+    "id": "r008-import-1",
+    "repository_id": "r008",
+    "source": "r008-f2",
+    "target": "r008-f1",
+    "type": "imports"
+  },
+  {
+    "id": "r008-call-1",
+    "repository_id": "r008",
+    "source": "r008-s2",
+    "target": "r008-s1",
+    "type": "calls"
+  },
+  {
+    "id": "r008-contains-2",
+    "repository_id": "r008",
+    "source": "r008-f3",
+    "target": "r008-s3",
+    "type": "contains"
+  },
+  {
+    "id": "r008-import-2",
+    "repository_id": "r008",
+    "source": "r008-f3",
+    "target": "r008-f2",
+    "type": "imports"
+  },
+  {
+    "id": "r008-call-2",
+    "repository_id": "r008",
+    "source": "r008-s3",
+    "target": "r008-s2",
+    "type": "calls"
+  },
+  {
+    "id": "r008-contains-3",
+    "repository_id": "r008",
+    "source": "r008-f4",
+    "target": "r008-s4",
+    "type": "contains"
+  },
+  {
+    "id": "r008-import-3",
+    "repository_id": "r008",
+    "source": "r008-f4",
+    "target": "r008-f3",
+    "type": "imports"
+  },
+  {
+    "id": "r008-call-3",
+    "repository_id": "r008",
+    "source": "r008-s4",
+    "target": "r008-s3",
+    "type": "calls"
+  },
+  {
+    "id": "r009-contains-0",
+    "repository_id": "r009",
+    "source": "r009-f1",
+    "target": "r009-s1",
+    "type": "contains"
+  },
+  {
+    "id": "r009-contains-1",
+    "repository_id": "r009",
+    "source": "r009-f2",
+    "target": "r009-s2",
+    "type": "contains"
+  },
+  {
+    "id": "r009-import-1",
+    "repository_id": "r009",
+    "source": "r009-f2",
+    "target": "r009-f1",
+    "type": "imports"
+  },
+  {
+    "id": "r009-call-1",
+    "repository_id": "r009",
+    "source": "r009-s2",
+    "target": "r009-s1",
+    "type": "calls"
+  },
+  {
+    "id": "r009-contains-2",
+    "repository_id": "r009",
+    "source": "r009-f3",
+    "target": "r009-s3",
+    "type": "contains"
+  },
+  {
+    "id": "r009-import-2",
+    "repository_id": "r009",
+    "source": "r009-f3",
+    "target": "r009-f2",
+    "type": "imports"
+  },
+  {
+    "id": "r009-call-2",
+    "repository_id": "r009",
+    "source": "r009-s3",
+    "target": "r009-s2",
+    "type": "calls"
+  },
+  {
+    "id": "r009-contains-3",
+    "repository_id": "r009",
+    "source": "r009-f4",
+    "target": "r009-s4",
+    "type": "contains"
+  },
+  {
+    "id": "r009-import-3",
+    "repository_id": "r009",
+    "source": "r009-f4",
+    "target": "r009-f3",
+    "type": "imports"
+  },
+  {
+    "id": "r009-call-3",
+    "repository_id": "r009",
+    "source": "r009-s4",
+    "target": "r009-s3",
+    "type": "calls"
+  },
+  {
+    "id": "r010-contains-0",
+    "repository_id": "r010",
+    "source": "r010-f1",
+    "target": "r010-s1",
+    "type": "contains"
+  },
+  {
+    "id": "r010-contains-1",
+    "repository_id": "r010",
+    "source": "r010-f2",
+    "target": "r010-s2",
+    "type": "contains"
+  },
+  {
+    "id": "r010-import-1",
+    "repository_id": "r010",
+    "source": "r010-f2",
+    "target": "r010-f1",
+    "type": "imports"
+  },
+  {
+    "id": "r010-call-1",
+    "repository_id": "r010",
+    "source": "r010-s2",
+    "target": "r010-s1",
+    "type": "calls"
+  },
+  {
+    "id": "r010-contains-2",
+    "repository_id": "r010",
+    "source": "r010-f3",
+    "target": "r010-s3",
+    "type": "contains"
+  },
+  {
+    "id": "r010-import-2",
+    "repository_id": "r010",
+    "source": "r010-f3",
+    "target": "r010-f2",
+    "type": "imports"
+  },
+  {
+    "id": "r010-call-2",
+    "repository_id": "r010",
+    "source": "r010-s3",
+    "target": "r010-s2",
+    "type": "calls"
+  },
+  {
+    "id": "r010-contains-3",
+    "repository_id": "r010",
+    "source": "r010-f4",
+    "target": "r010-s4",
+    "type": "contains"
+  },
+  {
+    "id": "r010-import-3",
+    "repository_id": "r010",
+    "source": "r010-f4",
+    "target": "r010-f3",
+    "type": "imports"
+  },
+  {
+    "id": "r010-call-3",
+    "repository_id": "r010",
+    "source": "r010-s4",
+    "target": "r010-s3",
+    "type": "calls"
+  },
+  {
+    "id": "r011-contains-0",
+    "repository_id": "r011",
+    "source": "r011-f1",
+    "target": "r011-s1",
+    "type": "contains"
+  },
+  {
+    "id": "r011-contains-1",
+    "repository_id": "r011",
+    "source": "r011-f2",
+    "target": "r011-s2",
+    "type": "contains"
+  },
+  {
+    "id": "r011-import-1",
+    "repository_id": "r011",
+    "source": "r011-f2",
+    "target": "r011-f1",
+    "type": "imports"
+  },
+  {
+    "id": "r011-call-1",
+    "repository_id": "r011",
+    "source": "r011-s2",
+    "target": "r011-s1",
+    "type": "calls"
+  },
+  {
+    "id": "r011-contains-2",
+    "repository_id": "r011",
+    "source": "r011-f3",
+    "target": "r011-s3",
+    "type": "contains"
+  },
+  {
+    "id": "r011-import-2",
+    "repository_id": "r011",
+    "source": "r011-f3",
+    "target": "r011-f2",
+    "type": "imports"
+  },
+  {
+    "id": "r011-call-2",
+    "repository_id": "r011",
+    "source": "r011-s3",
+    "target": "r011-s2",
+    "type": "calls"
+  },
+  {
+    "id": "r011-contains-3",
+    "repository_id": "r011",
+    "source": "r011-f4",
+    "target": "r011-s4",
+    "type": "contains"
+  },
+  {
+    "id": "r011-import-3",
+    "repository_id": "r011",
+    "source": "r011-f4",
+    "target": "r011-f3",
+    "type": "imports"
+  },
+  {
+    "id": "r011-call-3",
+    "repository_id": "r011",
+    "source": "r011-s4",
+    "target": "r011-s3",
+    "type": "calls"
+  },
+  {
+    "id": "r012-contains-0",
+    "repository_id": "r012",
+    "source": "r012-f1",
+    "target": "r012-s1",
+    "type": "contains"
+  },
+  {
+    "id": "r012-contains-1",
+    "repository_id": "r012",
+    "source": "r012-f2",
+    "target": "r012-s2",
+    "type": "contains"
+  },
+  {
+    "id": "r012-import-1",
+    "repository_id": "r012",
+    "source": "r012-f2",
+    "target": "r012-f1",
+    "type": "imports"
+  },
+  {
+    "id": "r012-call-1",
+    "repository_id": "r012",
+    "source": "r012-s2",
+    "target": "r012-s1",
+    "type": "calls"
+  },
+  {
+    "id": "r012-contains-2",
+    "repository_id": "r012",
+    "source": "r012-f3",
+    "target": "r012-s3",
+    "type": "contains"
+  },
+  {
+    "id": "r012-import-2",
+    "repository_id": "r012",
+    "source": "r012-f3",
+    "target": "r012-f2",
+    "type": "imports"
+  },
+  {
+    "id": "r012-call-2",
+    "repository_id": "r012",
+    "source": "r012-s3",
+    "target": "r012-s2",
+    "type": "calls"
+  },
+  {
+    "id": "r012-contains-3",
+    "repository_id": "r012",
+    "source": "r012-f4",
+    "target": "r012-s4",
+    "type": "contains"
+  },
+  {
+    "id": "r012-import-3",
+    "repository_id": "r012",
+    "source": "r012-f4",
+    "target": "r012-f3",
+    "type": "imports"
+  },
+  {
+    "id": "r012-call-3",
+    "repository_id": "r012",
+    "source": "r012-s4",
+    "target": "r012-s3",
+    "type": "calls"
+  }
+]

@@ -1,0 +1,8642 @@
+[
+  {
+    "id": "r001-day-0",
+    "repository_id": "r001",
+    "date": "2026-07-01",
+    "commit_count": 1,
+    "additions": 3,
+    "deletions": 5
+  },
+  {
+    "id": "r001-day-1",
+    "repository_id": "r001",
+    "date": "2026-07-02",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-2",
+    "repository_id": "r001",
+    "date": "2026-07-03",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-3",
+    "repository_id": "r001",
+    "date": "2026-07-04",
+    "commit_count": 1,
+    "additions": 2,
+    "deletions": 5
+  },
+  {
+    "id": "r001-day-4",
+    "repository_id": "r001",
+    "date": "2026-07-05",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-5",
+    "repository_id": "r001",
+    "date": "2026-07-06",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-6",
+    "repository_id": "r001",
+    "date": "2026-07-07",
+    "commit_count": 1,
+    "additions": 12,
+    "deletions": 4
+  },
+  {
+    "id": "r001-day-7",
+    "repository_id": "r001",
+    "date": "2026-07-08",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-8",
+    "repository_id": "r001",
+    "date": "2026-07-09",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-9",
+    "repository_id": "r001",
+    "date": "2026-07-10",
+    "commit_count": 1,
+    "additions": 2,
+    "deletions": 4
+  },
+  {
+    "id": "r001-day-10",
+    "repository_id": "r001",
+    "date": "2026-07-11",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-11",
+    "repository_id": "r001",
+    "date": "2026-07-12",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-12",
+    "repository_id": "r001",
+    "date": "2026-07-13",
+    "commit_count": 1,
+    "additions": 7,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-13",
+    "repository_id": "r001",
+    "date": "2026-07-14",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-14",
+    "repository_id": "r001",
+    "date": "2026-07-15",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-15",
+    "repository_id": "r001",
+    "date": "2026-07-16",
+    "commit_count": 1,
+    "additions": 1,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-16",
+    "repository_id": "r001",
+    "date": "2026-07-17",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-17",
+    "repository_id": "r001",
+    "date": "2026-07-18",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-18",
+    "repository_id": "r001",
+    "date": "2026-07-19",
+    "commit_count": 1,
+    "additions": 4,
+    "deletions": 1
+  },
+  {
+    "id": "r001-day-19",
+    "repository_id": "r001",
+    "date": "2026-07-20",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-20",
+    "repository_id": "r001",
+    "date": "2026-07-21",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-21",
+    "repository_id": "r001",
+    "date": "2026-07-22",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 4
+  },
+  {
+    "id": "r001-day-22",
+    "repository_id": "r001",
+    "date": "2026-07-23",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-23",
+    "repository_id": "r001",
+    "date": "2026-07-24",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-24",
+    "repository_id": "r001",
+    "date": "2026-07-25",
+    "commit_count": 1,
+    "additions": 1,
+    "deletions": 4
+  },
+  {
+    "id": "r001-day-25",
+    "repository_id": "r001",
+    "date": "2026-07-26",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-26",
+    "repository_id": "r001",
+    "date": "2026-07-27",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-27",
+    "repository_id": "r001",
+    "date": "2026-07-28",
+    "commit_count": 1,
+    "additions": 4,
+    "deletions": 5
+  },
+  {
+    "id": "r001-day-28",
+    "repository_id": "r001",
+    "date": "2026-07-29",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-29",
+    "repository_id": "r001",
+    "date": "2026-07-30",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-30",
+    "repository_id": "r001",
+    "date": "2026-07-31",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 5
+  },
+  {
+    "id": "r001-day-31",
+    "repository_id": "r001",
+    "date": "2026-08-01",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-32",
+    "repository_id": "r001",
+    "date": "2026-08-02",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-33",
+    "repository_id": "r001",
+    "date": "2026-08-03",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 3
+  },
+  {
+    "id": "r001-day-34",
+    "repository_id": "r001",
+    "date": "2026-08-04",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-35",
+    "repository_id": "r001",
+    "date": "2026-08-05",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-36",
+    "repository_id": "r001",
+    "date": "2026-08-06",
+    "commit_count": 1,
+    "additions": 4,
+    "deletions": 3
+  },
+  {
+    "id": "r001-day-37",
+    "repository_id": "r001",
+    "date": "2026-08-07",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-38",
+    "repository_id": "r001",
+    "date": "2026-08-08",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-39",
+    "repository_id": "r001",
+    "date": "2026-08-09",
+    "commit_count": 1,
+    "additions": 10,
+    "deletions": 2
+  },
+  {
+    "id": "r001-day-40",
+    "repository_id": "r001",
+    "date": "2026-08-10",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-41",
+    "repository_id": "r001",
+    "date": "2026-08-11",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-42",
+    "repository_id": "r001",
+    "date": "2026-08-12",
+    "commit_count": 1,
+    "additions": 1,
+    "deletions": 1
+  },
+  {
+    "id": "r001-day-43",
+    "repository_id": "r001",
+    "date": "2026-08-13",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-44",
+    "repository_id": "r001",
+    "date": "2026-08-14",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-45",
+    "repository_id": "r001",
+    "date": "2026-08-15",
+    "commit_count": 1,
+    "additions": 12,
+    "deletions": 3
+  },
+  {
+    "id": "r001-day-46",
+    "repository_id": "r001",
+    "date": "2026-08-16",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-47",
+    "repository_id": "r001",
+    "date": "2026-08-17",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-48",
+    "repository_id": "r001",
+    "date": "2026-08-18",
+    "commit_count": 1,
+    "additions": 6,
+    "deletions": 2
+  },
+  {
+    "id": "r001-day-49",
+    "repository_id": "r001",
+    "date": "2026-08-19",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-50",
+    "repository_id": "r001",
+    "date": "2026-08-20",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-51",
+    "repository_id": "r001",
+    "date": "2026-08-21",
+    "commit_count": 1,
+    "additions": 3,
+    "deletions": 1
+  },
+  {
+    "id": "r001-day-52",
+    "repository_id": "r001",
+    "date": "2026-08-22",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-53",
+    "repository_id": "r001",
+    "date": "2026-08-23",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-54",
+    "repository_id": "r001",
+    "date": "2026-08-24",
+    "commit_count": 1,
+    "additions": 6,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-55",
+    "repository_id": "r001",
+    "date": "2026-08-25",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-56",
+    "repository_id": "r001",
+    "date": "2026-08-26",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-57",
+    "repository_id": "r001",
+    "date": "2026-08-27",
+    "commit_count": 1,
+    "additions": 2,
+    "deletions": 3
+  },
+  {
+    "id": "r001-day-58",
+    "repository_id": "r001",
+    "date": "2026-08-28",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-59",
+    "repository_id": "r001",
+    "date": "2026-08-29",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-60",
+    "repository_id": "r001",
+    "date": "2026-08-30",
+    "commit_count": 1,
+    "additions": 2,
+    "deletions": 2
+  },
+  {
+    "id": "r001-day-61",
+    "repository_id": "r001",
+    "date": "2026-08-31",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-62",
+    "repository_id": "r001",
+    "date": "2026-09-01",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-63",
+    "repository_id": "r001",
+    "date": "2026-09-02",
+    "commit_count": 1,
+    "additions": 6,
+    "deletions": 4
+  },
+  {
+    "id": "r001-day-64",
+    "repository_id": "r001",
+    "date": "2026-09-03",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-65",
+    "repository_id": "r001",
+    "date": "2026-09-04",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-66",
+    "repository_id": "r001",
+    "date": "2026-09-05",
+    "commit_count": 1,
+    "additions": 5,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-67",
+    "repository_id": "r001",
+    "date": "2026-09-06",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-68",
+    "repository_id": "r001",
+    "date": "2026-09-07",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-69",
+    "repository_id": "r001",
+    "date": "2026-09-08",
+    "commit_count": 1,
+    "additions": 12,
+    "deletions": 3
+  },
+  {
+    "id": "r001-day-70",
+    "repository_id": "r001",
+    "date": "2026-09-09",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-71",
+    "repository_id": "r001",
+    "date": "2026-09-10",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-72",
+    "repository_id": "r001",
+    "date": "2026-09-11",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-73",
+    "repository_id": "r001",
+    "date": "2026-09-12",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-74",
+    "repository_id": "r001",
+    "date": "2026-09-13",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-75",
+    "repository_id": "r001",
+    "date": "2026-09-14",
+    "commit_count": 1,
+    "additions": 7,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-76",
+    "repository_id": "r001",
+    "date": "2026-09-15",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-77",
+    "repository_id": "r001",
+    "date": "2026-09-16",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-78",
+    "repository_id": "r001",
+    "date": "2026-09-17",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 2
+  },
+  {
+    "id": "r001-day-79",
+    "repository_id": "r001",
+    "date": "2026-09-18",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-80",
+    "repository_id": "r001",
+    "date": "2026-09-19",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-81",
+    "repository_id": "r001",
+    "date": "2026-09-20",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 4
+  },
+  {
+    "id": "r001-day-82",
+    "repository_id": "r001",
+    "date": "2026-09-21",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-83",
+    "repository_id": "r001",
+    "date": "2026-09-22",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-84",
+    "repository_id": "r001",
+    "date": "2026-09-23",
+    "commit_count": 1,
+    "additions": 6,
+    "deletions": 4
+  },
+  {
+    "id": "r001-day-85",
+    "repository_id": "r001",
+    "date": "2026-09-24",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-86",
+    "repository_id": "r001",
+    "date": "2026-09-25",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-87",
+    "repository_id": "r001",
+    "date": "2026-09-26",
+    "commit_count": 1,
+    "additions": 4,
+    "deletions": 5
+  },
+  {
+    "id": "r001-day-88",
+    "repository_id": "r001",
+    "date": "2026-09-27",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r001-day-89",
+    "repository_id": "r001",
+    "date": "2026-09-28",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-0",
+    "repository_id": "r002",
+    "date": "2026-07-01",
+    "commit_count": 1,
+    "additions": 2,
+    "deletions": 1
+  },
+  {
+    "id": "r002-day-1",
+    "repository_id": "r002",
+    "date": "2026-07-02",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-2",
+    "repository_id": "r002",
+    "date": "2026-07-03",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-3",
+    "repository_id": "r002",
+    "date": "2026-07-04",
+    "commit_count": 1,
+    "additions": 2,
+    "deletions": 3
+  },
+  {
+    "id": "r002-day-4",
+    "repository_id": "r002",
+    "date": "2026-07-05",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-5",
+    "repository_id": "r002",
+    "date": "2026-07-06",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-6",
+    "repository_id": "r002",
+    "date": "2026-07-07",
+    "commit_count": 1,
+    "additions": 5,
+    "deletions": 3
+  },
+  {
+    "id": "r002-day-7",
+    "repository_id": "r002",
+    "date": "2026-07-08",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-8",
+    "repository_id": "r002",
+    "date": "2026-07-09",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-9",
+    "repository_id": "r002",
+    "date": "2026-07-10",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 2
+  },
+  {
+    "id": "r002-day-10",
+    "repository_id": "r002",
+    "date": "2026-07-11",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-11",
+    "repository_id": "r002",
+    "date": "2026-07-12",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-12",
+    "repository_id": "r002",
+    "date": "2026-07-13",
+    "commit_count": 1,
+    "additions": 3,
+    "deletions": 2
+  },
+  {
+    "id": "r002-day-13",
+    "repository_id": "r002",
+    "date": "2026-07-14",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-14",
+    "repository_id": "r002",
+    "date": "2026-07-15",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-15",
+    "repository_id": "r002",
+    "date": "2026-07-16",
+    "commit_count": 1,
+    "additions": 6,
+    "deletions": 1
+  },
+  {
+    "id": "r002-day-16",
+    "repository_id": "r002",
+    "date": "2026-07-17",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-17",
+    "repository_id": "r002",
+    "date": "2026-07-18",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-18",
+    "repository_id": "r002",
+    "date": "2026-07-19",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 2
+  },
+  {
+    "id": "r002-day-19",
+    "repository_id": "r002",
+    "date": "2026-07-20",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-20",
+    "repository_id": "r002",
+    "date": "2026-07-21",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-21",
+    "repository_id": "r002",
+    "date": "2026-07-22",
+    "commit_count": 1,
+    "additions": 12,
+    "deletions": 5
+  },
+  {
+    "id": "r002-day-22",
+    "repository_id": "r002",
+    "date": "2026-07-23",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-23",
+    "repository_id": "r002",
+    "date": "2026-07-24",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-24",
+    "repository_id": "r002",
+    "date": "2026-07-25",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-25",
+    "repository_id": "r002",
+    "date": "2026-07-26",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-26",
+    "repository_id": "r002",
+    "date": "2026-07-27",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-27",
+    "repository_id": "r002",
+    "date": "2026-07-28",
+    "commit_count": 1,
+    "additions": 10,
+    "deletions": 5
+  },
+  {
+    "id": "r002-day-28",
+    "repository_id": "r002",
+    "date": "2026-07-29",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-29",
+    "repository_id": "r002",
+    "date": "2026-07-30",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-30",
+    "repository_id": "r002",
+    "date": "2026-07-31",
+    "commit_count": 1,
+    "additions": 3,
+    "deletions": 4
+  },
+  {
+    "id": "r002-day-31",
+    "repository_id": "r002",
+    "date": "2026-08-01",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-32",
+    "repository_id": "r002",
+    "date": "2026-08-02",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-33",
+    "repository_id": "r002",
+    "date": "2026-08-03",
+    "commit_count": 1,
+    "additions": 12,
+    "deletions": 1
+  },
+  {
+    "id": "r002-day-34",
+    "repository_id": "r002",
+    "date": "2026-08-04",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-35",
+    "repository_id": "r002",
+    "date": "2026-08-05",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-36",
+    "repository_id": "r002",
+    "date": "2026-08-06",
+    "commit_count": 1,
+    "additions": 3,
+    "deletions": 3
+  },
+  {
+    "id": "r002-day-37",
+    "repository_id": "r002",
+    "date": "2026-08-07",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-38",
+    "repository_id": "r002",
+    "date": "2026-08-08",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-39",
+    "repository_id": "r002",
+    "date": "2026-08-09",
+    "commit_count": 1,
+    "additions": 7,
+    "deletions": 2
+  },
+  {
+    "id": "r002-day-40",
+    "repository_id": "r002",
+    "date": "2026-08-10",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-41",
+    "repository_id": "r002",
+    "date": "2026-08-11",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-42",
+    "repository_id": "r002",
+    "date": "2026-08-12",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 5
+  },
+  {
+    "id": "r002-day-43",
+    "repository_id": "r002",
+    "date": "2026-08-13",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-44",
+    "repository_id": "r002",
+    "date": "2026-08-14",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-45",
+    "repository_id": "r002",
+    "date": "2026-08-15",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 1
+  },
+  {
+    "id": "r002-day-46",
+    "repository_id": "r002",
+    "date": "2026-08-16",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-47",
+    "repository_id": "r002",
+    "date": "2026-08-17",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-48",
+    "repository_id": "r002",
+    "date": "2026-08-18",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 2
+  },
+  {
+    "id": "r002-day-49",
+    "repository_id": "r002",
+    "date": "2026-08-19",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-50",
+    "repository_id": "r002",
+    "date": "2026-08-20",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-51",
+    "repository_id": "r002",
+    "date": "2026-08-21",
+    "commit_count": 1,
+    "additions": 1,
+    "deletions": 1
+  },
+  {
+    "id": "r002-day-52",
+    "repository_id": "r002",
+    "date": "2026-08-22",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-53",
+    "repository_id": "r002",
+    "date": "2026-08-23",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-54",
+    "repository_id": "r002",
+    "date": "2026-08-24",
+    "commit_count": 1,
+    "additions": 1,
+    "deletions": 2
+  },
+  {
+    "id": "r002-day-55",
+    "repository_id": "r002",
+    "date": "2026-08-25",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-56",
+    "repository_id": "r002",
+    "date": "2026-08-26",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-57",
+    "repository_id": "r002",
+    "date": "2026-08-27",
+    "commit_count": 1,
+    "additions": 7,
+    "deletions": 2
+  },
+  {
+    "id": "r002-day-58",
+    "repository_id": "r002",
+    "date": "2026-08-28",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-59",
+    "repository_id": "r002",
+    "date": "2026-08-29",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-60",
+    "repository_id": "r002",
+    "date": "2026-08-30",
+    "commit_count": 1,
+    "additions": 2,
+    "deletions": 1
+  },
+  {
+    "id": "r002-day-61",
+    "repository_id": "r002",
+    "date": "2026-08-31",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-62",
+    "repository_id": "r002",
+    "date": "2026-09-01",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-63",
+    "repository_id": "r002",
+    "date": "2026-09-02",
+    "commit_count": 1,
+    "additions": 10,
+    "deletions": 5
+  },
+  {
+    "id": "r002-day-64",
+    "repository_id": "r002",
+    "date": "2026-09-03",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-65",
+    "repository_id": "r002",
+    "date": "2026-09-04",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-66",
+    "repository_id": "r002",
+    "date": "2026-09-05",
+    "commit_count": 1,
+    "additions": 6,
+    "deletions": 1
+  },
+  {
+    "id": "r002-day-67",
+    "repository_id": "r002",
+    "date": "2026-09-06",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-68",
+    "repository_id": "r002",
+    "date": "2026-09-07",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-69",
+    "repository_id": "r002",
+    "date": "2026-09-08",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 3
+  },
+  {
+    "id": "r002-day-70",
+    "repository_id": "r002",
+    "date": "2026-09-09",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-71",
+    "repository_id": "r002",
+    "date": "2026-09-10",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-72",
+    "repository_id": "r002",
+    "date": "2026-09-11",
+    "commit_count": 1,
+    "additions": 7,
+    "deletions": 5
+  },
+  {
+    "id": "r002-day-73",
+    "repository_id": "r002",
+    "date": "2026-09-12",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-74",
+    "repository_id": "r002",
+    "date": "2026-09-13",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-75",
+    "repository_id": "r002",
+    "date": "2026-09-14",
+    "commit_count": 1,
+    "additions": 8,
+    "deletions": 1
+  },
+  {
+    "id": "r002-day-76",
+    "repository_id": "r002",
+    "date": "2026-09-15",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-77",
+    "repository_id": "r002",
+    "date": "2026-09-16",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-78",
+    "repository_id": "r002",
+    "date": "2026-09-17",
+    "commit_count": 1,
+    "additions": 5,
+    "deletions": 1
+  },
+  {
+    "id": "r002-day-79",
+    "repository_id": "r002",
+    "date": "2026-09-18",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-80",
+    "repository_id": "r002",
+    "date": "2026-09-19",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-81",
+    "repository_id": "r002",
+    "date": "2026-09-20",
+    "commit_count": 1,
+    "additions": 4,
+    "deletions": 5
+  },
+  {
+    "id": "r002-day-82",
+    "repository_id": "r002",
+    "date": "2026-09-21",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-83",
+    "repository_id": "r002",
+    "date": "2026-09-22",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-84",
+    "repository_id": "r002",
+    "date": "2026-09-23",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 4
+  },
+  {
+    "id": "r002-day-85",
+    "repository_id": "r002",
+    "date": "2026-09-24",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-86",
+    "repository_id": "r002",
+    "date": "2026-09-25",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-87",
+    "repository_id": "r002",
+    "date": "2026-09-26",
+    "commit_count": 1,
+    "additions": 5,
+    "deletions": 5
+  },
+  {
+    "id": "r002-day-88",
+    "repository_id": "r002",
+    "date": "2026-09-27",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r002-day-89",
+    "repository_id": "r002",
+    "date": "2026-09-28",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-0",
+    "repository_id": "r003",
+    "date": "2026-07-01",
+    "commit_count": 1,
+    "additions": 4,
+    "deletions": 1
+  },
+  {
+    "id": "r003-day-1",
+    "repository_id": "r003",
+    "date": "2026-07-02",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-2",
+    "repository_id": "r003",
+    "date": "2026-07-03",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-3",
+    "repository_id": "r003",
+    "date": "2026-07-04",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 3
+  },
+  {
+    "id": "r003-day-4",
+    "repository_id": "r003",
+    "date": "2026-07-05",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-5",
+    "repository_id": "r003",
+    "date": "2026-07-06",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-6",
+    "repository_id": "r003",
+    "date": "2026-07-07",
+    "commit_count": 1,
+    "additions": 2,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-7",
+    "repository_id": "r003",
+    "date": "2026-07-08",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-8",
+    "repository_id": "r003",
+    "date": "2026-07-09",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-9",
+    "repository_id": "r003",
+    "date": "2026-07-10",
+    "commit_count": 1,
+    "additions": 2,
+    "deletions": 1
+  },
+  {
+    "id": "r003-day-10",
+    "repository_id": "r003",
+    "date": "2026-07-11",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-11",
+    "repository_id": "r003",
+    "date": "2026-07-12",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-12",
+    "repository_id": "r003",
+    "date": "2026-07-13",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 1
+  },
+  {
+    "id": "r003-day-13",
+    "repository_id": "r003",
+    "date": "2026-07-14",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-14",
+    "repository_id": "r003",
+    "date": "2026-07-15",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-15",
+    "repository_id": "r003",
+    "date": "2026-07-16",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 3
+  },
+  {
+    "id": "r003-day-16",
+    "repository_id": "r003",
+    "date": "2026-07-17",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-17",
+    "repository_id": "r003",
+    "date": "2026-07-18",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-18",
+    "repository_id": "r003",
+    "date": "2026-07-19",
+    "commit_count": 1,
+    "additions": 10,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-19",
+    "repository_id": "r003",
+    "date": "2026-07-20",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-20",
+    "repository_id": "r003",
+    "date": "2026-07-21",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-21",
+    "repository_id": "r003",
+    "date": "2026-07-22",
+    "commit_count": 1,
+    "additions": 7,
+    "deletions": 3
+  },
+  {
+    "id": "r003-day-22",
+    "repository_id": "r003",
+    "date": "2026-07-23",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-23",
+    "repository_id": "r003",
+    "date": "2026-07-24",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-24",
+    "repository_id": "r003",
+    "date": "2026-07-25",
+    "commit_count": 1,
+    "additions": 10,
+    "deletions": 3
+  },
+  {
+    "id": "r003-day-25",
+    "repository_id": "r003",
+    "date": "2026-07-26",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-26",
+    "repository_id": "r003",
+    "date": "2026-07-27",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-27",
+    "repository_id": "r003",
+    "date": "2026-07-28",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 2
+  },
+  {
+    "id": "r003-day-28",
+    "repository_id": "r003",
+    "date": "2026-07-29",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-29",
+    "repository_id": "r003",
+    "date": "2026-07-30",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-30",
+    "repository_id": "r003",
+    "date": "2026-07-31",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-31",
+    "repository_id": "r003",
+    "date": "2026-08-01",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-32",
+    "repository_id": "r003",
+    "date": "2026-08-02",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-33",
+    "repository_id": "r003",
+    "date": "2026-08-03",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 5
+  },
+  {
+    "id": "r003-day-34",
+    "repository_id": "r003",
+    "date": "2026-08-04",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-35",
+    "repository_id": "r003",
+    "date": "2026-08-05",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-36",
+    "repository_id": "r003",
+    "date": "2026-08-06",
+    "commit_count": 1,
+    "additions": 2,
+    "deletions": 5
+  },
+  {
+    "id": "r003-day-37",
+    "repository_id": "r003",
+    "date": "2026-08-07",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-38",
+    "repository_id": "r003",
+    "date": "2026-08-08",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-39",
+    "repository_id": "r003",
+    "date": "2026-08-09",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 2
+  },
+  {
+    "id": "r003-day-40",
+    "repository_id": "r003",
+    "date": "2026-08-10",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-41",
+    "repository_id": "r003",
+    "date": "2026-08-11",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-42",
+    "repository_id": "r003",
+    "date": "2026-08-12",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 2
+  },
+  {
+    "id": "r003-day-43",
+    "repository_id": "r003",
+    "date": "2026-08-13",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-44",
+    "repository_id": "r003",
+    "date": "2026-08-14",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-45",
+    "repository_id": "r003",
+    "date": "2026-08-15",
+    "commit_count": 1,
+    "additions": 2,
+    "deletions": 2
+  },
+  {
+    "id": "r003-day-46",
+    "repository_id": "r003",
+    "date": "2026-08-16",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-47",
+    "repository_id": "r003",
+    "date": "2026-08-17",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-48",
+    "repository_id": "r003",
+    "date": "2026-08-18",
+    "commit_count": 1,
+    "additions": 7,
+    "deletions": 1
+  },
+  {
+    "id": "r003-day-49",
+    "repository_id": "r003",
+    "date": "2026-08-19",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-50",
+    "repository_id": "r003",
+    "date": "2026-08-20",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-51",
+    "repository_id": "r003",
+    "date": "2026-08-21",
+    "commit_count": 1,
+    "additions": 8,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-52",
+    "repository_id": "r003",
+    "date": "2026-08-22",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-53",
+    "repository_id": "r003",
+    "date": "2026-08-23",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-54",
+    "repository_id": "r003",
+    "date": "2026-08-24",
+    "commit_count": 1,
+    "additions": 12,
+    "deletions": 5
+  },
+  {
+    "id": "r003-day-55",
+    "repository_id": "r003",
+    "date": "2026-08-25",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-56",
+    "repository_id": "r003",
+    "date": "2026-08-26",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-57",
+    "repository_id": "r003",
+    "date": "2026-08-27",
+    "commit_count": 1,
+    "additions": 5,
+    "deletions": 4
+  },
+  {
+    "id": "r003-day-58",
+    "repository_id": "r003",
+    "date": "2026-08-28",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-59",
+    "repository_id": "r003",
+    "date": "2026-08-29",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-60",
+    "repository_id": "r003",
+    "date": "2026-08-30",
+    "commit_count": 1,
+    "additions": 3,
+    "deletions": 4
+  },
+  {
+    "id": "r003-day-61",
+    "repository_id": "r003",
+    "date": "2026-08-31",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-62",
+    "repository_id": "r003",
+    "date": "2026-09-01",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-63",
+    "repository_id": "r003",
+    "date": "2026-09-02",
+    "commit_count": 1,
+    "additions": 2,
+    "deletions": 5
+  },
+  {
+    "id": "r003-day-64",
+    "repository_id": "r003",
+    "date": "2026-09-03",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-65",
+    "repository_id": "r003",
+    "date": "2026-09-04",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-66",
+    "repository_id": "r003",
+    "date": "2026-09-05",
+    "commit_count": 1,
+    "additions": 5,
+    "deletions": 5
+  },
+  {
+    "id": "r003-day-67",
+    "repository_id": "r003",
+    "date": "2026-09-06",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-68",
+    "repository_id": "r003",
+    "date": "2026-09-07",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-69",
+    "repository_id": "r003",
+    "date": "2026-09-08",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 4
+  },
+  {
+    "id": "r003-day-70",
+    "repository_id": "r003",
+    "date": "2026-09-09",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-71",
+    "repository_id": "r003",
+    "date": "2026-09-10",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-72",
+    "repository_id": "r003",
+    "date": "2026-09-11",
+    "commit_count": 1,
+    "additions": 4,
+    "deletions": 1
+  },
+  {
+    "id": "r003-day-73",
+    "repository_id": "r003",
+    "date": "2026-09-12",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-74",
+    "repository_id": "r003",
+    "date": "2026-09-13",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-75",
+    "repository_id": "r003",
+    "date": "2026-09-14",
+    "commit_count": 1,
+    "additions": 6,
+    "deletions": 1
+  },
+  {
+    "id": "r003-day-76",
+    "repository_id": "r003",
+    "date": "2026-09-15",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-77",
+    "repository_id": "r003",
+    "date": "2026-09-16",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-78",
+    "repository_id": "r003",
+    "date": "2026-09-17",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 4
+  },
+  {
+    "id": "r003-day-79",
+    "repository_id": "r003",
+    "date": "2026-09-18",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-80",
+    "repository_id": "r003",
+    "date": "2026-09-19",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-81",
+    "repository_id": "r003",
+    "date": "2026-09-20",
+    "commit_count": 1,
+    "additions": 1,
+    "deletions": 4
+  },
+  {
+    "id": "r003-day-82",
+    "repository_id": "r003",
+    "date": "2026-09-21",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-83",
+    "repository_id": "r003",
+    "date": "2026-09-22",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-84",
+    "repository_id": "r003",
+    "date": "2026-09-23",
+    "commit_count": 1,
+    "additions": 6,
+    "deletions": 3
+  },
+  {
+    "id": "r003-day-85",
+    "repository_id": "r003",
+    "date": "2026-09-24",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-86",
+    "repository_id": "r003",
+    "date": "2026-09-25",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-87",
+    "repository_id": "r003",
+    "date": "2026-09-26",
+    "commit_count": 1,
+    "additions": 1,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-88",
+    "repository_id": "r003",
+    "date": "2026-09-27",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r003-day-89",
+    "repository_id": "r003",
+    "date": "2026-09-28",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-0",
+    "repository_id": "r004",
+    "date": "2026-07-01",
+    "commit_count": 1,
+    "additions": 10,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-1",
+    "repository_id": "r004",
+    "date": "2026-07-02",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-2",
+    "repository_id": "r004",
+    "date": "2026-07-03",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-3",
+    "repository_id": "r004",
+    "date": "2026-07-04",
+    "commit_count": 1,
+    "additions": 2,
+    "deletions": 5
+  },
+  {
+    "id": "r004-day-4",
+    "repository_id": "r004",
+    "date": "2026-07-05",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-5",
+    "repository_id": "r004",
+    "date": "2026-07-06",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-6",
+    "repository_id": "r004",
+    "date": "2026-07-07",
+    "commit_count": 1,
+    "additions": 8,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-7",
+    "repository_id": "r004",
+    "date": "2026-07-08",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-8",
+    "repository_id": "r004",
+    "date": "2026-07-09",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-9",
+    "repository_id": "r004",
+    "date": "2026-07-10",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 1
+  },
+  {
+    "id": "r004-day-10",
+    "repository_id": "r004",
+    "date": "2026-07-11",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-11",
+    "repository_id": "r004",
+    "date": "2026-07-12",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-12",
+    "repository_id": "r004",
+    "date": "2026-07-13",
+    "commit_count": 1,
+    "additions": 3,
+    "deletions": 5
+  },
+  {
+    "id": "r004-day-13",
+    "repository_id": "r004",
+    "date": "2026-07-14",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-14",
+    "repository_id": "r004",
+    "date": "2026-07-15",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-15",
+    "repository_id": "r004",
+    "date": "2026-07-16",
+    "commit_count": 1,
+    "additions": 8,
+    "deletions": 4
+  },
+  {
+    "id": "r004-day-16",
+    "repository_id": "r004",
+    "date": "2026-07-17",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-17",
+    "repository_id": "r004",
+    "date": "2026-07-18",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-18",
+    "repository_id": "r004",
+    "date": "2026-07-19",
+    "commit_count": 1,
+    "additions": 3,
+    "deletions": 2
+  },
+  {
+    "id": "r004-day-19",
+    "repository_id": "r004",
+    "date": "2026-07-20",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-20",
+    "repository_id": "r004",
+    "date": "2026-07-21",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-21",
+    "repository_id": "r004",
+    "date": "2026-07-22",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 4
+  },
+  {
+    "id": "r004-day-22",
+    "repository_id": "r004",
+    "date": "2026-07-23",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-23",
+    "repository_id": "r004",
+    "date": "2026-07-24",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-24",
+    "repository_id": "r004",
+    "date": "2026-07-25",
+    "commit_count": 1,
+    "additions": 7,
+    "deletions": 1
+  },
+  {
+    "id": "r004-day-25",
+    "repository_id": "r004",
+    "date": "2026-07-26",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-26",
+    "repository_id": "r004",
+    "date": "2026-07-27",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-27",
+    "repository_id": "r004",
+    "date": "2026-07-28",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 5
+  },
+  {
+    "id": "r004-day-28",
+    "repository_id": "r004",
+    "date": "2026-07-29",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-29",
+    "repository_id": "r004",
+    "date": "2026-07-30",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-30",
+    "repository_id": "r004",
+    "date": "2026-07-31",
+    "commit_count": 1,
+    "additions": 12,
+    "deletions": 1
+  },
+  {
+    "id": "r004-day-31",
+    "repository_id": "r004",
+    "date": "2026-08-01",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-32",
+    "repository_id": "r004",
+    "date": "2026-08-02",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-33",
+    "repository_id": "r004",
+    "date": "2026-08-03",
+    "commit_count": 1,
+    "additions": 12,
+    "deletions": 2
+  },
+  {
+    "id": "r004-day-34",
+    "repository_id": "r004",
+    "date": "2026-08-04",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-35",
+    "repository_id": "r004",
+    "date": "2026-08-05",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-36",
+    "repository_id": "r004",
+    "date": "2026-08-06",
+    "commit_count": 1,
+    "additions": 7,
+    "deletions": 5
+  },
+  {
+    "id": "r004-day-37",
+    "repository_id": "r004",
+    "date": "2026-08-07",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-38",
+    "repository_id": "r004",
+    "date": "2026-08-08",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-39",
+    "repository_id": "r004",
+    "date": "2026-08-09",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 2
+  },
+  {
+    "id": "r004-day-40",
+    "repository_id": "r004",
+    "date": "2026-08-10",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-41",
+    "repository_id": "r004",
+    "date": "2026-08-11",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-42",
+    "repository_id": "r004",
+    "date": "2026-08-12",
+    "commit_count": 1,
+    "additions": 8,
+    "deletions": 4
+  },
+  {
+    "id": "r004-day-43",
+    "repository_id": "r004",
+    "date": "2026-08-13",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-44",
+    "repository_id": "r004",
+    "date": "2026-08-14",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-45",
+    "repository_id": "r004",
+    "date": "2026-08-15",
+    "commit_count": 1,
+    "additions": 8,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-46",
+    "repository_id": "r004",
+    "date": "2026-08-16",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-47",
+    "repository_id": "r004",
+    "date": "2026-08-17",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-48",
+    "repository_id": "r004",
+    "date": "2026-08-18",
+    "commit_count": 1,
+    "additions": 4,
+    "deletions": 1
+  },
+  {
+    "id": "r004-day-49",
+    "repository_id": "r004",
+    "date": "2026-08-19",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-50",
+    "repository_id": "r004",
+    "date": "2026-08-20",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-51",
+    "repository_id": "r004",
+    "date": "2026-08-21",
+    "commit_count": 1,
+    "additions": 2,
+    "deletions": 2
+  },
+  {
+    "id": "r004-day-52",
+    "repository_id": "r004",
+    "date": "2026-08-22",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-53",
+    "repository_id": "r004",
+    "date": "2026-08-23",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-54",
+    "repository_id": "r004",
+    "date": "2026-08-24",
+    "commit_count": 1,
+    "additions": 1,
+    "deletions": 4
+  },
+  {
+    "id": "r004-day-55",
+    "repository_id": "r004",
+    "date": "2026-08-25",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-56",
+    "repository_id": "r004",
+    "date": "2026-08-26",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-57",
+    "repository_id": "r004",
+    "date": "2026-08-27",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 1
+  },
+  {
+    "id": "r004-day-58",
+    "repository_id": "r004",
+    "date": "2026-08-28",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-59",
+    "repository_id": "r004",
+    "date": "2026-08-29",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-60",
+    "repository_id": "r004",
+    "date": "2026-08-30",
+    "commit_count": 1,
+    "additions": 10,
+    "deletions": 1
+  },
+  {
+    "id": "r004-day-61",
+    "repository_id": "r004",
+    "date": "2026-08-31",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-62",
+    "repository_id": "r004",
+    "date": "2026-09-01",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-63",
+    "repository_id": "r004",
+    "date": "2026-09-02",
+    "commit_count": 1,
+    "additions": 1,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-64",
+    "repository_id": "r004",
+    "date": "2026-09-03",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-65",
+    "repository_id": "r004",
+    "date": "2026-09-04",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-66",
+    "repository_id": "r004",
+    "date": "2026-09-05",
+    "commit_count": 1,
+    "additions": 12,
+    "deletions": 5
+  },
+  {
+    "id": "r004-day-67",
+    "repository_id": "r004",
+    "date": "2026-09-06",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-68",
+    "repository_id": "r004",
+    "date": "2026-09-07",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-69",
+    "repository_id": "r004",
+    "date": "2026-09-08",
+    "commit_count": 1,
+    "additions": 1,
+    "deletions": 1
+  },
+  {
+    "id": "r004-day-70",
+    "repository_id": "r004",
+    "date": "2026-09-09",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-71",
+    "repository_id": "r004",
+    "date": "2026-09-10",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-72",
+    "repository_id": "r004",
+    "date": "2026-09-11",
+    "commit_count": 1,
+    "additions": 2,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-73",
+    "repository_id": "r004",
+    "date": "2026-09-12",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-74",
+    "repository_id": "r004",
+    "date": "2026-09-13",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-75",
+    "repository_id": "r004",
+    "date": "2026-09-14",
+    "commit_count": 1,
+    "additions": 6,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-76",
+    "repository_id": "r004",
+    "date": "2026-09-15",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-77",
+    "repository_id": "r004",
+    "date": "2026-09-16",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-78",
+    "repository_id": "r004",
+    "date": "2026-09-17",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 1
+  },
+  {
+    "id": "r004-day-79",
+    "repository_id": "r004",
+    "date": "2026-09-18",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-80",
+    "repository_id": "r004",
+    "date": "2026-09-19",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-81",
+    "repository_id": "r004",
+    "date": "2026-09-20",
+    "commit_count": 1,
+    "additions": 5,
+    "deletions": 5
+  },
+  {
+    "id": "r004-day-82",
+    "repository_id": "r004",
+    "date": "2026-09-21",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-83",
+    "repository_id": "r004",
+    "date": "2026-09-22",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-84",
+    "repository_id": "r004",
+    "date": "2026-09-23",
+    "commit_count": 1,
+    "additions": 8,
+    "deletions": 1
+  },
+  {
+    "id": "r004-day-85",
+    "repository_id": "r004",
+    "date": "2026-09-24",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-86",
+    "repository_id": "r004",
+    "date": "2026-09-25",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-87",
+    "repository_id": "r004",
+    "date": "2026-09-26",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 1
+  },
+  {
+    "id": "r004-day-88",
+    "repository_id": "r004",
+    "date": "2026-09-27",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r004-day-89",
+    "repository_id": "r004",
+    "date": "2026-09-28",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-0",
+    "repository_id": "r005",
+    "date": "2026-07-01",
+    "commit_count": 1,
+    "additions": 7,
+    "deletions": 1
+  },
+  {
+    "id": "r005-day-1",
+    "repository_id": "r005",
+    "date": "2026-07-02",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-2",
+    "repository_id": "r005",
+    "date": "2026-07-03",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-3",
+    "repository_id": "r005",
+    "date": "2026-07-04",
+    "commit_count": 1,
+    "additions": 2,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-4",
+    "repository_id": "r005",
+    "date": "2026-07-05",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-5",
+    "repository_id": "r005",
+    "date": "2026-07-06",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-6",
+    "repository_id": "r005",
+    "date": "2026-07-07",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 3
+  },
+  {
+    "id": "r005-day-7",
+    "repository_id": "r005",
+    "date": "2026-07-08",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-8",
+    "repository_id": "r005",
+    "date": "2026-07-09",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-9",
+    "repository_id": "r005",
+    "date": "2026-07-10",
+    "commit_count": 1,
+    "additions": 6,
+    "deletions": 3
+  },
+  {
+    "id": "r005-day-10",
+    "repository_id": "r005",
+    "date": "2026-07-11",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-11",
+    "repository_id": "r005",
+    "date": "2026-07-12",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-12",
+    "repository_id": "r005",
+    "date": "2026-07-13",
+    "commit_count": 1,
+    "additions": 7,
+    "deletions": 3
+  },
+  {
+    "id": "r005-day-13",
+    "repository_id": "r005",
+    "date": "2026-07-14",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-14",
+    "repository_id": "r005",
+    "date": "2026-07-15",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-15",
+    "repository_id": "r005",
+    "date": "2026-07-16",
+    "commit_count": 1,
+    "additions": 12,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-16",
+    "repository_id": "r005",
+    "date": "2026-07-17",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-17",
+    "repository_id": "r005",
+    "date": "2026-07-18",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-18",
+    "repository_id": "r005",
+    "date": "2026-07-19",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 5
+  },
+  {
+    "id": "r005-day-19",
+    "repository_id": "r005",
+    "date": "2026-07-20",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-20",
+    "repository_id": "r005",
+    "date": "2026-07-21",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-21",
+    "repository_id": "r005",
+    "date": "2026-07-22",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-22",
+    "repository_id": "r005",
+    "date": "2026-07-23",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-23",
+    "repository_id": "r005",
+    "date": "2026-07-24",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-24",
+    "repository_id": "r005",
+    "date": "2026-07-25",
+    "commit_count": 1,
+    "additions": 1,
+    "deletions": 3
+  },
+  {
+    "id": "r005-day-25",
+    "repository_id": "r005",
+    "date": "2026-07-26",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-26",
+    "repository_id": "r005",
+    "date": "2026-07-27",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-27",
+    "repository_id": "r005",
+    "date": "2026-07-28",
+    "commit_count": 1,
+    "additions": 12,
+    "deletions": 2
+  },
+  {
+    "id": "r005-day-28",
+    "repository_id": "r005",
+    "date": "2026-07-29",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-29",
+    "repository_id": "r005",
+    "date": "2026-07-30",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-30",
+    "repository_id": "r005",
+    "date": "2026-07-31",
+    "commit_count": 1,
+    "additions": 2,
+    "deletions": 1
+  },
+  {
+    "id": "r005-day-31",
+    "repository_id": "r005",
+    "date": "2026-08-01",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-32",
+    "repository_id": "r005",
+    "date": "2026-08-02",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-33",
+    "repository_id": "r005",
+    "date": "2026-08-03",
+    "commit_count": 1,
+    "additions": 4,
+    "deletions": 1
+  },
+  {
+    "id": "r005-day-34",
+    "repository_id": "r005",
+    "date": "2026-08-04",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-35",
+    "repository_id": "r005",
+    "date": "2026-08-05",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-36",
+    "repository_id": "r005",
+    "date": "2026-08-06",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 3
+  },
+  {
+    "id": "r005-day-37",
+    "repository_id": "r005",
+    "date": "2026-08-07",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-38",
+    "repository_id": "r005",
+    "date": "2026-08-08",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-39",
+    "repository_id": "r005",
+    "date": "2026-08-09",
+    "commit_count": 1,
+    "additions": 3,
+    "deletions": 3
+  },
+  {
+    "id": "r005-day-40",
+    "repository_id": "r005",
+    "date": "2026-08-10",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-41",
+    "repository_id": "r005",
+    "date": "2026-08-11",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-42",
+    "repository_id": "r005",
+    "date": "2026-08-12",
+    "commit_count": 1,
+    "additions": 3,
+    "deletions": 2
+  },
+  {
+    "id": "r005-day-43",
+    "repository_id": "r005",
+    "date": "2026-08-13",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-44",
+    "repository_id": "r005",
+    "date": "2026-08-14",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-45",
+    "repository_id": "r005",
+    "date": "2026-08-15",
+    "commit_count": 1,
+    "additions": 8,
+    "deletions": 1
+  },
+  {
+    "id": "r005-day-46",
+    "repository_id": "r005",
+    "date": "2026-08-16",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-47",
+    "repository_id": "r005",
+    "date": "2026-08-17",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-48",
+    "repository_id": "r005",
+    "date": "2026-08-18",
+    "commit_count": 1,
+    "additions": 2,
+    "deletions": 3
+  },
+  {
+    "id": "r005-day-49",
+    "repository_id": "r005",
+    "date": "2026-08-19",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-50",
+    "repository_id": "r005",
+    "date": "2026-08-20",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-51",
+    "repository_id": "r005",
+    "date": "2026-08-21",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-52",
+    "repository_id": "r005",
+    "date": "2026-08-22",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-53",
+    "repository_id": "r005",
+    "date": "2026-08-23",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-54",
+    "repository_id": "r005",
+    "date": "2026-08-24",
+    "commit_count": 1,
+    "additions": 1,
+    "deletions": 5
+  },
+  {
+    "id": "r005-day-55",
+    "repository_id": "r005",
+    "date": "2026-08-25",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-56",
+    "repository_id": "r005",
+    "date": "2026-08-26",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-57",
+    "repository_id": "r005",
+    "date": "2026-08-27",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-58",
+    "repository_id": "r005",
+    "date": "2026-08-28",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-59",
+    "repository_id": "r005",
+    "date": "2026-08-29",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-60",
+    "repository_id": "r005",
+    "date": "2026-08-30",
+    "commit_count": 1,
+    "additions": 2,
+    "deletions": 1
+  },
+  {
+    "id": "r005-day-61",
+    "repository_id": "r005",
+    "date": "2026-08-31",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-62",
+    "repository_id": "r005",
+    "date": "2026-09-01",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-63",
+    "repository_id": "r005",
+    "date": "2026-09-02",
+    "commit_count": 1,
+    "additions": 3,
+    "deletions": 3
+  },
+  {
+    "id": "r005-day-64",
+    "repository_id": "r005",
+    "date": "2026-09-03",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-65",
+    "repository_id": "r005",
+    "date": "2026-09-04",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-66",
+    "repository_id": "r005",
+    "date": "2026-09-05",
+    "commit_count": 1,
+    "additions": 8,
+    "deletions": 3
+  },
+  {
+    "id": "r005-day-67",
+    "repository_id": "r005",
+    "date": "2026-09-06",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-68",
+    "repository_id": "r005",
+    "date": "2026-09-07",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-69",
+    "repository_id": "r005",
+    "date": "2026-09-08",
+    "commit_count": 1,
+    "additions": 4,
+    "deletions": 3
+  },
+  {
+    "id": "r005-day-70",
+    "repository_id": "r005",
+    "date": "2026-09-09",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-71",
+    "repository_id": "r005",
+    "date": "2026-09-10",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-72",
+    "repository_id": "r005",
+    "date": "2026-09-11",
+    "commit_count": 1,
+    "additions": 1,
+    "deletions": 1
+  },
+  {
+    "id": "r005-day-73",
+    "repository_id": "r005",
+    "date": "2026-09-12",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-74",
+    "repository_id": "r005",
+    "date": "2026-09-13",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-75",
+    "repository_id": "r005",
+    "date": "2026-09-14",
+    "commit_count": 1,
+    "additions": 7,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-76",
+    "repository_id": "r005",
+    "date": "2026-09-15",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-77",
+    "repository_id": "r005",
+    "date": "2026-09-16",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-78",
+    "repository_id": "r005",
+    "date": "2026-09-17",
+    "commit_count": 1,
+    "additions": 7,
+    "deletions": 2
+  },
+  {
+    "id": "r005-day-79",
+    "repository_id": "r005",
+    "date": "2026-09-18",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-80",
+    "repository_id": "r005",
+    "date": "2026-09-19",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-81",
+    "repository_id": "r005",
+    "date": "2026-09-20",
+    "commit_count": 1,
+    "additions": 8,
+    "deletions": 2
+  },
+  {
+    "id": "r005-day-82",
+    "repository_id": "r005",
+    "date": "2026-09-21",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-83",
+    "repository_id": "r005",
+    "date": "2026-09-22",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-84",
+    "repository_id": "r005",
+    "date": "2026-09-23",
+    "commit_count": 1,
+    "additions": 7,
+    "deletions": 5
+  },
+  {
+    "id": "r005-day-85",
+    "repository_id": "r005",
+    "date": "2026-09-24",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-86",
+    "repository_id": "r005",
+    "date": "2026-09-25",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-87",
+    "repository_id": "r005",
+    "date": "2026-09-26",
+    "commit_count": 1,
+    "additions": 12,
+    "deletions": 4
+  },
+  {
+    "id": "r005-day-88",
+    "repository_id": "r005",
+    "date": "2026-09-27",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r005-day-89",
+    "repository_id": "r005",
+    "date": "2026-09-28",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-0",
+    "repository_id": "r006",
+    "date": "2026-07-01",
+    "commit_count": 1,
+    "additions": 10,
+    "deletions": 5
+  },
+  {
+    "id": "r006-day-1",
+    "repository_id": "r006",
+    "date": "2026-07-02",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-2",
+    "repository_id": "r006",
+    "date": "2026-07-03",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-3",
+    "repository_id": "r006",
+    "date": "2026-07-04",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-4",
+    "repository_id": "r006",
+    "date": "2026-07-05",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-5",
+    "repository_id": "r006",
+    "date": "2026-07-06",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-6",
+    "repository_id": "r006",
+    "date": "2026-07-07",
+    "commit_count": 1,
+    "additions": 12,
+    "deletions": 2
+  },
+  {
+    "id": "r006-day-7",
+    "repository_id": "r006",
+    "date": "2026-07-08",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-8",
+    "repository_id": "r006",
+    "date": "2026-07-09",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-9",
+    "repository_id": "r006",
+    "date": "2026-07-10",
+    "commit_count": 1,
+    "additions": 1,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-10",
+    "repository_id": "r006",
+    "date": "2026-07-11",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-11",
+    "repository_id": "r006",
+    "date": "2026-07-12",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-12",
+    "repository_id": "r006",
+    "date": "2026-07-13",
+    "commit_count": 1,
+    "additions": 10,
+    "deletions": 3
+  },
+  {
+    "id": "r006-day-13",
+    "repository_id": "r006",
+    "date": "2026-07-14",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-14",
+    "repository_id": "r006",
+    "date": "2026-07-15",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-15",
+    "repository_id": "r006",
+    "date": "2026-07-16",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 4
+  },
+  {
+    "id": "r006-day-16",
+    "repository_id": "r006",
+    "date": "2026-07-17",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-17",
+    "repository_id": "r006",
+    "date": "2026-07-18",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-18",
+    "repository_id": "r006",
+    "date": "2026-07-19",
+    "commit_count": 1,
+    "additions": 3,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-19",
+    "repository_id": "r006",
+    "date": "2026-07-20",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-20",
+    "repository_id": "r006",
+    "date": "2026-07-21",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-21",
+    "repository_id": "r006",
+    "date": "2026-07-22",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-22",
+    "repository_id": "r006",
+    "date": "2026-07-23",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-23",
+    "repository_id": "r006",
+    "date": "2026-07-24",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-24",
+    "repository_id": "r006",
+    "date": "2026-07-25",
+    "commit_count": 1,
+    "additions": 3,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-25",
+    "repository_id": "r006",
+    "date": "2026-07-26",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-26",
+    "repository_id": "r006",
+    "date": "2026-07-27",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-27",
+    "repository_id": "r006",
+    "date": "2026-07-28",
+    "commit_count": 1,
+    "additions": 10,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-28",
+    "repository_id": "r006",
+    "date": "2026-07-29",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-29",
+    "repository_id": "r006",
+    "date": "2026-07-30",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-30",
+    "repository_id": "r006",
+    "date": "2026-07-31",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 1
+  },
+  {
+    "id": "r006-day-31",
+    "repository_id": "r006",
+    "date": "2026-08-01",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-32",
+    "repository_id": "r006",
+    "date": "2026-08-02",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-33",
+    "repository_id": "r006",
+    "date": "2026-08-03",
+    "commit_count": 1,
+    "additions": 7,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-34",
+    "repository_id": "r006",
+    "date": "2026-08-04",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-35",
+    "repository_id": "r006",
+    "date": "2026-08-05",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-36",
+    "repository_id": "r006",
+    "date": "2026-08-06",
+    "commit_count": 1,
+    "additions": 10,
+    "deletions": 1
+  },
+  {
+    "id": "r006-day-37",
+    "repository_id": "r006",
+    "date": "2026-08-07",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-38",
+    "repository_id": "r006",
+    "date": "2026-08-08",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-39",
+    "repository_id": "r006",
+    "date": "2026-08-09",
+    "commit_count": 1,
+    "additions": 10,
+    "deletions": 4
+  },
+  {
+    "id": "r006-day-40",
+    "repository_id": "r006",
+    "date": "2026-08-10",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-41",
+    "repository_id": "r006",
+    "date": "2026-08-11",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-42",
+    "repository_id": "r006",
+    "date": "2026-08-12",
+    "commit_count": 1,
+    "additions": 1,
+    "deletions": 4
+  },
+  {
+    "id": "r006-day-43",
+    "repository_id": "r006",
+    "date": "2026-08-13",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-44",
+    "repository_id": "r006",
+    "date": "2026-08-14",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-45",
+    "repository_id": "r006",
+    "date": "2026-08-15",
+    "commit_count": 1,
+    "additions": 2,
+    "deletions": 3
+  },
+  {
+    "id": "r006-day-46",
+    "repository_id": "r006",
+    "date": "2026-08-16",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-47",
+    "repository_id": "r006",
+    "date": "2026-08-17",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-48",
+    "repository_id": "r006",
+    "date": "2026-08-18",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 4
+  },
+  {
+    "id": "r006-day-49",
+    "repository_id": "r006",
+    "date": "2026-08-19",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-50",
+    "repository_id": "r006",
+    "date": "2026-08-20",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-51",
+    "repository_id": "r006",
+    "date": "2026-08-21",
+    "commit_count": 1,
+    "additions": 10,
+    "deletions": 4
+  },
+  {
+    "id": "r006-day-52",
+    "repository_id": "r006",
+    "date": "2026-08-22",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-53",
+    "repository_id": "r006",
+    "date": "2026-08-23",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-54",
+    "repository_id": "r006",
+    "date": "2026-08-24",
+    "commit_count": 1,
+    "additions": 6,
+    "deletions": 2
+  },
+  {
+    "id": "r006-day-55",
+    "repository_id": "r006",
+    "date": "2026-08-25",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-56",
+    "repository_id": "r006",
+    "date": "2026-08-26",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-57",
+    "repository_id": "r006",
+    "date": "2026-08-27",
+    "commit_count": 1,
+    "additions": 4,
+    "deletions": 5
+  },
+  {
+    "id": "r006-day-58",
+    "repository_id": "r006",
+    "date": "2026-08-28",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-59",
+    "repository_id": "r006",
+    "date": "2026-08-29",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-60",
+    "repository_id": "r006",
+    "date": "2026-08-30",
+    "commit_count": 1,
+    "additions": 12,
+    "deletions": 2
+  },
+  {
+    "id": "r006-day-61",
+    "repository_id": "r006",
+    "date": "2026-08-31",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-62",
+    "repository_id": "r006",
+    "date": "2026-09-01",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-63",
+    "repository_id": "r006",
+    "date": "2026-09-02",
+    "commit_count": 1,
+    "additions": 4,
+    "deletions": 2
+  },
+  {
+    "id": "r006-day-64",
+    "repository_id": "r006",
+    "date": "2026-09-03",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-65",
+    "repository_id": "r006",
+    "date": "2026-09-04",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-66",
+    "repository_id": "r006",
+    "date": "2026-09-05",
+    "commit_count": 1,
+    "additions": 7,
+    "deletions": 1
+  },
+  {
+    "id": "r006-day-67",
+    "repository_id": "r006",
+    "date": "2026-09-06",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-68",
+    "repository_id": "r006",
+    "date": "2026-09-07",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-69",
+    "repository_id": "r006",
+    "date": "2026-09-08",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 5
+  },
+  {
+    "id": "r006-day-70",
+    "repository_id": "r006",
+    "date": "2026-09-09",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-71",
+    "repository_id": "r006",
+    "date": "2026-09-10",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-72",
+    "repository_id": "r006",
+    "date": "2026-09-11",
+    "commit_count": 1,
+    "additions": 5,
+    "deletions": 3
+  },
+  {
+    "id": "r006-day-73",
+    "repository_id": "r006",
+    "date": "2026-09-12",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-74",
+    "repository_id": "r006",
+    "date": "2026-09-13",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-75",
+    "repository_id": "r006",
+    "date": "2026-09-14",
+    "commit_count": 1,
+    "additions": 6,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-76",
+    "repository_id": "r006",
+    "date": "2026-09-15",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-77",
+    "repository_id": "r006",
+    "date": "2026-09-16",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-78",
+    "repository_id": "r006",
+    "date": "2026-09-17",
+    "commit_count": 1,
+    "additions": 1,
+    "deletions": 3
+  },
+  {
+    "id": "r006-day-79",
+    "repository_id": "r006",
+    "date": "2026-09-18",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-80",
+    "repository_id": "r006",
+    "date": "2026-09-19",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-81",
+    "repository_id": "r006",
+    "date": "2026-09-20",
+    "commit_count": 1,
+    "additions": 10,
+    "deletions": 4
+  },
+  {
+    "id": "r006-day-82",
+    "repository_id": "r006",
+    "date": "2026-09-21",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-83",
+    "repository_id": "r006",
+    "date": "2026-09-22",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-84",
+    "repository_id": "r006",
+    "date": "2026-09-23",
+    "commit_count": 1,
+    "additions": 2,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-85",
+    "repository_id": "r006",
+    "date": "2026-09-24",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-86",
+    "repository_id": "r006",
+    "date": "2026-09-25",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-87",
+    "repository_id": "r006",
+    "date": "2026-09-26",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 1
+  },
+  {
+    "id": "r006-day-88",
+    "repository_id": "r006",
+    "date": "2026-09-27",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r006-day-89",
+    "repository_id": "r006",
+    "date": "2026-09-28",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-0",
+    "repository_id": "r007",
+    "date": "2026-07-01",
+    "commit_count": 1,
+    "additions": 2,
+    "deletions": 1
+  },
+  {
+    "id": "r007-day-1",
+    "repository_id": "r007",
+    "date": "2026-07-02",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-2",
+    "repository_id": "r007",
+    "date": "2026-07-03",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-3",
+    "repository_id": "r007",
+    "date": "2026-07-04",
+    "commit_count": 1,
+    "additions": 6,
+    "deletions": 2
+  },
+  {
+    "id": "r007-day-4",
+    "repository_id": "r007",
+    "date": "2026-07-05",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-5",
+    "repository_id": "r007",
+    "date": "2026-07-06",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-6",
+    "repository_id": "r007",
+    "date": "2026-07-07",
+    "commit_count": 1,
+    "additions": 3,
+    "deletions": 3
+  },
+  {
+    "id": "r007-day-7",
+    "repository_id": "r007",
+    "date": "2026-07-08",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-8",
+    "repository_id": "r007",
+    "date": "2026-07-09",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-9",
+    "repository_id": "r007",
+    "date": "2026-07-10",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 5
+  },
+  {
+    "id": "r007-day-10",
+    "repository_id": "r007",
+    "date": "2026-07-11",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-11",
+    "repository_id": "r007",
+    "date": "2026-07-12",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-12",
+    "repository_id": "r007",
+    "date": "2026-07-13",
+    "commit_count": 1,
+    "additions": 5,
+    "deletions": 4
+  },
+  {
+    "id": "r007-day-13",
+    "repository_id": "r007",
+    "date": "2026-07-14",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-14",
+    "repository_id": "r007",
+    "date": "2026-07-15",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-15",
+    "repository_id": "r007",
+    "date": "2026-07-16",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 4
+  },
+  {
+    "id": "r007-day-16",
+    "repository_id": "r007",
+    "date": "2026-07-17",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-17",
+    "repository_id": "r007",
+    "date": "2026-07-18",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-18",
+    "repository_id": "r007",
+    "date": "2026-07-19",
+    "commit_count": 1,
+    "additions": 1,
+    "deletions": 5
+  },
+  {
+    "id": "r007-day-19",
+    "repository_id": "r007",
+    "date": "2026-07-20",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-20",
+    "repository_id": "r007",
+    "date": "2026-07-21",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-21",
+    "repository_id": "r007",
+    "date": "2026-07-22",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 2
+  },
+  {
+    "id": "r007-day-22",
+    "repository_id": "r007",
+    "date": "2026-07-23",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-23",
+    "repository_id": "r007",
+    "date": "2026-07-24",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-24",
+    "repository_id": "r007",
+    "date": "2026-07-25",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-25",
+    "repository_id": "r007",
+    "date": "2026-07-26",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-26",
+    "repository_id": "r007",
+    "date": "2026-07-27",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-27",
+    "repository_id": "r007",
+    "date": "2026-07-28",
+    "commit_count": 1,
+    "additions": 3,
+    "deletions": 2
+  },
+  {
+    "id": "r007-day-28",
+    "repository_id": "r007",
+    "date": "2026-07-29",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-29",
+    "repository_id": "r007",
+    "date": "2026-07-30",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-30",
+    "repository_id": "r007",
+    "date": "2026-07-31",
+    "commit_count": 1,
+    "additions": 2,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-31",
+    "repository_id": "r007",
+    "date": "2026-08-01",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-32",
+    "repository_id": "r007",
+    "date": "2026-08-02",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-33",
+    "repository_id": "r007",
+    "date": "2026-08-03",
+    "commit_count": 1,
+    "additions": 12,
+    "deletions": 4
+  },
+  {
+    "id": "r007-day-34",
+    "repository_id": "r007",
+    "date": "2026-08-04",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-35",
+    "repository_id": "r007",
+    "date": "2026-08-05",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-36",
+    "repository_id": "r007",
+    "date": "2026-08-06",
+    "commit_count": 1,
+    "additions": 3,
+    "deletions": 2
+  },
+  {
+    "id": "r007-day-37",
+    "repository_id": "r007",
+    "date": "2026-08-07",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-38",
+    "repository_id": "r007",
+    "date": "2026-08-08",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-39",
+    "repository_id": "r007",
+    "date": "2026-08-09",
+    "commit_count": 1,
+    "additions": 5,
+    "deletions": 4
+  },
+  {
+    "id": "r007-day-40",
+    "repository_id": "r007",
+    "date": "2026-08-10",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-41",
+    "repository_id": "r007",
+    "date": "2026-08-11",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-42",
+    "repository_id": "r007",
+    "date": "2026-08-12",
+    "commit_count": 1,
+    "additions": 4,
+    "deletions": 5
+  },
+  {
+    "id": "r007-day-43",
+    "repository_id": "r007",
+    "date": "2026-08-13",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-44",
+    "repository_id": "r007",
+    "date": "2026-08-14",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-45",
+    "repository_id": "r007",
+    "date": "2026-08-15",
+    "commit_count": 1,
+    "additions": 6,
+    "deletions": 1
+  },
+  {
+    "id": "r007-day-46",
+    "repository_id": "r007",
+    "date": "2026-08-16",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-47",
+    "repository_id": "r007",
+    "date": "2026-08-17",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-48",
+    "repository_id": "r007",
+    "date": "2026-08-18",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 5
+  },
+  {
+    "id": "r007-day-49",
+    "repository_id": "r007",
+    "date": "2026-08-19",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-50",
+    "repository_id": "r007",
+    "date": "2026-08-20",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-51",
+    "repository_id": "r007",
+    "date": "2026-08-21",
+    "commit_count": 1,
+    "additions": 5,
+    "deletions": 4
+  },
+  {
+    "id": "r007-day-52",
+    "repository_id": "r007",
+    "date": "2026-08-22",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-53",
+    "repository_id": "r007",
+    "date": "2026-08-23",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-54",
+    "repository_id": "r007",
+    "date": "2026-08-24",
+    "commit_count": 1,
+    "additions": 8,
+    "deletions": 2
+  },
+  {
+    "id": "r007-day-55",
+    "repository_id": "r007",
+    "date": "2026-08-25",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-56",
+    "repository_id": "r007",
+    "date": "2026-08-26",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-57",
+    "repository_id": "r007",
+    "date": "2026-08-27",
+    "commit_count": 1,
+    "additions": 1,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-58",
+    "repository_id": "r007",
+    "date": "2026-08-28",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-59",
+    "repository_id": "r007",
+    "date": "2026-08-29",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-60",
+    "repository_id": "r007",
+    "date": "2026-08-30",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 3
+  },
+  {
+    "id": "r007-day-61",
+    "repository_id": "r007",
+    "date": "2026-08-31",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-62",
+    "repository_id": "r007",
+    "date": "2026-09-01",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-63",
+    "repository_id": "r007",
+    "date": "2026-09-02",
+    "commit_count": 1,
+    "additions": 5,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-64",
+    "repository_id": "r007",
+    "date": "2026-09-03",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-65",
+    "repository_id": "r007",
+    "date": "2026-09-04",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-66",
+    "repository_id": "r007",
+    "date": "2026-09-05",
+    "commit_count": 1,
+    "additions": 1,
+    "deletions": 2
+  },
+  {
+    "id": "r007-day-67",
+    "repository_id": "r007",
+    "date": "2026-09-06",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-68",
+    "repository_id": "r007",
+    "date": "2026-09-07",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-69",
+    "repository_id": "r007",
+    "date": "2026-09-08",
+    "commit_count": 1,
+    "additions": 3,
+    "deletions": 5
+  },
+  {
+    "id": "r007-day-70",
+    "repository_id": "r007",
+    "date": "2026-09-09",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-71",
+    "repository_id": "r007",
+    "date": "2026-09-10",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-72",
+    "repository_id": "r007",
+    "date": "2026-09-11",
+    "commit_count": 1,
+    "additions": 5,
+    "deletions": 1
+  },
+  {
+    "id": "r007-day-73",
+    "repository_id": "r007",
+    "date": "2026-09-12",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-74",
+    "repository_id": "r007",
+    "date": "2026-09-13",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-75",
+    "repository_id": "r007",
+    "date": "2026-09-14",
+    "commit_count": 1,
+    "additions": 12,
+    "deletions": 3
+  },
+  {
+    "id": "r007-day-76",
+    "repository_id": "r007",
+    "date": "2026-09-15",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-77",
+    "repository_id": "r007",
+    "date": "2026-09-16",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-78",
+    "repository_id": "r007",
+    "date": "2026-09-17",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 5
+  },
+  {
+    "id": "r007-day-79",
+    "repository_id": "r007",
+    "date": "2026-09-18",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-80",
+    "repository_id": "r007",
+    "date": "2026-09-19",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-81",
+    "repository_id": "r007",
+    "date": "2026-09-20",
+    "commit_count": 1,
+    "additions": 7,
+    "deletions": 4
+  },
+  {
+    "id": "r007-day-82",
+    "repository_id": "r007",
+    "date": "2026-09-21",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-83",
+    "repository_id": "r007",
+    "date": "2026-09-22",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-84",
+    "repository_id": "r007",
+    "date": "2026-09-23",
+    "commit_count": 1,
+    "additions": 1,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-85",
+    "repository_id": "r007",
+    "date": "2026-09-24",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-86",
+    "repository_id": "r007",
+    "date": "2026-09-25",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-87",
+    "repository_id": "r007",
+    "date": "2026-09-26",
+    "commit_count": 1,
+    "additions": 2,
+    "deletions": 5
+  },
+  {
+    "id": "r007-day-88",
+    "repository_id": "r007",
+    "date": "2026-09-27",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r007-day-89",
+    "repository_id": "r007",
+    "date": "2026-09-28",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-0",
+    "repository_id": "r008",
+    "date": "2026-07-01",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 1
+  },
+  {
+    "id": "r008-day-1",
+    "repository_id": "r008",
+    "date": "2026-07-02",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-2",
+    "repository_id": "r008",
+    "date": "2026-07-03",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-3",
+    "repository_id": "r008",
+    "date": "2026-07-04",
+    "commit_count": 1,
+    "additions": 7,
+    "deletions": 1
+  },
+  {
+    "id": "r008-day-4",
+    "repository_id": "r008",
+    "date": "2026-07-05",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-5",
+    "repository_id": "r008",
+    "date": "2026-07-06",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-6",
+    "repository_id": "r008",
+    "date": "2026-07-07",
+    "commit_count": 1,
+    "additions": 1,
+    "deletions": 2
+  },
+  {
+    "id": "r008-day-7",
+    "repository_id": "r008",
+    "date": "2026-07-08",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-8",
+    "repository_id": "r008",
+    "date": "2026-07-09",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-9",
+    "repository_id": "r008",
+    "date": "2026-07-10",
+    "commit_count": 1,
+    "additions": 6,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-10",
+    "repository_id": "r008",
+    "date": "2026-07-11",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-11",
+    "repository_id": "r008",
+    "date": "2026-07-12",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-12",
+    "repository_id": "r008",
+    "date": "2026-07-13",
+    "commit_count": 1,
+    "additions": 6,
+    "deletions": 1
+  },
+  {
+    "id": "r008-day-13",
+    "repository_id": "r008",
+    "date": "2026-07-14",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-14",
+    "repository_id": "r008",
+    "date": "2026-07-15",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-15",
+    "repository_id": "r008",
+    "date": "2026-07-16",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 1
+  },
+  {
+    "id": "r008-day-16",
+    "repository_id": "r008",
+    "date": "2026-07-17",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-17",
+    "repository_id": "r008",
+    "date": "2026-07-18",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-18",
+    "repository_id": "r008",
+    "date": "2026-07-19",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-19",
+    "repository_id": "r008",
+    "date": "2026-07-20",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-20",
+    "repository_id": "r008",
+    "date": "2026-07-21",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-21",
+    "repository_id": "r008",
+    "date": "2026-07-22",
+    "commit_count": 1,
+    "additions": 6,
+    "deletions": 4
+  },
+  {
+    "id": "r008-day-22",
+    "repository_id": "r008",
+    "date": "2026-07-23",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-23",
+    "repository_id": "r008",
+    "date": "2026-07-24",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-24",
+    "repository_id": "r008",
+    "date": "2026-07-25",
+    "commit_count": 1,
+    "additions": 7,
+    "deletions": 4
+  },
+  {
+    "id": "r008-day-25",
+    "repository_id": "r008",
+    "date": "2026-07-26",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-26",
+    "repository_id": "r008",
+    "date": "2026-07-27",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-27",
+    "repository_id": "r008",
+    "date": "2026-07-28",
+    "commit_count": 1,
+    "additions": 12,
+    "deletions": 1
+  },
+  {
+    "id": "r008-day-28",
+    "repository_id": "r008",
+    "date": "2026-07-29",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-29",
+    "repository_id": "r008",
+    "date": "2026-07-30",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-30",
+    "repository_id": "r008",
+    "date": "2026-07-31",
+    "commit_count": 1,
+    "additions": 4,
+    "deletions": 1
+  },
+  {
+    "id": "r008-day-31",
+    "repository_id": "r008",
+    "date": "2026-08-01",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-32",
+    "repository_id": "r008",
+    "date": "2026-08-02",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-33",
+    "repository_id": "r008",
+    "date": "2026-08-03",
+    "commit_count": 1,
+    "additions": 3,
+    "deletions": 3
+  },
+  {
+    "id": "r008-day-34",
+    "repository_id": "r008",
+    "date": "2026-08-04",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-35",
+    "repository_id": "r008",
+    "date": "2026-08-05",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-36",
+    "repository_id": "r008",
+    "date": "2026-08-06",
+    "commit_count": 1,
+    "additions": 1,
+    "deletions": 1
+  },
+  {
+    "id": "r008-day-37",
+    "repository_id": "r008",
+    "date": "2026-08-07",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-38",
+    "repository_id": "r008",
+    "date": "2026-08-08",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-39",
+    "repository_id": "r008",
+    "date": "2026-08-09",
+    "commit_count": 1,
+    "additions": 12,
+    "deletions": 2
+  },
+  {
+    "id": "r008-day-40",
+    "repository_id": "r008",
+    "date": "2026-08-10",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-41",
+    "repository_id": "r008",
+    "date": "2026-08-11",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-42",
+    "repository_id": "r008",
+    "date": "2026-08-12",
+    "commit_count": 1,
+    "additions": 7,
+    "deletions": 5
+  },
+  {
+    "id": "r008-day-43",
+    "repository_id": "r008",
+    "date": "2026-08-13",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-44",
+    "repository_id": "r008",
+    "date": "2026-08-14",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-45",
+    "repository_id": "r008",
+    "date": "2026-08-15",
+    "commit_count": 1,
+    "additions": 12,
+    "deletions": 1
+  },
+  {
+    "id": "r008-day-46",
+    "repository_id": "r008",
+    "date": "2026-08-16",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-47",
+    "repository_id": "r008",
+    "date": "2026-08-17",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-48",
+    "repository_id": "r008",
+    "date": "2026-08-18",
+    "commit_count": 1,
+    "additions": 5,
+    "deletions": 1
+  },
+  {
+    "id": "r008-day-49",
+    "repository_id": "r008",
+    "date": "2026-08-19",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-50",
+    "repository_id": "r008",
+    "date": "2026-08-20",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-51",
+    "repository_id": "r008",
+    "date": "2026-08-21",
+    "commit_count": 1,
+    "additions": 12,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-52",
+    "repository_id": "r008",
+    "date": "2026-08-22",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-53",
+    "repository_id": "r008",
+    "date": "2026-08-23",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-54",
+    "repository_id": "r008",
+    "date": "2026-08-24",
+    "commit_count": 1,
+    "additions": 7,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-55",
+    "repository_id": "r008",
+    "date": "2026-08-25",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-56",
+    "repository_id": "r008",
+    "date": "2026-08-26",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-57",
+    "repository_id": "r008",
+    "date": "2026-08-27",
+    "commit_count": 1,
+    "additions": 8,
+    "deletions": 1
+  },
+  {
+    "id": "r008-day-58",
+    "repository_id": "r008",
+    "date": "2026-08-28",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-59",
+    "repository_id": "r008",
+    "date": "2026-08-29",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-60",
+    "repository_id": "r008",
+    "date": "2026-08-30",
+    "commit_count": 1,
+    "additions": 4,
+    "deletions": 3
+  },
+  {
+    "id": "r008-day-61",
+    "repository_id": "r008",
+    "date": "2026-08-31",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-62",
+    "repository_id": "r008",
+    "date": "2026-09-01",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-63",
+    "repository_id": "r008",
+    "date": "2026-09-02",
+    "commit_count": 1,
+    "additions": 6,
+    "deletions": 2
+  },
+  {
+    "id": "r008-day-64",
+    "repository_id": "r008",
+    "date": "2026-09-03",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-65",
+    "repository_id": "r008",
+    "date": "2026-09-04",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-66",
+    "repository_id": "r008",
+    "date": "2026-09-05",
+    "commit_count": 1,
+    "additions": 4,
+    "deletions": 1
+  },
+  {
+    "id": "r008-day-67",
+    "repository_id": "r008",
+    "date": "2026-09-06",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-68",
+    "repository_id": "r008",
+    "date": "2026-09-07",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-69",
+    "repository_id": "r008",
+    "date": "2026-09-08",
+    "commit_count": 1,
+    "additions": 1,
+    "deletions": 5
+  },
+  {
+    "id": "r008-day-70",
+    "repository_id": "r008",
+    "date": "2026-09-09",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-71",
+    "repository_id": "r008",
+    "date": "2026-09-10",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-72",
+    "repository_id": "r008",
+    "date": "2026-09-11",
+    "commit_count": 1,
+    "additions": 4,
+    "deletions": 3
+  },
+  {
+    "id": "r008-day-73",
+    "repository_id": "r008",
+    "date": "2026-09-12",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-74",
+    "repository_id": "r008",
+    "date": "2026-09-13",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-75",
+    "repository_id": "r008",
+    "date": "2026-09-14",
+    "commit_count": 1,
+    "additions": 6,
+    "deletions": 2
+  },
+  {
+    "id": "r008-day-76",
+    "repository_id": "r008",
+    "date": "2026-09-15",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-77",
+    "repository_id": "r008",
+    "date": "2026-09-16",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-78",
+    "repository_id": "r008",
+    "date": "2026-09-17",
+    "commit_count": 1,
+    "additions": 2,
+    "deletions": 2
+  },
+  {
+    "id": "r008-day-79",
+    "repository_id": "r008",
+    "date": "2026-09-18",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-80",
+    "repository_id": "r008",
+    "date": "2026-09-19",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-81",
+    "repository_id": "r008",
+    "date": "2026-09-20",
+    "commit_count": 1,
+    "additions": 6,
+    "deletions": 5
+  },
+  {
+    "id": "r008-day-82",
+    "repository_id": "r008",
+    "date": "2026-09-21",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-83",
+    "repository_id": "r008",
+    "date": "2026-09-22",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-84",
+    "repository_id": "r008",
+    "date": "2026-09-23",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 3
+  },
+  {
+    "id": "r008-day-85",
+    "repository_id": "r008",
+    "date": "2026-09-24",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-86",
+    "repository_id": "r008",
+    "date": "2026-09-25",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-87",
+    "repository_id": "r008",
+    "date": "2026-09-26",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 4
+  },
+  {
+    "id": "r008-day-88",
+    "repository_id": "r008",
+    "date": "2026-09-27",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r008-day-89",
+    "repository_id": "r008",
+    "date": "2026-09-28",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-0",
+    "repository_id": "r009",
+    "date": "2026-07-01",
+    "commit_count": 1,
+    "additions": 10,
+    "deletions": 2
+  },
+  {
+    "id": "r009-day-1",
+    "repository_id": "r009",
+    "date": "2026-07-02",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-2",
+    "repository_id": "r009",
+    "date": "2026-07-03",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-3",
+    "repository_id": "r009",
+    "date": "2026-07-04",
+    "commit_count": 1,
+    "additions": 1,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-4",
+    "repository_id": "r009",
+    "date": "2026-07-05",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-5",
+    "repository_id": "r009",
+    "date": "2026-07-06",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-6",
+    "repository_id": "r009",
+    "date": "2026-07-07",
+    "commit_count": 1,
+    "additions": 10,
+    "deletions": 3
+  },
+  {
+    "id": "r009-day-7",
+    "repository_id": "r009",
+    "date": "2026-07-08",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-8",
+    "repository_id": "r009",
+    "date": "2026-07-09",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-9",
+    "repository_id": "r009",
+    "date": "2026-07-10",
+    "commit_count": 1,
+    "additions": 6,
+    "deletions": 5
+  },
+  {
+    "id": "r009-day-10",
+    "repository_id": "r009",
+    "date": "2026-07-11",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-11",
+    "repository_id": "r009",
+    "date": "2026-07-12",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-12",
+    "repository_id": "r009",
+    "date": "2026-07-13",
+    "commit_count": 1,
+    "additions": 6,
+    "deletions": 3
+  },
+  {
+    "id": "r009-day-13",
+    "repository_id": "r009",
+    "date": "2026-07-14",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-14",
+    "repository_id": "r009",
+    "date": "2026-07-15",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-15",
+    "repository_id": "r009",
+    "date": "2026-07-16",
+    "commit_count": 1,
+    "additions": 10,
+    "deletions": 4
+  },
+  {
+    "id": "r009-day-16",
+    "repository_id": "r009",
+    "date": "2026-07-17",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-17",
+    "repository_id": "r009",
+    "date": "2026-07-18",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-18",
+    "repository_id": "r009",
+    "date": "2026-07-19",
+    "commit_count": 1,
+    "additions": 2,
+    "deletions": 3
+  },
+  {
+    "id": "r009-day-19",
+    "repository_id": "r009",
+    "date": "2026-07-20",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-20",
+    "repository_id": "r009",
+    "date": "2026-07-21",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-21",
+    "repository_id": "r009",
+    "date": "2026-07-22",
+    "commit_count": 1,
+    "additions": 10,
+    "deletions": 1
+  },
+  {
+    "id": "r009-day-22",
+    "repository_id": "r009",
+    "date": "2026-07-23",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-23",
+    "repository_id": "r009",
+    "date": "2026-07-24",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-24",
+    "repository_id": "r009",
+    "date": "2026-07-25",
+    "commit_count": 1,
+    "additions": 5,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-25",
+    "repository_id": "r009",
+    "date": "2026-07-26",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-26",
+    "repository_id": "r009",
+    "date": "2026-07-27",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-27",
+    "repository_id": "r009",
+    "date": "2026-07-28",
+    "commit_count": 1,
+    "additions": 12,
+    "deletions": 3
+  },
+  {
+    "id": "r009-day-28",
+    "repository_id": "r009",
+    "date": "2026-07-29",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-29",
+    "repository_id": "r009",
+    "date": "2026-07-30",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-30",
+    "repository_id": "r009",
+    "date": "2026-07-31",
+    "commit_count": 1,
+    "additions": 1,
+    "deletions": 4
+  },
+  {
+    "id": "r009-day-31",
+    "repository_id": "r009",
+    "date": "2026-08-01",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-32",
+    "repository_id": "r009",
+    "date": "2026-08-02",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-33",
+    "repository_id": "r009",
+    "date": "2026-08-03",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 5
+  },
+  {
+    "id": "r009-day-34",
+    "repository_id": "r009",
+    "date": "2026-08-04",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-35",
+    "repository_id": "r009",
+    "date": "2026-08-05",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-36",
+    "repository_id": "r009",
+    "date": "2026-08-06",
+    "commit_count": 1,
+    "additions": 12,
+    "deletions": 5
+  },
+  {
+    "id": "r009-day-37",
+    "repository_id": "r009",
+    "date": "2026-08-07",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-38",
+    "repository_id": "r009",
+    "date": "2026-08-08",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-39",
+    "repository_id": "r009",
+    "date": "2026-08-09",
+    "commit_count": 1,
+    "additions": 12,
+    "deletions": 5
+  },
+  {
+    "id": "r009-day-40",
+    "repository_id": "r009",
+    "date": "2026-08-10",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-41",
+    "repository_id": "r009",
+    "date": "2026-08-11",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-42",
+    "repository_id": "r009",
+    "date": "2026-08-12",
+    "commit_count": 1,
+    "additions": 4,
+    "deletions": 2
+  },
+  {
+    "id": "r009-day-43",
+    "repository_id": "r009",
+    "date": "2026-08-13",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-44",
+    "repository_id": "r009",
+    "date": "2026-08-14",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-45",
+    "repository_id": "r009",
+    "date": "2026-08-15",
+    "commit_count": 1,
+    "additions": 7,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-46",
+    "repository_id": "r009",
+    "date": "2026-08-16",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-47",
+    "repository_id": "r009",
+    "date": "2026-08-17",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-48",
+    "repository_id": "r009",
+    "date": "2026-08-18",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 2
+  },
+  {
+    "id": "r009-day-49",
+    "repository_id": "r009",
+    "date": "2026-08-19",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-50",
+    "repository_id": "r009",
+    "date": "2026-08-20",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-51",
+    "repository_id": "r009",
+    "date": "2026-08-21",
+    "commit_count": 1,
+    "additions": 10,
+    "deletions": 2
+  },
+  {
+    "id": "r009-day-52",
+    "repository_id": "r009",
+    "date": "2026-08-22",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-53",
+    "repository_id": "r009",
+    "date": "2026-08-23",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-54",
+    "repository_id": "r009",
+    "date": "2026-08-24",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-55",
+    "repository_id": "r009",
+    "date": "2026-08-25",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-56",
+    "repository_id": "r009",
+    "date": "2026-08-26",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-57",
+    "repository_id": "r009",
+    "date": "2026-08-27",
+    "commit_count": 1,
+    "additions": 12,
+    "deletions": 2
+  },
+  {
+    "id": "r009-day-58",
+    "repository_id": "r009",
+    "date": "2026-08-28",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-59",
+    "repository_id": "r009",
+    "date": "2026-08-29",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-60",
+    "repository_id": "r009",
+    "date": "2026-08-30",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 2
+  },
+  {
+    "id": "r009-day-61",
+    "repository_id": "r009",
+    "date": "2026-08-31",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-62",
+    "repository_id": "r009",
+    "date": "2026-09-01",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-63",
+    "repository_id": "r009",
+    "date": "2026-09-02",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 3
+  },
+  {
+    "id": "r009-day-64",
+    "repository_id": "r009",
+    "date": "2026-09-03",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-65",
+    "repository_id": "r009",
+    "date": "2026-09-04",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-66",
+    "repository_id": "r009",
+    "date": "2026-09-05",
+    "commit_count": 1,
+    "additions": 6,
+    "deletions": 3
+  },
+  {
+    "id": "r009-day-67",
+    "repository_id": "r009",
+    "date": "2026-09-06",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-68",
+    "repository_id": "r009",
+    "date": "2026-09-07",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-69",
+    "repository_id": "r009",
+    "date": "2026-09-08",
+    "commit_count": 1,
+    "additions": 12,
+    "deletions": 2
+  },
+  {
+    "id": "r009-day-70",
+    "repository_id": "r009",
+    "date": "2026-09-09",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-71",
+    "repository_id": "r009",
+    "date": "2026-09-10",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-72",
+    "repository_id": "r009",
+    "date": "2026-09-11",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 1
+  },
+  {
+    "id": "r009-day-73",
+    "repository_id": "r009",
+    "date": "2026-09-12",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-74",
+    "repository_id": "r009",
+    "date": "2026-09-13",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-75",
+    "repository_id": "r009",
+    "date": "2026-09-14",
+    "commit_count": 1,
+    "additions": 4,
+    "deletions": 3
+  },
+  {
+    "id": "r009-day-76",
+    "repository_id": "r009",
+    "date": "2026-09-15",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-77",
+    "repository_id": "r009",
+    "date": "2026-09-16",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-78",
+    "repository_id": "r009",
+    "date": "2026-09-17",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 3
+  },
+  {
+    "id": "r009-day-79",
+    "repository_id": "r009",
+    "date": "2026-09-18",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-80",
+    "repository_id": "r009",
+    "date": "2026-09-19",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-81",
+    "repository_id": "r009",
+    "date": "2026-09-20",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 5
+  },
+  {
+    "id": "r009-day-82",
+    "repository_id": "r009",
+    "date": "2026-09-21",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-83",
+    "repository_id": "r009",
+    "date": "2026-09-22",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-84",
+    "repository_id": "r009",
+    "date": "2026-09-23",
+    "commit_count": 1,
+    "additions": 3,
+    "deletions": 4
+  },
+  {
+    "id": "r009-day-85",
+    "repository_id": "r009",
+    "date": "2026-09-24",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-86",
+    "repository_id": "r009",
+    "date": "2026-09-25",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-87",
+    "repository_id": "r009",
+    "date": "2026-09-26",
+    "commit_count": 1,
+    "additions": 10,
+    "deletions": 2
+  },
+  {
+    "id": "r009-day-88",
+    "repository_id": "r009",
+    "date": "2026-09-27",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r009-day-89",
+    "repository_id": "r009",
+    "date": "2026-09-28",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-0",
+    "repository_id": "r010",
+    "date": "2026-07-01",
+    "commit_count": 1,
+    "additions": 4,
+    "deletions": 3
+  },
+  {
+    "id": "r010-day-1",
+    "repository_id": "r010",
+    "date": "2026-07-02",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-2",
+    "repository_id": "r010",
+    "date": "2026-07-03",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-3",
+    "repository_id": "r010",
+    "date": "2026-07-04",
+    "commit_count": 1,
+    "additions": 10,
+    "deletions": 4
+  },
+  {
+    "id": "r010-day-4",
+    "repository_id": "r010",
+    "date": "2026-07-05",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-5",
+    "repository_id": "r010",
+    "date": "2026-07-06",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-6",
+    "repository_id": "r010",
+    "date": "2026-07-07",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 2
+  },
+  {
+    "id": "r010-day-7",
+    "repository_id": "r010",
+    "date": "2026-07-08",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-8",
+    "repository_id": "r010",
+    "date": "2026-07-09",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-9",
+    "repository_id": "r010",
+    "date": "2026-07-10",
+    "commit_count": 1,
+    "additions": 8,
+    "deletions": 3
+  },
+  {
+    "id": "r010-day-10",
+    "repository_id": "r010",
+    "date": "2026-07-11",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-11",
+    "repository_id": "r010",
+    "date": "2026-07-12",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-12",
+    "repository_id": "r010",
+    "date": "2026-07-13",
+    "commit_count": 1,
+    "additions": 8,
+    "deletions": 5
+  },
+  {
+    "id": "r010-day-13",
+    "repository_id": "r010",
+    "date": "2026-07-14",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-14",
+    "repository_id": "r010",
+    "date": "2026-07-15",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-15",
+    "repository_id": "r010",
+    "date": "2026-07-16",
+    "commit_count": 1,
+    "additions": 4,
+    "deletions": 4
+  },
+  {
+    "id": "r010-day-16",
+    "repository_id": "r010",
+    "date": "2026-07-17",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-17",
+    "repository_id": "r010",
+    "date": "2026-07-18",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-18",
+    "repository_id": "r010",
+    "date": "2026-07-19",
+    "commit_count": 1,
+    "additions": 8,
+    "deletions": 5
+  },
+  {
+    "id": "r010-day-19",
+    "repository_id": "r010",
+    "date": "2026-07-20",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-20",
+    "repository_id": "r010",
+    "date": "2026-07-21",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-21",
+    "repository_id": "r010",
+    "date": "2026-07-22",
+    "commit_count": 1,
+    "additions": 3,
+    "deletions": 5
+  },
+  {
+    "id": "r010-day-22",
+    "repository_id": "r010",
+    "date": "2026-07-23",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-23",
+    "repository_id": "r010",
+    "date": "2026-07-24",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-24",
+    "repository_id": "r010",
+    "date": "2026-07-25",
+    "commit_count": 1,
+    "additions": 2,
+    "deletions": 2
+  },
+  {
+    "id": "r010-day-25",
+    "repository_id": "r010",
+    "date": "2026-07-26",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-26",
+    "repository_id": "r010",
+    "date": "2026-07-27",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-27",
+    "repository_id": "r010",
+    "date": "2026-07-28",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 5
+  },
+  {
+    "id": "r010-day-28",
+    "repository_id": "r010",
+    "date": "2026-07-29",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-29",
+    "repository_id": "r010",
+    "date": "2026-07-30",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-30",
+    "repository_id": "r010",
+    "date": "2026-07-31",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 4
+  },
+  {
+    "id": "r010-day-31",
+    "repository_id": "r010",
+    "date": "2026-08-01",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-32",
+    "repository_id": "r010",
+    "date": "2026-08-02",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-33",
+    "repository_id": "r010",
+    "date": "2026-08-03",
+    "commit_count": 1,
+    "additions": 6,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-34",
+    "repository_id": "r010",
+    "date": "2026-08-04",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-35",
+    "repository_id": "r010",
+    "date": "2026-08-05",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-36",
+    "repository_id": "r010",
+    "date": "2026-08-06",
+    "commit_count": 1,
+    "additions": 4,
+    "deletions": 5
+  },
+  {
+    "id": "r010-day-37",
+    "repository_id": "r010",
+    "date": "2026-08-07",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-38",
+    "repository_id": "r010",
+    "date": "2026-08-08",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-39",
+    "repository_id": "r010",
+    "date": "2026-08-09",
+    "commit_count": 1,
+    "additions": 5,
+    "deletions": 1
+  },
+  {
+    "id": "r010-day-40",
+    "repository_id": "r010",
+    "date": "2026-08-10",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-41",
+    "repository_id": "r010",
+    "date": "2026-08-11",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-42",
+    "repository_id": "r010",
+    "date": "2026-08-12",
+    "commit_count": 1,
+    "additions": 4,
+    "deletions": 1
+  },
+  {
+    "id": "r010-day-43",
+    "repository_id": "r010",
+    "date": "2026-08-13",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-44",
+    "repository_id": "r010",
+    "date": "2026-08-14",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-45",
+    "repository_id": "r010",
+    "date": "2026-08-15",
+    "commit_count": 1,
+    "additions": 1,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-46",
+    "repository_id": "r010",
+    "date": "2026-08-16",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-47",
+    "repository_id": "r010",
+    "date": "2026-08-17",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-48",
+    "repository_id": "r010",
+    "date": "2026-08-18",
+    "commit_count": 1,
+    "additions": 4,
+    "deletions": 3
+  },
+  {
+    "id": "r010-day-49",
+    "repository_id": "r010",
+    "date": "2026-08-19",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-50",
+    "repository_id": "r010",
+    "date": "2026-08-20",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-51",
+    "repository_id": "r010",
+    "date": "2026-08-21",
+    "commit_count": 1,
+    "additions": 10,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-52",
+    "repository_id": "r010",
+    "date": "2026-08-22",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-53",
+    "repository_id": "r010",
+    "date": "2026-08-23",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-54",
+    "repository_id": "r010",
+    "date": "2026-08-24",
+    "commit_count": 1,
+    "additions": 8,
+    "deletions": 3
+  },
+  {
+    "id": "r010-day-55",
+    "repository_id": "r010",
+    "date": "2026-08-25",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-56",
+    "repository_id": "r010",
+    "date": "2026-08-26",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-57",
+    "repository_id": "r010",
+    "date": "2026-08-27",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 4
+  },
+  {
+    "id": "r010-day-58",
+    "repository_id": "r010",
+    "date": "2026-08-28",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-59",
+    "repository_id": "r010",
+    "date": "2026-08-29",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-60",
+    "repository_id": "r010",
+    "date": "2026-08-30",
+    "commit_count": 1,
+    "additions": 4,
+    "deletions": 5
+  },
+  {
+    "id": "r010-day-61",
+    "repository_id": "r010",
+    "date": "2026-08-31",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-62",
+    "repository_id": "r010",
+    "date": "2026-09-01",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-63",
+    "repository_id": "r010",
+    "date": "2026-09-02",
+    "commit_count": 1,
+    "additions": 12,
+    "deletions": 3
+  },
+  {
+    "id": "r010-day-64",
+    "repository_id": "r010",
+    "date": "2026-09-03",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-65",
+    "repository_id": "r010",
+    "date": "2026-09-04",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-66",
+    "repository_id": "r010",
+    "date": "2026-09-05",
+    "commit_count": 1,
+    "additions": 8,
+    "deletions": 3
+  },
+  {
+    "id": "r010-day-67",
+    "repository_id": "r010",
+    "date": "2026-09-06",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-68",
+    "repository_id": "r010",
+    "date": "2026-09-07",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-69",
+    "repository_id": "r010",
+    "date": "2026-09-08",
+    "commit_count": 1,
+    "additions": 4,
+    "deletions": 1
+  },
+  {
+    "id": "r010-day-70",
+    "repository_id": "r010",
+    "date": "2026-09-09",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-71",
+    "repository_id": "r010",
+    "date": "2026-09-10",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-72",
+    "repository_id": "r010",
+    "date": "2026-09-11",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 5
+  },
+  {
+    "id": "r010-day-73",
+    "repository_id": "r010",
+    "date": "2026-09-12",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-74",
+    "repository_id": "r010",
+    "date": "2026-09-13",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-75",
+    "repository_id": "r010",
+    "date": "2026-09-14",
+    "commit_count": 1,
+    "additions": 1,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-76",
+    "repository_id": "r010",
+    "date": "2026-09-15",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-77",
+    "repository_id": "r010",
+    "date": "2026-09-16",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-78",
+    "repository_id": "r010",
+    "date": "2026-09-17",
+    "commit_count": 1,
+    "additions": 7,
+    "deletions": 1
+  },
+  {
+    "id": "r010-day-79",
+    "repository_id": "r010",
+    "date": "2026-09-18",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-80",
+    "repository_id": "r010",
+    "date": "2026-09-19",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-81",
+    "repository_id": "r010",
+    "date": "2026-09-20",
+    "commit_count": 1,
+    "additions": 3,
+    "deletions": 5
+  },
+  {
+    "id": "r010-day-82",
+    "repository_id": "r010",
+    "date": "2026-09-21",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-83",
+    "repository_id": "r010",
+    "date": "2026-09-22",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-84",
+    "repository_id": "r010",
+    "date": "2026-09-23",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 3
+  },
+  {
+    "id": "r010-day-85",
+    "repository_id": "r010",
+    "date": "2026-09-24",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-86",
+    "repository_id": "r010",
+    "date": "2026-09-25",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-87",
+    "repository_id": "r010",
+    "date": "2026-09-26",
+    "commit_count": 1,
+    "additions": 1,
+    "deletions": 4
+  },
+  {
+    "id": "r010-day-88",
+    "repository_id": "r010",
+    "date": "2026-09-27",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r010-day-89",
+    "repository_id": "r010",
+    "date": "2026-09-28",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-0",
+    "repository_id": "r011",
+    "date": "2026-07-01",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 4
+  },
+  {
+    "id": "r011-day-1",
+    "repository_id": "r011",
+    "date": "2026-07-02",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-2",
+    "repository_id": "r011",
+    "date": "2026-07-03",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-3",
+    "repository_id": "r011",
+    "date": "2026-07-04",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 4
+  },
+  {
+    "id": "r011-day-4",
+    "repository_id": "r011",
+    "date": "2026-07-05",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-5",
+    "repository_id": "r011",
+    "date": "2026-07-06",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-6",
+    "repository_id": "r011",
+    "date": "2026-07-07",
+    "commit_count": 1,
+    "additions": 6,
+    "deletions": 3
+  },
+  {
+    "id": "r011-day-7",
+    "repository_id": "r011",
+    "date": "2026-07-08",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-8",
+    "repository_id": "r011",
+    "date": "2026-07-09",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-9",
+    "repository_id": "r011",
+    "date": "2026-07-10",
+    "commit_count": 1,
+    "additions": 10,
+    "deletions": 5
+  },
+  {
+    "id": "r011-day-10",
+    "repository_id": "r011",
+    "date": "2026-07-11",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-11",
+    "repository_id": "r011",
+    "date": "2026-07-12",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-12",
+    "repository_id": "r011",
+    "date": "2026-07-13",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 3
+  },
+  {
+    "id": "r011-day-13",
+    "repository_id": "r011",
+    "date": "2026-07-14",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-14",
+    "repository_id": "r011",
+    "date": "2026-07-15",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-15",
+    "repository_id": "r011",
+    "date": "2026-07-16",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 3
+  },
+  {
+    "id": "r011-day-16",
+    "repository_id": "r011",
+    "date": "2026-07-17",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-17",
+    "repository_id": "r011",
+    "date": "2026-07-18",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-18",
+    "repository_id": "r011",
+    "date": "2026-07-19",
+    "commit_count": 1,
+    "additions": 3,
+    "deletions": 5
+  },
+  {
+    "id": "r011-day-19",
+    "repository_id": "r011",
+    "date": "2026-07-20",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-20",
+    "repository_id": "r011",
+    "date": "2026-07-21",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-21",
+    "repository_id": "r011",
+    "date": "2026-07-22",
+    "commit_count": 1,
+    "additions": 8,
+    "deletions": 3
+  },
+  {
+    "id": "r011-day-22",
+    "repository_id": "r011",
+    "date": "2026-07-23",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-23",
+    "repository_id": "r011",
+    "date": "2026-07-24",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-24",
+    "repository_id": "r011",
+    "date": "2026-07-25",
+    "commit_count": 1,
+    "additions": 5,
+    "deletions": 1
+  },
+  {
+    "id": "r011-day-25",
+    "repository_id": "r011",
+    "date": "2026-07-26",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-26",
+    "repository_id": "r011",
+    "date": "2026-07-27",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-27",
+    "repository_id": "r011",
+    "date": "2026-07-28",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 2
+  },
+  {
+    "id": "r011-day-28",
+    "repository_id": "r011",
+    "date": "2026-07-29",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-29",
+    "repository_id": "r011",
+    "date": "2026-07-30",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-30",
+    "repository_id": "r011",
+    "date": "2026-07-31",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 3
+  },
+  {
+    "id": "r011-day-31",
+    "repository_id": "r011",
+    "date": "2026-08-01",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-32",
+    "repository_id": "r011",
+    "date": "2026-08-02",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-33",
+    "repository_id": "r011",
+    "date": "2026-08-03",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 1
+  },
+  {
+    "id": "r011-day-34",
+    "repository_id": "r011",
+    "date": "2026-08-04",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-35",
+    "repository_id": "r011",
+    "date": "2026-08-05",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-36",
+    "repository_id": "r011",
+    "date": "2026-08-06",
+    "commit_count": 1,
+    "additions": 5,
+    "deletions": 3
+  },
+  {
+    "id": "r011-day-37",
+    "repository_id": "r011",
+    "date": "2026-08-07",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-38",
+    "repository_id": "r011",
+    "date": "2026-08-08",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-39",
+    "repository_id": "r011",
+    "date": "2026-08-09",
+    "commit_count": 1,
+    "additions": 2,
+    "deletions": 5
+  },
+  {
+    "id": "r011-day-40",
+    "repository_id": "r011",
+    "date": "2026-08-10",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-41",
+    "repository_id": "r011",
+    "date": "2026-08-11",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-42",
+    "repository_id": "r011",
+    "date": "2026-08-12",
+    "commit_count": 1,
+    "additions": 5,
+    "deletions": 1
+  },
+  {
+    "id": "r011-day-43",
+    "repository_id": "r011",
+    "date": "2026-08-13",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-44",
+    "repository_id": "r011",
+    "date": "2026-08-14",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-45",
+    "repository_id": "r011",
+    "date": "2026-08-15",
+    "commit_count": 1,
+    "additions": 5,
+    "deletions": 2
+  },
+  {
+    "id": "r011-day-46",
+    "repository_id": "r011",
+    "date": "2026-08-16",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-47",
+    "repository_id": "r011",
+    "date": "2026-08-17",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-48",
+    "repository_id": "r011",
+    "date": "2026-08-18",
+    "commit_count": 1,
+    "additions": 6,
+    "deletions": 4
+  },
+  {
+    "id": "r011-day-49",
+    "repository_id": "r011",
+    "date": "2026-08-19",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-50",
+    "repository_id": "r011",
+    "date": "2026-08-20",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-51",
+    "repository_id": "r011",
+    "date": "2026-08-21",
+    "commit_count": 1,
+    "additions": 2,
+    "deletions": 1
+  },
+  {
+    "id": "r011-day-52",
+    "repository_id": "r011",
+    "date": "2026-08-22",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-53",
+    "repository_id": "r011",
+    "date": "2026-08-23",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-54",
+    "repository_id": "r011",
+    "date": "2026-08-24",
+    "commit_count": 1,
+    "additions": 3,
+    "deletions": 1
+  },
+  {
+    "id": "r011-day-55",
+    "repository_id": "r011",
+    "date": "2026-08-25",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-56",
+    "repository_id": "r011",
+    "date": "2026-08-26",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-57",
+    "repository_id": "r011",
+    "date": "2026-08-27",
+    "commit_count": 1,
+    "additions": 7,
+    "deletions": 5
+  },
+  {
+    "id": "r011-day-58",
+    "repository_id": "r011",
+    "date": "2026-08-28",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-59",
+    "repository_id": "r011",
+    "date": "2026-08-29",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-60",
+    "repository_id": "r011",
+    "date": "2026-08-30",
+    "commit_count": 1,
+    "additions": 3,
+    "deletions": 5
+  },
+  {
+    "id": "r011-day-61",
+    "repository_id": "r011",
+    "date": "2026-08-31",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-62",
+    "repository_id": "r011",
+    "date": "2026-09-01",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-63",
+    "repository_id": "r011",
+    "date": "2026-09-02",
+    "commit_count": 1,
+    "additions": 4,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-64",
+    "repository_id": "r011",
+    "date": "2026-09-03",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-65",
+    "repository_id": "r011",
+    "date": "2026-09-04",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-66",
+    "repository_id": "r011",
+    "date": "2026-09-05",
+    "commit_count": 1,
+    "additions": 7,
+    "deletions": 3
+  },
+  {
+    "id": "r011-day-67",
+    "repository_id": "r011",
+    "date": "2026-09-06",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-68",
+    "repository_id": "r011",
+    "date": "2026-09-07",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-69",
+    "repository_id": "r011",
+    "date": "2026-09-08",
+    "commit_count": 1,
+    "additions": 6,
+    "deletions": 4
+  },
+  {
+    "id": "r011-day-70",
+    "repository_id": "r011",
+    "date": "2026-09-09",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-71",
+    "repository_id": "r011",
+    "date": "2026-09-10",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-72",
+    "repository_id": "r011",
+    "date": "2026-09-11",
+    "commit_count": 1,
+    "additions": 8,
+    "deletions": 3
+  },
+  {
+    "id": "r011-day-73",
+    "repository_id": "r011",
+    "date": "2026-09-12",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-74",
+    "repository_id": "r011",
+    "date": "2026-09-13",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-75",
+    "repository_id": "r011",
+    "date": "2026-09-14",
+    "commit_count": 1,
+    "additions": 1,
+    "deletions": 1
+  },
+  {
+    "id": "r011-day-76",
+    "repository_id": "r011",
+    "date": "2026-09-15",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-77",
+    "repository_id": "r011",
+    "date": "2026-09-16",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-78",
+    "repository_id": "r011",
+    "date": "2026-09-17",
+    "commit_count": 1,
+    "additions": 7,
+    "deletions": 3
+  },
+  {
+    "id": "r011-day-79",
+    "repository_id": "r011",
+    "date": "2026-09-18",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-80",
+    "repository_id": "r011",
+    "date": "2026-09-19",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-81",
+    "repository_id": "r011",
+    "date": "2026-09-20",
+    "commit_count": 1,
+    "additions": 10,
+    "deletions": 5
+  },
+  {
+    "id": "r011-day-82",
+    "repository_id": "r011",
+    "date": "2026-09-21",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-83",
+    "repository_id": "r011",
+    "date": "2026-09-22",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-84",
+    "repository_id": "r011",
+    "date": "2026-09-23",
+    "commit_count": 1,
+    "additions": 1,
+    "deletions": 4
+  },
+  {
+    "id": "r011-day-85",
+    "repository_id": "r011",
+    "date": "2026-09-24",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-86",
+    "repository_id": "r011",
+    "date": "2026-09-25",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-87",
+    "repository_id": "r011",
+    "date": "2026-09-26",
+    "commit_count": 1,
+    "additions": 7,
+    "deletions": 3
+  },
+  {
+    "id": "r011-day-88",
+    "repository_id": "r011",
+    "date": "2026-09-27",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r011-day-89",
+    "repository_id": "r011",
+    "date": "2026-09-28",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-0",
+    "repository_id": "r012",
+    "date": "2026-07-01",
+    "commit_count": 1,
+    "additions": 7,
+    "deletions": 4
+  },
+  {
+    "id": "r012-day-1",
+    "repository_id": "r012",
+    "date": "2026-07-02",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-2",
+    "repository_id": "r012",
+    "date": "2026-07-03",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-3",
+    "repository_id": "r012",
+    "date": "2026-07-04",
+    "commit_count": 1,
+    "additions": 12,
+    "deletions": 5
+  },
+  {
+    "id": "r012-day-4",
+    "repository_id": "r012",
+    "date": "2026-07-05",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-5",
+    "repository_id": "r012",
+    "date": "2026-07-06",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-6",
+    "repository_id": "r012",
+    "date": "2026-07-07",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 4
+  },
+  {
+    "id": "r012-day-7",
+    "repository_id": "r012",
+    "date": "2026-07-08",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-8",
+    "repository_id": "r012",
+    "date": "2026-07-09",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-9",
+    "repository_id": "r012",
+    "date": "2026-07-10",
+    "commit_count": 1,
+    "additions": 4,
+    "deletions": 3
+  },
+  {
+    "id": "r012-day-10",
+    "repository_id": "r012",
+    "date": "2026-07-11",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-11",
+    "repository_id": "r012",
+    "date": "2026-07-12",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-12",
+    "repository_id": "r012",
+    "date": "2026-07-13",
+    "commit_count": 1,
+    "additions": 4,
+    "deletions": 2
+  },
+  {
+    "id": "r012-day-13",
+    "repository_id": "r012",
+    "date": "2026-07-14",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-14",
+    "repository_id": "r012",
+    "date": "2026-07-15",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-15",
+    "repository_id": "r012",
+    "date": "2026-07-16",
+    "commit_count": 1,
+    "additions": 7,
+    "deletions": 3
+  },
+  {
+    "id": "r012-day-16",
+    "repository_id": "r012",
+    "date": "2026-07-17",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-17",
+    "repository_id": "r012",
+    "date": "2026-07-18",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-18",
+    "repository_id": "r012",
+    "date": "2026-07-19",
+    "commit_count": 1,
+    "additions": 1,
+    "deletions": 3
+  },
+  {
+    "id": "r012-day-19",
+    "repository_id": "r012",
+    "date": "2026-07-20",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-20",
+    "repository_id": "r012",
+    "date": "2026-07-21",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-21",
+    "repository_id": "r012",
+    "date": "2026-07-22",
+    "commit_count": 1,
+    "additions": 6,
+    "deletions": 5
+  },
+  {
+    "id": "r012-day-22",
+    "repository_id": "r012",
+    "date": "2026-07-23",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-23",
+    "repository_id": "r012",
+    "date": "2026-07-24",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-24",
+    "repository_id": "r012",
+    "date": "2026-07-25",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 3
+  },
+  {
+    "id": "r012-day-25",
+    "repository_id": "r012",
+    "date": "2026-07-26",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-26",
+    "repository_id": "r012",
+    "date": "2026-07-27",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-27",
+    "repository_id": "r012",
+    "date": "2026-07-28",
+    "commit_count": 1,
+    "additions": 12,
+    "deletions": 1
+  },
+  {
+    "id": "r012-day-28",
+    "repository_id": "r012",
+    "date": "2026-07-29",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-29",
+    "repository_id": "r012",
+    "date": "2026-07-30",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-30",
+    "repository_id": "r012",
+    "date": "2026-07-31",
+    "commit_count": 1,
+    "additions": 8,
+    "deletions": 1
+  },
+  {
+    "id": "r012-day-31",
+    "repository_id": "r012",
+    "date": "2026-08-01",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-32",
+    "repository_id": "r012",
+    "date": "2026-08-02",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-33",
+    "repository_id": "r012",
+    "date": "2026-08-03",
+    "commit_count": 1,
+    "additions": 10,
+    "deletions": 4
+  },
+  {
+    "id": "r012-day-34",
+    "repository_id": "r012",
+    "date": "2026-08-04",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-35",
+    "repository_id": "r012",
+    "date": "2026-08-05",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-36",
+    "repository_id": "r012",
+    "date": "2026-08-06",
+    "commit_count": 1,
+    "additions": 1,
+    "deletions": 3
+  },
+  {
+    "id": "r012-day-37",
+    "repository_id": "r012",
+    "date": "2026-08-07",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-38",
+    "repository_id": "r012",
+    "date": "2026-08-08",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-39",
+    "repository_id": "r012",
+    "date": "2026-08-09",
+    "commit_count": 1,
+    "additions": 10,
+    "deletions": 4
+  },
+  {
+    "id": "r012-day-40",
+    "repository_id": "r012",
+    "date": "2026-08-10",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-41",
+    "repository_id": "r012",
+    "date": "2026-08-11",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-42",
+    "repository_id": "r012",
+    "date": "2026-08-12",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-43",
+    "repository_id": "r012",
+    "date": "2026-08-13",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-44",
+    "repository_id": "r012",
+    "date": "2026-08-14",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-45",
+    "repository_id": "r012",
+    "date": "2026-08-15",
+    "commit_count": 1,
+    "additions": 2,
+    "deletions": 5
+  },
+  {
+    "id": "r012-day-46",
+    "repository_id": "r012",
+    "date": "2026-08-16",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-47",
+    "repository_id": "r012",
+    "date": "2026-08-17",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-48",
+    "repository_id": "r012",
+    "date": "2026-08-18",
+    "commit_count": 1,
+    "additions": 7,
+    "deletions": 1
+  },
+  {
+    "id": "r012-day-49",
+    "repository_id": "r012",
+    "date": "2026-08-19",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-50",
+    "repository_id": "r012",
+    "date": "2026-08-20",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-51",
+    "repository_id": "r012",
+    "date": "2026-08-21",
+    "commit_count": 1,
+    "additions": 8,
+    "deletions": 1
+  },
+  {
+    "id": "r012-day-52",
+    "repository_id": "r012",
+    "date": "2026-08-22",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-53",
+    "repository_id": "r012",
+    "date": "2026-08-23",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-54",
+    "repository_id": "r012",
+    "date": "2026-08-24",
+    "commit_count": 1,
+    "additions": 1,
+    "deletions": 2
+  },
+  {
+    "id": "r012-day-55",
+    "repository_id": "r012",
+    "date": "2026-08-25",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-56",
+    "repository_id": "r012",
+    "date": "2026-08-26",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-57",
+    "repository_id": "r012",
+    "date": "2026-08-27",
+    "commit_count": 1,
+    "additions": 7,
+    "deletions": 2
+  },
+  {
+    "id": "r012-day-58",
+    "repository_id": "r012",
+    "date": "2026-08-28",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-59",
+    "repository_id": "r012",
+    "date": "2026-08-29",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-60",
+    "repository_id": "r012",
+    "date": "2026-08-30",
+    "commit_count": 1,
+    "additions": 4,
+    "deletions": 3
+  },
+  {
+    "id": "r012-day-61",
+    "repository_id": "r012",
+    "date": "2026-08-31",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-62",
+    "repository_id": "r012",
+    "date": "2026-09-01",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-63",
+    "repository_id": "r012",
+    "date": "2026-09-02",
+    "commit_count": 1,
+    "additions": 6,
+    "deletions": 2
+  },
+  {
+    "id": "r012-day-64",
+    "repository_id": "r012",
+    "date": "2026-09-03",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-65",
+    "repository_id": "r012",
+    "date": "2026-09-04",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-66",
+    "repository_id": "r012",
+    "date": "2026-09-05",
+    "commit_count": 1,
+    "additions": 7,
+    "deletions": 2
+  },
+  {
+    "id": "r012-day-67",
+    "repository_id": "r012",
+    "date": "2026-09-06",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-68",
+    "repository_id": "r012",
+    "date": "2026-09-07",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-69",
+    "repository_id": "r012",
+    "date": "2026-09-08",
+    "commit_count": 1,
+    "additions": 7,
+    "deletions": 2
+  },
+  {
+    "id": "r012-day-70",
+    "repository_id": "r012",
+    "date": "2026-09-09",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-71",
+    "repository_id": "r012",
+    "date": "2026-09-10",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-72",
+    "repository_id": "r012",
+    "date": "2026-09-11",
+    "commit_count": 1,
+    "additions": 2,
+    "deletions": 3
+  },
+  {
+    "id": "r012-day-73",
+    "repository_id": "r012",
+    "date": "2026-09-12",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-74",
+    "repository_id": "r012",
+    "date": "2026-09-13",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-75",
+    "repository_id": "r012",
+    "date": "2026-09-14",
+    "commit_count": 1,
+    "additions": 1,
+    "deletions": 5
+  },
+  {
+    "id": "r012-day-76",
+    "repository_id": "r012",
+    "date": "2026-09-15",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-77",
+    "repository_id": "r012",
+    "date": "2026-09-16",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-78",
+    "repository_id": "r012",
+    "date": "2026-09-17",
+    "commit_count": 1,
+    "additions": 9,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-79",
+    "repository_id": "r012",
+    "date": "2026-09-18",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-80",
+    "repository_id": "r012",
+    "date": "2026-09-19",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-81",
+    "repository_id": "r012",
+    "date": "2026-09-20",
+    "commit_count": 1,
+    "additions": 6,
+    "deletions": 1
+  },
+  {
+    "id": "r012-day-82",
+    "repository_id": "r012",
+    "date": "2026-09-21",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-83",
+    "repository_id": "r012",
+    "date": "2026-09-22",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-84",
+    "repository_id": "r012",
+    "date": "2026-09-23",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-85",
+    "repository_id": "r012",
+    "date": "2026-09-24",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-86",
+    "repository_id": "r012",
+    "date": "2026-09-25",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-87",
+    "repository_id": "r012",
+    "date": "2026-09-26",
+    "commit_count": 1,
+    "additions": 11,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-88",
+    "repository_id": "r012",
+    "date": "2026-09-27",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  },
+  {
+    "id": "r012-day-89",
+    "repository_id": "r012",
+    "date": "2026-09-28",
+    "commit_count": 0,
+    "additions": 0,
+    "deletions": 0
+  }
+]
