@@ -11,12 +11,14 @@ import { NotFoundPage } from "./pages/NotFoundPage";
 import { ProjectOverviewPage } from "./pages/ProjectOverviewPage";
 import { ProjectActivityPage } from "./pages/ProjectActivityPage";
 import { ProjectIntelligencePage } from "./pages/ProjectIntelligencePage";
+import { AccountActionPage } from "./pages/AccountActionPage";
 
 const WorkspacePage = lazy(() => import("./pages/WorkspacePage").then((module) => ({ default: module.WorkspacePage })));
 const ProjectLabsPage = lazy(() => import("./pages/ProjectLabsPage").then((module) => ({ default: module.ProjectLabsPage })));
 const ProjectAdvancedPage = lazy(() => import("./pages/ProjectAdvancedPage").then((module) => ({ default: module.ProjectAdvancedPage })));
 const ProjectUniversePage = lazy(() => import("./pages/ProjectUniversePage").then((module) => ({ default: module.ProjectUniversePage })));
 const ProjectControlRoomPage = lazy(() => import("./pages/ProjectControlRoomPage").then((module) => ({ default: module.ProjectControlRoomPage })));
+const ProjectOperationsPage = lazy(() => import("./pages/ProjectOperationsPage").then((module) => ({ default: module.ProjectOperationsPage })));
 
 export const router = createBrowserRouter([
   {
@@ -28,6 +30,8 @@ export const router = createBrowserRouter([
       { path: "discover", element: <DiscoverPage /> },
       { path: "dashboard", element: <DashboardPage /> },
       { path: "docs", element: <DocsPage /> },
+      { path: "account/reset-password", element: <AccountActionPage mode="reset" /> },
+      { path: "account/verify-email", element: <AccountActionPage mode="verify" /> },
       { path: "projects/:projectId", element: <ProjectOverviewPage /> },
       { path: "projects/:projectId/assistant", element: <AssistantPage /> },
       {
@@ -50,6 +54,10 @@ export const router = createBrowserRouter([
       {
         path: "projects/:projectId/advanced",
         element: <Suspense fallback={<LoadingState label="Loading advanced operations" />}><ProjectAdvancedPage /></Suspense>
+      },
+      {
+        path: "projects/:projectId/operations",
+        element: <Suspense fallback={<LoadingState label="Opening Production Center" />}><ProjectOperationsPage /></Suspense>
       },
       { path: "projects/:projectId/:section", element: <ProjectActivityPage /> }
     ]

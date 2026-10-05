@@ -1,5 +1,7 @@
 import type { Server as HttpServer } from "node:http";
 import jwt from "jsonwebtoken";
+import { Redis } from "ioredis";
+import { createAdapter } from "@socket.io/redis-adapter";
 import { Server } from "socket.io";
 import * as Y from "yjs";
 import { hasPermission, permissionsForRole, type ProjectRole } from "@codemesh/shared";
@@ -15,7 +17,16 @@ type SocketUser = {
 
 type DocKey = `${string}:${string}:${string}`;
 
-export function attachRealtime(server: HttpServer, config: AppConfig, store: JsonStore) {
+export type RealtimeRuntime = {
+  io: Server;
+  mode: "memory" | "redis";
+  configured: boolean;
+  detail: string;
+  health(): Promise<{ ok: boolean; configured: boolean; mode: "memory" | "redis"; detail: string }>;
+  close(): Promise<void>;
+};
+
+export async function attachRealtime(server: HttpServer, config: AppConfig, store: JsonStore): Promise<RealtimeRuntime> {
   const io = new Server(server, {
     cors: {
       origin: config.corsOrigins,
@@ -23,6 +34,29 @@ export function attachRealtime(server: HttpServer, config: AppConfig, store: Jso
     }
   });
   const docs = new Map<DocKey, Y.Doc>();
+  let pubClient: Redis | undefined;
+  let subClient: Redis | undefined;
+  let mode: RealtimeRuntime["mode"] = "memory";
+  let detail = "Single-instance realtime collaboration is active.";
+
+  if (config.REDIS_URL) {
+    try {
+      pubClient = new Redis(config.REDIS_URL, { lazyConnect: true, connectTimeout: 2_500, maxRetriesPerRequest: null });
+      subClient = pubClient.duplicate();
+      pubClient.on("error", () => undefined);
+      subClient.on("error", () => undefined);
+      await Promise.all([pubClient.connect(), subClient.connect()]);
+      io.adapter(createAdapter(pubClient, subClient));
+      mode = "redis";
+      detail = "Redis-backed Socket.IO fan-out is active.";
+    } catch (error) {
+      detail = `Redis was configured but unavailable; using single-instance realtime. ${error instanceof Error ? error.message : ""}`.trim();
+      pubClient?.disconnect();
+      subClient?.disconnect();
+      pubClient = undefined;
+      subClient = undefined;
+    }
+  }
 
   io.use((socket, next) => {
     const cookies = parseCookies(socket.handshake.headers.cookie ?? "");
@@ -210,7 +244,25 @@ export function attachRealtime(server: HttpServer, config: AppConfig, store: Jso
     );
   });
 
-  return io;
+  return {
+    io,
+    mode,
+    configured: Boolean(config.REDIS_URL),
+    detail,
+    async health() {
+      if (!pubClient || mode !== "redis") return { ok: true, configured: Boolean(config.REDIS_URL), mode, detail };
+      try {
+        const pong = await pubClient.ping();
+        return { ok: pong === "PONG", configured: true, mode, detail };
+      } catch (error) {
+        return { ok: false, configured: true, mode, detail: error instanceof Error ? error.message : "Redis is unavailable." };
+      }
+    },
+    async close() {
+      await new Promise<void>((resolve) => io.close(() => resolve()));
+      await Promise.allSettled([pubClient?.quit(), subClient?.quit()].filter(Boolean) as Array<Promise<unknown>>);
+    }
+  };
 }
 
 function ensureDoc(docs: Map<DocKey, Y.Doc>, store: JsonStore, projectId: string, workspaceId: string, filePath: string) {

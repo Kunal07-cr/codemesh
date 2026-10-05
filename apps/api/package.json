@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "@codemesh/api",
   "version": "0.1.0",
   "private": true,
@@ -17,10 +17,12 @@
     "prisma:seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1146.0",
     "@codemesh/ai": "0.1.0",
     "@codemesh/code-intelligence": "0.1.0",
     "@codemesh/shared": "0.1.0",
     "@prisma/client": "^5.18.0",
+    "@socket.io/redis-adapter": "^8.3.0",
     "argon2": "^0.40.3",
     "bcryptjs": "^3.0.2",
     "compression": "^1.8.1",
@@ -33,10 +35,10 @@
     "ioredis": "^5.4.1",
     "jsonwebtoken": "^9.0.2",
     "multer": "^2.0.2",
+    "pg": "^8.23.1",
     "pino": "^9.3.2",
     "pino-http": "^10.2.0",
     "socket.io": "^4.8.1",
-    "uuid": "^10.0.0",
     "yjs": "^13.6.27",
     "zod": "^4.1.11"
   },
@@ -48,8 +50,8 @@
     "@types/jsonwebtoken": "^9.0.6",
     "@types/multer": "^2.0.0",
     "@types/node": "^24.5.2",
+    "@types/pg": "^8.23.1",
     "@types/supertest": "^6.0.2",
-    "@types/uuid": "^10.0.0",
     "pino-pretty": "^11.2.2",
     "prisma": "^5.18.0",
     "supertest": "^7.0.0",

@@ -11,6 +11,11 @@ const optionalEnvUrl = z.preprocess(
   z.string().url().optional()
 );
 
+const envBoolean = z.preprocess(
+  (value) => typeof value === "string" ? ["1", "true", "yes", "on"].includes(value.toLowerCase()) : value,
+  z.boolean()
+);
+
 const envSchema = z.object({
   NODE_ENV: z.string().default("development"),
   API_PORT: z.coerce.number().default(4200),
@@ -18,6 +23,19 @@ const envSchema = z.object({
   API_ORIGIN: z.string().default("http://localhost:4200"),
   SESSION_SECRET: z.string().default("dev-session-secret-change-me"),
   DATA_PATH: z.string().optional(),
+  DATABASE_URL: optionalEnvString,
+  REDIS_URL: optionalEnvUrl,
+  S3_ENDPOINT: optionalEnvUrl,
+  S3_REGION: z.string().default("us-east-1"),
+  S3_BUCKET: optionalEnvString,
+  S3_ACCESS_KEY_ID: optionalEnvString,
+  S3_SECRET_ACCESS_KEY: optionalEnvString,
+  S3_FORCE_PATH_STYLE: envBoolean.default(true),
+  METRICS_TOKEN: optionalEnvString,
+  EMAIL_WEBHOOK_URL: optionalEnvUrl,
+  APP_PUBLIC_URL: optionalEnvUrl,
+  AI_REQUESTS_PER_MINUTE: z.coerce.number().int().min(1).max(1000).default(60),
+  JOB_CONCURRENCY: z.coerce.number().int().min(1).max(10).default(2),
   GEMINI_API_KEY: z.string().optional(),
   GEMINI_MODEL: z.string().optional(),
   LLM_BASE_URL: optionalEnvUrl,
@@ -56,6 +74,9 @@ export function loadConfig(env = process.env) {
         parsed.GITHUB_WEBHOOK_SECRET &&
         parsed.GITHUB_PRIVATE_KEY_BASE64
     ),
+    objectStorageConfigured: Boolean(parsed.S3_BUCKET && parsed.S3_ACCESS_KEY_ID && parsed.S3_SECRET_ACCESS_KEY),
+    emailDeliveryConfigured: Boolean(parsed.EMAIL_WEBHOOK_URL),
+    publicUrl: parsed.APP_PUBLIC_URL ?? parsed.API_ORIGIN,
     aiProvider: parsed.LLM_BASE_URL && parsed.LLM_MODEL ? `openai-compatible:${parsed.LLM_MODEL}` : parsed.GEMINI_API_KEY && parsed.GEMINI_MODEL ? `gemini:${parsed.GEMINI_MODEL}` : "local-repository"
   };
 }

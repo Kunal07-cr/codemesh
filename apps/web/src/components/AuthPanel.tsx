@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Eye, EyeOff, LogIn, UserPlus } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff, LogIn, Mail, UserPlus } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../lib/auth";
+import { api, jsonBody } from "../lib/api";
 
 const demoAccounts = [
   "owner@codemesh.dev",
@@ -14,13 +15,14 @@ const fieldClass = "mt-1 w-full rounded border border-line bg-ink px-3 py-2 text
 
 export function AuthPanel() {
   const { user, login, register } = useAuth();
-  const [mode, setMode] = useState<"login" | "register">("login");
+  const [mode, setMode] = useState<"login" | "register" | "recover">("login");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("owner@codemesh.dev");
   const [password, setPassword] = useState("CodeMesh123!");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
 
   if (user) {
@@ -34,13 +36,14 @@ export function AuthPanel() {
     );
   }
 
-  function selectMode(nextMode: "login" | "register") {
+  function selectMode(nextMode: "login" | "register" | "recover") {
     if (nextMode === mode || busy) return;
     setMode(nextMode);
     setError("");
+    setMessage("");
     setShowPassword(false);
     setConfirmPassword("");
-    if (nextMode === "register") {
+    if (nextMode === "register" || nextMode === "recover") {
       setName("");
       setEmail("");
       setPassword("");
@@ -56,10 +59,14 @@ export function AuthPanel() {
     setError("");
     try {
       const normalizedEmail = email.trim().toLowerCase();
-      if (password.length < 8) throw new Error("Password must contain at least 8 characters.");
-      if (mode === "login") {
+      if (mode === "recover") {
+        const result = await api<{ accepted: boolean; message: string; developmentToken?: string }>("/api/auth/password/forgot", { method: "POST", body: jsonBody({ email: normalizedEmail }) });
+        setMessage(result.developmentToken ? `${result.message} Development token: ${result.developmentToken}` : result.message);
+      } else if (mode === "login") {
+        if (password.length < 8) throw new Error("Password must contain at least 8 characters.");
         await login({ email: normalizedEmail, password });
       } else {
+        if (password.length < 8) throw new Error("Password must contain at least 8 characters.");
         if (name.trim().length < 2) throw new Error("Enter your full name.");
         if (password !== confirmPassword) throw new Error("Passwords do not match.");
         await register({ name: name.trim(), email: normalizedEmail, password });
@@ -73,7 +80,7 @@ export function AuthPanel() {
 
   return (
     <form className="rounded border border-line bg-panel p-4" onSubmit={submit}>
-      <div className="grid grid-cols-2 rounded border border-line bg-ink p-1" role="tablist" aria-label="Account access">
+      {mode !== "recover" ? <div className="grid grid-cols-2 rounded border border-line bg-ink p-1" role="tablist" aria-label="Account access">
         <button
           type="button"
           role="tab"
@@ -92,11 +99,11 @@ export function AuthPanel() {
         >
           Create account
         </button>
-      </div>
+      </div> : <button className="inline-flex items-center gap-1 text-sm text-steel hover:text-white" type="button" onClick={() => selectMode("login")}><ArrowLeft className="h-4 w-4" /> Back to sign in</button>}
       <div className="mt-4">
-        <h2 className="text-lg font-semibold text-white">{mode === "login" ? "Welcome back" : "Join CodeMesh"}</h2>
+        <h2 className="text-lg font-semibold text-white">{mode === "login" ? "Welcome back" : mode === "register" ? "Join CodeMesh" : "Recover account"}</h2>
         <p className="mt-1 text-sm text-steel">
-          {mode === "login" ? "Use your CodeMesh email and password." : "Create an account with your email address."}
+          {mode === "login" ? "Use your CodeMesh email and password." : mode === "register" ? "Create an account with your email address." : "Request a secure, time-limited password reset link."}
         </p>
       </div>
       {mode === "register" && (
@@ -113,7 +120,7 @@ export function AuthPanel() {
           />
         </label>
       )}
-      <label className="mt-4 block text-sm">
+      {mode !== "recover" && <label className="mt-4 block text-sm">
         <span className="text-steel">Email</span>
         <input
           className={fieldClass}
@@ -128,7 +135,7 @@ export function AuthPanel() {
         <datalist id="codemesh-demo-accounts">
           {demoAccounts.map((account) => <option key={account} value={account} />)}
         </datalist>
-      </label>
+      </label>}
       <label className="mt-4 block text-sm">
         <span className="text-steel">Password</span>
         <span className="relative mt-1 block">
@@ -166,10 +173,12 @@ export function AuthPanel() {
           />
         </label>
       )}
+      {mode === "login" && <button className="mt-3 text-xs font-semibold text-mint hover:text-white" type="button" onClick={() => selectMode("recover")}>Forgot password?</button>}
       {error && <div className="mt-3 rounded border border-coral/40 bg-coral/10 px-3 py-2 text-sm text-coral" role="alert">{error}</div>}
+      {message && <div className="mt-3 break-words rounded border border-mint/40 bg-mint/10 px-3 py-2 text-sm leading-6 text-mint" role="status">{message}</div>}
       <button className="mt-4 flex w-full items-center justify-center gap-2 rounded bg-mint px-3 py-2 font-semibold text-ink transition hover:bg-mint/90 disabled:opacity-60" disabled={busy}>
-        {mode === "login" ? <LogIn className="h-4 w-4" /> : <UserPlus className="h-4 w-4" />}
-        {busy ? "Working..." : mode === "login" ? "Sign in" : "Create account"}
+        {mode === "login" ? <LogIn className="h-4 w-4" /> : mode === "register" ? <UserPlus className="h-4 w-4" /> : <Mail className="h-4 w-4" />}
+        {busy ? "Working..." : mode === "login" ? "Sign in" : mode === "register" ? "Create account" : "Send recovery link"}
       </button>
     </form>
   );

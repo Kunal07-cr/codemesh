@@ -20,17 +20,25 @@ import { projectRoutes } from "./routes/projects.js";
 import { attachRealtime } from "./realtime/socket.js";
 import { authenticate, createRequestId, csrfProtection } from "./services/security.js";
 import { loadAssistantDataset } from "./services/assistantDataset.js";
+import { ArtifactStorage } from "./services/artifactStorage.js";
+import { OperationQueue } from "./services/jobQueue.js";
+import { MetricsRegistry } from "./services/metrics.js";
+import { integrationRoutes } from "./routes/integrations.js";
+import { metricsRoutes, operationRoutes } from "./routes/operations.js";
 
 const pinoHttp = pinoHttpModule as unknown as (options: Record<string, unknown>) => express.RequestHandler;
 
 export async function createApp() {
   const config = loadConfig();
-  const store = await createStore(config.dataPath);
+  const store = await createStore(config.dataPath, config.DATABASE_URL);
   const assistantDataset = await loadAssistantDataset(config.ASSISTANT_DATASET_PATH).catch((error: unknown) => {
     console.warn(`CodeMesh assistant dataset unavailable: ${error instanceof Error ? error.message : "unknown error"}`);
     return null;
   });
   const app = express();
+  const server = http.createServer(app);
+  const metrics = new MetricsRegistry();
+  const artifacts = new ArtifactStorage(config);
 
   app.disable("x-powered-by");
   app.use(createRequestId());
@@ -40,6 +48,7 @@ export async function createApp() {
       customProps: (req: express.Request) => ({ requestId: req.id })
     })
   );
+  app.use(metrics.middleware());
   app.use(helmet());
   app.use(compression());
   app.use((req, res, next) => {
@@ -54,17 +63,29 @@ export async function createApp() {
       credentials: true
     })(req, res, next);
   });
-  app.use(express.json({ limit: "2mb" }));
+  app.use(express.json({
+    limit: "2mb",
+    verify: (req, _res, buffer) => {
+      (req as express.Request).rawBody = Buffer.from(buffer);
+    }
+  }));
   app.use(cookieParser());
   app.use(authenticate(config, store));
   app.use(csrfProtection());
 
-  app.use("/api", healthRoutes(config, Boolean(assistantDataset)));
+  const realtime = await attachRealtime(server, config, store);
+  const queue = new OperationQueue(store, metrics, config.JOB_CONCURRENCY);
+  await queue.start();
+
+  app.use("/api", healthRoutes(config, store, artifacts, realtime, queue, Boolean(assistantDataset)));
+  app.use("/api", metricsRoutes(config, metrics));
   app.use("/api/auth", authRoutes(config, store));
-  app.use("/api/projects", projectRoutes(store));
+  app.use("/api/integrations", integrationRoutes(config, store, queue));
+  app.use("/api/projects", projectRoutes(store, artifacts));
   app.use("/api/projects", advancedRoutes(store));
   app.use("/api/projects", collaborationRoutes(config, store));
   app.use("/api/projects", aiRoutes(config, store, assistantDataset));
+  app.use("/api/projects", operationRoutes(config, store, queue, metrics, artifacts, realtime));
 
   const webDist = path.resolve(process.cwd(), "../web/dist");
   if (existsSync(webDist)) {
@@ -76,10 +97,7 @@ export async function createApp() {
 
   app.use(errorHandler);
 
-  const server = http.createServer(app);
-  const io = attachRealtime(server, config, store);
-
-  return { app, server, io, config, store, assistantDataset };
+  return { app, server, io: realtime.io, realtime, queue, metrics, artifacts, config, store, assistantDataset };
 }
 
 if (fileURLToPath(import.meta.url) === path.resolve(process.argv[1] ?? "")) {
@@ -91,7 +109,9 @@ if (fileURLToPath(import.meta.url) === path.resolve(process.argv[1] ?? "")) {
 
   const shutdown = async (signal: string) => {
     console.log(`Received ${signal}; shutting down.`);
-    runtime.io.close();
+    await runtime.queue.stop();
+    await runtime.realtime.close();
+    await runtime.store.close();
     runtime.server.close(() => process.exit(0));
     setTimeout(() => process.exit(1), 10_000).unref();
   };

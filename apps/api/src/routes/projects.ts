@@ -29,10 +29,11 @@ import { badRequest, forbidden, notFound } from "../errors.js";
 import { extractRepoFiles, validateZipArchive } from "../services/zipImport.js";
 import { requireAuth, requireProjectPermission, requireVisibleProject } from "../services/security.js";
 import { asyncHandler, ok, parseBody } from "./helpers.js";
+import type { ArtifactStorage } from "../services/artifactStorage.js";
 
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: ZIP_UPLOAD_LIMIT_BYTES } });
 
-export function projectRoutes(store: JsonStore) {
+export function projectRoutes(store: JsonStore, artifacts?: ArtifactStorage) {
   const router = Router();
 
   router.get("/discovery", (req, res) => {
@@ -286,11 +287,13 @@ export function projectRoutes(store: JsonStore) {
     asyncHandler(async (req, res) => {
       if (!req.file) throw badRequest("ZIP archive is required.");
       const projectId = String(req.params.projectId);
+      const artifact = await artifacts?.archiveRepository(projectId, req.file.buffer, req.file.originalname || "repository.zip");
+      if (artifact) await store.recordAudit({ projectId, userId: req.auth!.user.id, action: "repository.archive_stored", metadata: artifact });
       const files = extractRepoFiles(projectId, req.file.buffer);
       if (files.length === 0) throw badRequest("ZIP contains no indexable text files.");
       const commitSha = `zip-${Date.now()}`;
       await store.replaceProjectFiles(projectId, files, "zip", commitSha);
-      ok(res, { files: files.length, commitSha });
+      ok(res, { files: files.length, commitSha, artifact });
     })
   );
 
@@ -330,12 +333,14 @@ export function projectRoutes(store: JsonStore) {
       if (!archive) throw badRequest("GitHub repository could not be downloaded. Check that it is public and the branch exists.");
 
       const projectId = String(req.params.projectId);
+      const artifact = await artifacts?.archiveRepository(projectId, archive, `${repository.owner}-${repository.name}-${selectedBranch}.zip`);
+      if (artifact) await store.recordAudit({ projectId, userId: req.auth!.user.id, action: "repository.archive_stored", metadata: artifact });
       const files = extractRepoFiles(projectId, archive, { stripCommonRoot: true });
       if (files.length === 0) throw badRequest("GitHub repository contains no safe text or code files.");
       const commitSha = `github-${Date.now()}`;
       await store.replaceProjectFiles(projectId, files, "github", commitSha);
       await store.updateProjectRepository(projectId, input.url);
-      ok(res, { files: files.length, commitSha, branch: selectedBranch, repository: `${repository.owner}/${repository.name}` });
+      ok(res, { files: files.length, commitSha, branch: selectedBranch, repository: `${repository.owner}/${repository.name}`, artifact });
     })
   );
 

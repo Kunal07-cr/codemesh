@@ -109,7 +109,14 @@ export function csrfProtection(): RequestHandler {
       next();
       return;
     }
-    if (req.path.startsWith("/api/auth/login") || req.path.startsWith("/api/auth/register")) {
+    if (
+      req.path.startsWith("/api/auth/login") ||
+      req.path.startsWith("/api/auth/register") ||
+      req.path.startsWith("/api/auth/password/forgot") ||
+      req.path.startsWith("/api/auth/password/reset") ||
+      req.path.startsWith("/api/auth/email/verify") ||
+      req.path.startsWith("/api/integrations/github/webhook")
+    ) {
       next();
       return;
     }
@@ -204,6 +211,32 @@ export function createAuthRateLimiter(limit = 10, windowMs = 60_000): RequestHan
     bucket.count += 1;
     if (bucket.count > limit) {
       res.status(429).json({ error: { code: "RATE_LIMITED", message: "Too many authentication attempts.", requestId: req.id } });
+      return;
+    }
+    next();
+  };
+}
+
+export function createUserRateLimiter(limit: number, windowMs = 60_000): RequestHandler {
+  const buckets = new Map<string, { count: number; resetAt: number }>();
+  return (req, res, next) => {
+    const key = `${req.auth?.user.id ?? req.ip}:${req.path}`;
+    const now = Date.now();
+    const bucket = buckets.get(key);
+    if (!bucket || bucket.resetAt <= now) {
+      buckets.set(key, { count: 1, resetAt: now + windowMs });
+      res.setHeader("x-ratelimit-limit", String(limit));
+      res.setHeader("x-ratelimit-remaining", String(Math.max(0, limit - 1)));
+      next();
+      return;
+    }
+    bucket.count += 1;
+    const remaining = Math.max(0, limit - bucket.count);
+    res.setHeader("x-ratelimit-limit", String(limit));
+    res.setHeader("x-ratelimit-remaining", String(remaining));
+    if (bucket.count > limit) {
+      res.setHeader("retry-after", String(Math.ceil((bucket.resetAt - now) / 1000)));
+      res.status(429).json({ error: { code: "RATE_LIMITED", message: "Assistant request limit reached. Try again shortly.", requestId: req.id } });
       return;
     }
     next();

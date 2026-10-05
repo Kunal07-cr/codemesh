@@ -6,7 +6,7 @@ import { createAiProvider } from "@codemesh/ai";
 import type { AppConfig } from "../config.js";
 import type { JsonStore } from "../db/store.js";
 import type { AssistantDataset } from "../services/assistantDataset.js";
-import { requireProjectPermission } from "../services/security.js";
+import { createUserRateLimiter, requireProjectPermission } from "../services/security.js";
 import { notFound } from "../errors.js";
 import { asyncHandler, ok, parseBody } from "./helpers.js";
 
@@ -22,6 +22,7 @@ export function aiRoutes(config: AppConfig, store: JsonStore, assistantDataset: 
     systemPrompt: config.LLM_SYSTEM_PROMPT,
     maxContextMessages: config.MAX_CONTEXT_MESSAGES
   });
+  const assistantLimiter = createUserRateLimiter(config.AI_REQUESTS_PER_MINUTE);
 
   router.get(
     "/:projectId/ai/dataset",
@@ -34,6 +35,7 @@ export function aiRoutes(config: AppConfig, store: JsonStore, assistantDataset: 
   router.post(
     "/:projectId/ai/ask",
     requireProjectPermission(store, "ai.query"),
+    assistantLimiter,
     asyncHandler(async (req, res) => {
       const input = parseBody(aiAskSchema, req);
       const project = store.getProject(String(req.params.projectId))!;
@@ -94,6 +96,7 @@ export function aiRoutes(config: AppConfig, store: JsonStore, assistantDataset: 
   router.post(
     "/:projectId/ai/stream",
     requireProjectPermission(store, "ai.query"),
+    assistantLimiter,
     async (req, res) => {
       const streamSchema = aiAskSchema.extend({ conversationId: z.string().uuid().optional() });
       try {

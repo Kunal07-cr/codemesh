@@ -1,5 +1,3 @@
-import fs from "node:fs/promises";
-import path from "node:path";
 import bcrypt from "bcryptjs";
 import {
   analyzeRepository,
@@ -28,10 +26,12 @@ import type {
   SourceRange,
   WorkspaceDoc
 } from "@codemesh/shared";
+import { createStatePersistence, type PersistenceHealth, type StatePersistence } from "./persistence.js";
 
 export type UserRecord = PublicUser & {
   passwordHash: string;
   githubUserId?: string;
+  emailVerifiedAt?: string;
 };
 
 export type RefreshTokenRecord = {
@@ -148,6 +148,45 @@ export type AssistantMessageRecord = {
   createdAt: string;
 };
 
+export type OperationJobType = "repository.reindex" | "quality.scan" | "persistence.verify" | "audit.export";
+export type OperationJobStatus = "queued" | "running" | "succeeded" | "failed" | "cancelled";
+
+export type OperationJob = {
+  id: string;
+  projectId: string;
+  type: OperationJobType;
+  status: OperationJobStatus;
+  progress: number;
+  attempts: number;
+  maxAttempts: number;
+  createdBy: string;
+  createdAt: string;
+  startedAt?: string;
+  completedAt?: string;
+  output?: Record<string, unknown>;
+  error?: string;
+};
+
+export type AuthActionTokenRecord = {
+  id: string;
+  userId: string;
+  kind: "password_reset" | "email_verification";
+  tokenHash: string;
+  expiresAt: string;
+  createdAt: string;
+  consumedAt?: string;
+};
+
+export type WebhookDeliveryRecord = {
+  id: string;
+  provider: "github";
+  event: string;
+  status: "received" | "processed" | "ignored" | "failed";
+  receivedAt: string;
+  processedAt?: string;
+  projectIds: string[];
+};
+
 export type StoreState = {
   users: UserRecord[];
   refreshTokens: RefreshTokenRecord[];
@@ -172,18 +211,25 @@ export type StoreState = {
   architectureDecisions?: ArchitectureDecisionRecord[];
   assistantConversations?: AssistantConversation[];
   assistantMessages?: AssistantMessageRecord[];
+  operationJobs?: OperationJob[];
+  authActionTokens?: AuthActionTokenRecord[];
+  webhookDeliveries?: WebhookDeliveryRecord[];
 };
 
 export class JsonStore {
   private state!: StoreState;
   private indexes = new Map<string, RepositoryIndex>();
+  private readonly persistence: StatePersistence;
+  private saveQueue: Promise<void> = Promise.resolve();
 
-  constructor(private readonly filePath: string) {}
+  constructor(filePath: string, databaseUrl?: string) {
+    this.persistence = createStatePersistence(filePath, databaseUrl);
+  }
 
   async init() {
-    await fs.mkdir(path.dirname(this.filePath), { recursive: true });
-    try {
-      const raw = await fs.readFile(this.filePath, "utf8");
+    await this.persistence.init();
+    const raw = await this.persistence.load();
+    if (raw) {
       this.state = JSON.parse(raw) as StoreState;
       this.state.annotations ??= [];
       this.state.auditEvents ??= [];
@@ -195,7 +241,10 @@ export class JsonStore {
       this.state.architectureDecisions ??= [];
       this.state.assistantConversations ??= [];
       this.state.assistantMessages ??= [];
-    } catch {
+      this.state.operationJobs ??= [];
+      this.state.authActionTokens ??= [];
+      this.state.webhookDeliveries ??= [];
+    } else {
       this.state = await seedState();
       await this.save();
     }
@@ -209,7 +258,29 @@ export class JsonStore {
   }
 
   async save() {
-    await fs.writeFile(this.filePath, JSON.stringify(this.state, null, 2), "utf8");
+    const serialized = JSON.stringify(this.state, null, 2);
+    const pending = this.saveQueue.then(() => this.persistence.save(serialized));
+    this.saveQueue = pending.catch(() => undefined);
+    await pending;
+  }
+
+  persistenceInfo() {
+    return { provider: this.persistence.provider, durable: this.persistence.durable };
+  }
+
+  async persistenceHealth(): Promise<PersistenceHealth> {
+    await this.saveQueue;
+    return this.persistence.health();
+  }
+
+  async verifyPersistence() {
+    await this.save();
+    return this.persistence.health();
+  }
+
+  async close() {
+    await this.saveQueue;
+    await this.persistence.close();
   }
 
   async resetWithSeed() {
@@ -234,6 +305,10 @@ export class JsonStore {
 
   getUserRecord(id: string) {
     return this.state.users.find((user) => user.id === id) ?? null;
+  }
+
+  isEmailVerified(userId: string) {
+    return Boolean(this.getUserRecord(userId)?.emailVerifiedAt);
   }
 
   async createUser(input: { name: string; email: string; password: string }) {
@@ -280,6 +355,69 @@ export class JsonStore {
     }
   }
 
+  listRefreshTokens(userId: string) {
+    return this.state.refreshTokens
+      .filter((token) => token.userId === userId)
+      .map(({ tokenHash: _tokenHash, ...token }) => token)
+      .sort((a, b) => b.expiresAt.localeCompare(a.expiresAt));
+  }
+
+  async revokeAllRefreshTokens(userId: string, exceptId?: string) {
+    const now = new Date().toISOString();
+    let revoked = 0;
+    for (const token of this.state.refreshTokens) {
+      if (token.userId === userId && token.id !== exceptId && !token.revokedAt) {
+        token.revokedAt = now;
+        revoked += 1;
+      }
+    }
+    if (revoked > 0) await this.save();
+    return revoked;
+  }
+
+  async updateUserPassword(userId: string, password: string) {
+    const user = this.getUserRecord(userId);
+    if (!user) return false;
+    user.passwordHash = await bcrypt.hash(password, 12);
+    await this.revokeAllRefreshTokens(userId);
+    await this.save();
+    return true;
+  }
+
+  async markEmailVerified(userId: string) {
+    const user = this.getUserRecord(userId);
+    if (!user) return false;
+    user.emailVerifiedAt = new Date().toISOString();
+    await this.save();
+    return true;
+  }
+
+  async addAuthActionToken(input: Omit<AuthActionTokenRecord, "id" | "createdAt">) {
+    this.state.authActionTokens ??= [];
+    const now = new Date().toISOString();
+    for (const token of this.state.authActionTokens) {
+      if (token.userId === input.userId && token.kind === input.kind && !token.consumedAt) token.consumedAt = now;
+    }
+    const record: AuthActionTokenRecord = { ...input, id: crypto.randomUUID(), createdAt: now };
+    this.state.authActionTokens.unshift(record);
+    this.state.authActionTokens = this.state.authActionTokens.slice(0, 500);
+    await this.save();
+    return record;
+  }
+
+  async consumeAuthActionToken(kind: AuthActionTokenRecord["kind"], tokenHash: string) {
+    const record = (this.state.authActionTokens ?? []).find((candidate) =>
+      candidate.kind === kind &&
+      candidate.tokenHash === tokenHash &&
+      !candidate.consumedAt &&
+      Date.parse(candidate.expiresAt) > Date.now()
+    );
+    if (!record) return null;
+    record.consumedAt = new Date().toISOString();
+    await this.save();
+    return record;
+  }
+
   listPublicProjects(search = "") {
     const needle = search.trim().toLowerCase();
     return this.state.projects.filter((project) => {
@@ -304,6 +442,11 @@ export class JsonStore {
 
   getProjectBySlug(slug: string) {
     return this.state.projects.find((project) => project.slug === slug) ?? null;
+  }
+
+  findProjectsByRepositoryUrl(repoUrl: string) {
+    const normalized = normalizeRepositoryUrl(repoUrl);
+    return this.state.projects.filter((project) => project.repoUrl && normalizeRepositoryUrl(project.repoUrl) === normalized);
   }
 
   getRole(projectId: string, userId?: string | null): ProjectRole | null {
@@ -848,10 +991,83 @@ export class JsonStore {
   async recordAudit(input: Omit<AuditEvent, "id" | "createdAt">) {
     this.state.auditEvents.unshift({ ...input, id: crypto.randomUUID(), createdAt: new Date().toISOString() });
   }
+
+  listOperationJobs(projectId: string, limit = 30) {
+    return (this.state.operationJobs ?? []).filter((job) => job.projectId === projectId).slice(0, limit);
+  }
+
+  listPendingOperationJobs() {
+    return (this.state.operationJobs ?? []).filter((job) => job.status === "queued" || job.status === "running");
+  }
+
+  getOperationJob(id: string) {
+    return (this.state.operationJobs ?? []).find((job) => job.id === id) ?? null;
+  }
+
+  async createOperationJob(input: { projectId: string; type: OperationJobType; createdBy: string; maxAttempts?: number }) {
+    const job: OperationJob = {
+      id: crypto.randomUUID(),
+      projectId: input.projectId,
+      type: input.type,
+      status: "queued",
+      progress: 0,
+      attempts: 0,
+      maxAttempts: input.maxAttempts ?? 3,
+      createdBy: input.createdBy,
+      createdAt: new Date().toISOString()
+    };
+    this.state.operationJobs ??= [];
+    this.state.operationJobs.unshift(job);
+    this.state.operationJobs = this.state.operationJobs.slice(0, 500);
+    await this.recordAudit({ projectId: job.projectId, userId: job.createdBy, action: "operations.job_queued", metadata: { jobId: job.id, type: job.type } });
+    await this.save();
+    return job;
+  }
+
+  async updateOperationJob(id: string, patch: Partial<Omit<OperationJob, "id" | "projectId" | "type" | "createdBy" | "createdAt">>) {
+    const job = this.getOperationJob(id);
+    if (!job) return null;
+    Object.assign(job, patch);
+    await this.save();
+    return job;
+  }
+
+  async cancelOperationJob(projectId: string, id: string) {
+    const job = this.getOperationJob(id);
+    if (!job || job.projectId !== projectId || !["queued", "running"].includes(job.status)) return null;
+    job.status = "cancelled";
+    job.completedAt = new Date().toISOString();
+    await this.recordAudit({ projectId, action: "operations.job_cancelled", metadata: { jobId: id, type: job.type } });
+    await this.save();
+    return job;
+  }
+
+  getWebhookDelivery(id: string) {
+    return (this.state.webhookDeliveries ?? []).find((delivery) => delivery.id === id) ?? null;
+  }
+
+  async recordWebhookDelivery(input: Omit<WebhookDeliveryRecord, "receivedAt">) {
+    const existing = this.getWebhookDelivery(input.id);
+    if (existing) return existing;
+    const delivery: WebhookDeliveryRecord = { ...input, receivedAt: new Date().toISOString() };
+    this.state.webhookDeliveries ??= [];
+    this.state.webhookDeliveries.unshift(delivery);
+    this.state.webhookDeliveries = this.state.webhookDeliveries.slice(0, 1000);
+    await this.save();
+    return delivery;
+  }
+
+  async updateWebhookDelivery(id: string, patch: Partial<Pick<WebhookDeliveryRecord, "status" | "processedAt" | "projectIds">>) {
+    const delivery = this.getWebhookDelivery(id);
+    if (!delivery) return null;
+    Object.assign(delivery, patch);
+    await this.save();
+    return delivery;
+  }
 }
 
-export async function createStore(filePath: string) {
-  return new JsonStore(filePath).init();
+export async function createStore(filePath: string, databaseUrl?: string) {
+  return new JsonStore(filePath, databaseUrl).init();
 }
 
 function publicUser(user: UserRecord): PublicUser {
@@ -862,6 +1078,10 @@ function publicUser(user: UserRecord): PublicUser {
     avatarUrl: user.avatarUrl,
     createdAt: user.createdAt
   };
+}
+
+function normalizeRepositoryUrl(value: string) {
+  return value.trim().toLowerCase().replace(/\.git$/, "").replace(/\/$/, "");
 }
 
 async function seedState(): Promise<StoreState> {
