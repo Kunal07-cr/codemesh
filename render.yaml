@@ -60,4 +60,17 @@ services:
         sync: false
       - key: GITHUB_PRIVATE_KEY_BASE64
         sync: false
+      - key: SANDBOX_EXECUTION_ENABLED
+        value: "false"
+      - key: SANDBOX_TIMEOUT_MS
+        value: "30000"
+      - key: OIDC_ISSUER_URL
+        sync: false
+      - key: OIDC_CLIENT_ID
+        sync: false
+      - key: OIDC_CLIENT_SECRET
+        sync: false
+      - key: SCIM_BEARER_TOKEN
+        sync: false
+
 

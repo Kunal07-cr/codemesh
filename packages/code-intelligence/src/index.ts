@@ -11,6 +11,7 @@ import type {
 } from "@codemesh/shared";
 
 export * from "./advanced.js";
+export * from "./delivery.js";
 
 export type RepositoryIndex = {
   projectId: string;
@@ -1431,3 +1432,4 @@ function relatedFilePaths(graph: RepositoryGraph, filePath: string): string[] {
     .filter((node) => relatedIds.has(node.id) && node.type === "file" && node.filePath)
     .map((node) => node.filePath!);
 }
+

@@ -36,6 +36,8 @@ const envSchema = z.object({
   APP_PUBLIC_URL: optionalEnvUrl,
   AI_REQUESTS_PER_MINUTE: z.coerce.number().int().min(1).max(1000).default(60),
   JOB_CONCURRENCY: z.coerce.number().int().min(1).max(10).default(2),
+  SANDBOX_EXECUTION_ENABLED: envBoolean.default(false),
+  SANDBOX_TIMEOUT_MS: z.coerce.number().int().min(1_000).max(300_000).default(30_000),
   GEMINI_API_KEY: z.string().optional(),
   GEMINI_MODEL: z.string().optional(),
   LLM_BASE_URL: optionalEnvUrl,
@@ -49,7 +51,11 @@ const envSchema = z.object({
   GITHUB_CLIENT_ID: z.string().optional(),
   GITHUB_CLIENT_SECRET: z.string().optional(),
   GITHUB_WEBHOOK_SECRET: z.string().optional(),
-  GITHUB_PRIVATE_KEY_BASE64: z.string().optional()
+  GITHUB_PRIVATE_KEY_BASE64: z.string().optional(),
+  OIDC_ISSUER_URL: optionalEnvUrl,
+  OIDC_CLIENT_ID: optionalEnvString,
+  OIDC_CLIENT_SECRET: optionalEnvString,
+  SCIM_BEARER_TOKEN: optionalEnvString
 });
 
 export type AppConfig = ReturnType<typeof loadConfig>;
@@ -76,7 +82,10 @@ export function loadConfig(env = process.env) {
     ),
     objectStorageConfigured: Boolean(parsed.S3_BUCKET && parsed.S3_ACCESS_KEY_ID && parsed.S3_SECRET_ACCESS_KEY),
     emailDeliveryConfigured: Boolean(parsed.EMAIL_WEBHOOK_URL),
+    enterpriseIdentityConfigured: Boolean(parsed.OIDC_ISSUER_URL && parsed.OIDC_CLIENT_ID && parsed.OIDC_CLIENT_SECRET),
+    scimConfigured: Boolean(parsed.SCIM_BEARER_TOKEN),
     publicUrl: parsed.APP_PUBLIC_URL ?? parsed.API_ORIGIN,
     aiProvider: parsed.LLM_BASE_URL && parsed.LLM_MODEL ? `openai-compatible:${parsed.LLM_MODEL}` : parsed.GEMINI_API_KEY && parsed.GEMINI_MODEL ? `gemini:${parsed.GEMINI_MODEL}` : "local-repository"
   };
 }
+

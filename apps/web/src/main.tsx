@@ -6,6 +6,7 @@ import { AuthProvider } from "./lib/auth";
 import { router } from "./router";
 import "./styles.css";
 import "./landing.css";
+import "./delivery.css";
 import "@xyflow/react/dist/style.css";
 
 const queryClient = new QueryClient({

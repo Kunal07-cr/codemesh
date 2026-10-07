@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Bot, BrainCircuit, Check, Clipboard, Code2, FlaskConical, FolderPlus, GitPullRequest, Orbit, Play, ShieldCheck, Users } from "lucide-react";
+import { Bot, BrainCircuit, Check, Clipboard, Code2, FlaskConical, FolderPlus, GitPullRequest, KeyRound, Orbit, Play, Rocket, ShieldCheck, Users } from "lucide-react";
 
 const quickStart = `npm.cmd install
 npm.cmd run build
@@ -27,6 +27,10 @@ const apiGroups = [
   {
     title: "AI and review",
     routes: ["POST /api/projects/:projectId/ai/ask", "POST /api/projects/:projectId/ai/stream", "GET /api/projects/:projectId/ai/conversations", "GET /api/projects/:projectId/ai/dataset", "POST /api/projects/:projectId/patches/:patchId/apply", "POST /api/projects/:projectId/patches/:patchId/reject"]
+  },
+  {
+    title: "Delivery and agents",
+    routes: ["GET /api/projects/:projectId/delivery", "POST /api/projects/:projectId/delivery/reviews", "POST /api/projects/:projectId/delivery/sandbox", "POST /api/projects/:projectId/delivery/incidents", "POST /api/projects/:projectId/delivery/tokens", "POST /api/mcp"]
   }
 ];
 
@@ -48,6 +52,7 @@ export function DocsPage() {
               ["intelligence", "Graph intelligence"],
               ["labs", "Engineering Labs"],
               ["advanced", "Advanced Operations"],
+              ["delivery", "Delivery Hub"],
               ["assistant", "AI Assistant"],
               ["collaboration", "Collaboration"],
               ["api", "API reference"],
@@ -123,6 +128,17 @@ export function DocsPage() {
             </div>
           </DocSection>
 
+          <DocSection id="delivery" icon={Rocket} title="Delivery Hub">
+            <p>Delivery Hub turns repository intelligence into repeatable engineering workflows without replacing the existing graph, workspace, labs, or control room.</p>
+            <div className="grid gap-5 sm:grid-cols-2">
+              <Feature icon={GitPullRequest} title="Review and sync">Select changed files, calculate graph impact, generate targeted tests, and queue an incremental index refresh.</Feature>
+              <Feature icon={ShieldCheck} title="Secure verification">Run static gates everywhere. Repository commands execute only when a dedicated restricted worker is explicitly enabled.</Feature>
+              <Feature icon={KeyRound} title="MCP and VS Code">Create scoped, expiring agent tokens for repository search, impact analysis, documentation, incident tracing, and guarded plans.</Feature>
+              <Feature icon={Bot} title="Incidents and automation">Map stack traces to source, build response runbooks, and turn natural-language objectives into reviewable missions.</Feature>
+            </div>
+            <p>Owners can create expiring read-only architecture reports. Shared reports contain health and structure evidence, but never source contents, cookies, or credentials.</p>
+          </DocSection>
+
           <DocSection id="assistant" icon={Bot} title="AI Assistant">
             <p>The project overview includes an AI Assistant button. Select a repository file, then choose a mode:</p>
             <div className="grid gap-4 sm:grid-cols-3">
@@ -171,7 +187,7 @@ export function DocsPage() {
             <p>Alternatively, connect any OpenAI-compatible service such as Ollama, LM Studio, vLLM, or a hosted gateway. The endpoint must expose <code className="text-mint">/chat/completions</code>.</p>
             <CodeBlock code={compatibleConfig} />
             <p>The bundled assistant dataset loads automatically. Set <code className="text-mint">ASSISTANT_DATASET_PATH</code> only when you need to point the API at another directory using the same JSON schema.</p>
-            <p>GitHub pull-request publishing remains disabled until GitHub App credentials and the installation-token flow are configured. Local patch review and contributions continue to work without GitHub.</p>
+            <p>A configured GitHub App enables private-file refresh and pull-request Check annotations. Branch creation and upstream pull-request publishing remain separate write operations. Local review, MCP tools, and static verification continue to work without GitHub credentials.</p>
           </DocSection>
         </article>
       </div>
@@ -225,3 +241,4 @@ function Mode({ title, description }: { title: string; description: string }) {
 function Feature({ icon: Icon, title, children }: { icon: React.ElementType; title: string; children: React.ReactNode }) {
   return <div className="border-t border-line pt-4"><Icon className="h-4 w-4 text-mint" /><h3 className="mt-2 font-semibold text-white">{title}</h3><p className="mt-1 text-sm leading-6 text-steel">{children}</p></div>;
 }
+

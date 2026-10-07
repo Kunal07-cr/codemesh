@@ -10,6 +10,8 @@ Implemented in this repository:
 - Socket.IO + Yjs collaborative document updates, presence, and workspace chat.
 - Discussions, tasks, contribution status, repository imports, advanced code intelligence, and a visual Code Universe.
 - Production Center with readiness scoring, SLO telemetry, release/security gates, AI usage, integration state, and durable maintenance jobs.
+- Delivery Hub with graph-aware pull-request reviews, targeted test plans, incremental indexing, incident tracing, guarded automation missions, expiring reports, and a secure verification boundary.
+- MCP server and VS Code companion for scoped repository search, impact analysis, architecture documentation, incident tracing, and read-only change planning.
 - Atomic local persistence with transparent PostgreSQL state storage when `DATABASE_URL` is configured.
 - Optional Redis Socket.IO fan-out, S3-compatible encrypted repository archives, verified GitHub webhooks, and account-email delivery hooks.
 - Password recovery, email verification, session inventory/revocation, per-user AI limits, Prometheus metrics, CI, CodeQL, and Dependabot.
@@ -56,12 +58,14 @@ Without infrastructure variables, CodeMesh runs with an atomic JSON datastore an
 - `DATABASE_URL`: PostgreSQL-backed durable application state.
 - `REDIS_URL`: multi-instance Socket.IO fan-out.
 - `S3_*`: encrypted repository archive retention in S3, MinIO, or another compatible service.
-- `GITHUB_*`: HMAC-verified webhook intake and push-triggered repository operations.
+- `GITHUB_*`: HMAC-verified push and pull-request webhooks, installation-token access, incremental private-repository sync, and GitHub Check annotations.
+- `SANDBOX_*`: verification timeout and an explicit execution switch. Keep execution disabled on the API host; enable it only on a dedicated restricted worker.
+- `OIDC_*` and `SCIM_BEARER_TOKEN`: enterprise identity readiness controls.
 - `EMAIL_WEBHOOK_URL`: password-reset and email-verification delivery.
 - `METRICS_TOKEN`: bearer-protected Prometheus export at `/api/metrics`.
 - `LLM_*` or `GEMINI_*`: hosted model generation; grounded local repository answers remain available without a key.
 
-Project owners can inspect the active configuration, run maintenance jobs, and review release gates at `/projects/:projectId/operations`.
+Project owners can inspect production configuration at `/projects/:projectId/operations` and run delivery workflows at `/projects/:projectId/delivery`.
 
 ## Verification Results
 
@@ -88,7 +92,8 @@ and an email webhook can be enabled independently without rebuilding the image.
 
 ## Known Limitations
 
-- Private GitHub repository access and upstream pull-request creation still require a GitHub App installation-token flow; public imports and signed webhooks work now.
+- Upstream branch creation and pull-request publishing remain separate from the implemented GitHub Check workflow. Private content sync and PR annotations require a configured GitHub App installation.
+- Process execution is disabled by default. Static verification is available everywhere; untrusted repository commands belong on a dedicated container or microVM worker.
 - The PostgreSQL adapter persists the complete state transactionally as JSONB. The normalized Prisma schema remains the longer-term high-volume migration path.
 - Retrieval uses deterministic local lexical/hash-vector scoring unless a hosted provider is configured.
 - Durable jobs execute inside the API process. A dedicated worker service is the next scaling step for CPU-heavy indexing.
@@ -105,3 +110,4 @@ and an email webhook can be enabled independently without rebuilding the image.
 - `docs/gemini-setup.md`
 - `docs/deployment-backup.md`
 - `docs/research/literature-survey.md`
+

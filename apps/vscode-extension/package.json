@@ -1,0 +1,78 @@
+{
+  "name": "codemesh-vscode",
+  "displayName": "CodeMesh",
+  "description": "Source-linked repository search, impact analysis, and graph navigation for CodeMesh.",
+  "version": "0.1.0",
+  "private": true,
+  "publisher": "codemesh",
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "Other",
+    "Machine Learning"
+  ],
+  "main": "./extension.js",
+  "activationEvents": [
+    "onCommand:codemesh.openGraph",
+    "onCommand:codemesh.explainSelection",
+    "onCommand:codemesh.showImpact"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "codemesh.openGraph",
+        "title": "CodeMesh: Open Repository Graph",
+        "icon": "$(type-hierarchy)"
+      },
+      {
+        "command": "codemesh.explainSelection",
+        "title": "CodeMesh: Explain Selection",
+        "icon": "$(sparkle)"
+      },
+      {
+        "command": "codemesh.showImpact",
+        "title": "CodeMesh: Show File Impact",
+        "icon": "$(references)"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "codemesh.explainSelection",
+          "when": "editorHasSelection",
+          "group": "navigation@20"
+        },
+        {
+          "command": "codemesh.showImpact",
+          "when": "editorTextFocus",
+          "group": "navigation@21"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "CodeMesh",
+      "properties": {
+        "codemesh.endpoint": {
+          "type": "string",
+          "default": "http://localhost:4200/api/mcp",
+          "description": "CodeMesh MCP HTTP endpoint."
+        },
+        "codemesh.token": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Scoped token created in the CodeMesh Delivery Hub. Treat it as a secret."
+        },
+        "codemesh.projectId": {
+          "type": "string",
+          "default": "project-sample-taskpilot",
+          "description": "CodeMesh project ID used for graph links."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "check": "node --check extension.js"
+  }
+}
+

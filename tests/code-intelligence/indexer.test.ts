@@ -10,6 +10,12 @@ import {
   buildOnboardingJourney,
   buildReviewCouncil,
   buildAiEvaluation,
+  buildArchitectureDocumentation,
+  buildAutomationMission,
+  buildGeneratedTestPlans,
+  buildIncidentReport,
+  buildIncrementalIndexPlan,
+  buildPullRequestReview,
   buildPullRequestRisk,
   buildRuntimeTracePreview,
   buildSampleRepoFiles,
@@ -157,4 +163,29 @@ describe("code intelligence", () => {
     expect(evaluation.benchmarkCases.length).toBeGreaterThan(0);
     expect(decision.evidenceFiles.length).toBeGreaterThan(0);
   });
+
+  it("builds delivery, incident, documentation, and incremental-index evidence", () => {
+    const projectId = "project-delivery";
+    const index = indexRepository(projectId, SAMPLE_COMMIT, buildSampleRepoFiles(projectId));
+    const authFile = index.files.find((file) => file.path.includes("auth"))!.path;
+    const review = buildPullRequestReview(index, [authFile]);
+    const incremental = buildIncrementalIndexPlan(index, [authFile]);
+    const incident = buildIncidentReport(index, "Login failure", "Error in " + authFile + " while calling createSession");
+    const documentation = buildArchitectureDocumentation(index);
+    const tests = buildGeneratedTestPlans(index, [authFile]);
+    const mission = buildAutomationMission(index, "Add stable authentication error codes with focused tests");
+
+    expect(review.changedFiles).toEqual([authFile]);
+    expect(review.impactedFiles).toContain(authFile);
+    expect(review.checks.length).toBeGreaterThan(0);
+    expect(incremental.strategy).toBe("incremental");
+    expect(incremental.estimatedFilesAvoided).toBeGreaterThanOrEqual(0);
+    expect(incident.matchedFiles[0]?.path).toBe(authFile);
+    expect(incident.runbook).toHaveLength(4);
+    expect(documentation.mermaid).toContain("flowchart LR");
+    expect(documentation.modules.length).toBeGreaterThan(0);
+    expect(tests[0]?.changedFile).toBe(authFile);
+    expect(mission.plan.steps.length).toBeGreaterThan(0);
+  });
 });
+

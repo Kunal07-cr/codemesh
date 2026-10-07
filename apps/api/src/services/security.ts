@@ -115,7 +115,8 @@ export function csrfProtection(): RequestHandler {
       req.path.startsWith("/api/auth/password/forgot") ||
       req.path.startsWith("/api/auth/password/reset") ||
       req.path.startsWith("/api/auth/email/verify") ||
-      req.path.startsWith("/api/integrations/github/webhook")
+      req.path.startsWith("/api/integrations/github/webhook") ||
+      req.path.startsWith("/api/mcp")
     ) {
       next();
       return;
@@ -251,3 +252,4 @@ declare global {
     }
   }
 }
+

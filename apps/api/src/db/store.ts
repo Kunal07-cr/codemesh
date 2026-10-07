@@ -148,7 +148,7 @@ export type AssistantMessageRecord = {
   createdAt: string;
 };
 
-export type OperationJobType = "repository.reindex" | "quality.scan" | "persistence.verify" | "audit.export";
+export type OperationJobType = "repository.reindex" | "repository.incremental_sync" | "quality.scan" | "persistence.verify" | "audit.export";
 export type OperationJobStatus = "queued" | "running" | "succeeded" | "failed" | "cancelled";
 
 export type OperationJob = {
@@ -163,6 +163,7 @@ export type OperationJob = {
   createdAt: string;
   startedAt?: string;
   completedAt?: string;
+  metadata?: Record<string, unknown>;
   output?: Record<string, unknown>;
   error?: string;
 };
@@ -185,6 +186,56 @@ export type WebhookDeliveryRecord = {
   receivedAt: string;
   processedAt?: string;
   projectIds: string[];
+};
+
+export type DeliveryRunKind = "pull_request" | "sandbox" | "incremental_sync" | "incident" | "automation";
+export type DeliveryRun = {
+  id: string;
+  projectId: string;
+  kind: DeliveryRunKind;
+  status: "queued" | "running" | "passed" | "attention" | "blocked" | "failed";
+  title: string;
+  input: Record<string, unknown>;
+  result?: Record<string, unknown>;
+  createdBy: string;
+  createdAt: string;
+  completedAt?: string;
+};
+
+export type AgentAccessToken = {
+  id: string;
+  projectId: string;
+  userId: string;
+  name: string;
+  prefix: string;
+  tokenHash: string;
+  scopes: Array<"read" | "propose">;
+  createdAt: string;
+  expiresAt?: string;
+  lastUsedAt?: string;
+  revokedAt?: string;
+};
+
+export type ProjectShare = {
+  id: string;
+  projectId: string;
+  createdBy: string;
+  label: string;
+  tokenHash: string;
+  createdAt: string;
+  expiresAt: string;
+  revokedAt?: string;
+};
+
+export type UserNotification = {
+  id: string;
+  userId: string;
+  projectId?: string;
+  kind: "delivery" | "github" | "security" | "system";
+  title: string;
+  body: string;
+  createdAt: string;
+  readAt?: string;
 };
 
 export type StoreState = {
@@ -214,6 +265,10 @@ export type StoreState = {
   operationJobs?: OperationJob[];
   authActionTokens?: AuthActionTokenRecord[];
   webhookDeliveries?: WebhookDeliveryRecord[];
+  deliveryRuns?: DeliveryRun[];
+  agentAccessTokens?: AgentAccessToken[];
+  projectShares?: ProjectShare[];
+  notifications?: UserNotification[];
 };
 
 export class JsonStore {
@@ -244,6 +299,10 @@ export class JsonStore {
       this.state.operationJobs ??= [];
       this.state.authActionTokens ??= [];
       this.state.webhookDeliveries ??= [];
+      this.state.deliveryRuns ??= [];
+      this.state.agentAccessTokens ??= [];
+      this.state.projectShares ??= [];
+      this.state.notifications ??= [];
     } else {
       this.state = await seedState();
       await this.save();
@@ -534,6 +593,35 @@ export class JsonStore {
     this.captureRepositorySnapshot(projectId, source);
     this.captureQualitySnapshot(projectId, "Repository import");
     await this.save();
+  }
+
+  async applyIncrementalProjectFiles(projectId: string, upserts: RepoFile[], removedPaths: string[], commitSha: string) {
+    const project = this.getProject(projectId);
+    if (!project) throw new Error(`Project ${projectId} not found`);
+    const removed = new Set(removedPaths.map(normalizeRepositoryPath));
+    const updateByPath = new Map(upserts.map((file) => [normalizeRepositoryPath(file.path), { ...file, projectId, path: normalizeRepositoryPath(file.path) }]));
+    this.state.files = this.state.files.filter((file) => file.projectId !== projectId || (!removed.has(file.path) && !updateByPath.has(file.path)));
+    this.state.files.push(...updateByPath.values());
+    this.state.workspaceDocs = this.state.workspaceDocs.filter((doc) =>
+      doc.projectId !== projectId || (!removed.has(doc.path) && !updateByPath.has(doc.path))
+    );
+    const now = new Date().toISOString();
+    for (const file of updateByPath.values()) {
+      this.state.workspaceDocs.push({ projectId, workspaceId: "main", path: file.path, content: file.content, version: 1, updatedAt: now });
+    }
+    project.commitSha = commitSha;
+    project.languages = [...new Set(this.listFiles(projectId).map((file) => file.language))].sort();
+    project.updatedAt = now;
+    const index = this.rebuildIndex(projectId);
+    this.captureRepositorySnapshot(projectId, project.repositorySource, true);
+    this.captureQualitySnapshot(projectId, "Incremental repository sync");
+    await this.recordAudit({
+      projectId,
+      action: "repository.incremental_sync",
+      metadata: { commitSha, upserted: updateByPath.size, removed: removed.size, files: index.files.length, symbols: index.symbols.length }
+    });
+    await this.save();
+    return { upserted: updateByPath.size, removed: removed.size, index };
   }
 
   async updateProjectRepository(projectId: string, repoUrl: string) {
@@ -1004,7 +1092,7 @@ export class JsonStore {
     return (this.state.operationJobs ?? []).find((job) => job.id === id) ?? null;
   }
 
-  async createOperationJob(input: { projectId: string; type: OperationJobType; createdBy: string; maxAttempts?: number }) {
+  async createOperationJob(input: { projectId: string; type: OperationJobType; createdBy: string; maxAttempts?: number; metadata?: Record<string, unknown> }) {
     const job: OperationJob = {
       id: crypto.randomUUID(),
       projectId: input.projectId,
@@ -1014,7 +1102,8 @@ export class JsonStore {
       attempts: 0,
       maxAttempts: input.maxAttempts ?? 3,
       createdBy: input.createdBy,
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
+      metadata: input.metadata
     };
     this.state.operationJobs ??= [];
     this.state.operationJobs.unshift(job);
@@ -1064,6 +1153,123 @@ export class JsonStore {
     await this.save();
     return delivery;
   }
+
+  listDeliveryRuns(projectId: string, kind?: DeliveryRunKind, limit = 60) {
+    return (this.state.deliveryRuns ?? [])
+      .filter((run) => run.projectId === projectId && (!kind || run.kind === kind))
+      .slice(0, limit);
+  }
+
+  async saveDeliveryRun(input: Omit<DeliveryRun, "id" | "createdAt">) {
+    const run: DeliveryRun = { ...input, id: crypto.randomUUID(), createdAt: new Date().toISOString() };
+    this.state.deliveryRuns ??= [];
+    this.state.deliveryRuns.unshift(run);
+    this.state.deliveryRuns = this.state.deliveryRuns.slice(0, 800);
+    await this.recordAudit({ projectId: run.projectId, userId: run.createdBy, action: `delivery.${run.kind}`, metadata: { runId: run.id, status: run.status, title: run.title } });
+    await this.notifyProject(run.projectId, {
+      kind: "delivery",
+      title: `${deliveryKindLabel(run.kind)} ${run.status}`,
+      body: `${run.title} finished with status ${run.status}.`
+    });
+    await this.save();
+    return run;
+  }
+
+  listAgentAccessTokens(projectId: string) {
+    return (this.state.agentAccessTokens ?? []).filter((token) => token.projectId === projectId).slice(0, 100);
+  }
+
+  getAgentAccessTokenByHash(tokenHash: string) {
+    const token = (this.state.agentAccessTokens ?? []).find((candidate) => candidate.tokenHash === tokenHash) ?? null;
+    if (!token || token.revokedAt || (token.expiresAt && Date.parse(token.expiresAt) <= Date.now())) return null;
+    return token;
+  }
+
+  async createAgentAccessToken(input: Omit<AgentAccessToken, "id" | "createdAt">) {
+    const token: AgentAccessToken = { ...input, id: crypto.randomUUID(), createdAt: new Date().toISOString() };
+    this.state.agentAccessTokens ??= [];
+    this.state.agentAccessTokens.unshift(token);
+    this.state.agentAccessTokens = this.state.agentAccessTokens.slice(0, 500);
+    await this.recordAudit({ projectId: token.projectId, userId: token.userId, action: "agent.token_created", metadata: { tokenId: token.id, name: token.name, scopes: token.scopes } });
+    await this.save();
+    return token;
+  }
+
+  async touchAgentAccessToken(id: string) {
+    const token = (this.state.agentAccessTokens ?? []).find((candidate) => candidate.id === id);
+    if (!token) return null;
+    token.lastUsedAt = new Date().toISOString();
+    await this.save();
+    return token;
+  }
+
+  async revokeAgentAccessToken(projectId: string, id: string, userId: string) {
+    const token = (this.state.agentAccessTokens ?? []).find((candidate) => candidate.id === id && candidate.projectId === projectId);
+    if (!token || token.revokedAt) return null;
+    token.revokedAt = new Date().toISOString();
+    await this.recordAudit({ projectId, userId, action: "agent.token_revoked", metadata: { tokenId: id, name: token.name } });
+    await this.save();
+    return token;
+  }
+
+  listProjectShares(projectId: string) {
+    return (this.state.projectShares ?? []).filter((share) => share.projectId === projectId).slice(0, 100);
+  }
+
+  getProjectShareByHash(tokenHash: string) {
+    const share = (this.state.projectShares ?? []).find((candidate) => candidate.tokenHash === tokenHash) ?? null;
+    if (!share || share.revokedAt || Date.parse(share.expiresAt) <= Date.now()) return null;
+    return share;
+  }
+
+  async createProjectShare(input: Omit<ProjectShare, "id" | "createdAt">) {
+    const share: ProjectShare = { ...input, id: crypto.randomUUID(), createdAt: new Date().toISOString() };
+    this.state.projectShares ??= [];
+    this.state.projectShares.unshift(share);
+    this.state.projectShares = this.state.projectShares.slice(0, 300);
+    await this.recordAudit({ projectId: share.projectId, userId: share.createdBy, action: "share.created", metadata: { shareId: share.id, label: share.label, expiresAt: share.expiresAt } });
+    await this.save();
+    return share;
+  }
+
+  async revokeProjectShare(projectId: string, id: string, userId: string) {
+    const share = (this.state.projectShares ?? []).find((candidate) => candidate.id === id && candidate.projectId === projectId);
+    if (!share || share.revokedAt) return null;
+    share.revokedAt = new Date().toISOString();
+    await this.recordAudit({ projectId, userId, action: "share.revoked", metadata: { shareId: id, label: share.label } });
+    await this.save();
+    return share;
+  }
+
+  listNotifications(userId: string, limit = 40) {
+    return (this.state.notifications ?? []).filter((notification) => notification.userId === userId).slice(0, limit);
+  }
+
+  async createNotification(input: Omit<UserNotification, "id" | "createdAt">) {
+    const notification: UserNotification = { ...input, id: crypto.randomUUID(), createdAt: new Date().toISOString() };
+    this.state.notifications ??= [];
+    this.state.notifications.unshift(notification);
+    this.state.notifications = this.state.notifications.slice(0, 1_500);
+    await this.save();
+    return notification;
+  }
+
+  async markNotificationRead(userId: string, id: string) {
+    const notification = (this.state.notifications ?? []).find((candidate) => candidate.id === id && candidate.userId === userId);
+    if (!notification) return null;
+    notification.readAt ??= new Date().toISOString();
+    await this.save();
+    return notification;
+  }
+
+  private async notifyProject(projectId: string, input: Pick<UserNotification, "kind" | "title" | "body">) {
+    const now = new Date().toISOString();
+    this.state.notifications ??= [];
+    for (const member of this.listMembers(projectId)) {
+      this.state.notifications.unshift({ id: crypto.randomUUID(), userId: member.userId, projectId, ...input, createdAt: now });
+    }
+    this.state.notifications = this.state.notifications.slice(0, 1_500);
+  }
 }
 
 export async function createStore(filePath: string, databaseUrl?: string) {
@@ -1082,6 +1288,20 @@ function publicUser(user: UserRecord): PublicUser {
 
 function normalizeRepositoryUrl(value: string) {
   return value.trim().toLowerCase().replace(/\.git$/, "").replace(/\/$/, "");
+}
+
+function normalizeRepositoryPath(value: string) {
+  return value.trim().replace(/\\/g, "/").replace(/^\.\//, "");
+}
+
+function deliveryKindLabel(kind: DeliveryRunKind) {
+  return ({
+    pull_request: "Pull request review",
+    sandbox: "Verification run",
+    incremental_sync: "Incremental sync",
+    incident: "Incident trace",
+    automation: "Automation mission"
+  } as const)[kind];
 }
 
 async function seedState(): Promise<StoreState> {
@@ -1243,3 +1463,4 @@ function slugify(input: string) {
     .replace(/^-|-$/g, "")
     .slice(0, 60);
 }
+

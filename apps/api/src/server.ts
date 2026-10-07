@@ -24,7 +24,11 @@ import { ArtifactStorage } from "./services/artifactStorage.js";
 import { OperationQueue } from "./services/jobQueue.js";
 import { MetricsRegistry } from "./services/metrics.js";
 import { integrationRoutes } from "./routes/integrations.js";
+import { deliveryRoutes, publicDeliveryRoutes } from "./routes/delivery.js";
+import { mcpRoutes } from "./routes/mcp.js";
 import { metricsRoutes, operationRoutes } from "./routes/operations.js";
+import { GitHubAppService } from "./services/githubApp.js";
+import { SandboxRunner } from "./services/sandboxRunner.js";
 
 const pinoHttp = pinoHttpModule as unknown as (options: Record<string, unknown>) => express.RequestHandler;
 
@@ -39,6 +43,8 @@ export async function createApp() {
   const server = http.createServer(app);
   const metrics = new MetricsRegistry();
   const artifacts = new ArtifactStorage(config);
+  const github = new GitHubAppService(config);
+  const sandbox = new SandboxRunner(config);
 
   app.disable("x-powered-by");
   app.use(createRequestId());
@@ -79,12 +85,15 @@ export async function createApp() {
 
   app.use("/api", healthRoutes(config, store, artifacts, realtime, queue, Boolean(assistantDataset)));
   app.use("/api", metricsRoutes(config, metrics));
+  app.use("/api", publicDeliveryRoutes(store));
   app.use("/api/auth", authRoutes(config, store));
-  app.use("/api/integrations", integrationRoutes(config, store, queue));
+  app.use("/api/mcp", mcpRoutes(store));
+  app.use("/api/integrations", integrationRoutes(config, store, queue, github));
   app.use("/api/projects", projectRoutes(store, artifacts));
   app.use("/api/projects", advancedRoutes(store));
   app.use("/api/projects", collaborationRoutes(config, store));
   app.use("/api/projects", aiRoutes(config, store, assistantDataset));
+  app.use("/api/projects", deliveryRoutes(config, store, queue, sandbox, github));
   app.use("/api/projects", operationRoutes(config, store, queue, metrics, artifacts, realtime));
 
   const webDist = path.resolve(process.cwd(), "../web/dist");
@@ -97,7 +106,7 @@ export async function createApp() {
 
   app.use(errorHandler);
 
-  return { app, server, io: realtime.io, realtime, queue, metrics, artifacts, config, store, assistantDataset };
+  return { app, server, io: realtime.io, realtime, queue, metrics, artifacts, github, sandbox, config, store, assistantDataset };
 }
 
 if (fileURLToPath(import.meta.url) === path.resolve(process.argv[1] ?? "")) {
@@ -119,3 +128,4 @@ if (fileURLToPath(import.meta.url) === path.resolve(process.argv[1] ?? "")) {
   process.on("SIGINT", () => void shutdown("SIGINT"));
   process.on("SIGTERM", () => void shutdown("SIGTERM"));
 }
+

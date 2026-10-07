@@ -19,6 +19,8 @@ const ProjectAdvancedPage = lazy(() => import("./pages/ProjectAdvancedPage").the
 const ProjectUniversePage = lazy(() => import("./pages/ProjectUniversePage").then((module) => ({ default: module.ProjectUniversePage })));
 const ProjectControlRoomPage = lazy(() => import("./pages/ProjectControlRoomPage").then((module) => ({ default: module.ProjectControlRoomPage })));
 const ProjectOperationsPage = lazy(() => import("./pages/ProjectOperationsPage").then((module) => ({ default: module.ProjectOperationsPage })));
+const ProjectDeliveryPage = lazy(() => import("./pages/ProjectDeliveryPage").then((module) => ({ default: module.ProjectDeliveryPage })));
+const SharedReportPage = lazy(() => import("./pages/SharedReportPage").then((module) => ({ default: module.SharedReportPage })));
 
 export const router = createBrowserRouter([
   {
@@ -32,6 +34,10 @@ export const router = createBrowserRouter([
       { path: "docs", element: <DocsPage /> },
       { path: "account/reset-password", element: <AccountActionPage mode="reset" /> },
       { path: "account/verify-email", element: <AccountActionPage mode="verify" /> },
+      {
+        path: "share/:token",
+        element: <Suspense fallback={<LoadingState label="Opening shared report" />}><SharedReportPage /></Suspense>
+      },
       { path: "projects/:projectId", element: <ProjectOverviewPage /> },
       { path: "projects/:projectId/assistant", element: <AssistantPage /> },
       {
@@ -59,7 +65,12 @@ export const router = createBrowserRouter([
         path: "projects/:projectId/operations",
         element: <Suspense fallback={<LoadingState label="Opening Production Center" />}><ProjectOperationsPage /></Suspense>
       },
+      {
+        path: "projects/:projectId/delivery",
+        element: <Suspense fallback={<LoadingState label="Preparing Delivery Hub" />}><ProjectDeliveryPage /></Suspense>
+      },
       { path: "projects/:projectId/:section", element: <ProjectActivityPage /> }
     ]
   }
 ]);
+

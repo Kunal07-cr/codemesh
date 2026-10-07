@@ -49,3 +49,31 @@ Unsafe requests require `x-csrf-token` matching the `cm_csrf` cookie, except log
 - `POST /api/projects/:projectId/contributions/:contributionId/create-pr`
 
 GitHub PR creation currently returns a not-configured or not-completed state unless the GitHub App flow is finished.
+
+## Delivery Hub
+
+- `GET /api/projects/:projectId/delivery`
+- `POST /api/projects/:projectId/delivery/reviews`
+- `POST /api/projects/:projectId/delivery/sandbox`
+- `POST /api/projects/:projectId/delivery/sync`
+- `POST /api/projects/:projectId/delivery/incidents`
+- `POST /api/projects/:projectId/delivery/automation`
+- `POST /api/projects/:projectId/delivery/tokens`
+- `DELETE /api/projects/:projectId/delivery/tokens/:tokenId`
+- `POST /api/projects/:projectId/delivery/shares`
+- `DELETE /api/projects/:projectId/delivery/shares/:shareId`
+- `GET /api/shares/:token`
+
+## MCP
+
+`POST /api/mcp` implements authenticated JSON-RPC over HTTP. Use a `Bearer cmcp_*` token created in Delivery Hub.
+
+Available tools include repository search, impact analysis, repository health, architecture documentation, generated test plans, incident tracing, and scoped change planning. MCP resources expose non-sensitive indexed files through `codemesh://` URIs.
+
+## GitHub Integration
+
+- `GET /api/integrations/github/status`
+- `POST /api/integrations/github/webhook`
+
+The webhook requires `x-hub-signature-256`. Push events trigger incremental content sync and pull-request events create graph-aware GitHub Checks when installation credentials are configured.
+

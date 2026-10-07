@@ -1,5 +1,5 @@
 import crypto from "node:crypto";
-import { analyzeRepository } from "@codemesh/code-intelligence";
+import { analyzeRepository, buildIncrementalIndexPlan } from "@codemesh/code-intelligence";
 import type { JsonStore, OperationJob, OperationJobType } from "../db/store.js";
 import type { MetricsRegistry } from "./metrics.js";
 
@@ -25,8 +25,8 @@ export class OperationQueue {
     await this.tick();
   }
 
-  async enqueue(projectId: string, type: OperationJobType, createdBy: string) {
-    const job = await this.store.createOperationJob({ projectId, type, createdBy });
+  async enqueue(projectId: string, type: OperationJobType, createdBy: string, metadata?: Record<string, unknown>) {
+    const job = await this.store.createOperationJob({ projectId, type, createdBy, metadata });
     void this.tick();
     return job;
   }
@@ -108,6 +108,25 @@ export class OperationQueue {
       await this.store.captureLabSnapshot(job.projectId, job.createdBy);
       return { files: index.files.length, symbols: index.symbols.length, relationships: index.graph.edges.length };
     }
+    if (job.type === "repository.incremental_sync") {
+      const changedPaths = Array.isArray(job.metadata?.changedPaths)
+        ? job.metadata.changedPaths.filter((value): value is string => typeof value === "string")
+        : [];
+      const before = this.store.getIndex(job.projectId);
+      const plan = buildIncrementalIndexPlan(before, changedPaths);
+      const index = this.store.rebuildIndex(job.projectId);
+      await this.store.captureLabSnapshot(job.projectId, job.createdBy);
+      return {
+        strategy: plan.strategy,
+        changedFiles: plan.changedFiles.length,
+        affectedFiles: plan.affectedFiles.length,
+        filesAvoided: plan.estimatedFilesAvoided,
+        files: index.files.length,
+        symbols: index.symbols.length,
+        relationships: index.graph.edges.length,
+        commitSha: job.metadata?.commitSha
+      };
+    }
     if (job.type === "quality.scan") {
       const report = analyzeRepository(this.store.getIndex(job.projectId));
       return {
@@ -127,3 +146,4 @@ export class OperationQueue {
     return { records: events.length, sha256: digest, generatedAt: new Date().toISOString() };
   }
 }
+

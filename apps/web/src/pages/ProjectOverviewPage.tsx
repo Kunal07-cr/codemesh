@@ -1,6 +1,6 @@
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { Activity, Bot, BrainCircuit, Code2, FlaskConical, Gauge, GitBranch, GitFork, MessageSquare, Orbit, ServerCog, Settings, ShieldCheck, Split, Users, Waypoints } from "lucide-react";
+import { Activity, Bot, BrainCircuit, Code2, FlaskConical, Gauge, GitBranch, GitFork, MessageSquare, Orbit, Rocket, ServerCog, Settings, ShieldCheck, Split, Users, Waypoints } from "lucide-react";
 import type { Permission, Project, ProjectMember, ProjectRole, PublicUser } from "@codemesh/shared";
 import { LoadingState } from "../components/LoadingState";
 import { StatusPill } from "../components/StatusPill";
@@ -77,6 +77,7 @@ export function ProjectOverviewPage() {
           { icon: FlaskConical, label: "Engineering Labs", to: "labs", tone: "cm-tone-amber", detail: "Simulate impact and review repository evidence." },
           { icon: Orbit, label: "Advanced Operations", to: "advanced", tone: "cm-tone-violet", detail: "Plan, trace, gate, secure, and evaluate changes." },
           { icon: Gauge, label: "Mesh Control Room", to: "control-room", tone: "cm-tone-coral", detail: "Bring sync, security, Copilot, tasks, and team signals together." },
+          { icon: Rocket, label: "Delivery Hub", to: "delivery", tone: "cm-tone-rose", detail: "Review, verify, sync, trace incidents, and connect engineering agents." },
           ...(data.permissions.includes("project.manage") ? [{ icon: ServerCog, label: "Production Center", to: "operations", tone: "cm-tone-cyan", detail: "Operate persistence, SLOs, jobs, integrations, and release gates." }] : []),
           { icon: MessageSquare, label: "Discussions", to: "discussions", tone: "cm-tone-cyan", detail: "Keep technical decisions visible to the team." },
           { icon: Split, label: "Tasks", to: "tasks", tone: "cm-tone-amber", detail: "Plan and track focused engineering work." },
@@ -149,3 +150,4 @@ function healthScore(edges: number, nodes: number) {
 function formatNumber(value: number) {
   return new Intl.NumberFormat().format(value);
 }
+
