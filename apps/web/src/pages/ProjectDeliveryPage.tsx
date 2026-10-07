@@ -632,7 +632,7 @@ function AgentsView(props: {
   return (
     <div className="grid gap-8 xl:grid-cols-2">
       <section>
-        <SectionTitle icon={Bot} eyebrow="Model Context Protocol" title="Connect engineering agents" detail="Issue scoped, revocable credentials for repository search, impact analysis, architecture docs, incident tracing, and change planning." />
+        <SectionTitle icon={Bot} eyebrow="Model Context Protocol" title="Connect engineering agents" detail="Issue scoped, revocable credentials for precise source spans, graph queries, impact analysis, architecture docs, incident tracing, and change planning." />
         <label className="mt-5 block text-xs text-steel">Token name<input className="field mt-1" value={props.tokenName} onChange={(event) => props.setTokenName(event.target.value)} /></label>
         <button className="action-primary mt-3" type="button" disabled={props.pending || props.tokenName.trim().length < 3} onClick={props.create}><KeyRound className="h-4 w-4" /> Create 30-day token</button>
         {props.revealedToken && <SecretField label="Copy this token now. It is shown once." value={props.revealedToken} />}
@@ -640,9 +640,20 @@ function AgentsView(props: {
           <div className="text-xs uppercase text-steel">MCP endpoint</div>
           <CopyRow value={props.data.integrations.mcp.endpoint} />
           <div className="mt-2 font-mono text-[10px] text-steel">Protocol {props.data.integrations.mcp.protocolVersion}</div>
+          <div className="mt-3 flex flex-wrap gap-1.5">{["graph_ontology", "code_answer", "code_context", "search_code", "fetch_code", "query_context"].map((tool) => <span className="border border-line px-2 py-1 font-mono text-[9px] text-cyan" key={tool}>{tool}</span>)}</div>
         </div>
         <div className="mt-5 divide-y divide-line border-y border-line">
-          {props.data.agentTokens.map((token) => <div className="flex items-center gap-3 py-3" key={token.id}><KeyRound className={"h-4 w-4 " + (token.revokedAt ? "text-steel" : "text-mint")} /><div className="min-w-0 flex-1"><div className="truncate text-sm text-white">{token.name}</div><div className="font-mono text-[10px] text-steel">{token.prefix}... / {token.scopes.join(", ")}</div></div>{!token.revokedAt && <button className="cm-icon-button" title="Revoke token" type="button" onClick={() => props.revoke(token.id)}><Trash2 className="h-4 w-4" /></button>}</div>)}
+          {props.data.agentTokens.map((token) => (
+            <div className="flex items-center gap-3 py-3" key={token.id}>
+              <KeyRound className={"h-4 w-4 " + (token.revokedAt ? "text-steel" : token.lastUsedAt ? "text-mint" : "text-amber")} />
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-center gap-2"><span className="truncate text-sm text-white">{token.name}</span><span className={`font-mono text-[9px] uppercase ${token.revokedAt ? "text-steel" : token.lastUsedAt ? "text-mint" : "text-amber"}`}>{token.revokedAt ? "revoked" : token.lastUsedAt ? "handshake passed" : "awaiting handshake"}</span></div>
+                <div className="mt-1 font-mono text-[10px] text-steel">{token.prefix}... / {token.scopes.join(", ")}</div>
+                <div className="mt-1 text-[10px] text-steel">{token.lastUsedAt ? `Last verified ${new Date(token.lastUsedAt).toLocaleString()}` : "No successful MCP request recorded yet."}</div>
+              </div>
+              {!token.revokedAt && <button className="cm-icon-button" title="Revoke token" type="button" onClick={() => props.revoke(token.id)}><Trash2 className="h-4 w-4" /></button>}
+            </div>
+          ))}
         </div>
       </section>
       <section>
@@ -986,3 +997,4 @@ function isGood(status: string) {
 function isBad(status: string) {
   return ["block", "blocked", "failed", "critical", "high"].includes(status);
 }
+

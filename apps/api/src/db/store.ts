@@ -1214,6 +1214,16 @@ export class JsonStore {
     return token;
   }
 
+  async recordAgentToolCall(token: AgentAccessToken, tool: string, argumentsPreview?: string) {
+    await this.recordAudit({
+      projectId: token.projectId,
+      userId: token.userId,
+      action: "agent.tool_called",
+      metadata: { tokenId: token.id, agent: token.name, tool, argumentsPreview }
+    });
+    await this.save();
+  }
+
   async revokeAgentAccessToken(projectId: string, id: string, userId: string) {
     const token = (this.state.agentAccessTokens ?? []).find((candidate) => candidate.id === id && candidate.projectId === projectId);
     if (!token || token.revokedAt) return null;
@@ -1476,3 +1486,4 @@ function slugify(input: string) {
     .replace(/^-|-$/g, "")
     .slice(0, 60);
 }
+

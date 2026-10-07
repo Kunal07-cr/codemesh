@@ -12,7 +12,9 @@ import {
   buildAiEvaluation,
   buildArchitectureDocumentation,
   buildAutomationMission,
+  buildContextObservatory,
   buildFutureReconciliation,
+  buildGraphOntology,
   buildGeneratedTestPlans,
   buildIncidentReport,
   buildIncrementalIndexPlan,
@@ -23,6 +25,7 @@ import {
   buildSampleRepoFiles,
   buildSecurityWorkbench,
   buildTestPlans,
+  fetchCodeSpan,
   hashContent,
   isIndexableTextFile,
   isRepositoryTextFile,
@@ -31,8 +34,10 @@ import {
   generateArchitectureDecisionDraft,
   mapRuntimeTrace,
   planAutonomousChange,
+  queryRepositoryContext,
   SAMPLE_COMMIT,
   searchRepository,
+  searchExactCode,
   traceSecurityFlows,
   verifyVirtualSandbox
 } from "@codemesh/code-intelligence";
@@ -212,4 +217,40 @@ describe("code intelligence", () => {
     expect(awaiting.status).toBe("awaiting_change");
     expect(awaiting.calibrationScore).toBeNull();
   });
+
+  it("returns precise MCP context and a measurable context-efficiency receipt", () => {
+    const projectId = "project-context";
+    const index = indexRepository(projectId, SAMPLE_COMMIT, buildSampleRepoFiles(projectId));
+    const search = searchRepository(index, "authentication session", "graph", 4);
+    const ontology = buildGraphOntology(index);
+    const exact = searchExactCode(index, "createSession", 5);
+    const span = fetchCodeSpan(index, "src/auth/session.ts", 1, 12);
+    const graph = queryRepositoryContext(index, { selector: "src/auth/session.ts", relationship: "all", depth: 2 });
+    const observatory = buildContextObservatory(index, [{
+      id: "retrieval-one",
+      projectId,
+      question: "Where is authentication handled?",
+      mode: "graph",
+      chunkIds: search.hits.map((hit) => hit.chunk.id),
+      sourceRevision: SAMPLE_COMMIT,
+      model: "test-model",
+      embeddingModel: "local-hash-demo",
+      contextTokens: search.hits.reduce((total, hit) => total + hit.chunk.tokenCount, 0),
+      retrievalLatencyMs: 2,
+      generationLatencyMs: 9,
+      createdAt: new Date(0).toISOString()
+    }]);
+
+    expect(ontology.nodeKinds.find((kind) => kind.kind === "symbol")?.count).toBeGreaterThan(0);
+    expect(ontology.relationshipKinds.some((kind) => kind.kind === "imports")).toBe(true);
+    expect(exact[0]?.range.startLine).toBeGreaterThan(0);
+    expect(span?.content).toContain("createSession");
+    expect(graph.roots.length).toBeGreaterThan(0);
+    expect(graph.sourceSpans.some((item) => item.filePath === "src/auth/session.ts")).toBe(true);
+    expect(observatory.summary.questions).toBe(1);
+    expect(observatory.summary.avoidedTokens).toBeGreaterThanOrEqual(0);
+    expect(observatory.traces[0]?.spans.length).toBeGreaterThan(0);
+    expect(observatory.freshness.manifest).toMatch(/^[0-9a-f]{8}$/);
+  });
 });
+

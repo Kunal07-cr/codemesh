@@ -15,6 +15,7 @@ import {
   analyzeImpact,
   analyzeRepository,
   analyzeRepositoryHotspots,
+  buildContextObservatory,
   buildOnboardingJourney,
   buildReviewCouncil,
   buildSampleRepoFiles,
@@ -168,6 +169,7 @@ export function projectRoutes(store: JsonStore, artifacts?: ArtifactStorage) {
       const role = req.auth ? store.getRole(projectId, req.auth.user.id) : null;
       ok(res, {
         health: analyzeRepository(index),
+        context: buildContextObservatory(index, store.listRetrievals(projectId, 100), store.getWorkspaceDocs(projectId, "main")),
         search,
         activity: role ? store.listAuditEvents(projectId) : [],
         integrations: {
@@ -447,3 +449,4 @@ function summarizeProject(store: JsonStore, projectId: string, userId?: string):
     fileCount: store.listFiles(project.id).length
   };
 }
+

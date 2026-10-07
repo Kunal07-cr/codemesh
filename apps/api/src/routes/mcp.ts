@@ -4,9 +4,13 @@ import {
   analyzeRepository,
   buildArchitectureDocumentation,
   buildAutomationMission,
+  buildGraphOntology,
   buildGeneratedTestPlans,
   buildIncidentReport,
   buildRepositoryFutureSimulation,
+  fetchCodeSpan,
+  queryRepositoryContext,
+  searchExactCode,
   searchRepository
 } from "@codemesh/code-intelligence";
 import type { JsonStore } from "../db/store.js";
@@ -70,7 +74,7 @@ async function handleMcpRequest(
       protocolVersion: typeof params.protocolVersion === "string" ? params.protocolVersion : "2025-11-25",
       capabilities: { tools: { listChanged: false }, resources: { subscribe: false, listChanged: false }, prompts: { listChanged: false } },
       serverInfo: { name: "CodeMesh", version: "0.2.0", description: "Source-linked repository graph and delivery intelligence" },
-      instructions: "Use repository_search before requesting impact, tests, incidents, or a change plan. Cite returned file paths and ranges."
+      instructions: "Read graph_ontology once, then use code_context for questions, search_code for exact text, query_context for relationships, and fetch_code only for identified ranges. Cite every returned file path and range."
     };
   }
   if (method === "ping") return {};
@@ -108,6 +112,7 @@ async function handleMcpRequest(
     const name = String(params.name ?? "");
     const args = (params.arguments && typeof params.arguments === "object" ? params.arguments : {}) as Record<string, unknown>;
     const value = callTool(store, access, name, args);
+    await store.recordAgentToolCall(access, name, agentArgumentPreview(args));
     return { content: [{ type: "text", text: JSON.stringify(value, null, 2) }], structuredContent: value, isError: false };
   }
   throw new Error(`Unknown MCP method: ${method}`);
@@ -115,6 +120,48 @@ async function handleMcpRequest(
 
 function callTool(store: JsonStore, access: NonNullable<ReturnType<typeof authorizeMcp>>, name: string, args: Record<string, unknown>) {
   const index = store.getIndex(access.projectId);
+  if (name === "graph_ontology") return buildGraphOntology(index);
+  if (name === "code_context") {
+    const question = requiredString(args.question ?? args.query, "question");
+    const result = searchRepository(index, question, "graph", Math.max(1, Math.min(12, Number(args.limit ?? 6))));
+    return {
+      question,
+      latencyMs: result.latencyMs,
+      spans: result.hits.map((hit) => ({ filePath: hit.chunk.filePath, symbolName: hit.chunk.symbolName, range: hit.chunk.range, tokenCount: hit.chunk.tokenCount, score: Math.round(hit.score * 1_000) / 1_000, reason: hit.reason, content: hit.chunk.content }))
+    };
+  }
+  if (name === "code_answer") {
+    const question = requiredString(args.question, "question");
+    const result = searchRepository(index, question, "graph", 6);
+    const citations = result.hits.map((hit) => ({ filePath: hit.chunk.filePath, symbolName: hit.chunk.symbolName, range: hit.chunk.range, excerpt: hit.chunk.content.slice(0, 900), score: Math.round(hit.score * 1_000) / 1_000 }));
+    const primary = citations[0];
+    return {
+      question,
+      answer: primary
+        ? `The strongest repository evidence is ${primary.symbolName ?? primary.filePath} in ${primary.filePath}:${primary.range.startLine}-${primary.range.endLine}. ${citations.length - 1} additional source span${citations.length === 2 ? "" : "s"} provide related context.`
+        : "No indexed source span matched this question.",
+      citations,
+      uncertainty: citations.length < 2 ? "Repository evidence is limited; verify the cited span before changing behavior." : undefined
+    };
+  }
+  if (name === "search_code") return { query: requiredString(args.query, "query"), matches: searchExactCode(index, requiredString(args.query, "query"), Math.max(1, Math.min(100, Number(args.limit ?? 20)))) };
+  if (name === "fetch_code") {
+    const filePath = requiredString(args.filePath, "filePath");
+    const span = fetchCodeSpan(index, filePath, Number(args.startLine ?? 1), args.endLine === undefined ? undefined : Number(args.endLine));
+    if (!span) throw new Error("Unknown or protected source file.");
+    return span;
+  }
+  if (name === "query_context") {
+    const relationship = String(args.relationship ?? "all");
+    const direction = String(args.direction ?? "both");
+    return queryRepositoryContext(index, {
+      selector: requiredString(args.selector, "selector"),
+      relationship: (["contains", "imports", "exports", "references", "all"].includes(relationship) ? relationship : "all") as "contains" | "imports" | "exports" | "references" | "all",
+      direction: (["incoming", "outgoing", "both"].includes(direction) ? direction : "both") as "incoming" | "outgoing" | "both",
+      depth: Number(args.depth ?? 1),
+      limit: Number(args.limit ?? 30)
+    });
+  }
   if (name === "repository_search") {
     const query = requiredString(args.query, "query");
     const mode = ["vector", "hybrid", "graph"].includes(String(args.mode)) ? String(args.mode) as "vector" | "hybrid" | "graph" : "graph";
@@ -153,6 +200,12 @@ function authorizeMcp(req: Request, store: JsonStore) {
 
 function toolDefinitions(canPropose: boolean) {
   const tools: Array<Record<string, unknown>> = [
+    { name: "graph_ontology", description: "Describe indexed node kinds, relationship kinds, languages, counts, and safe query guidance.", inputSchema: { type: "object", properties: {} } },
+    { name: "code_answer", description: "Return a concise repository-grounded answer with source citations in one call.", inputSchema: { type: "object", properties: { question: { type: "string" } }, required: ["question"] } },
+    { name: "code_context", description: "Return the smallest graph-expanded source spans relevant to a natural-language question.", inputSchema: { type: "object", properties: { question: { type: "string" }, limit: { type: "number", minimum: 1, maximum: 12 } }, required: ["question"] } },
+    { name: "search_code", description: "Find an exact identifier or string and return matching lines with source ranges.", inputSchema: { type: "object", properties: { query: { type: "string" }, limit: { type: "number", minimum: 1, maximum: 100 } }, required: ["query"] } },
+    { name: "fetch_code", description: "Read a bounded source span after its file and range have been identified.", inputSchema: { type: "object", properties: { filePath: { type: "string" }, startLine: { type: "number", minimum: 1 }, endLine: { type: "number", minimum: 1 } }, required: ["filePath"] } },
+    { name: "query_context", description: "Walk verified repository relationships from a file, symbol, path, or node id.", inputSchema: { type: "object", properties: { selector: { type: "string" }, relationship: { type: "string", enum: ["all", "contains", "imports", "exports", "references"] }, direction: { type: "string", enum: ["incoming", "outgoing", "both"] }, depth: { type: "number", minimum: 1, maximum: 4 }, limit: { type: "number", minimum: 1, maximum: 100 } }, required: ["selector"] } },
     { name: "repository_search", description: "Search CodeMesh chunks and graph neighbors with source ranges.", inputSchema: { type: "object", properties: { query: { type: "string" }, mode: { type: "string", enum: ["graph", "hybrid", "vector"] }, limit: { type: "number", minimum: 1, maximum: 20 } }, required: ["query"] } },
     { name: "impact_analysis", description: "Find incoming, outgoing, and affected files for a graph node or file.", inputSchema: { type: "object", properties: { nodeId: { type: "string" }, filePath: { type: "string" } } } },
     { name: "repository_health", description: "Return repository health, coverage estimate, issues, and suggested tests.", inputSchema: { type: "object", properties: {} } },
@@ -197,6 +250,12 @@ function stringArray(value: unknown) {
   return value.filter((item): item is string => typeof item === "string").slice(0, 200);
 }
 
+function agentArgumentPreview(args: Record<string, unknown>) {
+  const value = args.question ?? args.query ?? args.selector ?? args.filePath ?? args.objective;
+  return typeof value === "string" ? value.slice(0, 180) : undefined;
+}
+
 function rpcError(id: JsonRpcRequest["id"], code: number, message: string) {
   return { jsonrpc: "2.0", id: id ?? null, error: { code, message } };
 }
+

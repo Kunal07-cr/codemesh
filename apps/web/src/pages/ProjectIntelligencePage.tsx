@@ -6,15 +6,21 @@ import {
   AlertTriangle,
   ArrowLeft,
   Bot,
+  Braces,
   CheckCircle2,
   CircleGauge,
+  Clock3,
   FileCode2,
+  Fingerprint,
+  Gauge,
   Github,
   Network,
+  RefreshCw,
   Search,
   ShieldCheck,
   Star,
-  TestTube2
+  TestTube2,
+  Zap
 } from "lucide-react";
 import type { SourceRange } from "@codemesh/shared";
 import { LoadingState } from "../components/LoadingState";
@@ -41,6 +47,40 @@ type IntelligencePayload = {
     }>;
     suggestedTests: string[];
   };
+  context: {
+    summary: {
+      questions: number;
+      repositoryTokens: number;
+      deliveredTokens: number;
+      estimatedBaselineTokens: number;
+      avoidedTokens: number;
+      reductionPercentage: number | null;
+      averageRetrievalLatencyMs: number;
+      averageGenerationLatencyMs: number;
+    };
+    freshness: {
+      status: "synced" | "workspace-ahead";
+      manifest: string;
+      commitSha: string;
+      indexedAt: string;
+      changedFiles: number;
+      changedPaths: string[];
+    };
+    traces: Array<{
+      id: string;
+      question: string;
+      mode: "graph" | "hybrid" | "vector";
+      sourceRevision: string;
+      createdAt: string;
+      baselineTokens: number;
+      deliveredTokens: number;
+      avoidedTokens: number;
+      reductionPercentage: number;
+      retrievalLatencyMs: number;
+      generationLatencyMs: number;
+      spans: Array<{ filePath: string; range: SourceRange; symbolName?: string; tokenCount: number }>;
+    }>;
+  };
   search: Array<{
     id: string;
     filePath: string;
@@ -63,9 +103,10 @@ type IntelligencePayload = {
   };
 };
 
-type Tab = "overview" | "search" | "tests" | "activity" | "integrations";
+type Tab = "overview" | "context" | "search" | "tests" | "activity" | "integrations";
 const tabs: Array<{ id: Tab; label: string; icon: typeof Activity }> = [
   { id: "overview", label: "Health", icon: CircleGauge },
+  { id: "context", label: "Context Observatory", icon: Gauge },
   { id: "search", label: "Semantic search", icon: Search },
   { id: "tests", label: "Test intelligence", icon: TestTube2 },
   { id: "activity", label: "Activity", icon: Activity },
@@ -162,6 +203,8 @@ export function ProjectIntelligencePage() {
         </div>
       )}
 
+      {activeTab === "context" && <ContextObservatoryView context={data.context} projectId={projectId} />}
+
       {activeTab === "search" && (
         <div className="mt-6">
           <form className="flex gap-2" onSubmit={submitSearch}>
@@ -210,6 +253,96 @@ function Metric({ label, value, tone }: { label: string; value: number; tone: st
   return <div className={`surface-panel cm-accent-card ${tone} p-4`}><div className="text-xs uppercase text-steel">{label}</div><div className="mt-2 text-2xl font-bold text-white">{new Intl.NumberFormat().format(value)}</div></div>;
 }
 
+function ContextObservatoryView({ context, projectId }: { context: IntelligencePayload["context"]; projectId: string }) {
+  const reduction = context.summary.reductionPercentage;
+  const tools = ["graph_ontology", "code_answer", "code_context", "search_code", "fetch_code", "query_context"];
+  return (
+    <div className="cm-stagger mt-6">
+      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <ContextMetric icon={Zap} label="Context reduction" value={reduction === null ? "Learning" : `${reduction}%`} detail={`${context.summary.questions} measured question${context.summary.questions === 1 ? "" : "s"}`} tone="cm-tone-mint" />
+        <ContextMetric icon={Gauge} label="Tokens avoided" value={formatNumber(context.summary.avoidedTokens)} detail={`${formatNumber(context.summary.deliveredTokens)} delivered`} tone="cm-tone-violet" />
+        <ContextMetric icon={Clock3} label="Average lookup" value={`${context.summary.averageRetrievalLatencyMs} ms`} detail={`${context.summary.averageGenerationLatencyMs} ms generation`} tone="cm-tone-cyan" />
+        <ContextMetric icon={RefreshCw} label="Graph freshness" value={context.freshness.status === "synced" ? "Synced" : "Workspace ahead"} detail={`${context.freshness.changedFiles} unindexed change${context.freshness.changedFiles === 1 ? "" : "s"}`} tone="cm-tone-amber" />
+      </div>
+
+      <section className="mt-6 border-y border-line">
+        <div className="grid lg:grid-cols-[1.15fr_0.85fr]">
+          <div className="py-6 pr-0 lg:border-r lg:border-line lg:pr-8">
+            <div className="eyebrow"><Gauge className="h-3.5 w-3.5" /> Measured context economy</div>
+            <h2 className="mt-2 text-xl font-semibold text-white">What reached the model versus a repository-wide read</h2>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-steel">The baseline is an explicit estimate from indexed repository tokens. Delivered context comes from recorded assistant retrievals, so the comparison remains inspectable instead of becoming a marketing claim.</p>
+            <div className="mt-6 space-y-4">
+              <TokenBar label="Estimated whole-repository baseline" value={context.summary.estimatedBaselineTokens} maximum={Math.max(1, context.summary.estimatedBaselineTokens)} tone="bg-coral" />
+              <TokenBar label="Graph-selected context delivered" value={context.summary.deliveredTokens} maximum={Math.max(1, context.summary.estimatedBaselineTokens)} tone="bg-mint" />
+            </div>
+            {context.summary.questions === 0 && <div className="mt-5 border-l-2 border-cyan bg-cyan/5 px-4 py-3 text-sm text-steel">Ask the repository assistant a question to create the first measured context trace.</div>}
+          </div>
+          <div className="py-6 lg:pl-8">
+            <div className="eyebrow"><Fingerprint className="h-3.5 w-3.5" /> Freshness receipt</div>
+            <dl className="mt-4 divide-y divide-line border-y border-line text-sm">
+              <ReceiptRow label="Manifest" value={context.freshness.manifest} mono />
+              <ReceiptRow label="Revision" value={context.freshness.commitSha} mono />
+              <ReceiptRow label="Indexed" value={relativeTime(context.freshness.indexedAt)} />
+              <ReceiptRow label="Workspace drift" value={context.freshness.changedFiles ? `${context.freshness.changedFiles} file${context.freshness.changedFiles === 1 ? "" : "s"}` : "None detected"} />
+            </dl>
+            {context.freshness.changedPaths.length > 0 && <div className="mt-4 flex flex-wrap gap-2">{context.freshness.changedPaths.slice(0, 8).map((path) => <Link className="border border-amber/30 px-2 py-1 font-mono text-[10px] text-amber hover:border-amber" key={path} to={`/projects/${projectId}/workspace?path=${encodeURIComponent(path)}`}>{path}</Link>)}</div>}
+          </div>
+        </div>
+      </section>
+
+      <section className="mt-8">
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div><div className="eyebrow"><Braces className="h-3.5 w-3.5" /> Purpose-built MCP surface</div><h2 className="mt-2 text-xl font-semibold text-white">Six precise tools instead of one broad file reader</h2></div>
+          <Link className="text-xs font-semibold text-mint hover:underline" to={`/projects/${projectId}/delivery`}>Manage agent access</Link>
+        </div>
+        <div className="mt-4 grid gap-px overflow-hidden border border-line bg-line sm:grid-cols-2 xl:grid-cols-3">
+          {tools.map((tool, index) => <div className="bg-panel px-4 py-4" key={tool}><span className="font-mono text-[10px] text-steel">0{index + 1}</span><div className="mt-2 font-mono text-sm text-white">{tool}</div></div>)}
+        </div>
+      </section>
+
+      <section className="mt-8">
+        <div className="eyebrow"><Clock3 className="h-3.5 w-3.5" /> Retrieval ledger</div>
+        <h2 className="mt-2 text-xl font-semibold text-white">Every answer leaves a source-span trace</h2>
+        <div className="mt-4 divide-y divide-line border-y border-line">
+          {context.traces.length === 0 && <div className="py-10 text-center text-sm text-steel">No retrieval traces recorded yet.</div>}
+          {context.traces.slice(0, 20).map((trace) => (
+            <article className="grid gap-4 py-5 lg:grid-cols-[minmax(0,1fr)_15rem]" key={trace.id} data-reveal>
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-center gap-2"><span className="border border-violet/30 bg-violet/5 px-2 py-1 font-mono text-[10px] uppercase text-violet">{trace.mode}</span><span className="text-xs text-steel">{relativeTime(trace.createdAt)}</span></div>
+                <h3 className="mt-3 text-sm font-semibold leading-6 text-white">{trace.question}</h3>
+                <div className="mt-3 flex flex-wrap gap-2">{trace.spans.slice(0, 6).map((span, index) => <Link className="inline-flex max-w-full items-center gap-1 border border-line px-2 py-1 font-mono text-[10px] text-cyan hover:border-cyan" key={`${span.filePath}-${span.range.startLine}-${index}`} to={`/projects/${projectId}/workspace?path=${encodeURIComponent(span.filePath)}&line=${span.range.startLine}`}><FileCode2 className="h-3 w-3 shrink-0" /><span className="truncate">{span.filePath}:{span.range.startLine}-{span.range.endLine}</span></Link>)}</div>
+              </div>
+              <dl className="grid grid-cols-2 gap-px self-start overflow-hidden border border-line bg-line text-xs">
+                <TraceStat label="Reduction" value={`${trace.reductionPercentage}%`} />
+                <TraceStat label="Lookup" value={`${trace.retrievalLatencyMs} ms`} />
+                <TraceStat label="Delivered" value={formatNumber(trace.deliveredTokens)} />
+                <TraceStat label="Avoided" value={formatNumber(trace.avoidedTokens)} />
+              </dl>
+            </article>
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function ContextMetric({ icon: Icon, label, value, detail, tone }: { icon: typeof Activity; label: string; value: string; detail: string; tone: string }) {
+  return <div className={`surface-panel cm-accent-card ${tone} p-4`}><div className="flex items-center justify-between"><Icon className="cm-icon-motion h-5 w-5" /><span className="text-[10px] uppercase text-steel">measured</span></div><div className="mt-4 text-xs uppercase text-steel">{label}</div><div className="mt-1 break-words text-2xl font-bold text-white">{value}</div><div className="mt-1 text-xs text-steel">{detail}</div></div>;
+}
+
+function TokenBar({ label, value, maximum, tone }: { label: string; value: number; maximum: number; tone: string }) {
+  const width = value === 0 ? 0 : Math.max(2, Math.min(100, (value / maximum) * 100));
+  return <div><div className="mb-2 flex items-center justify-between gap-4 text-xs"><span className="text-steel">{label}</span><strong className="font-mono text-white">{formatNumber(value)}</strong></div><div className="h-2 overflow-hidden bg-ink"><div className={`h-full transition-[width] duration-700 ${tone}`} style={{ width: `${width}%` }} /></div></div>;
+}
+
+function ReceiptRow({ label, value, mono = false }: { label: string; value: string; mono?: boolean }) {
+  return <div className="flex items-center justify-between gap-4 py-3"><dt className="text-steel">{label}</dt><dd className={`${mono ? "font-mono text-xs" : "text-sm"} max-w-[65%] truncate text-white`} title={value}>{value}</dd></div>;
+}
+
+function TraceStat({ label, value }: { label: string; value: string }) {
+  return <div className="bg-panel p-3"><dt className="text-[10px] uppercase text-steel">{label}</dt><dd className="mt-1 font-mono text-sm text-white">{value}</dd></div>;
+}
+
 function Integration({ icon: Icon, title, status, detail, tone }: { icon: typeof Activity; title: string; status: string; detail: string; tone: string }) {
   return <div className={`surface-panel cm-accent-card ${tone} p-4`}><div className="flex items-center justify-between"><Icon className="cm-icon-motion h-5 w-5" /><span className="text-xs font-semibold text-mint">{status}</span></div><h2 className="mt-5 font-semibold text-white">{title}</h2><p className="mt-2 break-words text-sm leading-6 text-steel">{detail}</p></div>;
 }
@@ -221,3 +354,8 @@ function scoreTone(score: number) {
 function formatAction(action: string) {
   return action.split(".").map((part) => part.charAt(0).toUpperCase() + part.slice(1)).join(" ");
 }
+
+function formatNumber(value: number) {
+  return new Intl.NumberFormat().format(value);
+}
+

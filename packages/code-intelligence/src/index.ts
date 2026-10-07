@@ -6,8 +6,10 @@ import type {
   GraphNode,
   RepoFile,
   RepositoryGraph,
+  RetrievalRecord,
   RetrievalMode,
-  SourceRange
+  SourceRange,
+  WorkspaceDoc
 } from "@codemesh/shared";
 
 export * from "./advanced.js";
@@ -34,6 +36,80 @@ export type SearchResult = {
   hits: SearchHit[];
   latencyMs: number;
   expandedFromChunkIds: string[];
+};
+
+export type GraphOntology = {
+  repository: { projectId: string; commitSha: string; files: number; symbols: number };
+  nodeKinds: Array<{ kind: GraphNode["type"]; count: number; facts: string[] }>;
+  relationshipKinds: Array<{ kind: GraphEdge["type"]; count: number; meaning: string }>;
+  languages: Array<{ language: string; files: number }>;
+  queryHints: string[];
+};
+
+export type ExactCodeMatch = {
+  filePath: string;
+  range: SourceRange;
+  excerpt: string;
+};
+
+export type CodeSpan = {
+  filePath: string;
+  language: string;
+  range: SourceRange;
+  content: string;
+  commitSha: string;
+};
+
+export type GraphContextQuery = {
+  selector: string;
+  relationship?: GraphEdge["type"] | "all";
+  direction?: "incoming" | "outgoing" | "both";
+  depth?: number;
+  limit?: number;
+};
+
+export type GraphContextResult = {
+  selector: string;
+  roots: GraphNode[];
+  nodes: Array<GraphNode & { depth: number }>;
+  edges: GraphEdge[];
+  sourceSpans: Array<{ filePath: string; range?: SourceRange; label: string }>;
+  truncated: boolean;
+};
+
+export type ContextObservatory = {
+  summary: {
+    questions: number;
+    repositoryTokens: number;
+    deliveredTokens: number;
+    estimatedBaselineTokens: number;
+    avoidedTokens: number;
+    reductionPercentage: number | null;
+    averageRetrievalLatencyMs: number;
+    averageGenerationLatencyMs: number;
+  };
+  freshness: {
+    status: "synced" | "workspace-ahead";
+    manifest: string;
+    commitSha: string;
+    indexedAt: string;
+    changedFiles: number;
+    changedPaths: string[];
+  };
+  traces: Array<{
+    id: string;
+    question: string;
+    mode: RetrievalMode;
+    sourceRevision: string;
+    createdAt: string;
+    baselineTokens: number;
+    deliveredTokens: number;
+    avoidedTokens: number;
+    reductionPercentage: number;
+    retrievalLatencyMs: number;
+    generationLatencyMs: number;
+    spans: Array<{ filePath: string; range: SourceRange; symbolName?: string; tokenCount: number }>;
+  }>;
 };
 
 export type RepositoryHealthIssue = {
@@ -822,6 +898,187 @@ export function searchRepository(index: RepositoryIndex, query: string, mode: Re
   };
 }
 
+export function buildGraphOntology(index: RepositoryIndex): GraphOntology {
+  const nodeFacts: Record<GraphNode["type"], string[]> = {
+    repository: ["projectId", "commitSha"],
+    folder: ["path", "parent"],
+    file: ["path", "language", "sensitivity"],
+    symbol: ["name", "kind", "source range", "file"]
+  };
+  const relationshipMeaning: Record<GraphEdge["type"], string> = {
+    contains: "Repository, folder, file, and symbol ownership.",
+    imports: "A source file imports another indexed file.",
+    exports: "A file exposes an indexed symbol.",
+    references: "A source symbol or file references another indexed entity."
+  };
+  const nodeCounts = new Map<GraphNode["type"], number>();
+  const edgeCounts = new Map<GraphEdge["type"], number>();
+  const languageCounts = new Map<string, number>();
+  index.graph.nodes.forEach((node) => nodeCounts.set(node.type, (nodeCounts.get(node.type) ?? 0) + 1));
+  index.graph.edges.forEach((edge) => edgeCounts.set(edge.type, (edgeCounts.get(edge.type) ?? 0) + 1));
+  index.files.forEach((file) => languageCounts.set(file.language, (languageCounts.get(file.language) ?? 0) + 1));
+  return {
+    repository: { projectId: index.projectId, commitSha: index.commitSha, files: index.files.length, symbols: index.symbols.length },
+    nodeKinds: (["repository", "folder", "file", "symbol"] as GraphNode["type"][]).map((kind) => ({ kind, count: nodeCounts.get(kind) ?? 0, facts: nodeFacts[kind] })),
+    relationshipKinds: (["contains", "imports", "exports", "references"] as GraphEdge["type"][]).map((kind) => ({ kind, count: edgeCounts.get(kind) ?? 0, meaning: relationshipMeaning[kind] })),
+    languages: [...languageCounts.entries()].map(([language, files]) => ({ language, files })).sort((a, b) => b.files - a.files || a.language.localeCompare(b.language)),
+    queryHints: [
+      "Use code_context for a natural-language question.",
+      "Use search_code for an exact identifier or string.",
+      "Use query_context to walk imports, references, exports, or containment.",
+      "Use fetch_code only after a source range has been identified."
+    ]
+  };
+}
+
+export function searchExactCode(index: RepositoryIndex, query: string, limit = 20): ExactCodeMatch[] {
+  const needle = query.trim().toLowerCase();
+  if (!needle) return [];
+  const matches: ExactCodeMatch[] = [];
+  for (const file of index.files.filter((candidate) => !candidate.sensitive)) {
+    const lines = file.content.split(/\r?\n/);
+    for (let lineIndex = 0; lineIndex < lines.length; lineIndex += 1) {
+      const line = lines[lineIndex] ?? "";
+      if (!line.toLowerCase().includes(needle)) continue;
+      const excerptStart = Math.max(0, lineIndex - 1);
+      const excerptEnd = Math.min(lines.length, lineIndex + 2);
+      matches.push({
+        filePath: file.path,
+        range: { startLine: lineIndex + 1, startColumn: 1, endLine: lineIndex + 1, endColumn: line.length + 1 },
+        excerpt: lines.slice(excerptStart, excerptEnd).join("\n")
+      });
+      if (matches.length >= Math.max(1, Math.min(limit, 100))) return matches;
+    }
+  }
+  return matches;
+}
+
+export function fetchCodeSpan(index: RepositoryIndex, filePath: string, startLine = 1, endLine?: number): CodeSpan | null {
+  const normalized = normalizePath(filePath);
+  const file = index.files.find((candidate) => candidate.path === normalized && !candidate.sensitive);
+  if (!file) return null;
+  const lines = file.content.split(/\r?\n/);
+  const start = Math.max(1, Math.min(Math.trunc(startLine), Math.max(1, lines.length)));
+  const requestedEnd = endLine === undefined ? start + 79 : Math.trunc(endLine);
+  const end = Math.max(start, Math.min(requestedEnd, start + 249, Math.max(1, lines.length)));
+  return {
+    filePath: file.path,
+    language: file.language,
+    range: { startLine: start, startColumn: 1, endLine: end, endColumn: (lines[end - 1]?.length ?? 0) + 1 },
+    content: lines.slice(start - 1, end).join("\n"),
+    commitSha: index.commitSha
+  };
+}
+
+export function queryRepositoryContext(index: RepositoryIndex, query: GraphContextQuery): GraphContextResult {
+  const selector = query.selector.trim().toLowerCase();
+  const relationship = query.relationship ?? "all";
+  const direction = query.direction ?? "both";
+  const maxDepth = Math.max(1, Math.min(Math.trunc(query.depth ?? 1), 4));
+  const limit = Math.max(1, Math.min(Math.trunc(query.limit ?? 30), 100));
+  const ranked = index.graph.nodes
+    .map((node) => {
+      const id = node.id.toLowerCase();
+      const label = node.label.toLowerCase();
+      const path = (node.filePath ?? "").toLowerCase();
+      const score = id === selector || path === selector ? 4 : label === selector ? 3 : id.includes(selector) || path.includes(selector) ? 2 : label.includes(selector) ? 1 : 0;
+      return { node, score };
+    })
+    .filter((item) => item.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 5);
+  const roots = ranked.map((item) => item.node);
+  const depthById = new Map(roots.map((node) => [node.id, 0]));
+  const selectedEdges = new Map<string, GraphEdge>();
+  const queue = roots.map((node) => node.id);
+  while (queue.length && depthById.size < limit) {
+    const current = queue.shift()!;
+    const currentDepth = depthById.get(current) ?? 0;
+    if (currentDepth >= maxDepth) continue;
+    const candidates = index.graph.edges.filter((edge) => {
+      if (relationship !== "all" && edge.type !== relationship) return false;
+      return direction === "incoming" ? edge.target === current : direction === "outgoing" ? edge.source === current : edge.source === current || edge.target === current;
+    });
+    for (const edge of candidates) {
+      selectedEdges.set(edge.id, edge);
+      const next = edge.source === current ? edge.target : edge.source;
+      if (!depthById.has(next)) {
+        depthById.set(next, currentDepth + 1);
+        queue.push(next);
+        if (depthById.size >= limit) break;
+      }
+    }
+  }
+  const nodes = index.graph.nodes
+    .filter((node) => depthById.has(node.id))
+    .map((node) => ({ ...node, depth: depthById.get(node.id)! }))
+    .sort((a, b) => a.depth - b.depth || a.label.localeCompare(b.label));
+  return {
+    selector: query.selector,
+    roots,
+    nodes,
+    edges: [...selectedEdges.values()],
+    sourceSpans: nodes.filter((node) => node.filePath).map((node) => ({ filePath: node.filePath!, range: node.range, label: node.label })),
+    truncated: depthById.size >= limit
+  };
+}
+
+export function buildContextObservatory(index: RepositoryIndex, retrievals: RetrievalRecord[], workspaceDocs: WorkspaceDoc[] = []): ContextObservatory {
+  const repositoryTokens = index.files.filter((file) => !file.sensitive).reduce((total, file) => total + roughTokenCount(file.content), 0);
+  const chunkById = new Map(index.chunks.map((chunk) => [chunk.id, chunk]));
+  const traces = retrievals.slice(0, 100).map((retrieval) => {
+    const chunks = retrieval.chunkIds.map((id) => chunkById.get(id)).filter((chunk): chunk is CodeChunk => Boolean(chunk));
+    const deliveredTokens = Math.max(0, retrieval.contextTokens || chunks.reduce((total, chunk) => total + chunk.tokenCount, 0));
+    const baselineTokens = Math.max(repositoryTokens, deliveredTokens);
+    const avoidedTokens = Math.max(0, baselineTokens - deliveredTokens);
+    return {
+      id: retrieval.id,
+      question: retrieval.question,
+      mode: retrieval.mode,
+      sourceRevision: retrieval.sourceRevision,
+      createdAt: retrieval.createdAt,
+      baselineTokens,
+      deliveredTokens,
+      avoidedTokens,
+      reductionPercentage: baselineTokens ? Math.round((avoidedTokens / baselineTokens) * 1000) / 10 : 0,
+      retrievalLatencyMs: retrieval.retrievalLatencyMs,
+      generationLatencyMs: retrieval.generationLatencyMs,
+      spans: chunks.map((chunk) => ({ filePath: chunk.filePath, range: chunk.range, symbolName: chunk.symbolName, tokenCount: chunk.tokenCount }))
+    };
+  });
+  const deliveredTokens = traces.reduce((total, trace) => total + trace.deliveredTokens, 0);
+  const estimatedBaselineTokens = traces.reduce((total, trace) => total + trace.baselineTokens, 0);
+  const avoidedTokens = Math.max(0, estimatedBaselineTokens - deliveredTokens);
+  const baseByPath = new Map(index.files.map((file) => [file.path, file.content]));
+  const changedPaths = workspaceDocs.filter((doc) => baseByPath.get(doc.path) !== doc.content).map((doc) => doc.path).sort();
+  const manifestInput = [...index.files]
+    .filter((file) => !file.sensitive)
+    .sort((a, b) => a.path.localeCompare(b.path))
+    .map((file) => `${file.path}:${hashContent(file.content)}`)
+    .join("|");
+  return {
+    summary: {
+      questions: traces.length,
+      repositoryTokens,
+      deliveredTokens,
+      estimatedBaselineTokens,
+      avoidedTokens,
+      reductionPercentage: traces.length && estimatedBaselineTokens ? Math.round((avoidedTokens / estimatedBaselineTokens) * 1000) / 10 : null,
+      averageRetrievalLatencyMs: averageNumber(traces.map((trace) => trace.retrievalLatencyMs)),
+      averageGenerationLatencyMs: averageNumber(traces.map((trace) => trace.generationLatencyMs))
+    },
+    freshness: {
+      status: changedPaths.length ? "workspace-ahead" : "synced",
+      manifest: hashContent(manifestInput),
+      commitSha: index.commitSha,
+      indexedAt: index.graph.generatedAt,
+      changedFiles: changedPaths.length,
+      changedPaths
+    },
+    traces
+  };
+}
+
 export function hashContent(content: string): string {
   let hash = 2166136261;
   for (let index = 0; index < content.length; index += 1) {
@@ -1419,6 +1676,11 @@ function cosine(a: number[], b: number[]) {
     bNorm += b[index]! * b[index]!;
   }
   return aNorm === 0 || bNorm === 0 ? 0 : dot / (Math.sqrt(aNorm) * Math.sqrt(bNorm));
+}
+
+function averageNumber(values: number[]) {
+  if (!values.length) return 0;
+  return Math.round(values.reduce((total, value) => total + value, 0) / values.length);
 }
 
 function relatedFilePaths(graph: RepositoryGraph, filePath: string): string[] {

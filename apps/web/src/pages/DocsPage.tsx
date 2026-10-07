@@ -91,12 +91,13 @@ export function DocsPage() {
           </DocSection>
 
           <DocSection id="intelligence" icon={BrainCircuit} title="Graph intelligence">
-            <p>Open a project and choose <strong className="text-white">Intelligence</strong> for repository health, semantic graph search, suggested tests, the audit timeline, and integration status.</p>
+            <p>Open a project and choose <strong className="text-white">Intelligence</strong> for repository health, the Context Observatory, semantic graph search, suggested tests, the audit timeline, and integration status.</p>
             <ol className="space-y-4">
-              <Step number="1" title="Use Split view">The workspace places the interactive graph beside Monaco. File tabs keep frequently inspected source within reach.</Step>
-              <Step number="2" title="Select a node">Function and class nodes open their source file, highlight the exact indexed line range, and reveal incoming, outgoing, and affected-file counts.</Step>
-              <Step number="3" title="Annotate in context">Attach review or onboarding notes directly to the selected node. Notes synchronize through the collaboration room and persist with the project.</Step>
-              <Step number="4" title="Analyze and fix">The copilot produces a grounded correction as a side-by-side patch. A reviewer must explicitly apply or reject it.</Step>
+              <Step number="1" title="Measure context economy">Context Observatory compares recorded graph-selected context with an explicit whole-repository token estimate, preserves every returned source span, and fingerprints index freshness.</Step>
+              <Step number="2" title="Use Split view">The workspace places the interactive graph beside Monaco. File tabs keep frequently inspected source within reach.</Step>
+              <Step number="3" title="Select a node">Function and class nodes open their source file, highlight the exact indexed line range, and reveal incoming, outgoing, and affected-file counts.</Step>
+              <Step number="4" title="Annotate in context">Attach review or onboarding notes directly to the selected node. Notes synchronize through the collaboration room and persist with the project.</Step>
+              <Step number="5" title="Analyze and fix">The copilot produces a grounded correction as a side-by-side patch. A reviewer must explicitly apply or reject it.</Step>
             </ol>
           </DocSection>
 
@@ -134,7 +135,7 @@ export function DocsPage() {
               <Feature icon={GitPullRequest} title="Review and sync">Select changed files, calculate graph impact, generate targeted tests, and queue an incremental index refresh.</Feature>
               <Feature icon={FlaskConical} title="Repository Futures Lab">Compare three implementation strategies before editing, preserve a prediction receipt, and reconcile the forecast against observed repository outcomes.</Feature>
               <Feature icon={ShieldCheck} title="Secure verification">Run static gates everywhere. Repository commands execute only when a dedicated restricted worker is explicitly enabled.</Feature>
-              <Feature icon={KeyRound} title="MCP and VS Code">Create scoped, expiring agent tokens for repository search, impact analysis, documentation, incident tracing, and guarded plans.</Feature>
+              <Feature icon={KeyRound} title="MCP and VS Code">Create scoped, expiring agent tokens with verified handshake status. Agents receive six precise tools for ontology, grounded answers, source context, exact search, bounded fetches, and graph queries.</Feature>
               <Feature icon={Bot} title="Incidents and automation">Map stack traces to source, build response runbooks, and turn natural-language objectives into reviewable missions.</Feature>
             </div>
             <p>Owners can create expiring read-only architecture reports. Shared reports contain health and structure evidence, but never source contents, cookies, or credentials.</p>
@@ -242,3 +243,4 @@ function Mode({ title, description }: { title: string; description: string }) {
 function Feature({ icon: Icon, title, children }: { icon: React.ElementType; title: string; children: React.ReactNode }) {
   return <div className="border-t border-line pt-4"><Icon className="h-4 w-4 text-mint" /><h3 className="mt-2 font-semibold text-white">{title}</h3><p className="mt-1 text-sm leading-6 text-steel">{children}</p></div>;
 }
+

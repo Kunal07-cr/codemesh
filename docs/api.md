@@ -70,7 +70,9 @@ GitHub PR creation currently returns a not-configured or not-completed state unl
 
 `POST /api/mcp` implements authenticated JSON-RPC over HTTP. Use a `Bearer cmcp_*` token created in Delivery Hub. The `simulate_change_futures` tool exposes the evidence-grounded Futures Lab to connected engineering agents.
 
-Available tools include repository search, impact analysis, repository health, architecture documentation, generated test plans, incident tracing, and scoped change planning. MCP resources expose non-sensitive indexed files through `codemesh://` URIs.
+The precise retrieval surface includes `graph_ontology`, `code_answer`, `code_context`, `search_code`, `fetch_code`, and `query_context`. Broader tools provide repository search, impact analysis, repository health, architecture documentation, generated test plans, incident tracing, Futures Lab simulation, and scoped change planning. Successful tool calls update the token handshake timestamp and append a redacted agent-activity audit event. MCP resources expose non-sensitive indexed files through `codemesh://` URIs.
+
+`GET /api/projects/:projectId/intelligence` also returns the Context Observatory payload: measured retrieval traces, estimated whole-repository baselines, delivered and avoided tokens, exact source spans, the current content manifest, and unsynced workspace paths.
 
 ## GitHub Integration
 
@@ -78,3 +80,4 @@ Available tools include repository search, impact analysis, repository health, a
 - `POST /api/integrations/github/webhook`
 
 The webhook requires `x-hub-signature-256`. Push events trigger incremental content sync and pull-request events create graph-aware GitHub Checks when installation credentials are configured.
+
