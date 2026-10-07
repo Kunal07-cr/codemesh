@@ -5,6 +5,7 @@ import { RouterProvider } from "react-router-dom";
 import { AuthProvider } from "./lib/auth";
 import { router } from "./router";
 import "./styles.css";
+import "./landing.css";
 import "@xyflow/react/dist/style.css";
 
 const queryClient = new QueryClient({
@@ -25,3 +26,4 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     </QueryClientProvider>
   </React.StrictMode>
 );
+

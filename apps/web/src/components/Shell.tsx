@@ -69,8 +69,8 @@ export function Shell() {
           <nav className="hidden items-center gap-1 text-sm md:flex">
             {location.pathname === "/" ? (
               <>
-                <a className="cm-nav-link flex items-center gap-2 rounded px-3 py-2 text-steel hover:bg-panel hover:text-white" href="#repository-model"><Network className="h-4 w-4" /> Graph</a>
-                <a className="cm-nav-link flex items-center gap-2 rounded px-3 py-2 text-steel hover:bg-panel hover:text-white" href="#how-it-works"><Workflow className="h-4 w-4" /> Workflow</a>
+                <a className="cm-nav-link flex items-center gap-2 rounded px-3 py-2 text-steel hover:bg-panel hover:text-white" href="#demo"><Network className="h-4 w-4" /> Demo</a>
+                <a className="cm-nav-link flex items-center gap-2 rounded px-3 py-2 text-steel hover:bg-panel hover:text-white" href="#calculator"><Workflow className="h-4 w-4" /> Savings</a>
                 <NavLink className={navClass} to="/discover"><Search className="h-4 w-4" /> Discover</NavLink>
                 <NavLink className={navClass} to="/dashboard"><Gauge className="h-4 w-4" /> Dashboard</NavLink>
               </>
@@ -143,3 +143,4 @@ function navClass({ isActive }: { isActive: boolean }) {
 function mobileNavClass({ isActive }: { isActive: boolean }) {
   return `flex min-w-0 flex-col items-center justify-center gap-1 text-[10px] ${isActive ? "text-mint" : "text-steel"}`;
 }
+
