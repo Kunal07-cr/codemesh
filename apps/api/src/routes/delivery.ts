@@ -4,10 +4,13 @@ import { z } from "zod";
 import {
   buildArchitectureDocumentation,
   buildAutomationMission,
+  buildFutureReconciliation,
   buildGeneratedTestPlans,
   buildIncidentReport,
   buildIncrementalIndexPlan,
-  buildPullRequestReview
+  buildPullRequestReview,
+  buildRepositoryFutureSimulation,
+  type RepositoryFutureSimulation
 } from "@codemesh/code-intelligence";
 import type { AppConfig } from "../config.js";
 import type { DeliveryRun, JsonStore } from "../db/store.js";
@@ -28,6 +31,12 @@ const incidentSchema = z.object({
   stackTrace: z.string().trim().min(10).max(30_000)
 });
 const automationSchema = z.object({ objective: z.string().trim().min(8).max(1200) });
+const futureSchema = z.object({ objective: z.string().trim().min(12).max(1200) });
+const reconciliationSchema = z.object({
+  futureId: z.enum(["surgical", "boundary", "compatibility"]),
+  observedFiles: z.array(z.string().trim().min(1).max(500)).max(200).default([]),
+  notes: z.string().trim().max(2_000).optional()
+});
 const tokenSchema = z.object({
   name: z.string().trim().min(3).max(80),
   scopes: z.array(z.enum(["read", "propose"])).min(1).max(2).default(["read"]),
@@ -59,6 +68,7 @@ export function deliveryRoutes(
         .filter((doc) => baseByPath.get(doc.path) !== doc.content)
         .map((doc) => doc.path);
       const role = store.getRole(projectId, req.auth!.user.id);
+      const futureCalibration = calibrationProfile(store.listDeliveryRuns(projectId, "future_reconciliation"));
       ok(res, {
         project: { id: project.id, name: project.name, commitSha: project.commitSha, repoUrl: project.repoUrl, role },
         files: store.listFiles(projectId).map((file) => file.path).sort(),
@@ -67,6 +77,7 @@ export function deliveryRoutes(
         incremental: buildIncrementalIndexPlan(index, changedFiles),
         documentation: buildArchitectureDocumentation(index),
         generatedTests: buildGeneratedTestPlans(index, changedFiles),
+        futureCalibration,
         runs: store.listDeliveryRuns(projectId),
         agentTokens: store.listAgentAccessTokens(projectId).map(safeAgentToken),
         shares: store.listProjectShares(projectId).map(safeShare),
@@ -198,6 +209,50 @@ export function deliveryRoutes(
   );
 
   router.post(
+    "/:projectId/delivery/futures",
+    requireProjectPermission(store, "ai.query"),
+    asyncHandler(async (req, res) => {
+      const input = parseBody(futureSchema, req);
+      const projectId = String(req.params.projectId);
+      const calibration = calibrationProfile(store.listDeliveryRuns(projectId, "future_reconciliation"));
+      const result = buildRepositoryFutureSimulation(store.getIndex(projectId), input.objective, calibration);
+      ok(res, await store.saveDeliveryRun({
+        projectId,
+        kind: "future_simulation",
+        status: "passed",
+        title: `Future forecast: ${input.objective.slice(0, 120)}`,
+        input,
+        result: result as unknown as Record<string, unknown>,
+        createdBy: req.auth!.user.id,
+        completedAt: new Date().toISOString()
+      }));
+    })
+  );
+
+  router.post(
+    "/:projectId/delivery/futures/:runId/reconcile",
+    requireProjectPermission(store, "workspace.review"),
+    asyncHandler(async (req, res) => {
+      const input = parseBody(reconciliationSchema, req);
+      const projectId = String(req.params.projectId);
+      const forecastRun = store.getDeliveryRun(projectId, String(req.params.runId));
+      if (!forecastRun || forecastRun.kind !== "future_simulation" || !forecastRun.result) throw notFound("Repository future forecast not found.");
+      const simulation = forecastRun.result as unknown as RepositoryFutureSimulation;
+      const result = buildFutureReconciliation(store.getIndex(projectId), simulation, input.futureId, input.observedFiles, input.notes);
+      ok(res, await store.saveDeliveryRun({
+        projectId,
+        kind: "future_reconciliation",
+        status: result.status === "calibrated" ? "passed" : "attention",
+        title: `Reality check: ${simulation.objective.slice(0, 130)}`,
+        input: { forecastRunId: forecastRun.id, futureId: input.futureId, observedFiles: input.observedFiles, notes: input.notes },
+        result: result as unknown as Record<string, unknown>,
+        createdBy: req.auth!.user.id,
+        completedAt: new Date().toISOString()
+      }));
+    })
+  );
+
+  router.post(
     "/:projectId/delivery/tokens",
     requireProjectPermission(store, "project.manage"),
     asyncHandler(async (req, res) => {
@@ -315,3 +370,14 @@ function requestPublicUrl(req: Request, config: AppConfig) {
   return host ? `${protocol}://${host}` : config.publicUrl.replace(/\/$/, "");
 }
 
+function calibrationProfile(runs: DeliveryRun[]) {
+  const scores = runs
+    .map((run) => Number(run.result?.calibrationScore))
+    .filter((score) => Number.isFinite(score) && score >= 0 && score <= 100);
+  const averageScore = scores.length ? Math.round(scores.reduce((total, score) => total + score, 0) / scores.length) : null;
+  return {
+    samples: scores.length,
+    averageScore,
+    confidenceAdjustment: averageScore === null ? 0 : Math.max(-8, Math.min(8, Math.round((averageScore - 72) * 0.16)))
+  };
+}

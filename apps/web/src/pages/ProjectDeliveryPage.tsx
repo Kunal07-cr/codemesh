@@ -73,6 +73,67 @@ type GeneratedTest = {
   evidence: string[];
 };
 
+type ForecastRange = { min: number; max: number };
+
+type RepositoryFuture = {
+  id: "surgical" | "boundary" | "compatibility";
+  name: string;
+  strategy: string;
+  thesis: string;
+  confidence: number;
+  risk: "low" | "medium" | "high";
+  effortPoints: number;
+  reversibility: number;
+  targetFiles: string[];
+  affectedFiles: string[];
+  affectedSymbols: string[];
+  predicted: {
+    changedFiles: ForecastRange;
+    impactedFiles: ForecastRange;
+    relationshipDelta: ForecastRange;
+    healthDelta: ForecastRange;
+    testAdditions: ForecastRange;
+    reviewMinutes: ForecastRange;
+  };
+  assumptions: string[];
+  evidence: string[];
+  sequence: string[];
+  compositeScore: number;
+};
+
+type RepositoryFutureSimulation = {
+  objective: string;
+  createdAt: string;
+  baseline: {
+    revision: string;
+    files: number;
+    symbols: number;
+    relationships: number;
+    testFiles: number;
+    healthScore: number;
+    modules: number;
+    architectureSignature: string;
+  };
+  calibration: { samples: number; averageScore: number | null; confidenceAdjustment: number };
+  futures: RepositoryFuture[];
+  recommendation: { futureId: RepositoryFuture["id"]; reason: string };
+  uncertainty: { level: "low" | "medium" | "high"; drivers: string[] };
+  receipt: { id: string; architectureSignature: string; evidenceFiles: string[]; statement: string };
+};
+
+type FutureReconciliation = {
+  simulationReceiptId: string;
+  futureId: RepositoryFuture["id"];
+  status: "awaiting_change" | "calibrated";
+  calibrationScore: number | null;
+  confidenceBefore: number;
+  confidenceAfter: number;
+  observedFiles: string[];
+  dimensions: Array<{ label: string; predicted: ForecastRange; actual: number; score: number; status: "inside" | "outside" }>;
+  lessons: string[];
+  summary: string;
+};
+
 type DeliveryRun = {
   id: string;
   kind: string;
@@ -120,6 +181,7 @@ type DeliveryPayload = {
   incremental: IncrementalPlan;
   documentation: Documentation;
   generatedTests: GeneratedTest[];
+  futureCalibration: { samples: number; averageScore: number | null; confidenceAdjustment: number };
   runs: DeliveryRun[];
   agentTokens: AgentToken[];
   shares: ProjectShare[];
@@ -138,10 +200,11 @@ type DeliveryPayload = {
   };
 };
 
-type Tab = "review" | "sandbox" | "sync" | "agents" | "incidents" | "automation" | "reports" | "organization";
+type Tab = "review" | "futures" | "sandbox" | "sync" | "agents" | "incidents" | "automation" | "reports" | "organization";
 
 const tabs: Array<{ id: Tab; label: string; icon: LucideIcon }> = [
   { id: "review", label: "PR review", icon: GitPullRequest },
+  { id: "futures", label: "Futures lab", icon: Sparkles },
   { id: "sandbox", label: "Verify", icon: ShieldCheck },
   { id: "sync", label: "Index sync", icon: RefreshCw },
   { id: "agents", label: "Agents", icon: Bot },
@@ -162,6 +225,8 @@ export function ProjectDeliveryPage() {
     stackTrace: "Error: Request failed\n    at handleLogin (src/auth/session.ts:18:9)\n    at login (src/routes/auth.ts:24:3)"
   });
   const [objective, setObjective] = useState("Add structured authentication error codes without changing existing response behavior.");
+  const [futureObjective, setFutureObjective] = useState("Introduce passkey login while preserving the current session and password flows.");
+  const [selectedFutureId, setSelectedFutureId] = useState<RepositoryFuture["id"] | "">("");
   const [tokenName, setTokenName] = useState("Local engineering agent");
   const [shareLabel, setShareLabel] = useState("Architecture review");
   const [revealedToken, setRevealedToken] = useState("");
@@ -214,6 +279,31 @@ export function ProjectDeliveryPage() {
     }),
     onSuccess: refresh
   });
+  const simulateFutures = useMutation({
+    mutationFn: () => api<DeliveryRun>("/api/projects/" + projectId + "/delivery/futures", {
+      method: "POST",
+      body: jsonBody({ objective: futureObjective })
+    }),
+    onSuccess: (run) => {
+      const simulation = run.result as RepositoryFutureSimulation | undefined;
+      if (simulation) setSelectedFutureId(simulation.recommendation.futureId);
+      void refresh();
+    }
+  });
+  const reconcileFuture = useMutation({
+    mutationFn: (input: { runId: string; futureId: RepositoryFuture["id"] }) => api<DeliveryRun>(
+      "/api/projects/" + projectId + "/delivery/futures/" + input.runId + "/reconcile",
+      {
+        method: "POST",
+        body: jsonBody({
+          futureId: input.futureId,
+          observedFiles: selectedFiles,
+          notes: "Compared with the files currently selected in pull-request review."
+        })
+      }
+    ),
+    onSuccess: refresh
+  });
   const createToken = useMutation({
     mutationFn: () => api<{ token: string }>("/api/projects/" + projectId + "/delivery/tokens", {
       method: "POST",
@@ -253,6 +343,20 @@ export function ProjectDeliveryPage() {
     return data.files.filter((file) => !term || file.toLowerCase().includes(term));
   }, [data, fileFilter]);
 
+  const latestFutureRun = data?.runs.find((run) => run.kind === "future_simulation" && run.result);
+  const activeFutureRun = simulateFutures.data ?? latestFutureRun;
+  const activeSimulation = activeFutureRun?.result as RepositoryFutureSimulation | undefined;
+  const latestMatchingReconciliation = data?.runs.find((run) =>
+    run.kind === "future_reconciliation"
+    && run.result?.simulationReceiptId === activeSimulation?.receipt.id
+  );
+  const activeReconciliation = (reconcileFuture.data?.result ?? latestMatchingReconciliation?.result) as FutureReconciliation | undefined;
+
+  useEffect(() => {
+    if (!activeSimulation || activeSimulation.futures.some((future) => future.id === selectedFutureId)) return;
+    setSelectedFutureId(activeSimulation.recommendation.futureId);
+  }, [activeSimulation, selectedFutureId]);
+
   if (delivery.isLoading) return <LoadingState label="Preparing Delivery Hub" />;
   if (!data) return <div className="mx-auto max-w-7xl px-4 py-10 text-coral">Delivery Hub could not be loaded.</div>;
 
@@ -262,7 +366,7 @@ export function ProjectDeliveryPage() {
   const latestSandbox = sandbox.data?.result as SandboxReport | undefined;
   const incidentResult = trace.data?.result as IncidentReport | undefined;
   const automationResult = automate.data?.result as AutomationResult | undefined;
-  const error = [review.error, sandbox.error, sync.error, trace.error, automate.error, createToken.error, revokeToken.error, createShare.error, revokeShare.error]
+  const error = [review.error, sandbox.error, sync.error, trace.error, automate.error, simulateFutures.error, reconcileFuture.error, createToken.error, revokeToken.error, createShare.error, revokeShare.error]
     .find((item): item is Error => item instanceof Error);
 
   return (
@@ -276,7 +380,7 @@ export function ProjectDeliveryPage() {
             <div className="eyebrow mt-5"><Rocket className="h-3.5 w-3.5" /> Release intelligence</div>
             <h1 className="mt-2 text-3xl font-bold text-white md:text-4xl">Delivery Hub</h1>
             <p className="mt-3 max-w-2xl leading-7 text-steel">
-              Review repository impact, verify changes, connect engineering agents, trace incidents, and publish evidence from one source-linked workflow.
+              Forecast implementation futures, review repository impact, verify changes, connect engineering agents, trace incidents, and publish evidence from one source-linked workflow.
             </p>
           </div>
           <div className="cm-delivery-orbit" aria-hidden="true">
@@ -284,8 +388,9 @@ export function ProjectDeliveryPage() {
             <Rocket className="h-7 w-7 text-mint" />
           </div>
         </div>
-        <div className="cm-stagger mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="cm-stagger mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
           <Metric label="Review gate" value={activeReview.status} icon={GitPullRequest} tone="cm-tone-violet" />
+          <Metric label="Forecast accuracy" value={data.futureCalibration.averageScore === null ? "learning" : data.futureCalibration.averageScore + "%"} icon={Sparkles} tone="cm-tone-mint" />
           <Metric label="Sandbox" value={data.sandbox.mode} icon={ShieldCheck} tone="cm-tone-cyan" />
           <Metric label="Agent access" value={String(data.agentTokens.filter((token) => !token.revokedAt).length) + " tokens"} icon={KeyRound} tone="cm-tone-amber" />
           <Metric label="Inbox" value={String(unread) + " unread"} icon={Bell} tone="cm-tone-coral" />
@@ -321,6 +426,22 @@ export function ProjectDeliveryPage() {
             review={activeReview}
             run={() => review.mutate()}
             pending={review.isPending}
+          />
+        )}
+        {tab === "futures" && (
+          <FuturesView
+            objective={futureObjective}
+            setObjective={setFutureObjective}
+            simulation={activeSimulation}
+            simulationRunId={activeFutureRun?.id}
+            reconciliation={activeReconciliation}
+            selectedFutureId={selectedFutureId || activeSimulation?.recommendation.futureId || "surgical"}
+            setSelectedFutureId={setSelectedFutureId}
+            observedFiles={selectedFiles}
+            projectId={projectId}
+            simulate={() => simulateFutures.mutate()}
+            reconcile={(runId, futureId) => reconcileFuture.mutate({ runId, futureId })}
+            pending={simulateFutures.isPending || reconcileFuture.isPending}
           />
         )}
         {tab === "sandbox" && <SandboxView info={data.sandbox} report={latestSandbox} run={(preset) => sandbox.mutate(preset)} pending={sandbox.isPending} />}
@@ -570,6 +691,194 @@ function AutomationView(props: { objective: string; setObjective(value: string):
   );
 }
 
+function FuturesView(props: {
+  objective: string;
+  setObjective(value: string): void;
+  simulation?: RepositoryFutureSimulation;
+  simulationRunId?: string;
+  reconciliation?: FutureReconciliation;
+  selectedFutureId: RepositoryFuture["id"];
+  setSelectedFutureId(value: RepositoryFuture["id"]): void;
+  observedFiles: string[];
+  projectId: string;
+  simulate(): void;
+  reconcile(runId: string, futureId: RepositoryFuture["id"]): void;
+  pending: boolean;
+}) {
+  const selected = props.simulation?.futures.find((future) => future.id === props.selectedFutureId) ?? props.simulation?.futures[0];
+  return (
+    <div>
+      <div className="grid gap-7 xl:grid-cols-[1.25fr_0.75fr] xl:items-end">
+        <section>
+          <SectionTitle
+            icon={Sparkles}
+            eyebrow="Self-calibrating change twin"
+            title="Explore the codebase before it exists"
+            detail="Describe one engineering outcome. CodeMesh creates three competing implementation futures, freezes their assumptions in a prediction receipt, and learns when reality arrives."
+          />
+          <label className="mt-5 block text-xs text-steel">
+            Outcome to model
+            <textarea
+              className="field mt-1 min-h-28 resize-y text-sm leading-6"
+              value={props.objective}
+              onChange={(event) => props.setObjective(event.target.value)}
+            />
+          </label>
+          <button className="action-primary mt-3" type="button" disabled={props.pending || props.objective.trim().length < 12} onClick={props.simulate}>
+            <Sparkles className={"h-4 w-4 " + (props.pending ? "animate-pulse" : "")} /> {props.simulation ? "Simulate again" : "Simulate three futures"}
+          </button>
+        </section>
+        <section className="cm-future-principle">
+          <div className="eyebrow"><Network className="h-3.5 w-3.5" /> Closed evidence loop</div>
+          <ol className="mt-4 space-y-4">
+            <Step number="01" title="Forecast" detail="Compare distinct implementation strategies against the current graph." />
+            <Step number="02" title="Freeze" detail="Record confidence, ranges, assumptions, revision, and evidence before editing." />
+            <Step number="03" title="Reconcile" detail="Score prediction against the implemented files and tune later confidence." />
+          </ol>
+        </section>
+      </div>
+
+      {!props.simulation ? (
+        <div className="cm-future-empty mt-8">
+          <div className="cm-future-pulse" aria-hidden="true"><Sparkles className="h-6 w-6" /></div>
+          <h3 className="mt-5 text-lg font-semibold text-white">No future has been observed yet</h3>
+          <p className="mt-2 max-w-xl text-sm leading-6 text-steel">Run the simulator to produce a surgical patch, a boundary redesign, and a compatibility bridge from the same objective.</p>
+        </div>
+      ) : (
+        <>
+          <div className="cm-future-receipt mt-8">
+            <div>
+              <div className="text-[10px] uppercase text-steel">Prediction receipt</div>
+              <div className="mt-1 font-mono text-sm text-white">{props.simulation.receipt.id}</div>
+              <p className="mt-2 max-w-2xl text-xs leading-5 text-steel">{props.simulation.receipt.statement}</p>
+            </div>
+            <div className="grid grid-cols-2 gap-x-8 gap-y-3 sm:grid-cols-4">
+              <ReceiptMetric label="Revision" value={props.simulation.baseline.revision.slice(0, 9)} />
+              <ReceiptMetric label="Health" value={props.simulation.baseline.healthScore + "/100"} />
+              <ReceiptMetric label="Graph links" value={String(props.simulation.baseline.relationships)} />
+              <ReceiptMetric label="Prior checks" value={String(props.simulation.calibration.samples)} />
+            </div>
+          </div>
+
+          <div className="cm-future-grid mt-6">
+            {props.simulation.futures.map((future) => {
+              const recommended = future.id === props.simulation?.recommendation.futureId;
+              const active = future.id === selected?.id;
+              return (
+                <button
+                  className={"cm-future-card " + (active ? "is-active" : "")}
+                  key={future.id}
+                  type="button"
+                  aria-pressed={active}
+                  onClick={() => props.setSelectedFutureId(future.id)}
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="text-left">
+                      <div className="text-[10px] uppercase text-steel">{future.strategy}</div>
+                      <h3 className="mt-1 font-semibold text-white">{future.name}</h3>
+                    </div>
+                    <div className="cm-future-score">{future.compositeScore}</div>
+                  </div>
+                  <p className="mt-3 text-left text-xs leading-5 text-steel">{future.thesis}</p>
+                  <div className="mt-4 flex items-center justify-between gap-3 text-[10px] uppercase text-steel"><span>Confidence</span><span className="font-mono text-cyan">{future.confidence}%</span></div>
+                  <div className="cm-confidence-track mt-1"><span style={{ width: future.confidence + "%" }} /></div>
+                  <div className="mt-4 flex flex-wrap items-center gap-2"><StatusBadge status={future.risk} />{recommended && <span className="border border-violet/40 bg-violet/5 px-2 py-1 font-mono text-[10px] uppercase text-violet">recommended</span>}</div>
+                </button>
+              );
+            })}
+          </div>
+
+          {selected && (
+            <div className="mt-8 grid gap-8 xl:grid-cols-[1.15fr_0.85fr]">
+              <section>
+                <SectionTitle icon={Network} eyebrow="Selected future" title={selected.name} detail={props.simulation.recommendation.reason} />
+                <div className="mt-5 grid grid-cols-2 gap-3 md:grid-cols-3">
+                  <ForecastMetric label="Changed files" range={selected.predicted.changedFiles} tone="text-cyan" />
+                  <ForecastMetric label="Impact radius" range={selected.predicted.impactedFiles} tone="text-violet" />
+                  <ForecastMetric label="Graph delta" range={selected.predicted.relationshipDelta} signed tone="text-amber" />
+                  <ForecastMetric label="Health delta" range={selected.predicted.healthDelta} signed tone="text-mint" />
+                  <ForecastMetric label="New tests" range={selected.predicted.testAdditions} tone="text-coral" />
+                  <ForecastMetric label="Review minutes" range={selected.predicted.reviewMinutes} tone="text-white" />
+                </div>
+                <div className="mt-7 grid gap-6 md:grid-cols-2">
+                  <div>
+                    <h3 className="text-sm font-semibold text-white">Predicted edit surface</h3>
+                    <div className="mt-2 border-y border-line">
+                      {selected.targetFiles.map((path) => <Link className="block truncate border-b border-line py-2 font-mono text-[11px] text-mint last:border-0 hover:text-white" key={path} to={"/projects/" + props.projectId + "/workspace?path=" + encodeURIComponent(path)}>{path}</Link>)}
+                    </div>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold text-white">Implementation sequence</h3>
+                    <ol className="mt-3 space-y-3">{selected.sequence.map((item, index) => <Step key={item} number={String(index + 1).padStart(2, "0")} title={item} />)}</ol>
+                  </div>
+                </div>
+                <div className="mt-7 border-l-2 border-amber pl-4">
+                  <div className="text-xs font-semibold uppercase text-amber">Uncertainty: {props.simulation.uncertainty.level}</div>
+                  {props.simulation.uncertainty.drivers.map((driver) => <p className="mt-2 text-xs leading-5 text-steel" key={driver}>{driver}</p>)}
+                </div>
+              </section>
+
+              <section>
+                <SectionTitle icon={RefreshCw} eyebrow="Reality reconciliation" title="Make the forecast answer for itself" detail="The currently selected PR files become observed implementation evidence. CodeMesh compares measurable outcomes with the frozen forecast bands." />
+                <div className="mt-5 grid grid-cols-2 gap-3">
+                  <Mini label="Observed files" value={String(props.observedFiles.length)} tone="text-cyan" />
+                  <Mini label="Reversibility" value={selected.reversibility + "%"} tone="text-mint" />
+                  <Mini label="Effort points" value={String(selected.effortPoints)} tone="text-amber" />
+                  <Mini label="Receipt evidence" value={String(props.simulation.receipt.evidenceFiles.length)} tone="text-violet" />
+                </div>
+                <button
+                  className="action-primary mt-6"
+                  type="button"
+                  disabled={props.pending || !props.simulationRunId || props.observedFiles.length === 0}
+                  onClick={() => props.simulationRunId && props.reconcile(props.simulationRunId, selected.id)}
+                >
+                  <RefreshCw className={"h-4 w-4 " + (props.pending ? "animate-spin" : "")} /> Reconcile with selected files
+                </button>
+                {props.observedFiles.length === 0 && <p className="mt-3 text-xs leading-5 text-amber">Select implemented files in PR Review first. CodeMesh will not invent an outcome without observed evidence.</p>}
+                <div className="mt-6 border-y border-line py-4">
+                  <div className="text-[10px] uppercase text-steel">Architecture signature</div>
+                  <code className="mt-1 block font-mono text-xs text-cyan">{props.simulation.receipt.architectureSignature}</code>
+                </div>
+              </section>
+            </div>
+          )}
+
+          {props.reconciliation && (
+            <section className="cm-reconciliation mt-8">
+              <div className="flex flex-wrap items-start justify-between gap-4">
+                <SectionTitle icon={CheckCircle2} eyebrow="Prediction outcome" title={props.reconciliation.status === "calibrated" ? "Reality scored the forecast" : "Waiting for implementation evidence"} detail={props.reconciliation.summary} />
+                <div className="cm-reconciliation-score"><strong>{props.reconciliation.calibrationScore ?? "--"}</strong><span>accuracy</span></div>
+              </div>
+              {props.reconciliation.dimensions.length > 0 && <div className="mt-6 grid gap-px border border-line bg-line sm:grid-cols-2 xl:grid-cols-5">{props.reconciliation.dimensions.map((dimension) => <div className="bg-panel p-4" key={dimension.label}><div className="flex items-center justify-between gap-2"><span className="text-xs text-steel">{dimension.label}</span><StatusIcon status={dimension.status === "inside" ? "pass" : "attention"} /></div><div className="mt-3 font-mono text-lg text-white">{dimension.actual}</div><div className="mt-1 font-mono text-[10px] text-cyan">forecast {formatRange(dimension.predicted)}</div><div className="mt-3 h-1 bg-ink"><span className={dimension.status === "inside" ? "block h-full bg-mint" : "block h-full bg-amber"} style={{ width: dimension.score + "%" }} /></div></div>)}</div>}
+              <div className="mt-5 grid gap-5 md:grid-cols-[auto_1fr] md:items-start">
+                <div className="border-l-2 border-violet pl-4"><div className="text-[10px] uppercase text-steel">Confidence update</div><div className="mt-1 font-mono text-sm text-white">{props.reconciliation.confidenceBefore}% → {props.reconciliation.confidenceAfter}%</div></div>
+                <div>{props.reconciliation.lessons.map((lesson) => <p className="mb-2 text-xs leading-5 text-steel last:mb-0" key={lesson}>{lesson}</p>)}</div>
+              </div>
+            </section>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
+
+function ReceiptMetric({ label, value }: { label: string; value: string }) {
+  return <div><div className="text-[9px] uppercase text-steel">{label}</div><div className="mt-1 font-mono text-xs text-white">{value}</div></div>;
+}
+
+function ForecastMetric({ label, range, tone, signed = false }: { label: string; range: ForecastRange; tone: string; signed?: boolean }) {
+  const value = signed ? `${formatSigned(range.min)} to ${formatSigned(range.max)}` : formatRange(range);
+  return <div className="cm-forecast-metric"><div className="text-[9px] uppercase text-steel">{label}</div><div className={"mt-2 font-mono text-sm font-semibold " + tone}>{value}</div></div>;
+}
+
+function formatRange(range: ForecastRange) {
+  return range.min === range.max ? String(range.min) : `${range.min}-${range.max}`;
+}
+
+function formatSigned(value: number) {
+  return value > 0 ? `+${value}` : String(value);
+}
+
 function ReportsView(props: { data: DeliveryPayload; label: string; setLabel(value: string): void; revealedShare: string; create(): void; revoke(id: string): void; pending: boolean }) {
   return (
     <div className="grid gap-8 xl:grid-cols-2">
@@ -677,4 +986,3 @@ function isGood(status: string) {
 function isBad(status: string) {
   return ["block", "blocked", "failed", "critical", "high"].includes(status);
 }
-

@@ -12,11 +12,13 @@ import {
   buildAiEvaluation,
   buildArchitectureDocumentation,
   buildAutomationMission,
+  buildFutureReconciliation,
   buildGeneratedTestPlans,
   buildIncidentReport,
   buildIncrementalIndexPlan,
   buildPullRequestReview,
   buildPullRequestRisk,
+  buildRepositoryFutureSimulation,
   buildRuntimeTracePreview,
   buildSampleRepoFiles,
   buildSecurityWorkbench,
@@ -187,5 +189,27 @@ describe("code intelligence", () => {
     expect(tests[0]?.changedFile).toBe(authFile);
     expect(mission.plan.steps.length).toBeGreaterThan(0);
   });
-});
 
+  it("forecasts competing repository futures and calibrates them against observed files", () => {
+    const projectId = "project-futures";
+    const index = indexRepository(projectId, SAMPLE_COMMIT, buildSampleRepoFiles(projectId));
+    const simulation = buildRepositoryFutureSimulation(index, "Introduce passkey login while preserving password authentication");
+
+    expect(simulation.futures).toHaveLength(3);
+    expect(new Set(simulation.futures.map((future) => future.id)).size).toBe(3);
+    expect(simulation.receipt.architectureSignature).toBe(simulation.baseline.architectureSignature);
+    expect(simulation.futures.every((future) => future.targetFiles.length > 0)).toBe(true);
+    expect(simulation.futures.some((future) => future.id === simulation.recommendation.futureId)).toBe(true);
+
+    const selected = simulation.futures.find((future) => future.id === simulation.recommendation.futureId)!;
+    const reconciliation = buildFutureReconciliation(index, simulation, selected.id, selected.targetFiles);
+    expect(reconciliation.status).toBe("calibrated");
+    expect(reconciliation.calibrationScore).toBeGreaterThanOrEqual(0);
+    expect(reconciliation.dimensions).toHaveLength(5);
+    expect(reconciliation.confidenceAfter).toBeGreaterThanOrEqual(35);
+
+    const awaiting = buildFutureReconciliation(index, simulation, selected.id);
+    expect(awaiting.status).toBe("awaiting_change");
+    expect(awaiting.calibrationScore).toBeNull();
+  });
+});

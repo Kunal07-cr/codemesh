@@ -188,7 +188,14 @@ export type WebhookDeliveryRecord = {
   projectIds: string[];
 };
 
-export type DeliveryRunKind = "pull_request" | "sandbox" | "incremental_sync" | "incident" | "automation";
+export type DeliveryRunKind =
+  | "pull_request"
+  | "sandbox"
+  | "incremental_sync"
+  | "incident"
+  | "automation"
+  | "future_simulation"
+  | "future_reconciliation";
 export type DeliveryRun = {
   id: string;
   projectId: string;
@@ -1160,6 +1167,10 @@ export class JsonStore {
       .slice(0, limit);
   }
 
+  getDeliveryRun(projectId: string, id: string) {
+    return (this.state.deliveryRuns ?? []).find((run) => run.projectId === projectId && run.id === id) ?? null;
+  }
+
   async saveDeliveryRun(input: Omit<DeliveryRun, "id" | "createdAt">) {
     const run: DeliveryRun = { ...input, id: crypto.randomUUID(), createdAt: new Date().toISOString() };
     this.state.deliveryRuns ??= [];
@@ -1300,7 +1311,9 @@ function deliveryKindLabel(kind: DeliveryRunKind) {
     sandbox: "Verification run",
     incremental_sync: "Incremental sync",
     incident: "Incident trace",
-    automation: "Automation mission"
+    automation: "Automation mission",
+    future_simulation: "Repository future forecast",
+    future_reconciliation: "Forecast reconciliation"
   } as const)[kind];
 }
 
@@ -1463,4 +1476,3 @@ function slugify(input: string) {
     .replace(/^-|-$/g, "")
     .slice(0, 60);
 }
-

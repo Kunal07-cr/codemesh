@@ -6,6 +6,7 @@ import {
   buildAutomationMission,
   buildGeneratedTestPlans,
   buildIncidentReport,
+  buildRepositoryFutureSimulation,
   searchRepository
 } from "@codemesh/code-intelligence";
 import type { JsonStore } from "../db/store.js";
@@ -97,6 +98,7 @@ async function handleMcpRequest(
       prompts: [
         { name: "review-change", description: "Review changed files with graph impact and targeted tests", arguments: [{ name: "changedFiles", description: "Comma-separated repository paths", required: true }] },
         { name: "investigate-incident", description: "Map a stack trace to indexed code", arguments: [{ name: "stackTrace", description: "Stack trace or error log", required: true }] },
+        { name: "compare-change-futures", description: "Compare implementation strategies before editing", arguments: [{ name: "objective", description: "Desired repository outcome", required: true }] },
         { name: "explain-architecture", description: "Explain modules, entry points, and repository health", arguments: [] }
       ]
     };
@@ -134,6 +136,7 @@ function callTool(store: JsonStore, access: NonNullable<ReturnType<typeof author
   if (name === "architecture_documentation") return buildArchitectureDocumentation(index);
   if (name === "generate_test_plan") return buildGeneratedTestPlans(index, stringArray(args.changedFiles));
   if (name === "trace_incident") return buildIncidentReport(index, String(args.title ?? "Repository incident"), requiredString(args.stackTrace, "stackTrace"));
+  if (name === "simulate_change_futures") return buildRepositoryFutureSimulation(index, requiredString(args.objective, "objective"));
   if (name === "plan_change") {
     if (!access.scopes.includes("propose")) throw new Error("This token does not include the propose scope.");
     return buildAutomationMission(index, requiredString(args.objective, "objective"));
@@ -155,7 +158,8 @@ function toolDefinitions(canPropose: boolean) {
     { name: "repository_health", description: "Return repository health, coverage estimate, issues, and suggested tests.", inputSchema: { type: "object", properties: {} } },
     { name: "architecture_documentation", description: "Generate module inventory, entry points, Mermaid architecture, and health evidence.", inputSchema: { type: "object", properties: {} } },
     { name: "generate_test_plan", description: "Generate focused test plans for changed files.", inputSchema: { type: "object", properties: { changedFiles: { type: "array", items: { type: "string" } } }, required: ["changedFiles"] } },
-    { name: "trace_incident", description: "Map a stack trace or error log to source, symbols, blast radius, and a runbook.", inputSchema: { type: "object", properties: { title: { type: "string" }, stackTrace: { type: "string" } }, required: ["stackTrace"] } }
+    { name: "trace_incident", description: "Map a stack trace or error log to source, symbols, blast radius, and a runbook.", inputSchema: { type: "object", properties: { title: { type: "string" }, stackTrace: { type: "string" } }, required: ["stackTrace"] } },
+    { name: "simulate_change_futures", description: "Compare three evidence-grounded implementation futures before editing and return a signed prediction receipt.", inputSchema: { type: "object", properties: { objective: { type: "string" } }, required: ["objective"] } }
   ];
   if (canPropose) tools.push({ name: "plan_change", description: "Prepare a reviewable change mission with graph evidence, tests, and static gates. It never writes source directly.", inputSchema: { type: "object", properties: { objective: { type: "string" } }, required: ["objective"] } });
   return tools;
@@ -164,6 +168,7 @@ function toolDefinitions(canPropose: boolean) {
 function getPrompt(name: string, args: Record<string, string> = {}) {
   if (name === "review-change") return { description: "Review repository changes", messages: [{ role: "user", content: { type: "text", text: `Review these changed files using CodeMesh impact_analysis and generate_test_plan: ${args.changedFiles ?? ""}` } }] };
   if (name === "investigate-incident") return { description: "Investigate an incident", messages: [{ role: "user", content: { type: "text", text: `Trace this incident to source and return evidence plus a runbook:\n${args.stackTrace ?? ""}` } }] };
+  if (name === "compare-change-futures") return { description: "Compare repository futures", messages: [{ role: "user", content: { type: "text", text: `Use simulate_change_futures to compare distinct implementation strategies before editing. Preserve the prediction receipt and explain uncertainty:\n${args.objective ?? ""}` } }] };
   if (name === "explain-architecture") return { description: "Explain repository architecture", messages: [{ role: "user", content: { type: "text", text: "Use architecture_documentation and repository_health to explain the system, its entry points, and its highest-priority risks." } }] };
   throw new Error(`Unknown CodeMesh prompt: ${name}`);
 }
@@ -195,4 +200,3 @@ function stringArray(value: unknown) {
 function rpcError(id: JsonRpcRequest["id"], code: number, message: string) {
   return { jsonrpc: "2.0", id: id ?? null, error: { code, message } };
 }
-

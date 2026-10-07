@@ -58,6 +58,8 @@ GitHub PR creation currently returns a not-configured or not-completed state unl
 - `POST /api/projects/:projectId/delivery/sync`
 - `POST /api/projects/:projectId/delivery/incidents`
 - `POST /api/projects/:projectId/delivery/automation`
+- `POST /api/projects/:projectId/delivery/futures`
+- `POST /api/projects/:projectId/delivery/futures/:runId/reconcile`
 - `POST /api/projects/:projectId/delivery/tokens`
 - `DELETE /api/projects/:projectId/delivery/tokens/:tokenId`
 - `POST /api/projects/:projectId/delivery/shares`
@@ -66,7 +68,7 @@ GitHub PR creation currently returns a not-configured or not-completed state unl
 
 ## MCP
 
-`POST /api/mcp` implements authenticated JSON-RPC over HTTP. Use a `Bearer cmcp_*` token created in Delivery Hub.
+`POST /api/mcp` implements authenticated JSON-RPC over HTTP. Use a `Bearer cmcp_*` token created in Delivery Hub. The `simulate_change_futures` tool exposes the evidence-grounded Futures Lab to connected engineering agents.
 
 Available tools include repository search, impact analysis, repository health, architecture documentation, generated test plans, incident tracing, and scoped change planning. MCP resources expose non-sensitive indexed files through `codemesh://` URIs.
 
@@ -76,4 +78,3 @@ Available tools include repository search, impact analysis, repository health, a
 - `POST /api/integrations/github/webhook`
 
 The webhook requires `x-hub-signature-256`. Push events trigger incremental content sync and pull-request events create graph-aware GitHub Checks when installation credentials are configured.
-

@@ -30,7 +30,7 @@ const apiGroups = [
   },
   {
     title: "Delivery and agents",
-    routes: ["GET /api/projects/:projectId/delivery", "POST /api/projects/:projectId/delivery/reviews", "POST /api/projects/:projectId/delivery/sandbox", "POST /api/projects/:projectId/delivery/incidents", "POST /api/projects/:projectId/delivery/tokens", "POST /api/mcp"]
+    routes: ["GET /api/projects/:projectId/delivery", "POST /api/projects/:projectId/delivery/reviews", "POST /api/projects/:projectId/delivery/futures", "POST /api/projects/:projectId/delivery/futures/:runId/reconcile", "POST /api/projects/:projectId/delivery/sandbox", "POST /api/projects/:projectId/delivery/incidents", "POST /api/projects/:projectId/delivery/tokens", "POST /api/mcp"]
   }
 ];
 
@@ -132,6 +132,7 @@ export function DocsPage() {
             <p>Delivery Hub turns repository intelligence into repeatable engineering workflows without replacing the existing graph, workspace, labs, or control room.</p>
             <div className="grid gap-5 sm:grid-cols-2">
               <Feature icon={GitPullRequest} title="Review and sync">Select changed files, calculate graph impact, generate targeted tests, and queue an incremental index refresh.</Feature>
+              <Feature icon={FlaskConical} title="Repository Futures Lab">Compare three implementation strategies before editing, preserve a prediction receipt, and reconcile the forecast against observed repository outcomes.</Feature>
               <Feature icon={ShieldCheck} title="Secure verification">Run static gates everywhere. Repository commands execute only when a dedicated restricted worker is explicitly enabled.</Feature>
               <Feature icon={KeyRound} title="MCP and VS Code">Create scoped, expiring agent tokens for repository search, impact analysis, documentation, incident tracing, and guarded plans.</Feature>
               <Feature icon={Bot} title="Incidents and automation">Map stack traces to source, build response runbooks, and turn natural-language objectives into reviewable missions.</Feature>
@@ -241,4 +242,3 @@ function Mode({ title, description }: { title: string; description: string }) {
 function Feature({ icon: Icon, title, children }: { icon: React.ElementType; title: string; children: React.ReactNode }) {
   return <div className="border-t border-line pt-4"><Icon className="h-4 w-4 text-mint" /><h3 className="mt-2 font-semibold text-white">{title}</h3><p className="mt-1 text-sm leading-6 text-steel">{children}</p></div>;
 }
-

@@ -11,6 +11,7 @@ Implemented in this repository:
 - Discussions, tasks, contribution status, repository imports, advanced code intelligence, and a visual Code Universe.
 - Production Center with readiness scoring, SLO telemetry, release/security gates, AI usage, integration state, and durable maintenance jobs.
 - Delivery Hub with graph-aware pull-request reviews, targeted test plans, incremental indexing, incident tracing, guarded automation missions, expiring reports, and a secure verification boundary.
+- Repository Futures Lab with three competing implementation forecasts, immutable prediction receipts, uncertainty bands, and post-change reconciliation that calibrates later confidence from measured outcomes.
 - MCP server and VS Code companion for scoped repository search, impact analysis, architecture documentation, incident tracing, and read-only change planning.
 - Atomic local persistence with transparent PostgreSQL state storage when `DATABASE_URL` is configured.
 - Optional Redis Socket.IO fan-out, S3-compatible encrypted repository archives, verified GitHub webhooks, and account-email delivery hooks.
@@ -110,4 +111,3 @@ and an email webhook can be enabled independently without rebuilding the image.
 - `docs/gemini-setup.md`
 - `docs/deployment-backup.md`
 - `docs/research/literature-survey.md`
-
