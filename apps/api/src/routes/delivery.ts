@@ -1,5 +1,5 @@
 import crypto from "node:crypto";
-import { Router } from "express";
+import { Router, type Request } from "express";
 import { z } from "zod";
 import {
   buildArchitectureDocumentation,
@@ -74,7 +74,7 @@ export function deliveryRoutes(
         sandbox: sandbox.info(),
         integrations: {
           github: github.info(),
-          mcp: { endpoint: `${config.publicUrl.replace(/\/$/, "")}/api/mcp`, protocolVersion: "2025-11-25" },
+          mcp: { endpoint: `${requestPublicUrl(req, config)}/api/mcp`, protocolVersion: "2025-11-25" },
           vscode: { available: true, extensionPath: "apps/vscode-extension" },
           identity: { oidc: config.enterpriseIdentityConfigured, scim: config.scimConfigured }
         },
@@ -213,7 +213,7 @@ export function deliveryRoutes(
         scopes: input.scopes,
         expiresAt: input.expiresInDays ? new Date(Date.now() + input.expiresInDays * 86_400_000).toISOString() : undefined
       });
-      ok(res, { token: rawToken, record: safeAgentToken(token), endpoint: `${config.publicUrl.replace(/\/$/, "")}/api/mcp` });
+      ok(res, { token: rawToken, record: safeAgentToken(token), endpoint: `${requestPublicUrl(req, config)}/api/mcp` });
     })
   );
 
@@ -241,7 +241,7 @@ export function deliveryRoutes(
         tokenHash: hashToken(rawToken),
         expiresAt: new Date(Date.now() + input.expiresInDays * 86_400_000).toISOString()
       });
-      ok(res, { share: safeShare(share), url: `${config.publicUrl.replace(/\/$/, "")}/share/${rawToken}` });
+      ok(res, { share: safeShare(share), url: `${requestPublicUrl(req, config)}/share/${rawToken}` });
     })
   );
 
@@ -307,5 +307,11 @@ function safeShare(share: ReturnType<JsonStore["listProjectShares"]>[number]) {
 
 function mapReviewStatus(status: "pass" | "review" | "block"): DeliveryRun["status"] {
   return status === "pass" ? "passed" : status === "review" ? "attention" : "blocked";
+}
+
+function requestPublicUrl(req: Request, config: AppConfig) {
+  const host = String(req.header("x-forwarded-host") ?? req.header("host") ?? "").split(",")[0]?.trim();
+  const protocol = String(req.header("x-forwarded-proto") ?? req.protocol).split(",")[0]?.trim();
+  return host ? `${protocol}://${host}` : config.publicUrl.replace(/\/$/, "");
 }
 

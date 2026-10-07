@@ -20,7 +20,7 @@ export function integrationRoutes(
     ok(res, {
       ...github.info(),
       signedIn: Boolean(req.auth),
-      webhookUrl: config.publicUrl.replace(/\/$/, "") + "/api/integrations/github/webhook",
+      webhookUrl: requestPublicUrl(req, config) + "/api/integrations/github/webhook",
       events: ["push", "pull_request"]
     });
   });
@@ -223,6 +223,12 @@ async function handlePullRequest(input: {
 
 function unique(values: string[]) {
   return [...new Set(values.filter(Boolean))];
+}
+
+function requestPublicUrl(req: { header(name: string): string | undefined; protocol: string }, config: AppConfig) {
+  const host = String(req.header("x-forwarded-host") ?? req.header("host") ?? "").split(",")[0]?.trim();
+  const protocol = String(req.header("x-forwarded-proto") ?? req.protocol).split(",")[0]?.trim();
+  return host ? `${protocol}://${host}` : config.publicUrl.replace(/\/$/, "");
 }
 
 export function verifyGitHubSignature(body: Buffer, signature: string, secret: string) {
