@@ -15,16 +15,13 @@ export function Shell() {
   const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {
-    const root = document.documentElement;
     const update = () => {
       setShowScrollTop(window.scrollY > 500);
-      root.style.setProperty("--cm-code-scroll-y", `${Math.max(-64, window.scrollY * -0.035).toFixed(2)}px`);
     };
     update();
     window.addEventListener("scroll", update, { passive: true });
     return () => {
       window.removeEventListener("scroll", update);
-      root.style.removeProperty("--cm-code-scroll-y");
     };
   }, []);
 
@@ -101,8 +98,6 @@ export function Shell() {
       const shiftY = ((event.clientY / window.innerHeight) - 0.5) * 10;
       root.style.setProperty("--cm-pointer-shift-x", `${shiftX.toFixed(2)}px`);
       root.style.setProperty("--cm-pointer-shift-y", `${shiftY.toFixed(2)}px`);
-      root.style.setProperty("--cm-code-pointer-x", `${(shiftX * -0.65).toFixed(2)}px`);
-      root.style.setProperty("--cm-code-pointer-y", `${(shiftY * -0.45).toFixed(2)}px`);
 
       const target = event.target instanceof Element
         ? event.target.closest<HTMLElement>(".surface-panel, .lp-hero-card, .lp-trace-col, .lp-terminal-body")
@@ -163,8 +158,6 @@ export function Shell() {
       document.documentElement.removeEventListener("mouseleave", clearSurface);
       root.style.removeProperty("--cm-pointer-shift-x");
       root.style.removeProperty("--cm-pointer-shift-y");
-      root.style.removeProperty("--cm-code-pointer-x");
-      root.style.removeProperty("--cm-code-pointer-y");
       clearSurface();
     };
   }, []);
