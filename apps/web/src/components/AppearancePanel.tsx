@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Check, Palette, RotateCcw } from "lucide-react";
 
-type Accent = "mint" | "cyan" | "violet" | "coral";
+type Accent = "spectrum" | "mint" | "cyan" | "violet" | "coral";
 type Motion = "full" | "reduced";
 type Density = "comfortable" | "compact";
 
@@ -11,9 +11,10 @@ type Preferences = {
   density: Density;
 };
 
-const STORAGE_KEY = "codemesh-appearance";
-const defaults: Preferences = { accent: "mint", motion: "full", density: "comfortable" };
+const STORAGE_KEY = "codemesh-appearance-v2";
+const defaults: Preferences = { accent: "spectrum", motion: "full", density: "comfortable" };
 const accents: Array<{ value: Accent; color: string; label: string }> = [
+  { value: "spectrum", color: "linear-gradient(135deg, #64d6af 4%, #56c7e8 29%, #a78bfa 53%, #f472b6 76%, #f2b86b 100%)", label: "Prism" },
   { value: "mint", color: "#64d6af", label: "Mint" },
   { value: "cyan", color: "#56c7e8", label: "Cyan" },
   { value: "violet", color: "#a78bfa", label: "Violet" },
@@ -82,15 +83,15 @@ export function AppearancePanel() {
               {accents.map((accent) => (
                 <button
                   key={accent.value}
-                  className="grid h-8 w-8 place-items-center rounded-full border border-white/15 transition hover:scale-110 focus:outline-none focus:ring-2 focus:ring-white/40"
-                  style={{ backgroundColor: accent.color }}
+                  className={`cm-accent-swatch grid h-8 w-8 place-items-center rounded-full border border-white/15 transition hover:scale-110 focus:outline-none focus:ring-2 focus:ring-white/40 ${preferences.accent === accent.value ? "is-active" : ""}`}
+                  style={{ background: accent.color }}
                   type="button"
                   title={accent.label}
                   aria-label={`${accent.label} accent`}
                   aria-pressed={preferences.accent === accent.value}
                   onClick={() => setPreferences((current) => ({ ...current, accent: accent.value }))}
                 >
-                  {preferences.accent === accent.value && <Check className="h-4 w-4 text-ink" />}
+                  {preferences.accent === accent.value && <Check className={`h-4 w-4 ${accent.value === "spectrum" ? "text-white" : "text-ink"}`} />}
                 </button>
               ))}
             </div>
@@ -143,3 +144,4 @@ function PreferenceGroup<T extends string>({
     </div>
   );
 }
+
