@@ -2162,14 +2162,17 @@ a:active {
   --mesh-light-y: 50%;
   position: absolute;
   z-index: 1;
-  inset: 0 0 0 35%;
+  inset: 0 0 0 26%;
+  isolation: isolate;
   overflow: hidden;
-  background: #090e15;
+  background: transparent;
+  mask-image: linear-gradient(90deg, transparent 0%, #000 16%, #000 100%);
   transition: opacity 260ms ease;
 }
 
 .cm-living-universe::before {
   position: absolute;
+  z-index: 0;
   inset: 0;
   background-image: linear-gradient(rgba(86, 199, 232, 0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(100, 214, 175, 0.03) 1px, transparent 1px);
   background-size: 42px 42px;
@@ -2179,6 +2182,7 @@ a:active {
 
 .cm-living-universe::after {
   position: absolute;
+  z-index: 5;
   inset: 0;
   background: radial-gradient(circle at var(--mesh-light-x) var(--mesh-light-y), rgba(100, 214, 175, 0.08), transparent 21%);
   content: "";
@@ -2186,13 +2190,15 @@ a:active {
 }
 
 .cm-universe-cluster,
-.cm-universe-links {
+.cm-universe-links,
+.cm-universe-contours {
   transform: translate(var(--mesh-shift-x), var(--mesh-shift-y));
   transition: transform 520ms var(--cm-ease);
 }
 
 .cm-universe-stars {
   position: absolute;
+  z-index: 1;
   inset: 0;
 }
 
@@ -2208,8 +2214,50 @@ a:active {
   animation: cm-star-breathe calc(4s + ((var(--star-index) % 6) * 0.8s)) ease-in-out infinite;
 }
 
+.cm-universe-contours {
+  position: absolute;
+  z-index: 2;
+  inset: 5%;
+  pointer-events: none;
+}
+
+.cm-universe-contours i {
+  position: absolute;
+  top: 50%;
+  left: 58%;
+  width: 22rem;
+  height: 13rem;
+  border: 1px solid rgba(86, 199, 232, 0.14);
+  clip-path: polygon(11% 0, 89% 0, 100% 19%, 100% 81%, 89% 100%, 11% 100%, 0 81%, 0 19%);
+  opacity: 0.12;
+  transform: translate(-50%, -50%) rotate(-10deg) scale(0.98);
+  animation: cm-contour-drift 16s ease-in-out infinite alternate;
+}
+
+.cm-universe-contours i:nth-child(2) {
+  width: 30rem;
+  height: 18rem;
+  border-color: rgba(167, 139, 250, 0.13);
+  animation-delay: -4s;
+}
+
+.cm-universe-contours i:nth-child(3) {
+  width: 39rem;
+  height: 23rem;
+  border-color: rgba(100, 214, 175, 0.11);
+  animation-delay: -8s;
+}
+
+.cm-universe-contours i:nth-child(4) {
+  width: 49rem;
+  height: 29rem;
+  border-color: rgba(242, 184, 107, 0.09);
+  animation-delay: -12s;
+}
+
 .cm-universe-links {
   position: absolute;
+  z-index: 3;
   inset: 7%;
   width: 86%;
   height: 86%;
@@ -2229,6 +2277,7 @@ a:active {
 
 .cm-universe-cluster {
   position: absolute;
+  z-index: 4;
   inset: 7%;
 }
 
@@ -2595,6 +2644,7 @@ a:active {
 .cm-feed-message.is-error { background: rgba(239, 116, 111, 0.07); color: #ef746f; }
 
 @keyframes cm-star-breathe { 0%, 100% { opacity: 0.12; } 50% { opacity: 0.7; } }
+@keyframes cm-contour-drift { 0% { opacity: 0.07; transform: translate(-50%, -50%) rotate(-12deg) scale(0.97); } 100% { opacity: 0.22; transform: translate(-50%, -50%) rotate(-7deg) scale(1.03); } }
 @keyframes cm-organic-drift { 0% { margin: -3px 0 0 -4px; } 100% { margin: 4px 0 0 5px; } }
 @keyframes cm-orbit-spin { to { transform: rotate(360deg); } }
 @keyframes cm-weather-drift { 0% { transform: translate3d(-1%, 0, 0) scale(1); } 100% { transform: translate3d(1%, -1%, 0) scale(1.04); } }
@@ -2605,7 +2655,7 @@ a:active {
 
 @media (max-width: 1023px) {
   .cm-living-universe { left: 18%; opacity: 0.55; }
-  .cm-living-universe::after { background: rgba(9, 14, 21, 0.26); }
+  .cm-living-universe::after { background: rgba(9, 14, 21, 0.14); }
   .cm-universe-point strong, .cm-universe-point small, .cm-universe-readout { display: none; }
   .cm-feed-layout { grid-template-columns: 1fr; }
   .cm-universe-dock button span { display: none; }
@@ -2617,6 +2667,7 @@ a:active {
 @media (max-width: 767px) {
   .cm-landing-hero, .cm-hero-content { min-height: 43rem; }
   .cm-living-universe { inset: 0; opacity: 0.24; }
+  .cm-universe-contours i:nth-child(n + 3) { display: none; }
   .cm-hero-content { justify-content: flex-start; padding-top: 3rem; }
   .cm-universe-page { height: calc(100dvh - 7.5rem); min-height: 36rem; }
   .cm-universe-page .react-flow__minimap { display: none; }
@@ -2640,6 +2691,7 @@ a:active {
 
 @media (prefers-reduced-motion: reduce) {
   .cm-universe-stars i,
+  .cm-universe-contours i,
   .cm-universe-point,
   .cm-universe-core::before,
   .cm-universe-core::after,
@@ -2652,4 +2704,3 @@ a:active {
     animation: none !important;
   }
 }
-

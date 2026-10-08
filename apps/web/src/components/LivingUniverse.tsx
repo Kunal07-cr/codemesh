@@ -59,6 +59,11 @@ export function LivingUniverse() {
           <i key={index} style={{ "--star-index": index } as CSSProperties} />
         ))}
       </div>
+      <div className="cm-universe-contours">
+        {Array.from({ length: 4 }, (_, index) => (
+          <i key={index} style={{ "--contour-index": index } as CSSProperties} />
+        ))}
+      </div>
       <svg className="cm-universe-links" viewBox="0 0 100 100" preserveAspectRatio="none">
         {links.map(([fromId, toId], index) => {
           const from = points.find((point) => point.id === fromId)!;
