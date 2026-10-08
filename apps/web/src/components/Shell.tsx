@@ -4,6 +4,7 @@ import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { ArrowUp, Boxes, Gauge, House, LogOut, Network, Search, Shield, Workflow } from "lucide-react";
 import { useAuth } from "../lib/auth";
 import { initials } from "../lib/format";
+import { AmbientCodeStream } from "./AmbientCodeStream";
 import { AppearancePanel } from "./AppearancePanel";
 import { CommandPalette } from "./CommandPalette";
 
@@ -14,10 +15,17 @@ export function Shell() {
   const [showScrollTop, setShowScrollTop] = useState(false);
 
   useEffect(() => {
-    const update = () => setShowScrollTop(window.scrollY > 500);
+    const root = document.documentElement;
+    const update = () => {
+      setShowScrollTop(window.scrollY > 500);
+      root.style.setProperty("--cm-code-scroll-y", `${Math.max(-64, window.scrollY * -0.035).toFixed(2)}px`);
+    };
     update();
     window.addEventListener("scroll", update, { passive: true });
-    return () => window.removeEventListener("scroll", update);
+    return () => {
+      window.removeEventListener("scroll", update);
+      root.style.removeProperty("--cm-code-scroll-y");
+    };
   }, []);
 
   useEffect(() => {
@@ -93,6 +101,8 @@ export function Shell() {
       const shiftY = ((event.clientY / window.innerHeight) - 0.5) * 10;
       root.style.setProperty("--cm-pointer-shift-x", `${shiftX.toFixed(2)}px`);
       root.style.setProperty("--cm-pointer-shift-y", `${shiftY.toFixed(2)}px`);
+      root.style.setProperty("--cm-code-pointer-x", `${(shiftX * -0.65).toFixed(2)}px`);
+      root.style.setProperty("--cm-code-pointer-y", `${(shiftY * -0.45).toFixed(2)}px`);
 
       const target = event.target instanceof Element
         ? event.target.closest<HTMLElement>(".surface-panel, .lp-hero-card, .lp-trace-col, .lp-terminal-body")
@@ -153,6 +163,8 @@ export function Shell() {
       document.documentElement.removeEventListener("mouseleave", clearSurface);
       root.style.removeProperty("--cm-pointer-shift-x");
       root.style.removeProperty("--cm-pointer-shift-y");
+      root.style.removeProperty("--cm-code-pointer-x");
+      root.style.removeProperty("--cm-code-pointer-y");
       clearSurface();
     };
   }, []);
@@ -164,6 +176,7 @@ export function Shell() {
         <span className="cm-spectrum-rail cm-spectrum-rail-two" />
         <span className="cm-spectrum-rail cm-spectrum-rail-three" />
       </div>
+      <AmbientCodeStream />
       <div className="cm-interaction-layer" aria-hidden="true" />
       <div className={`cm-network-progress ${fetching > 0 ? "is-active" : ""}`} aria-hidden="true" />
       <header className="cm-shell-header sticky top-0 z-20 border-b border-line bg-ink/90 backdrop-blur-xl">
