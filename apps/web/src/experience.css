@@ -79,7 +79,9 @@
 .cm-code-workspace[data-compact="true"] .cm-workspace-grid { position: relative; }
 .cm-code-workspace[data-compact="true"] .cm-workspace-rail { position: absolute; z-index: 3; top: 0; bottom: 0; width: min(23rem, 100%); box-shadow: 0 0 30px #0006; }
 .cm-code-workspace[data-compact="true"] .cm-file-rail { left: 0; width: min(18rem, 100%); }
-.cm-code-workspace[data-compact="true"] .cm-copilot-rail { right: 0; overflow-y: auto; }
+.cm-code-workspace[data-compact="true"] .cm-copilot-rail { right: 0; display: block; overflow-y: auto; }
+.cm-code-workspace[data-compact="true"] .cm-copilot-rail > section[aria-label="Repository assistant"] { height: 36rem; min-height: 36rem; }
+.cm-code-workspace[data-compact="true"] .cm-copilot-rail > div:last-child { height: 18rem; min-height: 18rem; }
 .cm-code-workspace[data-compact="true"] .cm-workspace-rail:not([aria-hidden="true"]) { animation: cm-trail-arrive 180ms ease both; }
 .cm-code-workspace[data-compact="true"] .cm-workspace-grid > main { min-height: 0; }
 .cm-app-shell .cm-universe-page { height: calc(100dvh - 6.5rem); }
