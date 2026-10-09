@@ -1,6 +1,6 @@
 import { Link, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { Activity, Bot, BrainCircuit, Code2, Fingerprint, FlaskConical, Gauge, GitBranch, GitFork, MessageSquare, Orbit, Rocket, ServerCog, Settings, ShieldCheck, Split, Users, Waypoints } from "lucide-react";
+import { Activity, Bot, BrainCircuit, Code2, Fingerprint, FlaskConical, Gauge, GitBranch, GitFork, GraduationCap, MessageSquare, Orbit, Rocket, ServerCog, Settings, ShieldCheck, Split, Users, Waypoints } from "lucide-react";
 import type { Permission, Project, ProjectMember, ProjectRole, PublicUser } from "@codemesh/shared";
 import { LoadingState } from "../components/LoadingState";
 import { StatusPill } from "../components/StatusPill";
@@ -76,6 +76,7 @@ export function ProjectOverviewPage() {
           { icon: BrainCircuit, label: "Intelligence", to: "intelligence", tone: "cm-tone-rose", detail: "Inspect health, search, and repository signals." },
           { icon: FlaskConical, label: "Engineering Labs", to: "labs", tone: "cm-tone-amber", detail: "Simulate impact and review repository evidence." },
           { icon: Fingerprint, label: "Invariant Ledger", to: "labs?lab=invariants", tone: "cm-tone-mint", detail: "Expose hidden code contracts and run failure drills against them." },
+          { icon: GraduationCap, label: "Challenge Room", to: "labs?lab=challenge", tone: "cm-tone-rose", detail: "Practice repository knowledge with source-linked questions." },
           { icon: Orbit, label: "Advanced Operations", to: "advanced", tone: "cm-tone-violet", detail: "Plan, trace, gate, secure, and evaluate changes." },
           { icon: Gauge, label: "Mesh Control Room", to: "control-room", tone: "cm-tone-coral", detail: "Bring sync, security, Copilot, tasks, and team signals together." },
           { icon: Rocket, label: "Delivery Hub", to: "delivery", tone: "cm-tone-rose", detail: "Forecast change futures, review, verify, sync, trace incidents, and connect engineering agents." },

@@ -34,11 +34,12 @@ import {
 } from "lucide-react";
 import type { GraphEdge, GraphNode, PublicUser } from "@codemesh/shared";
 import { LoadingState } from "../components/LoadingState";
+import { RepositoryChallengeRoom } from "../components/RepositoryChallengeRoom";
 import { api } from "../lib/api";
 
 type Risk = "low" | "medium" | "high";
 type InvariantCategory = "access" | "configuration" | "interface" | "data" | "resilience" | "verification";
-type LabTab = "impact" | "evolution" | "quality" | "guardrails" | "invariants" | "team" | "studio";
+type LabTab = "impact" | "evolution" | "quality" | "guardrails" | "invariants" | "challenge" | "team" | "studio";
 
 type LabsPayload = {
   project: { id: string; name: string; description: string; commitSha: string; source: string; languages: string[] };
@@ -101,6 +102,7 @@ const tabs: Array<{ id: LabTab; label: string; icon: typeof Activity; tone: stri
   { id: "quality", label: "Quality", icon: TestTube2, tone: "cm-tone-amber" },
   { id: "guardrails", label: "Guardrails", icon: ShieldCheck, tone: "cm-tone-coral" },
   { id: "invariants", label: "Invariants", icon: Fingerprint, tone: "cm-tone-cyan" },
+  { id: "challenge", label: "Challenge Room", icon: GraduationCap, tone: "cm-tone-rose" },
   { id: "team", label: "Team", icon: UsersRound, tone: "cm-tone-mint" },
   { id: "studio", label: "Studio", icon: WandSparkles, tone: "cm-tone-rose" }
 ];
@@ -177,6 +179,7 @@ export function ProjectLabsPage() {
       {tab === "quality" && <QualityLab data={data} projectId={projectId} />}
       {tab === "guardrails" && <GuardrailLab data={data} projectId={projectId} />}
       {tab === "invariants" && <InvariantLab data={data} projectId={projectId} />}
+      {tab === "challenge" && <RepositoryChallengeRoom project={data.project} nodes={data.nodes} contracts={data.invariantLedger.contracts} />}
       {tab === "team" && <TeamLab data={data} projectId={projectId} />}
       {tab === "studio" && <StudioLab data={data} projectId={projectId} rerun={() => void labs.refetch()} running={labs.isFetching} />}
     </section>

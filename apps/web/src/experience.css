@@ -105,3 +105,88 @@
 :root[data-motion="reduced"] .cm-trail-dialog[open],
 :root[data-motion="reduced"] .cm-app-shell details[open] > :not(summary),
 :root[data-motion="reduced"] .cm-app-shell :is(.action-primary, .action-secondary):hover svg { animation: none; }
+
+.cm-challenge-room { margin-top: 1.5rem; min-width: 0; }
+.cm-challenge-header { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 1.25rem; }
+.cm-challenge-header h2 { margin-top: 0.6rem; color: #f2f6f8; font-size: 1.5rem; font-weight: 650; }
+.cm-challenge-header p { max-width: 40rem; margin-top: 0.5rem; color: #8da2b8; font-size: 0.8rem; line-height: 1.6; }
+.cm-challenge-settings { display: flex; align-items: flex-end; gap: 0.65rem; }
+.cm-challenge-settings label { color: #8da2b8; font-size: 0.7rem; }
+.cm-challenge-settings select { width: 12rem; margin-top: 0.3rem; font-size: 0.75rem; }
+.cm-challenge-settings .cm-tool-button { width: 2.4rem; height: 2.4rem; border-color: #293744; }
+.cm-challenge-progress { margin-block: 1.5rem; }
+.cm-challenge-progress > div { display: flex; justify-content: space-between; gap: 1rem; font-size: 0.72rem; }
+.cm-challenge-progress span { color: #8da2b8; }
+.cm-challenge-progress strong { color: #56c7e8; font-weight: 500; }
+.cm-challenge-progress progress { appearance: none; display: block; width: 100%; height: 4px; margin-top: 0.7rem; overflow: hidden; border: 0; border-radius: 2px; background: #24313c; }
+.cm-challenge-progress progress::-webkit-progress-bar { background: #24313c; }
+.cm-challenge-progress progress::-webkit-progress-value { background: linear-gradient(90deg, #56c7e8, #a78bfa, #f472b6); transition: width 250ms ease; }
+.cm-challenge-progress progress::-moz-progress-bar { background: linear-gradient(90deg, #56c7e8, #a78bfa, #f472b6); }
+.cm-challenge-layout { display: grid; min-width: 0; grid-template-columns: minmax(0, 1fr) 15rem; gap: 2rem; }
+.cm-challenge-workbench { min-width: 0; border-top: 2px solid #a78bfa; border-bottom: 1px solid #293744; background: #10171e; padding: 1.5rem; }
+.cm-challenge-kicker { display: flex; justify-content: space-between; gap: 1rem; color: #a78bfa; font-family: ui-monospace, monospace; font-size: 0.7rem; }
+.cm-challenge-question { animation: cm-disclosure-arrive 220ms ease both; }
+.cm-challenge-question h3 { min-height: 4rem; margin-top: 1.25rem; overflow-wrap: anywhere; color: #f2f6f8; font-size: 1.3rem; font-weight: 600; line-height: 1.5; }
+.cm-challenge-choices { display: grid; gap: 0.7rem; margin-top: 1.5rem; border: 0; }
+.cm-challenge-choice { display: flex; min-height: 3.5rem; align-items: center; gap: 0.85rem; border: 1px solid #293744; border-radius: 6px; padding: 0.8rem; cursor: pointer; color: #b0c1ce; transition: border-color 150ms ease, background-color 150ms ease; }
+.cm-challenge-choice:hover { border-color: #59657a; background: #18232b; }
+.cm-challenge-choice:has(input:focus-visible) { outline: 2px solid #56c7e8; outline-offset: 3px; }
+.cm-challenge-choice:has(input:disabled) { cursor: default; }
+.cm-challenge-choice.is-selected { border-color: #a78bfa; background: #a78bfa0b; color: #e9ddff; }
+.cm-challenge-choice.is-correct { border-color: #64d6af; background: #64d6af0b; color: #83e1bf; }
+.cm-challenge-choice.is-wrong { border-color: #ef746f; background: #ef746f0b; color: #f49792; }
+.cm-challenge-letter { display: grid; width: 1.6rem; height: 1.6rem; flex-shrink: 0; place-items: center; border-right: 1px solid #3b4f5b; padding-right: 0.4rem; color: #8da2b8; font-family: ui-monospace, monospace; font-size: 0.75rem; }
+.cm-challenge-choice-text { min-width: 0; flex: 1; overflow-wrap: anywhere; font-family: ui-monospace, monospace; font-size: 0.8rem; }
+.cm-challenge-choice > svg { flex-shrink: 0; }
+.cm-challenge-feedback { margin-top: 1.25rem; border-left: 2px solid #64d6af; padding: 0.2rem 0 0.2rem 1rem; animation: cm-disclosure-arrive 220ms ease both; }
+.cm-challenge-feedback.is-wrong { border-color: #ef746f; }
+.cm-challenge-feedback strong { color: #64d6af; font-size: 0.85rem; }
+.cm-challenge-feedback.is-wrong strong { color: #ef746f; }
+.cm-challenge-feedback p { margin-top: 0.5rem; overflow-wrap: anywhere; color: #8da2b8; font-size: 0.8rem; line-height: 1.6; }
+.cm-challenge-source { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.7rem; color: #56c7e8; font-family: ui-monospace, monospace; font-size: 0.75rem; }
+.cm-challenge-source span { min-width: 0; overflow-wrap: anywhere; }
+.cm-challenge-source svg { flex-shrink: 0; }
+.cm-challenge-feedback pre { max-height: 8rem; margin-top: 0.7rem; overflow: auto; border-block: 1px solid #293744; padding-block: 0.65rem; color: #cad9e2; font-size: 0.72rem; line-height: 1.7; white-space: pre-wrap; overflow-wrap: anywhere; }
+.cm-challenge-discuss { display: inline-flex; align-items: center; gap: 0.45rem; margin-top: 0.7rem; color: #a78bfa; font-size: 0.75rem; }
+.cm-challenge-footer { display: flex; justify-content: space-between; gap: 1rem; margin-top: 1.5rem; border-top: 1px solid #293744; padding-top: 1rem; }
+.cm-challenge-map { min-width: 0; align-self: start; }
+.cm-challenge-score { display: flex; align-items: baseline; gap: 0.7rem; margin-top: 1rem; }
+.cm-challenge-score strong { color: #64d6af; font-size: 2rem; font-weight: 650; }
+.cm-challenge-score span { color: #8da2b8; font-size: 0.72rem; }
+.cm-challenge-dots { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0.4rem; margin-top: 1rem; }
+.cm-challenge-dots button { display: grid; aspect-ratio: 1; place-items: center; border: 1px solid #293744; border-radius: 5px; background: #10171e; color: #8da2b8; font-family: ui-monospace, monospace; font-size: 0.7rem; }
+.cm-challenge-dots button[aria-current] { border-color: #a78bfa; box-shadow: inset 0 -2px #a78bfa; }
+.cm-challenge-dots button[data-result="correct"] { background: #64d6af14; color: #64d6af; }
+.cm-challenge-dots button[data-result="wrong"] { background: #ef746f14; color: #ef746f; }
+.cm-challenge-map-legend { display: flex; gap: 1rem; margin-top: 0.8rem; }
+.cm-challenge-map-legend span { display: flex; align-items: center; gap: 0.3rem; color: #8da2b8; font-size: 0.65rem; }
+.cm-challenge-revision { margin-top: 1.5rem; border-top: 1px solid #293744; padding-top: 1rem; color: #8da2b8; font-size: 0.7rem; }
+.cm-challenge-revision code { display: block; margin-top: 0.35rem; overflow-wrap: anywhere; color: #b0c1ce; font-size: 0.68rem; }
+.cm-challenge-export { display: flex; align-items: center; gap: 0.45rem; margin-top: 1rem; color: #56c7e8; font-size: 0.75rem; }
+.cm-challenge-recap { display: flex; min-height: 24rem; align-items: flex-start; justify-content: center; flex-direction: column; gap: 1rem; }
+.cm-challenge-recap h3 { color: #f2f6f8; font-size: 1.5rem; font-weight: 650; }
+.cm-challenge-recap p { color: #8da2b8; font-size: 0.85rem; }
+.cm-challenge-recap-actions { display: flex; flex-wrap: wrap; gap: 0.7rem; }
+.cm-challenge-empty { display: grid; min-height: 20rem; place-content: center; justify-items: center; gap: 0.8rem; text-align: center; }
+.cm-challenge-empty h3 { color: #f2f6f8; font-weight: 600; }
+.cm-challenge-empty p { max-width: 28rem; color: #8da2b8; font-size: 0.8rem; line-height: 1.6; }
+@media (max-width: 900px) {
+  .cm-challenge-layout { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
+  .cm-challenge-map { border-top: 1px solid #293744; padding-top: 1rem; }
+  .cm-challenge-dots { grid-template-columns: repeat(12, minmax(0, 1fr)); max-width: 30rem; }
+}
+@media (max-width: 480px) {
+  .cm-challenge-workbench { padding: 1rem; }
+  .cm-challenge-question h3 { font-size: 1.1rem; }
+  .cm-challenge-dots { grid-template-columns: repeat(8, minmax(0, 1fr)); }
+  .cm-challenge-choice { gap: 0.5rem; padding: 0.65rem; }
+  .cm-challenge-settings { width: 100%; }
+  .cm-challenge-settings label { flex: 1; }
+  .cm-challenge-settings select { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cm-challenge-question, .cm-challenge-feedback { animation: none; }
+  .cm-challenge-progress progress::-webkit-progress-value { transition: none; }
+}
+:root[data-motion="reduced"] :is(.cm-challenge-question, .cm-challenge-feedback) { animation: none; }
+:root[data-motion="reduced"] .cm-challenge-progress progress::-webkit-progress-value { transition: none; }
