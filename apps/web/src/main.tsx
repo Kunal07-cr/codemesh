@@ -8,6 +8,7 @@ import "./styles.css";
 import "./landing.css";
 import "./delivery.css";
 import "@xyflow/react/dist/style.css";
+import "./experience.css";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,4 +28,3 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     </QueryClientProvider>
   </React.StrictMode>
 );
-

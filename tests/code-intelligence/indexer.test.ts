@@ -18,6 +18,7 @@ import {
   buildGeneratedTestPlans,
   buildIncidentReport,
   buildIncrementalIndexPlan,
+  buildInvariantLedger,
   buildPullRequestReview,
   buildPullRequestRisk,
   buildRepositoryFutureSimulation,
@@ -43,6 +44,32 @@ import {
 } from "@codemesh/code-intelligence";
 
 describe("code intelligence", () => {
+  it("infers contracts from syntax, excluding comments, docs, and test examples", () => {
+    const source = [
+      "// router.get('/fake', requireAuth()); process.env.FAKE_SECRET;",
+      "const example = \"router.get('/example', requireAuth())\";",
+      "router.post(",
+      "  '/real',",
+      "  requireAuth(),",
+      "  (req, res) => res.end()",
+      ");",
+      "const key = process.env.API_SECRET ?? 'unsafe';"
+    ].join("\n");
+    const template = buildSampleRepoFiles("p")[0]!;
+    const files = [
+      { ...template, path: "src/routes.ts", content: source, size: source.length },
+      { ...template, path: "README.md", language: "markdown", content: "router.get('/docs', requireAuth())", size: 50 },
+      { ...template, path: "tests/contract.test.ts", content: "// requireAuth\nit('works', () => expect(true).toBe(true));", size: 60 }
+    ];
+    const ledger = buildInvariantLedger(indexRepository("p", "commit", files));
+    expect(ledger.contracts.some((item) => item.title.includes("POST /real") && item.line === 3)).toBe(true);
+    expect(ledger.contracts.some((item) => /fake|example|docs|FAKE_SECRET/.test(item.title))).toBe(false);
+    expect(ledger.contracts.find((item) => item.category === "access")?.status).toBe("watch");
+    expect(ledger.contracts.find((item) => item.category === "configuration")?.contradiction).toContain("fallback");
+    expect(ledger.contracts.find((item) => item.category === "verification")?.status).toBe("unverified");
+    expect(buildInvariantLedger(indexRepository("p", "empty", [])).drills).toEqual([]);
+  });
+
   it("keeps safe source paths visible while limiting only oversized semantic parsing", () => {
     expect(isRepositoryTextFile("dist/generated.js", 250_000)).toBe(true);
     expect(isIndexableTextFile("dist/generated.js", 250_000)).toBe(true);
@@ -133,6 +160,7 @@ describe("code intelligence", () => {
     const hotspots = analyzeRepositoryHotspots(index);
     const onboarding = buildOnboardingJourney(index);
     const council = buildReviewCouncil(index);
+    const invariantLedger = buildInvariantLedger(index);
 
     expect(policies.length).toBeGreaterThanOrEqual(4);
     expect(policies.every((policy) => policy.detail.length > 0)).toBe(true);
@@ -143,6 +171,10 @@ describe("code intelligence", () => {
     expect(hotspots[0]?.score).toBeGreaterThan(0);
     expect(onboarding.length).toBeGreaterThanOrEqual(3);
     expect(council.map((agent) => agent.id)).toEqual(expect.arrayContaining(["architecture", "security", "testing", "maintainability"]));
+    expect(invariantLedger.contracts.some((contract) => contract.category === "access" && contract.filePath.includes("auth"))).toBe(true);
+    expect(invariantLedger.contracts.some((contract) => contract.category === "interface" && contract.title.includes("/tasks"))).toBe(true);
+    expect(invariantLedger.drills.some((drill) => drill.id === "drill:trust-boundary" && drill.affectedFiles.length > 0)).toBe(true);
+    expect(invariantLedger.score).toBeGreaterThan(0);
   });
 
   it("builds advanced planning, runtime, security, risk, and governance evidence", () => {
@@ -253,4 +285,3 @@ describe("code intelligence", () => {
     expect(observatory.freshness.manifest).toMatch(/^[0-9a-f]{8}$/);
   });
 });
-

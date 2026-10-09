@@ -210,7 +210,7 @@ export function WorkspacePage() {
   }
 
   return (
-    <section className="h-[calc(100vh-3.5rem)] overflow-hidden bg-ink">
+    <section className="cm-code-workspace h-[calc(100vh-3.5rem)] overflow-hidden bg-ink">
       <header className="flex h-12 items-center justify-between border-b border-line px-4">
         <div className="flex min-w-0 items-center gap-3">
           <StatusPill tone={connection === "connected" ? "good" : "warn"}>

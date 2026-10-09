@@ -7,12 +7,14 @@ import { initials } from "../lib/format";
 import { AmbientCodeStream } from "./AmbientCodeStream";
 import { AppearancePanel } from "./AppearancePanel";
 import { CommandPalette } from "./CommandPalette";
+import { ProjectSwitchboard } from "./ProjectSwitchboard";
 
 export function Shell() {
   const { user, logout } = useAuth();
   const location = useLocation();
   const fetching = useIsFetching();
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const projectId = location.pathname.match(/^\/projects\/([^/]+)/)?.[1];
 
   useEffect(() => {
     const update = () => {
@@ -29,7 +31,7 @@ export function Shell() {
     const root = document.getElementById("root");
     if (!root) return;
 
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches || document.documentElement.dataset.motion === "reduced";
+    const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches || document.documentElement.dataset.motion === "reduced";
     const observer = new IntersectionObserver((entries) => {
       for (const entry of entries) {
         if (!entry.isIntersecting) continue;
@@ -41,7 +43,7 @@ export function Shell() {
     const register = (scope: ParentNode) => {
       scope.querySelectorAll<HTMLElement>("[data-reveal]:not(.cm-reveal-ready)").forEach((element) => {
         element.classList.add("cm-reveal-ready");
-        if (reducedMotion) element.classList.add("is-revealed");
+        if (reducedMotion()) element.classList.add("is-revealed");
         else observer.observe(element);
       });
     };
@@ -82,6 +84,8 @@ export function Shell() {
       activeSurface.classList.remove("cm-interactive-surface");
       activeSurface.style.removeProperty("--cm-tilt-x");
       activeSurface.style.removeProperty("--cm-tilt-y");
+      activeSurface.style.removeProperty("--cm-hover-x");
+      activeSurface.style.removeProperty("--cm-hover-y");
       activeSurface = null;
     };
 
@@ -123,6 +127,8 @@ export function Shell() {
       const y = Math.max(0, Math.min(1, (event.clientY - rect.top) / rect.height));
       target.style.setProperty("--cm-tilt-x", `${((0.5 - y) * 2.4).toFixed(2)}deg`);
       target.style.setProperty("--cm-tilt-y", `${((x - 0.5) * 3.2).toFixed(2)}deg`);
+      target.style.setProperty("--cm-hover-x", `${(x * 100).toFixed(1)}%`);
+      target.style.setProperty("--cm-hover-y", `${(y * 100).toFixed(1)}%`);
     };
 
     const movePointer = (event: PointerEvent) => {
@@ -143,7 +149,8 @@ export function Shell() {
       signal.style.left = `${event.clientX}px`;
       signal.style.top = `${event.clientY}px`;
       layer.appendChild(signal);
-      signal.addEventListener("animationend", () => signal.remove(), { once: true });
+      const cleanup = window.setTimeout(() => signal.remove(), 900);
+      signal.addEventListener("animationend", () => { window.clearTimeout(cleanup); signal.remove(); }, { once: true });
     };
 
     window.addEventListener("pointermove", movePointer, { passive: true });
@@ -222,6 +229,7 @@ export function Shell() {
           </div>
         </div>
       </header>
+      {projectId && <ProjectSwitchboard projectId={projectId} />}
       <main key={location.pathname} className="cm-page-enter pb-16 md:pb-0">
         <Outlet />
       </main>
@@ -237,7 +245,7 @@ export function Shell() {
           type="button"
           title="Back to top"
           aria-label="Back to top"
-          onClick={() => window.scrollTo({ top: 0, behavior: document.documentElement.dataset.motion === "reduced" ? "auto" : "smooth" })}
+          onClick={() => window.scrollTo({ top: 0, behavior: document.documentElement.dataset.motion === "reduced" || window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" })}
         >
           <ArrowUp className="h-4 w-4" />
         </button>
@@ -266,4 +274,3 @@ function routeTone(pathname: string) {
   if (pathname === "/docs") return "amber";
   return "spectrum";
 }
-

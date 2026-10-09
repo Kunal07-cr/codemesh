@@ -1,4 +1,4 @@
-import { useMemo, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useState, type CSSProperties, type FormEvent } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import {
@@ -15,6 +15,8 @@ import {
   Code2,
   Download,
   FileCode2,
+  Fingerprint,
+  Gauge,
   GitCompareArrows,
   GraduationCap,
   Network,
@@ -23,6 +25,7 @@ import {
   Radar,
   RefreshCw,
   Route,
+  Siren,
   ShieldCheck,
   Sparkles,
   TestTube2,
@@ -34,7 +37,8 @@ import { LoadingState } from "../components/LoadingState";
 import { api } from "../lib/api";
 
 type Risk = "low" | "medium" | "high";
-type LabTab = "impact" | "evolution" | "quality" | "guardrails" | "team" | "studio";
+type InvariantCategory = "access" | "configuration" | "interface" | "data" | "resilience" | "verification";
+type LabTab = "impact" | "evolution" | "quality" | "guardrails" | "invariants" | "team" | "studio";
 
 type LabsPayload = {
   project: { id: string; name: string; description: string; commitSha: string; source: string; languages: string[] };
@@ -59,6 +63,14 @@ type LabsPayload = {
   ownership: { members: Array<{ userId: string; role: string; activityEvents: number; user: PublicUser | null }>; activeStewards: number; busFactorRisk: "high" | "controlled" };
   onboarding: Array<{ id: string; title: string; detail: string; filePath: string; line: number; category: string }>;
   reviewCouncil: Array<{ id: string; name: string; verdict: "pass" | "review" | "block"; summary: string; findings: Array<{ title: string; detail: string; filePath?: string; line?: number }> }>;
+  invariantLedger: {
+    score: number;
+    guarded: number;
+    attention: number;
+    categoryCoverage: number;
+    contracts: Array<{ id: string; category: InvariantCategory; title: string; statement: string; status: "guarded" | "watch" | "unverified"; confidence: number; filePath: string; line: number; evidence: string; dependentFiles: string[]; contradiction?: string }>;
+    drills: Array<{ id: string; title: string; hypothesis: string; severity: Risk; contractIds: string[]; affectedFiles: string[]; recoverySteps: string[] }>;
+  };
   documentation: { generatedAt: string; files: number; symbols: number; relationships: number; entryPoints: string[]; modules: string[] };
 };
 
@@ -88,6 +100,7 @@ const tabs: Array<{ id: LabTab; label: string; icon: typeof Activity; tone: stri
   { id: "evolution", label: "Evolution", icon: GitCompareArrows, tone: "cm-tone-violet" },
   { id: "quality", label: "Quality", icon: TestTube2, tone: "cm-tone-amber" },
   { id: "guardrails", label: "Guardrails", icon: ShieldCheck, tone: "cm-tone-coral" },
+  { id: "invariants", label: "Invariants", icon: Fingerprint, tone: "cm-tone-cyan" },
   { id: "team", label: "Team", icon: UsersRound, tone: "cm-tone-mint" },
   { id: "studio", label: "Studio", icon: WandSparkles, tone: "cm-tone-rose" }
 ];
@@ -144,10 +157,11 @@ export function ProjectLabsPage() {
         </div>
       </div>
 
-      <div className="cm-stagger mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="cm-stagger mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
         <SummaryMetric label="Architecture policies" value={`${policyPasses}/${data.architecturePolicies.length}`} tone="cm-tone-cyan" />
         <SummaryMetric label="Security paths" value={String(data.securityFlows.length)} tone="cm-tone-coral" />
         <SummaryMetric label="Test targets" value={String(data.testPlans.length)} tone="cm-tone-violet" />
+        <SummaryMetric label="Invariants with evidence" value={`${data.invariantLedger.guarded}/${data.invariantLedger.contracts.length}`} tone="cm-tone-mint" />
         <SummaryMetric label="Current commit" value={shortSha(data.project.commitSha)} tone="cm-tone-amber" mono />
       </div>
 
@@ -162,6 +176,7 @@ export function ProjectLabsPage() {
       {tab === "evolution" && <EvolutionLab data={data} fromId={fromId} toId={toId} setFromId={setFromId} setToId={setToId} capture={() => snapshot.mutate()} capturing={snapshot.isPending} captureError={snapshot.error instanceof Error ? snapshot.error.message : ""} />}
       {tab === "quality" && <QualityLab data={data} projectId={projectId} />}
       {tab === "guardrails" && <GuardrailLab data={data} projectId={projectId} />}
+      {tab === "invariants" && <InvariantLab data={data} projectId={projectId} />}
       {tab === "team" && <TeamLab data={data} projectId={projectId} />}
       {tab === "studio" && <StudioLab data={data} projectId={projectId} rerun={() => void labs.refetch()} running={labs.isFetching} />}
     </section>
@@ -273,6 +288,107 @@ function GuardrailLab({ data, projectId }: { data: LabsPayload; projectId: strin
           {data.securityFlows.map((flow) => <div key={flow.id} className={`surface-panel cm-accent-card ${flow.severity === "critical" ? "cm-tone-coral" : flow.severity === "warning" ? "cm-tone-amber" : "cm-tone-cyan"} p-4`} data-reveal><div className="flex items-center gap-2"><ShieldCheck className="cm-icon-motion h-4 w-4" /><h3 className="text-sm font-semibold text-white">{flow.title}</h3></div><div className="mt-3 flex items-center gap-2 font-mono text-xs"><span className="text-cyan">{flow.source}</span><ArrowRight className="h-3.5 w-3.5 text-steel" /><span className="text-violet">{flow.sink}</span></div><p className="mt-2 text-sm leading-6 text-steel">{flow.detail}</p><div className="mt-2 flex flex-wrap gap-2">{flow.filePaths.map((path) => <Link key={path} className="font-mono text-[11px] text-mint hover:underline" to={`/projects/${projectId}/workspace?path=${encodeURIComponent(path)}`}>{path}</Link>)}</div></div>)}
         </div>
       </section>
+    </div>
+  );
+}
+
+function InvariantLab({ data, projectId }: { data: LabsPayload; projectId: string }) {
+  const ledger = data.invariantLedger;
+  const [filter, setFilter] = useState<"all" | "attention" | InvariantCategory>("all");
+  const [drillId, setDrillId] = useState(ledger.drills[0]?.id ?? "");
+  const [phase, setPhase] = useState(0);
+  const [runningId, setRunningId] = useState("");
+  const [runRevision, setRunRevision] = useState(0);
+  const drill = ledger.drills.find((candidate) => candidate.id === drillId) ?? ledger.drills[0];
+  const triggered = new Set(phase >= 2 && runningId === drill?.id ? drill?.contractIds ?? [] : []);
+  useEffect(() => {
+    if (!runningId) return;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches || document.documentElement.dataset.motion === "reduced";
+    if (reduced) { setPhase(3); return; }
+    const mapping = window.setTimeout(() => setPhase(2), 500);
+    const completion = window.setTimeout(() => setPhase(3), 1100);
+    return () => { window.clearTimeout(mapping); window.clearTimeout(completion); };
+  }, [runningId, runRevision]);
+  const contracts = ledger.contracts.filter((contract) => filter === "all" || (filter === "attention" ? contract.status !== "guarded" : contract.category === filter));
+  const filters: Array<{ id: typeof filter; label: string }> = [
+    { id: "all", label: "All" },
+    { id: "attention", label: "Needs attention" },
+    { id: "access", label: "Trust" },
+    { id: "configuration", label: "Runtime" },
+    { id: "interface", label: "Interfaces" },
+    { id: "data", label: "Data" },
+    { id: "resilience", label: "Resilience" },
+    { id: "verification", label: "Tests" }
+  ];
+
+  return (
+    <div className="mt-6 space-y-7">
+      <section className="cm-invariant-stage" data-reveal>
+        <div className="cm-invariant-copy">
+          <div className="eyebrow"><Fingerprint className="h-3.5 w-3.5" /> Repository invariant ledger</div>
+          <h2>Invariant Ledger</h2>
+          <p>Static TypeScript and JavaScript evidence. Scenarios are modeled from graph relationships; no source code or tests are executed.</p>
+        </div>
+        <div className="cm-invariant-score" style={{ "--invariant-score": `${ledger.score * 3.6}deg` } as CSSProperties} aria-label={`Heuristic static evidence score ${ledger.score} out of 100`} title="Heuristic evidence score, not test coverage or an accuracy measurement">
+          <span><strong>{ledger.score}</strong><small>/100</small></span>
+        </div>
+        <dl className="cm-invariant-stats">
+          <div><dt>Evidence linked</dt><dd>{ledger.guarded}</dd></div>
+          <div><dt>Attention</dt><dd>{ledger.attention}</dd></div>
+          <div><dt>Signal types</dt><dd>{ledger.categoryCoverage}/6</dd></div>
+        </dl>
+      </section>
+
+      <div className="grid gap-8 xl:grid-cols-[minmax(0,1.08fr)_minmax(24rem,0.92fr)]">
+        <section>
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <div><div className="eyebrow"><Gauge className="h-3.5 w-3.5" /> Contract evidence</div><h2 className="mt-2 text-xl font-semibold text-white">Repository promises</h2></div>
+            <span className="font-mono text-xs text-steel">{contracts.length} visible</span>
+          </div>
+          <div className="cm-invariant-filters mt-4" role="group" aria-label="Filter repository invariants">
+            {filters.map((item) => <button key={item.id} className={filter === item.id ? "is-active" : ""} type="button" onClick={() => setFilter(item.id)}>{item.label}</button>)}
+          </div>
+          <div className="mt-4 border-y border-line">
+            {contracts.map((contract) => (
+              <details key={contract.id} className={`cm-invariant-contract ${triggered.has(contract.id) ? "is-triggered" : ""}`} data-category={contract.category}>
+                <summary>
+                  <span className="cm-invariant-marker"><Fingerprint className="h-4 w-4" /></span>
+                  <span className="min-w-0 flex-1"><strong>{contract.title}</strong><small>{contract.category} · {contract.dependentFiles.length} connected file{contract.dependentFiles.length === 1 ? "" : "s"}</small></span>
+                  <span className={`cm-invariant-status ${contract.status}`}>{contract.status === "guarded" ? "evidence linked" : contract.status}</span>
+                </summary>
+                <div className="cm-invariant-evidence">
+                  <p>{contract.statement}</p>
+                  <code>{contract.evidence}</code>
+                  {contract.contradiction && <div className="cm-invariant-warning"><AlertTriangle className="h-4 w-4" /> {contract.contradiction}</div>}
+                  <div className="mt-3 flex flex-wrap items-center gap-3"><Link className="inline-flex items-center gap-1 font-mono text-xs text-mint" to={`/projects/${projectId}/workspace?path=${encodeURIComponent(contract.filePath)}&line=${contract.line}`}><FileCode2 className="h-3.5 w-3.5" /> {contract.filePath}:{contract.line}</Link><Link className="inline-flex items-center gap-1 text-xs text-violet" to={`/projects/${projectId}/assistant?path=${encodeURIComponent(contract.filePath)}&prompt=${encodeURIComponent(`Draft a focused regression test for this inferred contract: ${contract.statement} Source: ${contract.filePath}:${contract.line}. Check the implementation before proposing a patch.`)}`}><Bot className="h-3.5 w-3.5" /> Draft regression test</Link><span className="text-xs text-steel">Related files: {contract.dependentFiles.slice(0, 3).join(", ")}</span></div>
+                </div>
+              </details>
+            ))}
+            {contracts.length === 0 && <div className="py-10 text-center text-sm text-steel">No contracts match this filter.</div>}
+          </div>
+        </section>
+
+        <section className="cm-failure-drill">
+          <div className="eyebrow"><Siren className="h-3.5 w-3.5" /> Failure drill console</div>
+          <h2 className="mt-2 text-xl font-semibold text-white">Failure scenario explorer</h2>
+          <div className="cm-failure-drill-tabs mt-4" role="tablist" aria-label="Invariant failure drills">
+            {ledger.drills.map((item, index) => <button key={item.id} className={item.id === drill?.id ? "is-active" : ""} type="button" role="tab" aria-selected={item.id === drill?.id} title={item.title} onClick={() => { setDrillId(item.id); setRunningId(""); setPhase(0); }}><span>{String(index + 1).padStart(2, "0")}</span>{item.title}</button>)}
+          </div>
+          {drill ? <div className="cm-failure-drill-body">
+            <div className="flex items-start justify-between gap-3"><div><div className="text-xs uppercase text-steel">Hypothetical condition</div><h3 className="mt-1 text-lg font-semibold text-white">{drill.title}</h3></div><RiskPill risk={drill.severity} /></div>
+            <p className="mt-3 text-sm leading-6 text-steel">{drill.hypothesis}</p>
+            <div className="mt-4 flex flex-wrap items-center gap-3"><button className="action-primary" type="button" disabled={phase > 0 && phase < 3} onClick={() => { setPhase(1); setRunningId(drill.id); setRunRevision((revision) => revision + 1); }}><Play className="h-4 w-4" /> {phase > 0 && phase < 3 ? "Mapping" : "Map scenario"}</button><span className="text-xs text-steel" role="status">{phase === 3 ? "Scenario mapped; source unchanged" : phase === 2 ? "Tracing related files" : phase === 1 ? "Matching source contracts" : "Static model"}</span></div>
+            <div className={`cm-invariant-ripple mt-5 ${phase >= 2 ? "is-mapped" : ""}`}>
+              <div className="cm-invariant-cause"><Siren className="h-5 w-5" /><span>{phase >= 2 ? "Modeled assumption break" : "Scenario ready"}</span></div>
+              {drill.contractIds.map((id, index) => { const contract = ledger.contracts.find((candidate) => candidate.id === id); return contract ? <button key={id} type="button" onClick={() => setFilter(contract.category)}><i style={{ "--ripple-index": index } as CSSProperties} /><span>{contract.title}</span><small>{contract.filePath}:{contract.line}</small></button> : null; })}
+            </div>
+            <div className="mt-6 grid gap-6 md:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-2">
+              <div><div className="text-xs font-semibold uppercase text-cyan">Recovery sequence</div><ol className="mt-2 space-y-2">{drill.recoverySteps.map((step, index) => <li key={step} className="flex gap-2 text-sm leading-5 text-steel"><span className="font-mono text-xs text-mint">{index + 1}</span>{step}</li>)}</ol></div>
+              <div><div className="text-xs font-semibold uppercase text-violet">Graph-related surface</div><div className="mt-2 max-h-36 space-y-2 overflow-y-auto pr-1">{drill.affectedFiles.map((path) => <Link key={path} className="block truncate font-mono text-xs text-steel hover:text-white" to={`/projects/${projectId}/workspace?path=${encodeURIComponent(path)}`}>{path}</Link>)}</div></div>
+            </div>
+          </div> : <div className="mt-6 border-y border-line py-10 text-center text-sm text-steel">Import more source code to generate failure drills.</div>}
+        </section>
+      </div>
     </div>
   );
 }

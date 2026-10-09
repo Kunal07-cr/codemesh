@@ -216,6 +216,41 @@ export type ReviewAgentResult = {
   findings: Array<{ title: string; detail: string; filePath?: string; line?: number }>;
 };
 
+export type InvariantCategory = "access" | "configuration" | "interface" | "data" | "resilience" | "verification";
+
+export type RepositoryInvariant = {
+  id: string;
+  category: InvariantCategory;
+  title: string;
+  statement: string;
+  status: "guarded" | "watch" | "unverified";
+  confidence: number;
+  filePath: string;
+  line: number;
+  evidence: string;
+  dependentFiles: string[];
+  contradiction?: string;
+};
+
+export type InvariantFailureDrill = {
+  id: string;
+  title: string;
+  hypothesis: string;
+  severity: "low" | "medium" | "high";
+  contractIds: string[];
+  affectedFiles: string[];
+  recoverySteps: string[];
+};
+
+export type InvariantLedger = {
+  score: number;
+  guarded: number;
+  attention: number;
+  categoryCoverage: number;
+  contracts: RepositoryInvariant[];
+  drills: InvariantFailureDrill[];
+};
+
 type PendingCall = {
   sourceFilePath: string;
   sourceSymbolId?: string;
@@ -1465,6 +1500,228 @@ export function buildReviewCouncil(index: RepositoryIndex): ReviewAgentResult[] 
   ];
 }
 
+export function buildInvariantLedger(index: RepositoryIndex): InvariantLedger {
+  const contracts: RepositoryInvariant[] = [];
+  const sourceFiles = index.files.filter((file) => !file.binary && !file.sensitive && /\.[cm]?[jt]sx?$/i.test(file.path) && isIndexableTextFile(file.path, file.size));
+  const isTest = (path: string) => /(^|\/)(__tests__|tests?)(\/|$)|\.(test|spec)\.[^.]+$/i.test(path);
+  const signals = new Map(sourceFiles.map((file) => [file.path, extractInvariantSignals(file.path, file.content, isTest(file.path))]));
+  const testFiles = sourceFiles.filter((file) => isTest(file.path) && signals.get(file.path)!.some((signal) => signal.kind === "test"));
+  const categoryCounts = new Map<InvariantCategory, number>();
+  const categoryLimits: Record<InvariantCategory, number> = { access: 8, configuration: 8, interface: 12, data: 8, resilience: 8, verification: 8 };
+
+  const hasTestEvidence = (filePath: string, token: string) => {
+    const stem = baseName(filePath).replace(/\.[^.]+$/, "");
+    return testFiles.some((file) => signals.get(file.path)!.some((signal) => signal.kind === "reference" && signal.name === token) || baseName(file.path).replace(/\.(test|spec)\.[^.]+$/, "") === stem);
+  };
+
+  const addContract = (input: Omit<RepositoryInvariant, "id" | "dependentFiles">) => {
+    const count = categoryCounts.get(input.category) ?? 0;
+    if (count >= categoryLimits[input.category]) return;
+    categoryCounts.set(input.category, count + 1);
+    const impact = analyzeImpact(index, fileNodeId(input.filePath));
+    const dependentFiles = [...new Set([input.filePath, ...(impact?.affectedFiles ?? [])])].slice(0, 12);
+    contracts.push({
+      ...input,
+      id: `invariant:${hashContent(`${input.category}:${input.filePath}:${input.line}:${input.title}`)}`,
+      dependentFiles
+    });
+  };
+
+  for (const file of sourceFiles) {
+    const fileSignals = signals.get(file.path)!;
+    if (isTest(file.path)) {
+      const test = fileSignals.find((signal) => signal.kind === "test");
+      if (test) addContract({
+        category: "verification", title: `${baseName(file.path)} retains regression checks`,
+        statement: `Test declarations are present in ${file.path}; their execution result is not known to this analysis.`,
+        status: "unverified", confidence: 65, filePath: file.path, line: test.line, evidence: test.evidence,
+        contradiction: "Run these checks in CI before treating this behavior as verified."
+      });
+      continue;
+    }
+    let accessAdded = false;
+    let dataAdded = false;
+    let resilienceAdded = false;
+
+    fileSignals.forEach((signal) => {
+      const { evidence, line } = signal;
+
+      if (!accessAdded && signal.kind === "access") {
+          const gate = signal.name;
+          const tested = hasTestEvidence(file.path, gate.replace("jwt.", ""));
+          addContract({
+            category: "access",
+            title: `${gate} remains on the trust boundary`,
+            statement: `Protected work through ${file.path} must continue to cross the ${gate} gate.`,
+            status: tested ? "guarded" : "watch",
+            confidence: tested ? 96 : 84,
+            filePath: file.path,
+            line,
+            evidence,
+            contradiction: tested ? undefined : "A gate call is visible, but no matching test reference was found."
+          });
+          accessAdded = true;
+      }
+
+      if (signal.kind === "environment") {
+        const name = signal.name;
+        const sensitiveDefault = /SECRET|TOKEN|PASSWORD|KEY/.test(name) && /\?\?\s*["'`]/.test(evidence);
+        addContract({
+          category: "configuration",
+          title: `${name} remains an explicit runtime input`,
+          statement: `${name} must be supplied by the environment or retain a reviewed fallback.`,
+          status: "watch",
+          confidence: sensitiveDefault ? 68 : 88,
+          filePath: file.path,
+          line,
+          evidence,
+          contradiction: sensitiveDefault ? "A sensitive setting appears to have a source-code fallback." : "Environment read detected; required-value validation has not been established."
+        });
+      }
+
+      if (signal.kind === "route") {
+        const method = signal.name.split(" ")[0]!;
+        const routePath = signal.name.slice(method.length + 1);
+        const tested = hasTestEvidence(file.path, routePath);
+        addContract({
+          category: "interface",
+          title: `${method} ${routePath} preserves its contract`,
+          statement: `Consumers depend on the ${method} ${routePath} request and response boundary.`,
+          status: tested ? "guarded" : "unverified",
+          confidence: tested ? 94 : 61,
+          filePath: file.path,
+          line,
+          evidence,
+          contradiction: tested ? undefined : "No test file was found that names this endpoint."
+        });
+      }
+
+      if (!dataAdded && (signal.kind === "schema" || signal.kind === "shape")) {
+          const runtimeShape = signal.kind === "schema";
+          const shape = signal.name;
+          addContract({
+            category: "data",
+            title: `${shape} preserves its declared shape`,
+            statement: `Callers rely on the fields and constraints represented by ${shape}.`,
+            status: runtimeShape ? "guarded" : "watch",
+            confidence: runtimeShape ? 93 : 72,
+            filePath: file.path,
+            line,
+            evidence,
+            contradiction: runtimeShape ? undefined : "The shape is compile-time only; no runtime validator was detected on this line."
+          });
+          dataAdded = true;
+      }
+
+      if (!resilienceAdded && signal.kind === "failure") {
+        addContract({
+          category: "resilience",
+          title: `${baseName(file.path)} keeps a controlled failure path`,
+          statement: `Failures in ${file.path} must remain contained and observable.`,
+          status: "watch",
+          confidence: 82,
+          filePath: file.path,
+          line,
+          evidence,
+          contradiction: "Failure handling is present; rollback and observability still require runtime verification."
+        });
+        resilienceAdded = true;
+      }
+    });
+
+  }
+
+  const ranked = uniqueBy(contracts, (contract) => `${contract.category}:${contract.filePath}:${contract.title}`)
+    .sort((left, right) => invariantPriority(right) - invariantPriority(left) || right.dependentFiles.length - left.dependentFiles.length)
+    .slice(0, 24);
+  const statusScore = { guarded: 100, watch: 66, unverified: 42 } as const;
+  const score = ranked.length ? Math.round(ranked.reduce((total, contract) => total + statusScore[contract.status], 0) / ranked.length) : 0;
+  const guarded = ranked.filter((contract) => contract.status === "guarded").length;
+  const categories = new Set(ranked.map((contract) => contract.category));
+
+  return {
+    score,
+    guarded,
+    attention: ranked.length - guarded,
+    categoryCoverage: categories.size,
+    contracts: ranked,
+    drills: buildInvariantFailureDrills(ranked)
+  };
+}
+
+type InvariantSignal = { kind: "access" | "environment" | "route" | "schema" | "shape" | "failure" | "test" | "reference"; name: string; line: number; evidence: string };
+
+function extractInvariantSignals(path: string, content: string, includeReferences = false): InvariantSignal[] {
+  const source = ts.createSourceFile(path, content, ts.ScriptTarget.Latest, true);
+  const result: InvariantSignal[] = [];
+  const add = (node: ts.Node, kind: InvariantSignal["kind"], name: string) => {
+    result.push({ kind, name, line: source.getLineAndCharacterOfPosition(node.getStart(source)).line + 1, evidence: kind === "reference" ? "" : node.getText(source).replace(/\s+/g, " ").slice(0, 220) });
+  };
+  // AST signals exclude examples in documentation, comments, and string literals.
+  const visit = (node: ts.Node) => {
+    if (ts.isCallExpression(node)) {
+      const target = node.expression.getText(source);
+      if (/^(requireAuth|authori[sz]e|requirePermission|verifyToken|jwt\.verify|canAccess)$/i.test(target)) add(node, "access", target);
+      if (/^(app|router)\.(get|post|put|patch|delete)$/i.test(target) && node.arguments[0] && ts.isStringLiteralLike(node.arguments[0])) add(node, "route", `${target.split(".")[1]!.toUpperCase()} ${node.arguments[0].text}`);
+      if (target === "z.object") add(node, "schema", `${baseName(path)} schema`);
+      if (/^(it|test)(\.(only|skip))?$/.test(target)) add(node, "test", target);
+      if (/\b(rollback|transaction)$/.test(target)) add(node, "failure", target);
+    }
+    if (ts.isPropertyAccessExpression(node) && /^(process\.env|env)$/.test(node.expression.getText(source)) && /^[A-Z][A-Z0-9_]*$/.test(node.name.text)) {
+      add(ts.isBinaryExpression(node.parent) ? node.parent : node, "environment", node.name.text);
+    }
+    if (ts.isTypeAliasDeclaration(node) || ts.isInterfaceDeclaration(node)) add(node, "shape", node.name.text);
+    if (ts.isCatchClause(node)) add(node, "failure", "catch");
+    if (includeReferences && (ts.isIdentifier(node) || ts.isStringLiteralLike(node))) add(node, "reference", node.text);
+    ts.forEachChild(node, visit);
+  };
+  visit(source);
+  return result;
+}
+
+function buildInvariantFailureDrills(contracts: RepositoryInvariant[]): InvariantFailureDrill[] {
+  const definitions: Array<{
+    category: InvariantCategory;
+    id: string;
+    title: string;
+    hypothesis: string;
+    recoverySteps: string[];
+  }> = [
+    { category: "access", id: "trust-boundary", title: "Bypass a trust boundary", hypothesis: "Assume one authorization gate is accidentally removed from a protected path.", recoverySteps: ["Restore the gate at the earliest request boundary.", "Run focused unauthorized and expired-session tests.", "Review every dependent route before publishing."] },
+    { category: "configuration", id: "missing-runtime-input", title: "Remove a runtime input", hypothesis: "Assume a required environment value is missing or replaced with an unsafe fallback.", recoverySteps: ["Fail startup with a precise configuration error.", "Review fallbacks and rotate any exposed credentials.", "Verify deployment configuration before traffic resumes."] },
+    { category: "interface", id: "contract-break", title: "Break a public interface", hypothesis: "Assume a route, parameter, or response shape changes without a compatible migration.", recoverySteps: ["Restore compatibility or version the interface.", "Run consumer-facing contract tests.", "Publish a migration note for every dependent surface."] },
+    { category: "data", id: "shape-drift", title: "Introduce shape drift", hypothesis: "Assume a required domain field is renamed or its type changes across a boundary.", recoverySteps: ["Add runtime validation at the boundary.", "Migrate stored and in-flight representations.", "Re-run affected serialization and API tests."] },
+    { category: "resilience", id: "failure-path", title: "Force a downstream failure", hypothesis: "Assume a dependency throws after partial work has begun.", recoverySteps: ["Confirm the operation fails closed.", "Verify rollback, retry, and audit signals.", "Exercise the nearest incident runbook."] },
+    { category: "verification", id: "proof-gap", title: "Remove regression proof", hypothesis: "Assume a critical test is skipped while its implementation continues to change.", recoverySteps: ["Restore the smallest focused regression test.", "Bind it to the affected contract in CI.", "Require the proof before accepting the change."] }
+  ];
+
+  return definitions.flatMap((definition) => {
+    const matching = contracts.filter((contract) => contract.category === definition.category).slice(0, 4);
+    if (!matching.length) return [];
+    const affectedFiles = [...new Set(matching.flatMap((contract) => contract.dependentFiles))].slice(0, 16);
+    const severity: InvariantFailureDrill["severity"] = definition.category === "access" || definition.category === "configuration"
+      ? "high"
+      : affectedFiles.length >= 6 || matching.some((contract) => contract.status !== "guarded")
+        ? "medium"
+        : "low";
+    return [{
+      id: `drill:${definition.id}`,
+      title: definition.title,
+      hypothesis: definition.hypothesis,
+      severity,
+      contractIds: matching.map((contract) => contract.id),
+      affectedFiles,
+      recoverySteps: definition.recoverySteps
+    }];
+  });
+}
+
+function invariantPriority(contract: RepositoryInvariant) {
+  const categoryWeight: Record<InvariantCategory, number> = { access: 60, configuration: 50, interface: 40, data: 30, resilience: 20, verification: 10 };
+  const statusWeight = contract.status === "unverified" ? 24 : contract.status === "watch" ? 16 : 0;
+  return categoryWeight[contract.category] + statusWeight + Math.min(12, contract.dependentFiles.length);
+}
+
 function findImportCycles(graph: RepositoryGraph) {
   const nodeById = new Map(graph.nodes.map((node) => [node.id, node]));
   const adjacency = new Map<string, string[]>();
@@ -1694,4 +1951,3 @@ function relatedFilePaths(graph: RepositoryGraph, filePath: string): string[] {
     .filter((node) => relatedIds.has(node.id) && node.type === "file" && node.filePath)
     .map((node) => node.filePath!);
 }
-

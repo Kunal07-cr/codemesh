@@ -16,6 +16,7 @@ import {
   analyzeRepository,
   analyzeRepositoryHotspots,
   buildContextObservatory,
+  buildInvariantLedger,
   buildOnboardingJourney,
   buildReviewCouncil,
   buildSampleRepoFiles,
@@ -237,6 +238,7 @@ export function projectRoutes(store: JsonStore, artifacts?: ArtifactStorage) {
         },
         onboarding: buildOnboardingJourney(index),
         reviewCouncil: buildReviewCouncil(index),
+        invariantLedger: buildInvariantLedger(index),
         documentation: {
           generatedAt: new Date().toISOString(),
           files: index.files.length,
@@ -449,4 +451,3 @@ function summarizeProject(store: JsonStore, projectId: string, userId?: string):
     fileCount: store.listFiles(project.id).length
   };
 }
-
