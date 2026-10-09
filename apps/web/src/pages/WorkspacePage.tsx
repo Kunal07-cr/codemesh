@@ -48,20 +48,21 @@ type ChatMessage = {
 
 export function WorkspacePage() {
   const { projectId = "" } = useParams();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const requestedPath = searchParams.get("path") ?? "";
   const requestedLine = Number(searchParams.get("line") ?? 1);
+  const [compact, setCompact] = useState(() => window.matchMedia("(max-width: 1023px)").matches);
   const [selectedPath, setSelectedPath] = useState(requestedPath || "src/auth/session.ts");
   const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null);
-  const [view, setView] = useState<"editor" | "graph" | "split">("split");
+  const [view, setView] = useState<"editor" | "graph" | "split">(() => compact ? "editor" : "split");
   const [content, setContent] = useState("");
   const [fileFilter, setFileFilter] = useState("");
   const [connection, setConnection] = useState("offline");
   const [presence, setPresence] = useState<string[]>([]);
-  const [filePanelOpen, setFilePanelOpen] = useState(true);
-  const [assistantPanelOpen, setAssistantPanelOpen] = useState(true);
+  const [filePanelOpen, setFilePanelOpen] = useState(!compact);
+  const [assistantPanelOpen, setAssistantPanelOpen] = useState(!compact);
   const socketRef = useRef<Socket | null>(null);
   const docRef = useRef<Y.Doc | null>(null);
   const selectedPathRef = useRef(selectedPath);
@@ -87,13 +88,32 @@ export function WorkspacePage() {
   }, [data?.files, fileFilter]);
 
   useEffect(() => {
-    if (!data || !requestedPath || selectedNode) return;
+    const media = window.matchMedia("(max-width: 1023px)");
+    const resize = () => {
+      setCompact(media.matches);
+      if (media.matches) { setFilePanelOpen(false); setAssistantPanelOpen(false); setView("editor"); }
+    };
+    media.addEventListener("change", resize);
+    return () => media.removeEventListener("change", resize);
+  }, []);
+
+  useEffect(() => {
+    if (!data || !requestedPath) return;
     const matchingNode = data.graph.nodes.find((node) =>
       node.filePath === requestedPath && node.range && requestedLine >= node.range.startLine && requestedLine <= node.range.endLine
     ) ?? data.graph.nodes.find((node) => node.filePath === requestedPath && node.type === "file");
-    if (matchingNode) setSelectedNode(matchingNode);
+    setSelectedNode(matchingNode ?? null);
     setSelectedPath(requestedPath);
-  }, [data, requestedLine, requestedPath, selectedNode]);
+  }, [data, requestedLine, requestedPath]);
+
+  function selectSource(path: string, line?: number) {
+    setSelectedPath(path);
+    const next = new URLSearchParams(searchParams);
+    next.set("path", path);
+    if (line) next.set("line", String(line));
+    else next.delete("line");
+    setSearchParams(next, { replace: true });
+  }
 
   useEffect(() => {
     if (!data || !user) return;
@@ -210,7 +230,7 @@ export function WorkspacePage() {
   }
 
   return (
-    <section className="cm-code-workspace h-[calc(100vh-3.5rem)] overflow-hidden bg-ink">
+    <section className="cm-code-workspace h-[calc(100vh-3.5rem)] overflow-hidden bg-ink" data-compact={compact} onKeyDown={(event) => { if (compact && event.key === "Escape") { setFilePanelOpen(false); setAssistantPanelOpen(false); } }}>
       <header className="flex h-12 items-center justify-between border-b border-line px-4">
         <div className="flex min-w-0 items-center gap-3">
           <StatusPill tone={connection === "connected" ? "good" : "warn"}>
@@ -218,19 +238,19 @@ export function WorkspacePage() {
             {connection}
           </StatusPill>
           <div className="truncate font-semibold text-white">{data.project.name}</div>
-          <StatusPill>{data.role}</StatusPill>
+          <span className="hidden sm:inline-flex"><StatusPill>{data.role}</StatusPill></span>
           <span className="hidden text-xs text-steel md:inline">workspace/{data.workspaceId}</span>
         </div>
         <div className="flex items-center gap-2 text-xs text-steel">
           {presence.slice(0, 3).map((name) => (
-            <span key={name} className="rounded border border-line px-2 py-1">
+            <span key={name} className="hidden rounded border border-line px-2 py-1 sm:inline-flex">
               {name}
             </span>
           ))}
-          <button className="cm-icon-button hidden md:grid" type="button" title={filePanelOpen ? "Hide file tree" : "Show file tree"} aria-label={filePanelOpen ? "Hide file tree" : "Show file tree"} aria-pressed={filePanelOpen} onClick={() => setFilePanelOpen((open) => !open)}>
+          <button className="cm-icon-button" type="button" title={filePanelOpen ? "Hide file tree" : "Show file tree"} aria-label={filePanelOpen ? "Hide file tree" : "Show file tree"} aria-pressed={filePanelOpen} onClick={() => { setFilePanelOpen((open) => !open); if (compact) setAssistantPanelOpen(false); }}>
             {filePanelOpen ? <PanelLeftClose className="h-4 w-4" /> : <PanelLeftOpen className="h-4 w-4" />}
           </button>
-          <button className="cm-icon-button hidden md:grid" type="button" title={focusMode ? "Exit focus mode" : "Focus graph and code"} aria-label={focusMode ? "Exit focus mode" : "Focus graph and code"} aria-pressed={focusMode} onClick={() => {
+          <button className={compact ? "hidden" : "cm-icon-button"} type="button" title={focusMode ? "Exit focus mode" : "Focus graph and code"} aria-label={focusMode ? "Exit focus mode" : "Focus graph and code"} aria-pressed={focusMode} onClick={() => {
             if (focusMode) {
               setFilePanelOpen(true);
               setAssistantPanelOpen(true);
@@ -241,17 +261,18 @@ export function WorkspacePage() {
           }}>
             {focusMode ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
           </button>
-          <button className="cm-icon-button hidden md:grid" type="button" title={assistantPanelOpen ? "Hide copilot" : "Show copilot"} aria-label={assistantPanelOpen ? "Hide copilot" : "Show copilot"} aria-pressed={assistantPanelOpen} onClick={() => setAssistantPanelOpen((open) => !open)}>
+          <button className="cm-icon-button" type="button" title={assistantPanelOpen ? "Hide copilot" : "Show copilot"} aria-label={assistantPanelOpen ? "Hide copilot" : "Show copilot"} aria-pressed={assistantPanelOpen} onClick={() => { setAssistantPanelOpen((open) => !open); if (compact) setFilePanelOpen(false); }}>
             {assistantPanelOpen ? <PanelRightClose className="h-4 w-4" /> : <PanelRightOpen className="h-4 w-4" />}
           </button>
-          <StatusPill tone={canEdit ? "good" : "warn"}>{canEdit ? "edit allowed" : "read only"}</StatusPill>
+          <span className="hidden sm:inline-flex"><StatusPill tone={canEdit ? "good" : "warn"}>{canEdit ? "edit allowed" : "read only"}</StatusPill></span>
         </div>
       </header>
       <div
         className="cm-workspace-grid grid h-[calc(100%-3rem)]"
-        style={{ gridTemplateColumns: `${filePanelOpen ? "260px" : "0px"} minmax(0, 1fr) ${assistantPanelOpen ? "360px" : "0px"}` }}
+        style={{ gridTemplateColumns: compact ? "minmax(0, 1fr)" : `${filePanelOpen ? "260px" : "0px"} minmax(0, 1fr) ${assistantPanelOpen ? "360px" : "0px"}` }}
       >
-        <aside className={`cm-workspace-rail min-h-0 overflow-hidden border-r border-line bg-panel ${filePanelOpen ? "opacity-100" : "pointer-events-none border-transparent opacity-0"}`} aria-hidden={!filePanelOpen}>
+        {compact && (filePanelOpen || assistantPanelOpen) && <button className="cm-workspace-scrim" type="button" aria-label="Close workspace panels" onClick={() => { setFilePanelOpen(false); setAssistantPanelOpen(false); }} />}
+        <aside className={`cm-workspace-rail cm-file-rail min-h-0 overflow-hidden border-r border-line bg-panel ${filePanelOpen ? "opacity-100" : "pointer-events-none border-transparent opacity-0"}`} aria-hidden={!filePanelOpen} inert={!filePanelOpen}>
           <div className="border-b border-line p-3">
             <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wide text-steel">
               <span className="flex items-center gap-2"><FileSearch className="h-3.5 w-3.5 text-mint" /> Files</span>
@@ -270,7 +291,8 @@ export function WorkspacePage() {
                   file.path === selectedPath ? "bg-mint/15 text-mint" : "text-steel hover:bg-ink hover:text-white"
                 }`}
                 onClick={() => {
-                  setSelectedPath(file.path);
+                  selectSource(file.path);
+                  if (compact) setFilePanelOpen(false);
                   setView("editor");
                 }}
               >
@@ -280,7 +302,7 @@ export function WorkspacePage() {
             {visibleFiles.length === 0 && <div className="p-3 text-xs leading-5 text-steel">No files match this filter.</div>}
           </div>
         </aside>
-        <main className="min-w-0 bg-ink">
+        <main className="min-w-0 bg-ink" inert={compact && (filePanelOpen || assistantPanelOpen)}>
           <div className="flex h-11 items-center justify-between border-b border-line px-3">
             <div className="flex items-center gap-2">
               <button
@@ -310,35 +332,35 @@ export function WorkspacePage() {
               <button className="hidden items-center gap-1.5 rounded border border-line px-2 py-1.5 text-xs text-steel hover:border-mint hover:text-white sm:flex" type="button" title="Export architecture graph" onClick={() => exportGraph(data.project.name, data.graph)}>
                 <Download className="h-3.5 w-3.5" /> Export graph
               </button>
-              <div className="flex min-w-0 items-center gap-2"><span className="hidden text-xs text-steel sm:inline">Editing</span><div className="truncate font-mono text-xs text-steel">{selectedPath}</div></div>
+              <div className="hidden min-w-0 items-center gap-2 sm:flex"><span className="text-xs text-steel">Editing</span><div className="truncate font-mono text-xs text-steel">{selectedPath}</div></div>
             </div>
           </div>
           <div className="h-[calc(100%-2.75rem)]">
             {view === "editor" && (
-              <EditorPane path={selectedPath} files={data.files} content={content} canEdit={canEdit} onMount={mountEditor} onChange={updateEditor} onSelectPath={setSelectedPath} />
+              <EditorPane path={selectedPath} files={data.files} content={content} canEdit={canEdit} onMount={mountEditor} onChange={updateEditor} onSelectPath={selectSource} />
             )}
             {view === "graph" && (
               <GraphView graph={data.graph} selectedPath={selectedPath} selectedNodeId={selectedNode?.id} onSelectNode={(node) => {
                 setSelectedNode(node);
-                if (node.filePath) setSelectedPath(node.filePath);
+                if (node.filePath) selectSource(node.filePath, node.range?.startLine);
               }} />
             )}
             {view === "split" && (
-              <div className="grid h-full grid-cols-2">
+              <div className={`grid h-full ${compact ? "grid-cols-1 grid-rows-2" : "grid-cols-2"}`}>
                 <div className="min-w-0 border-r border-line">
                   <GraphView graph={data.graph} selectedPath={selectedPath} selectedNodeId={selectedNode?.id} onSelectNode={(node) => {
                     setSelectedNode(node);
-                    if (node.filePath) setSelectedPath(node.filePath);
+                    if (node.filePath) selectSource(node.filePath, node.range?.startLine);
                   }} />
                 </div>
                 <div className="min-w-0">
-                  <EditorPane path={selectedPath} files={data.files} content={content} canEdit={canEdit} onMount={mountEditor} onChange={updateEditor} onSelectPath={setSelectedPath} />
+                  <EditorPane path={selectedPath} files={data.files} content={content} canEdit={canEdit} onMount={mountEditor} onChange={updateEditor} onSelectPath={selectSource} />
                 </div>
               </div>
             )}
           </div>
         </main>
-        <aside className={`cm-workspace-rail flex min-h-0 flex-col overflow-hidden border-l border-line bg-panel ${assistantPanelOpen ? "opacity-100" : "pointer-events-none border-transparent opacity-0"}`} aria-hidden={!assistantPanelOpen}>
+        <aside className={`cm-workspace-rail cm-copilot-rail flex min-h-0 flex-col overflow-hidden border-l border-line bg-panel ${assistantPanelOpen ? "opacity-100" : "pointer-events-none border-transparent opacity-0"}`} aria-hidden={!assistantPanelOpen} inert={!assistantPanelOpen}>
           {selectedNode && (
             <NodeInspector
               node={selectedNode}
@@ -355,7 +377,8 @@ export function WorkspacePage() {
             activeFilePath={selectedPath}
             canReview={data.permissions.includes("workspace.review")}
             onOpenFile={(path) => {
-              setSelectedPath(path);
+              selectSource(path);
+              if (compact) setAssistantPanelOpen(false);
               if (selectedNode?.filePath !== path) setSelectedNode(null);
               setView("editor");
             }}

@@ -2242,6 +2242,7 @@ a:active {
 .cm-invariant-status.unverified { border-color: rgba(239, 116, 111, 0.38); color: #ef746f; }
 .cm-invariant-evidence { border-top: 1px solid rgba(36, 49, 65, 0.7); padding: 0.85rem 0.75rem 1rem 3.35rem; }
 .cm-invariant-evidence > p { color: #9bb0c3; font-size: 0.76rem; line-height: 1.6; }
+.cm-invariant-evidence :is(p, a, span) { overflow-wrap: anywhere; }
 .cm-invariant-evidence > code { display: block; overflow-x: auto; margin-top: 0.7rem; border-left: 2px solid var(--contract-color); background: #080e14; padding: 0.65rem 0.75rem; color: #c7d7e4; font-size: 0.66rem; white-space: nowrap; }
 .cm-invariant-warning { display: flex; align-items: flex-start; gap: 0.45rem; margin-top: 0.7rem; color: #f2b86b; font-size: 0.68rem; line-height: 1.5; }
 .cm-invariant-warning svg { flex: 0 0 auto; margin-top: 0.1rem; }

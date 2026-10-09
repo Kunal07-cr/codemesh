@@ -75,6 +75,13 @@
 .cm-app-shell [role="tab"][aria-selected="true"] { background: color-mix(in srgb, var(--cm-accent, #56c7e8) 6%, transparent); }
 .cm-app-shell .cm-interactive-surface { background-image: radial-gradient(ellipse 220px 150px at var(--cm-hover-x, 50%) var(--cm-hover-y, 50%), rgba(148, 218, 236, 0.035), transparent); }
 .cm-code-workspace { height: calc(100dvh - 6.5rem); }
+.cm-workspace-scrim { position: absolute; z-index: 2; inset: 0; border: 0; background: #020810a6; backdrop-filter: blur(2px); }
+.cm-code-workspace[data-compact="true"] .cm-workspace-grid { position: relative; }
+.cm-code-workspace[data-compact="true"] .cm-workspace-rail { position: absolute; z-index: 3; top: 0; bottom: 0; width: min(23rem, 100%); box-shadow: 0 0 30px #0006; }
+.cm-code-workspace[data-compact="true"] .cm-file-rail { left: 0; width: min(18rem, 100%); }
+.cm-code-workspace[data-compact="true"] .cm-copilot-rail { right: 0; overflow-y: auto; }
+.cm-code-workspace[data-compact="true"] .cm-workspace-rail:not([aria-hidden="true"]) { animation: cm-trail-arrive 180ms ease both; }
+.cm-code-workspace[data-compact="true"] .cm-workspace-grid > main { min-height: 0; }
 .cm-app-shell .cm-universe-page { height: calc(100dvh - 6.5rem); }
 @keyframes cm-action-feedback { 50% { transform: translateY(-2px); } }
 @keyframes cm-disclosure-arrive { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }

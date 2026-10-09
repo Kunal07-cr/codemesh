@@ -339,8 +339,8 @@ function InvariantLab({ data, projectId }: { data: LabsPayload; projectId: strin
         </dl>
       </section>
 
-      <div className="grid gap-8 xl:grid-cols-[minmax(0,1.08fr)_minmax(24rem,0.92fr)]">
-        <section>
+      <div className="grid grid-cols-1 gap-8 xl:grid-cols-[minmax(0,1.08fr)_minmax(24rem,0.92fr)]">
+        <section className="min-w-0">
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div><div className="eyebrow"><Gauge className="h-3.5 w-3.5" /> Contract evidence</div><h2 className="mt-2 text-xl font-semibold text-white">Repository promises</h2></div>
             <span className="font-mono text-xs text-steel">{contracts.length} visible</span>
@@ -368,7 +368,7 @@ function InvariantLab({ data, projectId }: { data: LabsPayload; projectId: strin
           </div>
         </section>
 
-        <section className="cm-failure-drill">
+        <section className="cm-failure-drill min-w-0">
           <div className="eyebrow"><Siren className="h-3.5 w-3.5" /> Failure drill console</div>
           <h2 className="mt-2 text-xl font-semibold text-white">Failure scenario explorer</h2>
           <div className="cm-failure-drill-tabs mt-4" role="tablist" aria-label="Invariant failure drills">
