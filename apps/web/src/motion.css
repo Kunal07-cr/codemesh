@@ -146,6 +146,57 @@ body { animation: none; }
 .cm-import-processing > i { position: absolute; left: 0; bottom: 0; width: 30%; height: 2px; background: var(--cm-cyan); transform: translateX(-110%); animation: cm-import-wait 1.5s var(--cm-ease) infinite; }
 .cm-feed-drop:focus-within { outline: 2px solid var(--cm-cyan); outline-offset: 3px; }
 .cm-feed-message { flex-wrap: wrap; }
+.cm-verified-answer { margin-top: 0.6rem; min-width: 0; }
+.cm-verified-answer-title { font-size: 0.75rem; color: #b8dfe8; margin-bottom: 0.5rem; }
+.cm-verified-answer details { margin-top: 0.4rem; border: 1px solid #303c49; border-radius: 5px; overflow: hidden; }
+.cm-verified-answer summary { display: flex; gap: 0.5rem; align-items: center; padding: 0.6rem; cursor: pointer; font: 0.65rem ui-monospace, monospace; color: #b9c6d5; }
+.cm-verified-answer summary > span { min-width: 0; overflow-wrap: anywhere; flex: 1; }
+.cm-verified-answer summary small { color: #56c7e8; white-space: nowrap; }
+.cm-evidence-code { position: relative; background: #10151d; }
+.cm-evidence-code > button { position: absolute; top: 0.3rem; right: 0.3rem; width: 1.7rem; height: 1.7rem; background: #1c2734; }
+.cm-evidence-code pre { margin: 0; max-height: 20rem; overflow: auto; padding: 1rem 2.3rem 1rem 0.8rem; color: #d4e7eb; font: 0.7rem/1.7 ui-monospace, monospace; }
+.cm-answer-inference { margin-top: 0.8rem; color: #aebdd1; font-size: 0.75rem; line-height: 1.65; }
+.cm-answer-inference strong { color: #f2b86b; font-weight: 500; }
+.cm-answer-inference p { white-space: pre-wrap; overflow-wrap: anywhere; }
+.cm-evaluation header { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; justify-content: space-between; margin: 1.5rem 0; }
+.cm-evaluation h1 { font-size: 2rem; font-weight: 650; margin-top: 0.5rem; color: #f0f3f7; }
+.cm-evaluation header p { max-width: 48rem; margin-top: 0.6rem; color: #9caabd; font-size: 0.8rem; line-height: 1.6; }
+.cm-evaluation header button { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.7rem 1rem; border-radius: 5px; font-size: 0.8rem; }
+.cm-evaluation button:disabled { opacity: 0.6; cursor: wait; }
+.cm-index-facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; border-block: 1px solid #303c49; padding: 1rem 0; }
+.cm-index-facts dt { color: #9caabd; font-size: 0.7rem; }
+.cm-index-facts dd { color: #d7e1ee; margin-top: 0.5rem; font: 0.85rem ui-monospace, monospace; overflow-wrap: anywhere; }
+.cm-evaluation-settings { display: flex; gap: 0.6rem; margin: 1rem 0; color: #64d6af; font: 0.7rem/1.6 ui-monospace, monospace; }
+.cm-evaluation-settings svg { flex-shrink: 0; margin-top: 0.2rem; }
+.cm-index-warnings { color: #f2b86b; font-size: 0.7rem; overflow-wrap: anywhere; }
+.cm-index-warnings summary { cursor: pointer; }
+.cm-index-warnings p { margin-top: 0.5rem; color: #aab6c8; }
+.cm-evaluation-select { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; justify-content: space-between; margin: 2rem 0 0.8rem; }
+.cm-evaluation-select h2 { color: #e8edf6; font-size: 1.1rem; font-weight: 600; }
+.cm-evaluation-select label { color: #9caabd; font-size: 0.7rem; display: flex; gap: 0.6rem; align-items: center; max-width: 100%; }
+.cm-evaluation-select select { max-width: min(100%, 24rem); border: 1px solid #303c49; border-radius: 4px; padding: 0.5rem; background: #111820; color: #c3d0df; min-width: 0; }
+.cm-evaluation-table { overflow-x: auto; }
+.cm-evaluation-table table { width: 100%; min-width: 620px; text-align: left; font-size: 0.75rem; }
+.cm-evaluation-table :is(th, td) { padding: 0.7rem; border-bottom: 1px solid #2a3540; }
+.cm-evaluation-table th { color: #b9c7d8; font-weight: 500; }
+.cm-evaluation-table td { color: #cce2ed; font-family: ui-monospace, monospace; }
+.cm-evaluation-table thead th { color: #56c7e8; background: #111820; }
+.cm-evaluation-caveat { color: #a6b3c5; font-size: 0.7rem; line-height: 1.7; margin-top: 1rem; }
+.cm-evaluation-progress { padding: 0.8rem 0; color: #56c7e8; font-size: 0.8rem; }
+.cm-evaluation-progress progress { width: 100%; height: 4px; display: block; margin-top: 0.6rem; accent-color: #56c7e8; }
+.cm-evaluation-questions > details { border-top: 1px solid #303c49; }
+.cm-evaluation-questions > details > summary { display: flex; align-items: center; gap: 0.7rem; padding: 1rem 0; color: #dae4f0; font-size: 0.8rem; cursor: pointer; }
+.cm-evaluation-questions summary > span:nth-child(2) { min-width: 0; flex: 1; overflow-wrap: anywhere; }
+.cm-evaluation-questions summary small { display: block; margin-top: 0.3rem; color: #8fa0b8; font: 0.65rem ui-monospace, monospace; }
+.cm-evaluation-questions summary strong { color: #64d6af; font-size: 0.65rem; font-weight: 500; }
+.cm-result-dot { width: 5px; height: 5px; background: #64d6af; flex-shrink: 0; }
+.cm-result-dot.is-failed { background: #f472b6; }
+.cm-question-inspection { padding: 0.8rem 0 1.5rem; color: #b8c5d7; font-size: 0.75rem; line-height: 1.7; overflow-wrap: anywhere; }
+.cm-question-inspection h3 { color: #c6b4ed; margin-top: 1rem; font-weight: 600; }
+.cm-question-inspection :is(pre, code) { font-family: ui-monospace, monospace; }
+.cm-question-inspection pre { overflow-x: auto; max-height: 22rem; margin-top: 0.5rem; padding: 0.8rem; background: #111820; white-space: pre-wrap; }
+.cm-question-inspection details { margin-top: 0.7rem; border-left: 2px solid #56c7e8; padding-left: 0.8rem; }
+@media (max-width: 640px) { .cm-index-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); } .cm-evaluation h1 { font-size: 1.75rem; } }
 .cm-time-machine-track { min-width: 0; }
 .cm-time-machine-track button { overflow-wrap: anywhere; }
 
@@ -168,7 +219,7 @@ body { animation: none; }
 }
 @media (max-width: 768px) {
   .cm-architecture-hero { display: flex; min-height: 0; flex-direction: column; }
-  .cm-architecture-copy { width: auto; padding: 1.6rem 1rem 1.3rem; margin: 0; }
+  .cm-architecture-copy { order: -1; width: auto; padding: 1.6rem 1rem 1.3rem; margin: 0; }
   .cm-architecture-copy h1 { font-size: 3rem; }
   .cm-architecture-copy h1 > span { font-size: 1.8rem; line-height: 1.15; margin-top: 0.75rem; }
   .cm-architecture-copy p { margin-top: 0.9rem; font-size: 0.88rem; line-height: 1.55; }

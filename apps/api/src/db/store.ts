@@ -161,7 +161,7 @@ export type AssistantFeedbackRecord = {
   updatedAt: string;
 };
 
-export type OperationJobType = "repository.reindex" | "repository.incremental_sync" | "quality.scan" | "persistence.verify" | "audit.export";
+export type OperationJobType = "repository.reindex" | "repository.incremental_sync" | "quality.scan" | "persistence.verify" | "audit.export" | "assistant.evaluate";
 export type OperationJobStatus = "queued" | "running" | "succeeded" | "failed" | "cancelled";
 
 export type OperationJob = {
@@ -1164,6 +1164,10 @@ export class JsonStore {
     };
     this.state.operationJobs ??= [];
     this.state.operationJobs.unshift(job);
+    if (input.type === "assistant.evaluate") {
+      let retained = 0;
+      this.state.operationJobs = this.state.operationJobs.filter((item) => item.type !== "assistant.evaluate" || item.projectId !== input.projectId || item.createdBy !== input.createdBy || ["running", "queued"].includes(item.status) || ++retained <= 20);
+    }
     this.state.operationJobs = this.state.operationJobs.slice(0, 500);
     await this.recordAudit({ projectId: job.projectId, userId: job.createdBy, action: "operations.job_queued", metadata: { jobId: job.id, type: job.type } });
     await this.save();

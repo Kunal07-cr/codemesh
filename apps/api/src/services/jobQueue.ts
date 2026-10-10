@@ -1,4 +1,5 @@
 import crypto from "node:crypto";
+import { createAiProvider, evaluateRepositoryBenchmark } from "@codemesh/ai";
 import { analyzeRepository, buildIncrementalIndexPlan } from "@codemesh/code-intelligence";
 import type { JsonStore, OperationJob, OperationJobType } from "../db/store.js";
 import type { MetricsRegistry } from "./metrics.js";
@@ -89,6 +90,7 @@ export class OperationQueue {
         completedAt: new Date().toISOString()
       });
     } catch (error) {
+      if (this.store.getOperationJob(job.id)?.status === "cancelled") return;
       const message = error instanceof Error ? error.message : "Operation failed.";
       const retry = attempts < job.maxAttempts;
       if (!retry) this.metrics.recordJob("failed");
@@ -102,6 +104,17 @@ export class OperationQueue {
   }
 
   private async execute(job: OperationJob): Promise<Record<string, unknown>> {
+    if (job.type === "assistant.evaluate") {
+      const provider = createAiProvider({});
+      const report = await evaluateRepositoryBenchmark((request, index, retrieval) => provider.answer(request, { projectId: index.projectId, workspaceId: "main", commitSha: index.commitSha, index, retrieval, workspaceDocs: [] }), {
+        provider: provider.name,
+        onRow: async (completed, total) => {
+          if (this.store.getOperationJob(job.id)?.status === "cancelled") throw new Error("Evaluation cancelled.");
+          await this.store.updateOperationJob(job.id, { progress: Math.round(completed / total * 100), metadata: { completed, total, suite: "source-facts-v1", provider: provider.name } });
+        }
+      });
+      return { report };
+    }
     await this.store.updateOperationJob(job.id, { progress: 45 });
     if (job.type === "repository.reindex") {
       const index = this.store.rebuildIndex(job.projectId);
@@ -146,4 +159,3 @@ export class OperationQueue {
     return { records: events.length, sha256: digest, generatedAt: new Date().toISOString() };
   }
 }
-

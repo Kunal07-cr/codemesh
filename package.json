@@ -18,6 +18,7 @@
     "test:watch": "vitest --configLoader runner",
     "typecheck": "npm run typecheck -w @codemesh/web && npm run typecheck -w @codemesh/api && npm run typecheck -w @codemesh/shared && npm run typecheck -w @codemesh/code-intelligence && npm run typecheck -w @codemesh/ai",
     "evaluate:retrieval": "node scripts/evaluate-retrieval.mjs",
+    "evaluate:accuracy": "node scripts/evaluate-accuracy.mjs",
     "seed": "npm run seed -w @codemesh/api"
   },
   "devDependencies": {

@@ -23,6 +23,7 @@ import {
 import { aiAnswerSchema, type AiAnswer, type AiAskRequest, type GraphNode, type PatchProposal } from "@codemesh/shared";
 import { ApiClientError, api, jsonBody, streamApi } from "../lib/api";
 import { AssistantFeedback } from "./AssistantFeedback";
+import { AssistantSourceAnswer } from "./AssistantSourceAnswer";
 import { useAuth } from "../lib/auth";
 
 type AssistantMessage = {
@@ -470,13 +471,14 @@ function RepositoryAssistantSession({ projectId, activeFilePath, activeEntity, c
             <div className={`text-[10px] font-semibold uppercase text-steel ${message.role === "user" ? "text-right" : ""}`}>
               {message.role === "user" ? "You" : "CodeMesh"}
             </div>
-            <p className={`mt-1 whitespace-pre-wrap text-sm leading-6 ${message.error ? "text-coral" : "text-slate-100"}`}>{message.content}</p>
+            {message.result?.sourceFacts?.length ? <AssistantSourceAnswer result={message.result} /> : <p className={`mt-1 whitespace-pre-wrap text-sm leading-6 ${message.error ? "text-coral" : "text-slate-100"}`}>{message.content}</p>}
             {message.result && (
               <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[10px] font-medium uppercase text-steel">
-                <span>{message.result.citations.some((citation) => citation.sourceType === "dataset") ? "Dataset-grounded" : message.result.retrieval.model.startsWith("gemini:") ? "Gemini reasoning" : "Repository reasoning"}</span>
+                <span>{message.result.grounding?.status ?? (message.result.citations.some((citation) => citation.sourceType === "dataset") ? "Synthetic dataset" : "Legacy response")}</span>
                 <span>{message.result.citations.length} source{message.result.citations.length === 1 ? "" : "s"}</span>
                 {message.result.citations.some((citation) => citation.sourceType === "dataset") && <span className="text-violet">synthetic dataset</span>}
                 <span>{message.result.retrieval.generationLatencyMs} ms</span>
+                {message.result.grounding && <span>{message.result.grounding.validatedCitations} checked citations · {message.result.grounding.rejectedCitations} rejected</span>}
               </div>
             )}
             {message.result?.uncertainty && <p className="mt-2 text-xs leading-5 text-amber">{message.result.uncertainty}</p>}
@@ -556,7 +558,7 @@ function RepositoryAssistantSession({ projectId, activeFilePath, activeEntity, c
             value={retrievalMode}
             onChange={(event) => setRetrievalMode(event.target.value as AiAskRequest["retrievalMode"])}
           >
-            <option value="vector">Vector</option>
+            <option value="vector">Local term retrieval</option>
             <option value="hybrid">Hybrid</option>
             <option value="graph">Graph + hybrid</option>
           </select>

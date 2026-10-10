@@ -79,7 +79,7 @@ export function InteractiveCodeGraph() {
     <div className="cm-graph-experience" data-reveal>
       <div className="cm-graph-toolbar">
         <div>
-          <div className="eyebrow"><Network className="h-3.5 w-3.5" /> Interactive repository graph</div>
+          <div className="eyebrow"><Network className="h-3.5 w-3.5" /> Illustrative platform model</div>
           <h3 className="mt-2 text-xl font-semibold text-white">Trace the system, not a pile of files</h3>
         </div>
         <div className="cm-segmented" role="tablist" aria-label="Graph view">

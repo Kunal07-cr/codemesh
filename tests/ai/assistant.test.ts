@@ -117,7 +117,7 @@ describe("repository assistant", () => {
     expect(answer.citations.length).toBeGreaterThan(0);
   });
 
-  it("streams an OpenAI-compatible response while retaining CodeMesh citations", async () => {
+  it("buffers and replaces an unsupported OpenAI-compatible response before streaming", async () => {
     const projectId = "project-compatible-test";
     const files = buildSampleRepoFiles(projectId);
     const index = indexRepository(projectId, SAMPLE_COMMIT, files);
@@ -155,7 +155,8 @@ describe("repository assistant", () => {
         (token) => tokens.push(token)
       );
 
-      expect(tokens.join("")).toBe("Authentication uses protected routes.");
+      expect(tokens.join("")).not.toContain("Authentication uses protected routes.");
+      expect(answer.grounding?.status).toBe("provider-fallback");
       expect(answer.answer).toBe(tokens.join(""));
       expect(answer.citations.length).toBeGreaterThan(0);
       expect(answer.retrieval.model).toBe("openai-compatible:qwen-test");

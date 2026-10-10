@@ -14,6 +14,7 @@ import { ProjectIntelligencePage } from "./pages/ProjectIntelligencePage";
 import { AccountActionPage } from "./pages/AccountActionPage";
 
 const WorkspacePage = lazy(() => import("./pages/WorkspacePage").then((module) => ({ default: module.WorkspacePage })));
+const ProjectEvaluationPage = lazy(() => import("./pages/ProjectEvaluationPage").then((module) => ({ default: module.ProjectEvaluationPage })));
 const ProjectLabsPage = lazy(() => import("./pages/ProjectLabsPage").then((module) => ({ default: module.ProjectLabsPage })));
 const ProjectAdvancedPage = lazy(() => import("./pages/ProjectAdvancedPage").then((module) => ({ default: module.ProjectAdvancedPage })));
 const ProjectUniversePage = lazy(() => import("./pages/ProjectUniversePage").then((module) => ({ default: module.ProjectUniversePage })));
@@ -40,6 +41,7 @@ export const router = createBrowserRouter([
       },
       { path: "projects/:projectId", element: <ProjectOverviewPage /> },
       { path: "projects/:projectId/assistant", element: <AssistantPage /> },
+      { path: "projects/:projectId/evaluation", element: <Suspense fallback={<LoadingState label="Loading source evaluation" />}><ProjectEvaluationPage /></Suspense> },
       {
         path: "projects/:projectId/workspace",
         element: <Suspense fallback={<LoadingState label="Loading code workspace" />}><WorkspacePage /></Suspense>
@@ -73,4 +75,3 @@ export const router = createBrowserRouter([
     ]
   }
 ]);
-

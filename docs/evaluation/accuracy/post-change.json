@@ -1,0 +1,1534 @@
+{
+  "version": "source-facts-v1",
+  "generatedAt": "2026-10-10T16:51:18.686Z",
+  "provider": "local-repository",
+  "scope": "Fixed, independently authored source fixtures; not the user's entire repository",
+  "k": 8,
+  "rows": [
+    {
+      "id": "returns",
+      "category": "function",
+      "question": "What does createSessionToken return and when does it expire?",
+      "expectedFacts": [
+        "jwt.sign",
+        "15m"
+      ],
+      "expectedEvidence": [
+        {
+          "path": "src/auth/session.ts",
+          "quote": "expiresIn: \"15m\"",
+          "startLine": 6,
+          "endLine": 6
+        }
+      ],
+      "retrieved": [
+        {
+          "path": "src/auth/session.ts",
+          "startLine": 5,
+          "startColumn": 1,
+          "endLine": 7,
+          "endColumn": 2,
+          "content": "export function createSessionToken(userId: string, secret: string) {\n  return jwt.sign({ sub: userId }, secret, { expiresIn: \"15m\" });\n}",
+          "reason": "exact symbol + BM25-style lexical relevance"
+        },
+        {
+          "path": "src/auth/routes.ts",
+          "startLine": 6,
+          "startColumn": 1,
+          "endLine": 19,
+          "endColumn": 2,
+          "content": "export function registerAuthRoutes(app: Express, config: AppConfig) {\n  app.post(\"/auth/login\", async (req, res) => {\n    const email = String(req.body.email ?? \"\").toLowerCase();\n    const password = String(req.body.password ?? \"\");\n    const user = findUserByEmail(email);\n\n    if (!user || !(await verifyPassword(user, password))) {\n      res.status(401).json({ error: \"Invalid credentials\" });\n      return;\n    }\n\n    res.json({ token: createSessionToken(user.id, config.jwtSecret), user });\n  });\n}",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/main.ts",
+          "startLine": 5,
+          "startColumn": 1,
+          "endLine": 5,
+          "endColumn": 31,
+          "content": "const app = createApp(config);",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/auth/session.ts",
+          "startLine": 9,
+          "startColumn": 1,
+          "endLine": 20,
+          "endColumn": 2,
+          "content": "export function requireAuth(config: AppConfig): RequestHandler {\n  return (req, res, next) => {\n    const header = req.headers.authorization ?? \"\";\n    const token = header.replace(/^Bearer\\s+/i, \"\");\n    try {\n      jwt.verify(token, config.jwtSecret);\n      next();\n    } catch {\n      res.status(401).json({ error: \"Authentication required\" });\n    }\n  };\n}",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/tasks.ts",
+          "startLine": 15,
+          "startColumn": 1,
+          "endLine": 22,
+          "endColumn": 2,
+          "content": "export function createTask(title: string) {\n  if (title.trim().length < 3) {\n    throw new Error(\"Task title is too short\");\n  }\n  const task = { id: crypto.randomUUID(), title, done: false };\n  tasks.push(task);\n  return task;\n}",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/server.ts",
+          "startLine": 7,
+          "startColumn": 1,
+          "endLine": 24,
+          "endColumn": 2,
+          "content": "export function createApp(config: AppConfig) {\n  const app = express();\n  app.use(express.json());\n  registerAuthRoutes(app, config);\n\n  app.get(\"/health\", (_req, res) => res.json({ ok: true }));\n\n  app.get(\"/tasks\", requireAuth(config), (_req, res) => {\n    res.json({ tasks: listTasks() });\n  });\n\n  app.post(\"/tasks\", requireAuth(config), (req, res) => {\n    const task = createTask(String(req.body.title ?? \"\"));\n    res.status(201).json({ task });\n  });\n\n  return app;\n}",
+          "reason": "BM25-style lexical relevance + term overlap"
+        }
+      ],
+      "answer": "Source evidence:\n\n[1] src/auth/session.ts:5-7\n```typescript\nexport function createSessionToken(userId: string, secret: string) {\n  return jwt.sign({ sub: userId }, secret, { expiresIn: \"15m\" });\n}\n```",
+      "recallAtK": 1,
+      "reciprocalRank": 1,
+      "factCoverage": 1,
+      "citationPrecision": 1,
+      "shouldAbstain": false,
+      "abstained": false,
+      "sourceSupported": true,
+      "multifileCoverage": null,
+      "latencyMs": 20,
+      "contextTokensEstimate": 435,
+      "failure": null
+    },
+    {
+      "id": "class",
+      "category": "class",
+      "question": "What does MemoryStore extend and how does its save method store a value?",
+      "expectedFacts": [
+        "BaseStore",
+        "this.values.set"
+      ],
+      "expectedEvidence": [
+        {
+          "path": "src/data/MemoryStore.ts",
+          "quote": "extends BaseStore",
+          "startLine": 2,
+          "endLine": 2
+        },
+        {
+          "path": "src/data/MemoryStore.ts",
+          "quote": "this.values.set",
+          "startLine": 4,
+          "endLine": 4
+        }
+      ],
+      "retrieved": [
+        {
+          "path": "src/data/MemoryStore.ts",
+          "startLine": 2,
+          "startColumn": 1,
+          "endLine": 6,
+          "endColumn": 2,
+          "content": "export class MemoryStore extends BaseStore {\n  private values = new Map<string, string>();\n  save(key: string, value: string) { this.values.set(key, value); return value; }\n  read(key: string) { return this.values.get(key) ?? null; }\n}",
+          "reason": "exact symbol + BM25-style lexical relevance"
+        },
+        {
+          "path": "src/data/BaseStore.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 53,
+          "content": "export class BaseStore { readonly kind = 'memory'; }",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/domain/deep/nested/normalize.ts",
+          "startLine": 2,
+          "startColumn": 1,
+          "endLine": 4,
+          "endColumn": 2,
+          "content": "export function normalizeSlug(value: string) {\n  return value.trim().toLowerCase().replaceAll(\" \", \"-\");\n}",
+          "reason": "BM25-style lexical relevance + term overlap"
+        }
+      ],
+      "answer": "Source evidence:\n\n[1] src/data/MemoryStore.ts:2-6\n```typescript\nexport class MemoryStore extends BaseStore {\n  private values = new Map<string, string>();\n  save(key: string, value: string) { this.values.set(key, value); return value; }\n  read(key: string) { return this.values.get(key) ?? null; }\n}\n```",
+      "recallAtK": 1,
+      "reciprocalRank": 1,
+      "factCoverage": 1,
+      "citationPrecision": 1,
+      "shouldAbstain": false,
+      "abstained": false,
+      "sourceSupported": true,
+      "multifileCoverage": null,
+      "latencyMs": 45,
+      "contextTokensEstimate": 99,
+      "failure": null
+    },
+    {
+      "id": "imports",
+      "category": "imports",
+      "question": "Where does registerAuthRoutes import verifyPassword from?",
+      "expectedFacts": [
+        "./users"
+      ],
+      "expectedEvidence": [
+        {
+          "path": "src/auth/routes.ts",
+          "quote": "from \"./users\"",
+          "startLine": 4,
+          "endLine": 4
+        }
+      ],
+      "retrieved": [
+        {
+          "path": "src/auth/routes.ts",
+          "startLine": 6,
+          "startColumn": 1,
+          "endLine": 19,
+          "endColumn": 2,
+          "content": "export function registerAuthRoutes(app: Express, config: AppConfig) {\n  app.post(\"/auth/login\", async (req, res) => {\n    const email = String(req.body.email ?? \"\").toLowerCase();\n    const password = String(req.body.password ?? \"\");\n    const user = findUserByEmail(email);\n\n    if (!user || !(await verifyPassword(user, password))) {\n      res.status(401).json({ error: \"Invalid credentials\" });\n      return;\n    }\n\n    res.json({ token: createSessionToken(user.id, config.jwtSecret), user });\n  });\n}",
+          "reason": "exact symbol + BM25-style lexical relevance"
+        },
+        {
+          "path": "src/auth/users.ts",
+          "startLine": 17,
+          "startColumn": 1,
+          "endLine": 19,
+          "endColumn": 2,
+          "content": "export function verifyPassword(user: User, password: string) {\n  return bcrypt.compare(password, user.passwordHash);\n}",
+          "reason": "exact symbol + BM25-style lexical relevance"
+        },
+        {
+          "path": "src/auth/routes.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 20,
+          "endColumn": 1,
+          "content": "import type { Express } from \"express\";\nimport { AppConfig } from \"../config\";\nimport { createSessionToken } from \"./session\";\nimport { findUserByEmail, verifyPassword } from \"./users\";\n\nexport function registerAuthRoutes(app: Express, config: AppConfig) {\n  app.post(\"/auth/login\", async (req, res) => {\n    const email = String(req.body.email ?? \"\").toLowerCase();\n    const password = String(req.body.password ?? \"\");\n    const user = findUserByEmail(email);\n\n    if (!user || !(await verifyPassword(user, password))) {\n      res.status(401).json({ error: \"Invalid credentials\" });\n      return;\n    }\n\n    res.json({ token: createSessionToken(user.id, config.jwtSecret), user });\n  });\n}\n",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/server.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 25,
+          "endColumn": 1,
+          "content": "import express from \"express\";\nimport { AppConfig } from \"./config\";\nimport { registerAuthRoutes } from \"./auth/routes\";\nimport { requireAuth } from \"./auth/session\";\nimport { listTasks, createTask } from \"./tasks\";\n\nexport function createApp(config: AppConfig) {\n  const app = express();\n  app.use(express.json());\n  registerAuthRoutes(app, config);\n\n  app.get(\"/health\", (_req, res) => res.json({ ok: true }));\n\n  app.get(\"/tasks\", requireAuth(config), (_req, res) => {\n    res.json({ tasks: listTasks() });\n  });\n\n  app.post(\"/tasks\", requireAuth(config), (req, res) => {\n    const task = createTask(String(req.body.title ?? \"\"));\n    res.status(201).json({ task });\n  });\n\n  return app;\n}\n",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/auth/users.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 20,
+          "endColumn": 1,
+          "content": "import bcrypt from \"bcryptjs\";\n\nexport type User = {\n  id: string;\n  email: string;\n  passwordHash: string;\n};\n\nconst users: User[] = [\n  { id: \"u1\", email: \"owner@example.com\", passwordHash: \"$2a$10$sample\" }\n];\n\nexport function findUserByEmail(email: string) {\n  return users.find((user) => user.email === email);\n}\n\nexport function verifyPassword(user: User, password: string) {\n  return bcrypt.compare(password, user.passwordHash);\n}\n",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/server.ts",
+          "startLine": 7,
+          "startColumn": 1,
+          "endLine": 24,
+          "endColumn": 2,
+          "content": "export function createApp(config: AppConfig) {\n  const app = express();\n  app.use(express.json());\n  registerAuthRoutes(app, config);\n\n  app.get(\"/health\", (_req, res) => res.json({ ok: true }));\n\n  app.get(\"/tasks\", requireAuth(config), (_req, res) => {\n    res.json({ tasks: listTasks() });\n  });\n\n  app.post(\"/tasks\", requireAuth(config), (req, res) => {\n    const task = createTask(String(req.body.title ?? \"\"));\n    res.status(201).json({ task });\n  });\n\n  return app;\n}",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/auth/users.ts",
+          "startLine": 3,
+          "startColumn": 1,
+          "endLine": 7,
+          "endColumn": 3,
+          "content": "export type User = {\n  id: string;\n  email: string;\n  passwordHash: string;\n};",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/auth/session.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 21,
+          "endColumn": 1,
+          "content": "import type { RequestHandler } from \"express\";\nimport jwt from \"jsonwebtoken\";\nimport { AppConfig } from \"../config\";\n\nexport function createSessionToken(userId: string, secret: string) {\n  return jwt.sign({ sub: userId }, secret, { expiresIn: \"15m\" });\n}\n\nexport function requireAuth(config: AppConfig): RequestHandler {\n  return (req, res, next) => {\n    const header = req.headers.authorization ?? \"\";\n    const token = header.replace(/^Bearer\\s+/i, \"\");\n    try {\n      jwt.verify(token, config.jwtSecret);\n      next();\n    } catch {\n      res.status(401).json({ error: \"Authentication required\" });\n    }\n  };\n}\n",
+          "reason": "BM25-style lexical relevance + term overlap"
+        }
+      ],
+      "answer": "Source evidence:\n\n[1] src/auth/routes.ts:1-20\n```typescript\nimport type { Express } from \"express\";\nimport { AppConfig } from \"../config\";\nimport { createSessionToken } from \"./session\";\nimport { findUserByEmail, verifyPassword } from \"./users\";\n\nexport function registerAuthRoutes(app: Express, config: AppConfig) {\n  app.post(\"/auth/login\", async (req, res) => {\n    const email = String(req.body.email ?? \"\").toLowerCase();\n    const password = String(req.body.password ?? \"\");\n    const user = findUserByEmail(email);\n\n    if (!user || !(await verifyPassword(user, password))) {\n      res.status(401).json({ error: \"Invalid credentials\" });\n      return;\n    }\n\n    res.json({ token: createSessionToken(user.id, config.jwtSecret), user });\n  });\n}\n\n```",
+      "recallAtK": 1,
+      "reciprocalRank": 0.3333333333333333,
+      "factCoverage": 1,
+      "citationPrecision": 1,
+      "shouldAbstain": false,
+      "abstained": false,
+      "sourceSupported": true,
+      "multifileCoverage": null,
+      "latencyMs": 5,
+      "contextTokensEstimate": 907,
+      "failure": null
+    },
+    {
+      "id": "entry",
+      "category": "entrypoint",
+      "question": "How does src/main.ts start the application?",
+      "expectedFacts": [
+        "loadConfig(process.env)",
+        "createApp(config)",
+        "app.listen"
+      ],
+      "expectedEvidence": [
+        {
+          "path": "src/main.ts",
+          "quote": "loadConfig(process.env)",
+          "startLine": 4,
+          "endLine": 4
+        },
+        {
+          "path": "src/server.ts",
+          "quote": "export function createApp",
+          "startLine": 7,
+          "endLine": 7
+        }
+      ],
+      "retrieved": [
+        {
+          "path": "src/main.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 10,
+          "endColumn": 1,
+          "content": "import { createApp } from \"./server\";\nimport { loadConfig } from \"./config\";\n\nconst config = loadConfig(process.env);\nconst app = createApp(config);\n\napp.listen(config.port, () => {\n  console.log(`TaskPilot listening on ${config.port}`);\n});\n",
+          "reason": "explicit source path + lexical relevance"
+        },
+        {
+          "path": "src/config.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 5,
+          "endColumn": 3,
+          "content": "export type AppConfig = {\n  port: number;\n  jwtSecret: string;\n  allowSignup: boolean;\n};",
+          "reason": "source context; dependency neighbor of src/main.ts (relationships are navigation hints, not runtime proof); dependency neighbor of src/main.ts (relationships are navigation hints, not runtime proof); dependency neighbor of src/main.ts (relationships are navigation hints, not runtime proof)"
+        },
+        {
+          "path": "src/config.ts",
+          "startLine": 7,
+          "startColumn": 1,
+          "endLine": 13,
+          "endColumn": 2,
+          "content": "export function loadConfig(env: NodeJS.ProcessEnv): AppConfig {\n  return {\n    port: Number(env.PORT ?? 3000),\n    jwtSecret: env.JWT_SECRET ?? \"dev-secret-change-me\",\n    allowSignup: env.ALLOW_SIGNUP !== \"false\"\n  };\n}",
+          "reason": "source context; dependency neighbor of src/main.ts (relationships are navigation hints, not runtime proof); dependency neighbor of src/main.ts (relationships are navigation hints, not runtime proof); dependency neighbor of src/main.ts (relationships are navigation hints, not runtime proof)"
+        },
+        {
+          "path": "src/server.ts",
+          "startLine": 7,
+          "startColumn": 1,
+          "endLine": 24,
+          "endColumn": 2,
+          "content": "export function createApp(config: AppConfig) {\n  const app = express();\n  app.use(express.json());\n  registerAuthRoutes(app, config);\n\n  app.get(\"/health\", (_req, res) => res.json({ ok: true }));\n\n  app.get(\"/tasks\", requireAuth(config), (_req, res) => {\n    res.json({ tasks: listTasks() });\n  });\n\n  app.post(\"/tasks\", requireAuth(config), (req, res) => {\n    const task = createTask(String(req.body.title ?? \"\"));\n    res.status(201).json({ task });\n  });\n\n  return app;\n}",
+          "reason": "source context; dependency neighbor of src/main.ts (relationships are navigation hints, not runtime proof); dependency neighbor of src/main.ts (relationships are navigation hints, not runtime proof); dependency neighbor of src/main.ts (relationships are navigation hints, not runtime proof)"
+        }
+      ],
+      "answer": "Source evidence:\n\n[1] src/main.ts:1-10\n```typescript\nimport { createApp } from \"./server\";\nimport { loadConfig } from \"./config\";\n\nconst config = loadConfig(process.env);\nconst app = createApp(config);\n\napp.listen(config.port, () => {\n  console.log(`TaskPilot listening on ${config.port}`);\n});\n\n```",
+      "recallAtK": 1,
+      "reciprocalRank": 1,
+      "factCoverage": 1,
+      "citationPrecision": 1,
+      "shouldAbstain": false,
+      "abstained": false,
+      "sourceSupported": true,
+      "multifileCoverage": 1,
+      "latencyMs": 3,
+      "contextTokensEstimate": 258,
+      "failure": null
+    },
+    {
+      "id": "cross",
+      "category": "cross-file",
+      "question": "Trace registerAuthRoutes through verifyPassword and createSessionToken across files.",
+      "expectedFacts": [
+        "verifyPassword(user, password)",
+        "bcrypt.compare",
+        "jwt.sign"
+      ],
+      "expectedEvidence": [
+        {
+          "path": "src/auth/routes.ts",
+          "quote": "verifyPassword(user, password)",
+          "startLine": 12,
+          "endLine": 12
+        },
+        {
+          "path": "src/auth/users.ts",
+          "quote": "bcrypt.compare",
+          "startLine": 18,
+          "endLine": 18
+        },
+        {
+          "path": "src/auth/session.ts",
+          "quote": "jwt.sign",
+          "startLine": 6,
+          "endLine": 6
+        }
+      ],
+      "retrieved": [
+        {
+          "path": "src/auth/routes.ts",
+          "startLine": 6,
+          "startColumn": 1,
+          "endLine": 19,
+          "endColumn": 2,
+          "content": "export function registerAuthRoutes(app: Express, config: AppConfig) {\n  app.post(\"/auth/login\", async (req, res) => {\n    const email = String(req.body.email ?? \"\").toLowerCase();\n    const password = String(req.body.password ?? \"\");\n    const user = findUserByEmail(email);\n\n    if (!user || !(await verifyPassword(user, password))) {\n      res.status(401).json({ error: \"Invalid credentials\" });\n      return;\n    }\n\n    res.json({ token: createSessionToken(user.id, config.jwtSecret), user });\n  });\n}",
+          "reason": "exact symbol + BM25-style lexical relevance; dependency neighbor of src/auth/session.ts (relationships are navigation hints, not runtime proof); dependency neighbor of src/auth/users.ts (relationships are navigation hints, not runtime proof)"
+        },
+        {
+          "path": "src/auth/users.ts",
+          "startLine": 17,
+          "startColumn": 1,
+          "endLine": 19,
+          "endColumn": 2,
+          "content": "export function verifyPassword(user: User, password: string) {\n  return bcrypt.compare(password, user.passwordHash);\n}",
+          "reason": "exact symbol + BM25-style lexical relevance; dependency neighbor of src/auth/routes.ts (relationships are navigation hints, not runtime proof)"
+        },
+        {
+          "path": "src/auth/session.ts",
+          "startLine": 5,
+          "startColumn": 1,
+          "endLine": 7,
+          "endColumn": 2,
+          "content": "export function createSessionToken(userId: string, secret: string) {\n  return jwt.sign({ sub: userId }, secret, { expiresIn: \"15m\" });\n}",
+          "reason": "exact symbol + BM25-style lexical relevance; dependency neighbor of src/auth/routes.ts (relationships are navigation hints, not runtime proof)"
+        },
+        {
+          "path": "src/server.ts",
+          "startLine": 7,
+          "startColumn": 1,
+          "endLine": 24,
+          "endColumn": 2,
+          "content": "export function createApp(config: AppConfig) {\n  const app = express();\n  app.use(express.json());\n  registerAuthRoutes(app, config);\n\n  app.get(\"/health\", (_req, res) => res.json({ ok: true }));\n\n  app.get(\"/tasks\", requireAuth(config), (_req, res) => {\n    res.json({ tasks: listTasks() });\n  });\n\n  app.post(\"/tasks\", requireAuth(config), (req, res) => {\n    const task = createTask(String(req.body.title ?? \"\"));\n    res.status(201).json({ task });\n  });\n\n  return app;\n}",
+          "reason": "BM25-style lexical relevance + term overlap; dependency neighbor of src/auth/routes.ts (relationships are navigation hints, not runtime proof); dependency neighbor of src/auth/session.ts (relationships are navigation hints, not runtime proof)"
+        },
+        {
+          "path": "src/config.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 5,
+          "endColumn": 3,
+          "content": "export type AppConfig = {\n  port: number;\n  jwtSecret: string;\n  allowSignup: boolean;\n};",
+          "reason": "source context; dependency neighbor of src/auth/routes.ts (relationships are navigation hints, not runtime proof); dependency neighbor of src/auth/session.ts (relationships are navigation hints, not runtime proof)"
+        },
+        {
+          "path": "src/config.ts",
+          "startLine": 7,
+          "startColumn": 1,
+          "endLine": 13,
+          "endColumn": 2,
+          "content": "export function loadConfig(env: NodeJS.ProcessEnv): AppConfig {\n  return {\n    port: Number(env.PORT ?? 3000),\n    jwtSecret: env.JWT_SECRET ?? \"dev-secret-change-me\",\n    allowSignup: env.ALLOW_SIGNUP !== \"false\"\n  };\n}",
+          "reason": "source context; dependency neighbor of src/auth/routes.ts (relationships are navigation hints, not runtime proof); dependency neighbor of src/auth/session.ts (relationships are navigation hints, not runtime proof)"
+        },
+        {
+          "path": "src/auth/session.ts",
+          "startLine": 9,
+          "startColumn": 1,
+          "endLine": 20,
+          "endColumn": 2,
+          "content": "export function requireAuth(config: AppConfig): RequestHandler {\n  return (req, res, next) => {\n    const header = req.headers.authorization ?? \"\";\n    const token = header.replace(/^Bearer\\s+/i, \"\");\n    try {\n      jwt.verify(token, config.jwtSecret);\n      next();\n    } catch {\n      res.status(401).json({ error: \"Authentication required\" });\n    }\n  };\n}",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/auth/users.ts",
+          "startLine": 3,
+          "startColumn": 1,
+          "endLine": 7,
+          "endColumn": 3,
+          "content": "export type User = {\n  id: string;\n  email: string;\n  passwordHash: string;\n};",
+          "reason": "BM25-style lexical relevance + term overlap"
+        }
+      ],
+      "answer": "Source evidence:\n\n[1] src/auth/routes.ts:6-19\n```typescript\nexport function registerAuthRoutes(app: Express, config: AppConfig) {\n  app.post(\"/auth/login\", async (req, res) => {\n    const email = String(req.body.email ?? \"\").toLowerCase();\n    const password = String(req.body.password ?? \"\");\n    const user = findUserByEmail(email);\n\n    if (!user || !(await verifyPassword(user, password))) {\n      res.status(401).json({ error: \"Invalid credentials\" });\n      return;\n    }\n\n    res.json({ token: createSessionToken(user.id, config.jwtSecret), user });\n  });\n}\n```\n\n[2] src/auth/users.ts:17-19\n```typescript\nexport function verifyPassword(user: User, password: string) {\n  return bcrypt.compare(password, user.passwordHash);\n}\n```\n\n[3] src/auth/session.ts:5-7\n```typescript\nexport function createSessionToken(userId: string, secret: string) {\n  return jwt.sign({ sub: userId }, secret, { expiresIn: \"15m\" });\n}\n```",
+      "recallAtK": 1,
+      "reciprocalRank": 1,
+      "factCoverage": 1,
+      "citationPrecision": 1,
+      "shouldAbstain": false,
+      "abstained": false,
+      "sourceSupported": true,
+      "multifileCoverage": 1,
+      "latencyMs": 6,
+      "contextTokensEstimate": 497,
+      "failure": null
+    },
+    {
+      "id": "config",
+      "category": "configuration",
+      "question": "What are the PORT and ALLOW_SIGNUP defaults in loadConfig?",
+      "expectedFacts": [
+        "env.PORT ?? 3000",
+        "env.ALLOW_SIGNUP !== \"false\""
+      ],
+      "expectedEvidence": [
+        {
+          "path": "src/config.ts",
+          "quote": "env.PORT ?? 3000",
+          "startLine": 9,
+          "endLine": 9
+        }
+      ],
+      "retrieved": [
+        {
+          "path": "src/config.ts",
+          "startLine": 7,
+          "startColumn": 1,
+          "endLine": 13,
+          "endColumn": 2,
+          "content": "export function loadConfig(env: NodeJS.ProcessEnv): AppConfig {\n  return {\n    port: Number(env.PORT ?? 3000),\n    jwtSecret: env.JWT_SECRET ?? \"dev-secret-change-me\",\n    allowSignup: env.ALLOW_SIGNUP !== \"false\"\n  };\n}",
+          "reason": "exact symbol + BM25-style lexical relevance"
+        },
+        {
+          "path": "src/config.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 5,
+          "endColumn": 3,
+          "content": "export type AppConfig = {\n  port: number;\n  jwtSecret: string;\n  allowSignup: boolean;\n};",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/main.ts",
+          "startLine": 4,
+          "startColumn": 1,
+          "endLine": 4,
+          "endColumn": 40,
+          "content": "const config = loadConfig(process.env);",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/constants.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 4,
+          "endColumn": 1,
+          "content": "import { loadConfig } from \"./config\";\nexport const STATUS_READY = \"ready\";\nconsole.log(loadConfig(process.env).port);\n",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/main.ts",
+          "startLine": 5,
+          "startColumn": 1,
+          "endLine": 5,
+          "endColumn": 31,
+          "content": "const app = createApp(config);",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/auth/session.ts",
+          "startLine": 9,
+          "startColumn": 1,
+          "endLine": 20,
+          "endColumn": 2,
+          "content": "export function requireAuth(config: AppConfig): RequestHandler {\n  return (req, res, next) => {\n    const header = req.headers.authorization ?? \"\";\n    const token = header.replace(/^Bearer\\s+/i, \"\");\n    try {\n      jwt.verify(token, config.jwtSecret);\n      next();\n    } catch {\n      res.status(401).json({ error: \"Authentication required\" });\n    }\n  };\n}",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/server.ts",
+          "startLine": 7,
+          "startColumn": 1,
+          "endLine": 24,
+          "endColumn": 2,
+          "content": "export function createApp(config: AppConfig) {\n  const app = express();\n  app.use(express.json());\n  registerAuthRoutes(app, config);\n\n  app.get(\"/health\", (_req, res) => res.json({ ok: true }));\n\n  app.get(\"/tasks\", requireAuth(config), (_req, res) => {\n    res.json({ tasks: listTasks() });\n  });\n\n  app.post(\"/tasks\", requireAuth(config), (req, res) => {\n    const task = createTask(String(req.body.title ?? \"\"));\n    res.status(201).json({ task });\n  });\n\n  return app;\n}",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/auth/routes.ts",
+          "startLine": 6,
+          "startColumn": 1,
+          "endLine": 19,
+          "endColumn": 2,
+          "content": "export function registerAuthRoutes(app: Express, config: AppConfig) {\n  app.post(\"/auth/login\", async (req, res) => {\n    const email = String(req.body.email ?? \"\").toLowerCase();\n    const password = String(req.body.password ?? \"\");\n    const user = findUserByEmail(email);\n\n    if (!user || !(await verifyPassword(user, password))) {\n      res.status(401).json({ error: \"Invalid credentials\" });\n      return;\n    }\n\n    res.json({ token: createSessionToken(user.id, config.jwtSecret), user });\n  });\n}",
+          "reason": "BM25-style lexical relevance + term overlap"
+        }
+      ],
+      "answer": "Source evidence:\n\n[1] src/config.ts:7-13\n```typescript\nexport function loadConfig(env: NodeJS.ProcessEnv): AppConfig {\n  return {\n    port: Number(env.PORT ?? 3000),\n    jwtSecret: env.JWT_SECRET ?? \"dev-secret-change-me\",\n    allowSignup: env.ALLOW_SIGNUP !== \"false\"\n  };\n}\n```",
+      "recallAtK": 1,
+      "reciprocalRank": 1,
+      "factCoverage": 1,
+      "citationPrecision": 1,
+      "shouldAbstain": false,
+      "abstained": false,
+      "sourceSupported": true,
+      "multifileCoverage": null,
+      "latencyMs": 8,
+      "contextTokensEstimate": 461,
+      "failure": null
+    },
+    {
+      "id": "route",
+      "category": "routes",
+      "question": "What happens in the POST /tasks route?",
+      "expectedFacts": [
+        "app.post(\"/tasks\"",
+        "createTask",
+        "201"
+      ],
+      "expectedEvidence": [
+        {
+          "path": "src/server.ts",
+          "quote": "app.post(\"/tasks\"",
+          "startLine": 18,
+          "endLine": 18
+        }
+      ],
+      "retrieved": [
+        {
+          "path": "src/server.ts",
+          "startLine": 7,
+          "startColumn": 1,
+          "endLine": 24,
+          "endColumn": 2,
+          "content": "export function createApp(config: AppConfig) {\n  const app = express();\n  app.use(express.json());\n  registerAuthRoutes(app, config);\n\n  app.get(\"/health\", (_req, res) => res.json({ ok: true }));\n\n  app.get(\"/tasks\", requireAuth(config), (_req, res) => {\n    res.json({ tasks: listTasks() });\n  });\n\n  app.post(\"/tasks\", requireAuth(config), (req, res) => {\n    const task = createTask(String(req.body.title ?? \"\"));\n    res.status(201).json({ task });\n  });\n\n  return app;\n}",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/auth/routes.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 20,
+          "endColumn": 1,
+          "content": "import type { Express } from \"express\";\nimport { AppConfig } from \"../config\";\nimport { createSessionToken } from \"./session\";\nimport { findUserByEmail, verifyPassword } from \"./users\";\n\nexport function registerAuthRoutes(app: Express, config: AppConfig) {\n  app.post(\"/auth/login\", async (req, res) => {\n    const email = String(req.body.email ?? \"\").toLowerCase();\n    const password = String(req.body.password ?? \"\");\n    const user = findUserByEmail(email);\n\n    if (!user || !(await verifyPassword(user, password))) {\n      res.status(401).json({ error: \"Invalid credentials\" });\n      return;\n    }\n\n    res.json({ token: createSessionToken(user.id, config.jwtSecret), user });\n  });\n}\n",
+          "reason": "source context; dependency neighbor of src/server.ts (relationships are navigation hints, not runtime proof); dependency neighbor of src/server.ts (relationships are navigation hints, not runtime proof)"
+        },
+        {
+          "path": "src/auth/session.ts",
+          "startLine": 5,
+          "startColumn": 1,
+          "endLine": 7,
+          "endColumn": 2,
+          "content": "export function createSessionToken(userId: string, secret: string) {\n  return jwt.sign({ sub: userId }, secret, { expiresIn: \"15m\" });\n}",
+          "reason": "source context; dependency neighbor of src/server.ts (relationships are navigation hints, not runtime proof); dependency neighbor of src/server.ts (relationships are navigation hints, not runtime proof)"
+        },
+        {
+          "path": "src/auth/session.ts",
+          "startLine": 9,
+          "startColumn": 1,
+          "endLine": 20,
+          "endColumn": 2,
+          "content": "export function requireAuth(config: AppConfig): RequestHandler {\n  return (req, res, next) => {\n    const header = req.headers.authorization ?? \"\";\n    const token = header.replace(/^Bearer\\s+/i, \"\");\n    try {\n      jwt.verify(token, config.jwtSecret);\n      next();\n    } catch {\n      res.status(401).json({ error: \"Authentication required\" });\n    }\n  };\n}",
+          "reason": "source context; dependency neighbor of src/server.ts (relationships are navigation hints, not runtime proof); dependency neighbor of src/server.ts (relationships are navigation hints, not runtime proof)"
+        },
+        {
+          "path": "src/config.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 5,
+          "endColumn": 3,
+          "content": "export type AppConfig = {\n  port: number;\n  jwtSecret: string;\n  allowSignup: boolean;\n};",
+          "reason": "source context; dependency neighbor of src/server.ts (relationships are navigation hints, not runtime proof); dependency neighbor of src/server.ts (relationships are navigation hints, not runtime proof)"
+        },
+        {
+          "path": "src/config.ts",
+          "startLine": 7,
+          "startColumn": 1,
+          "endLine": 13,
+          "endColumn": 2,
+          "content": "export function loadConfig(env: NodeJS.ProcessEnv): AppConfig {\n  return {\n    port: Number(env.PORT ?? 3000),\n    jwtSecret: env.JWT_SECRET ?? \"dev-secret-change-me\",\n    allowSignup: env.ALLOW_SIGNUP !== \"false\"\n  };\n}",
+          "reason": "source context; dependency neighbor of src/server.ts (relationships are navigation hints, not runtime proof); dependency neighbor of src/server.ts (relationships are navigation hints, not runtime proof)"
+        },
+        {
+          "path": "src/main.ts",
+          "startLine": 5,
+          "startColumn": 1,
+          "endLine": 5,
+          "endColumn": 31,
+          "content": "const app = createApp(config);",
+          "reason": "source context; dependency neighbor of src/server.ts (relationships are navigation hints, not runtime proof); dependency neighbor of src/server.ts (relationships are navigation hints, not runtime proof)"
+        },
+        {
+          "path": "src/main.ts",
+          "startLine": 4,
+          "startColumn": 1,
+          "endLine": 4,
+          "endColumn": 40,
+          "content": "const config = loadConfig(process.env);",
+          "reason": "source context; dependency neighbor of src/server.ts (relationships are navigation hints, not runtime proof); dependency neighbor of src/server.ts (relationships are navigation hints, not runtime proof)"
+        }
+      ],
+      "answer": "Source evidence:\n\n[1] src/server.ts:7-24\n```typescript\nexport function createApp(config: AppConfig) {\n  const app = express();\n  app.use(express.json());\n  registerAuthRoutes(app, config);\n\n  app.get(\"/health\", (_req, res) => res.json({ ok: true }));\n\n  app.get(\"/tasks\", requireAuth(config), (_req, res) => {\n    res.json({ tasks: listTasks() });\n  });\n\n  app.post(\"/tasks\", requireAuth(config), (req, res) => {\n    const task = createTask(String(req.body.title ?? \"\"));\n    res.status(201).json({ task });\n  });\n\n  return app;\n}\n```",
+      "recallAtK": 1,
+      "reciprocalRank": 1,
+      "factCoverage": 1,
+      "citationPrecision": 1,
+      "shouldAbstain": false,
+      "abstained": false,
+      "sourceSupported": true,
+      "multifileCoverage": null,
+      "latencyMs": 3,
+      "contextTokensEstimate": 512,
+      "failure": null
+    },
+    {
+      "id": "data",
+      "category": "data-flow",
+      "question": "How does MemoryStore persist values and read missing keys?",
+      "expectedFacts": [
+        "this.values.set",
+        "this.values.get",
+        "null"
+      ],
+      "expectedEvidence": [
+        {
+          "path": "src/data/MemoryStore.ts",
+          "quote": "this.values.set",
+          "startLine": 4,
+          "endLine": 4
+        },
+        {
+          "path": "src/data/MemoryStore.ts",
+          "quote": "this.values.get(key) ?? null",
+          "startLine": 5,
+          "endLine": 5
+        }
+      ],
+      "retrieved": [
+        {
+          "path": "src/data/MemoryStore.ts",
+          "startLine": 2,
+          "startColumn": 1,
+          "endLine": 6,
+          "endColumn": 2,
+          "content": "export class MemoryStore extends BaseStore {\n  private values = new Map<string, string>();\n  save(key: string, value: string) { this.values.set(key, value); return value; }\n  read(key: string) { return this.values.get(key) ?? null; }\n}",
+          "reason": "exact symbol + BM25-style lexical relevance"
+        },
+        {
+          "path": "src/data/BaseStore.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 53,
+          "content": "export class BaseStore { readonly kind = 'memory'; }",
+          "reason": "BM25-style lexical relevance + term overlap"
+        }
+      ],
+      "answer": "Source evidence:\n\n[1] src/data/MemoryStore.ts:2-6\n```typescript\nexport class MemoryStore extends BaseStore {\n  private values = new Map<string, string>();\n  save(key: string, value: string) { this.values.set(key, value); return value; }\n  read(key: string) { return this.values.get(key) ?? null; }\n}\n```",
+      "recallAtK": 1,
+      "reciprocalRank": 1,
+      "factCoverage": 1,
+      "citationPrecision": 1,
+      "shouldAbstain": false,
+      "abstained": false,
+      "sourceSupported": true,
+      "multifileCoverage": null,
+      "latencyMs": 8,
+      "contextTokensEstimate": 72,
+      "failure": null
+    },
+    {
+      "id": "error",
+      "category": "errors",
+      "question": "What happens when createTask gets a title shorter than three characters?",
+      "expectedFacts": [
+        "title.trim().length < 3",
+        "Task title is too short"
+      ],
+      "expectedEvidence": [
+        {
+          "path": "src/tasks.ts",
+          "quote": "Task title is too short",
+          "startLine": 17,
+          "endLine": 17
+        }
+      ],
+      "retrieved": [
+        {
+          "path": "src/tasks.ts",
+          "startLine": 15,
+          "startColumn": 1,
+          "endLine": 22,
+          "endColumn": 2,
+          "content": "export function createTask(title: string) {\n  if (title.trim().length < 3) {\n    throw new Error(\"Task title is too short\");\n  }\n  const task = { id: crypto.randomUUID(), title, done: false };\n  tasks.push(task);\n  return task;\n}",
+          "reason": "exact symbol + BM25-style lexical relevance"
+        },
+        {
+          "path": "src/tasks.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 5,
+          "endColumn": 3,
+          "content": "export type Task = {\n  id: string;\n  title: string;\n  done: boolean;\n};",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/tasks.ts",
+          "startLine": 7,
+          "startColumn": 1,
+          "endLine": 9,
+          "endColumn": 3,
+          "content": "const tasks: Task[] = [\n  { id: \"t1\", title: \"Audit authentication flow\", done: false }\n];",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/main.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 10,
+          "endColumn": 1,
+          "content": "import { createApp } from \"./server\";\nimport { loadConfig } from \"./config\";\n\nconst config = loadConfig(process.env);\nconst app = createApp(config);\n\napp.listen(config.port, () => {\n  console.log(`TaskPilot listening on ${config.port}`);\n});\n",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/server.ts",
+          "startLine": 7,
+          "startColumn": 1,
+          "endLine": 24,
+          "endColumn": 2,
+          "content": "export function createApp(config: AppConfig) {\n  const app = express();\n  app.use(express.json());\n  registerAuthRoutes(app, config);\n\n  app.get(\"/health\", (_req, res) => res.json({ ok: true }));\n\n  app.get(\"/tasks\", requireAuth(config), (_req, res) => {\n    res.json({ tasks: listTasks() });\n  });\n\n  app.post(\"/tasks\", requireAuth(config), (req, res) => {\n    const task = createTask(String(req.body.title ?? \"\"));\n    res.status(201).json({ task });\n  });\n\n  return app;\n}",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/auth/session.ts",
+          "startLine": 5,
+          "startColumn": 1,
+          "endLine": 7,
+          "endColumn": 2,
+          "content": "export function createSessionToken(userId: string, secret: string) {\n  return jwt.sign({ sub: userId }, secret, { expiresIn: \"15m\" });\n}",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "README.md",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 10,
+          "endColumn": 1,
+          "content": "# TaskPilot sample\n\nTaskPilot is a tiny Express and TypeScript task API used as the default CodeMesh sample repository.\n\nInteresting questions:\n\n- How does request authentication work?\n- Which files are involved when creating tasks?\n- What changes would make the auth failure response easier to audit?\n",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/auth/routes.ts",
+          "startLine": 6,
+          "startColumn": 1,
+          "endLine": 19,
+          "endColumn": 2,
+          "content": "export function registerAuthRoutes(app: Express, config: AppConfig) {\n  app.post(\"/auth/login\", async (req, res) => {\n    const email = String(req.body.email ?? \"\").toLowerCase();\n    const password = String(req.body.password ?? \"\");\n    const user = findUserByEmail(email);\n\n    if (!user || !(await verifyPassword(user, password))) {\n      res.status(401).json({ error: \"Invalid credentials\" });\n      return;\n    }\n\n    res.json({ token: createSessionToken(user.id, config.jwtSecret), user });\n  });\n}",
+          "reason": "BM25-style lexical relevance + term overlap"
+        }
+      ],
+      "answer": "Source evidence:\n\n[1] src/tasks.ts:15-22\n```typescript\nexport function createTask(title: string) {\n  if (title.trim().length < 3) {\n    throw new Error(\"Task title is too short\");\n  }\n  const task = { id: crypto.randomUUID(), title, done: false };\n  tasks.push(task);\n  return task;\n}\n```",
+      "recallAtK": 1,
+      "reciprocalRank": 1,
+      "factCoverage": 1,
+      "citationPrecision": 1,
+      "shouldAbstain": false,
+      "abstained": false,
+      "sourceSupported": true,
+      "multifileCoverage": null,
+      "latencyMs": 4,
+      "contextTokensEstimate": 515,
+      "failure": null
+    },
+    {
+      "id": "multi",
+      "category": "multi-file",
+      "question": "How do createApp and requireAuth protect the GET /tasks route?",
+      "expectedFacts": [
+        "app.get(\"/tasks\", requireAuth(config)",
+        "jwt.verify",
+        "Authentication required"
+      ],
+      "expectedEvidence": [
+        {
+          "path": "src/server.ts",
+          "quote": "app.get(\"/tasks\", requireAuth(config)",
+          "startLine": 14,
+          "endLine": 14
+        },
+        {
+          "path": "src/auth/session.ts",
+          "quote": "jwt.verify",
+          "startLine": 14,
+          "endLine": 14
+        }
+      ],
+      "retrieved": [
+        {
+          "path": "src/server.ts",
+          "startLine": 7,
+          "startColumn": 1,
+          "endLine": 24,
+          "endColumn": 2,
+          "content": "export function createApp(config: AppConfig) {\n  const app = express();\n  app.use(express.json());\n  registerAuthRoutes(app, config);\n\n  app.get(\"/health\", (_req, res) => res.json({ ok: true }));\n\n  app.get(\"/tasks\", requireAuth(config), (_req, res) => {\n    res.json({ tasks: listTasks() });\n  });\n\n  app.post(\"/tasks\", requireAuth(config), (req, res) => {\n    const task = createTask(String(req.body.title ?? \"\"));\n    res.status(201).json({ task });\n  });\n\n  return app;\n}",
+          "reason": "exact symbol + BM25-style lexical relevance; dependency neighbor of src/auth/session.ts (relationships are navigation hints, not runtime proof)"
+        },
+        {
+          "path": "src/auth/session.ts",
+          "startLine": 9,
+          "startColumn": 1,
+          "endLine": 20,
+          "endColumn": 2,
+          "content": "export function requireAuth(config: AppConfig): RequestHandler {\n  return (req, res, next) => {\n    const header = req.headers.authorization ?? \"\";\n    const token = header.replace(/^Bearer\\s+/i, \"\");\n    try {\n      jwt.verify(token, config.jwtSecret);\n      next();\n    } catch {\n      res.status(401).json({ error: \"Authentication required\" });\n    }\n  };\n}",
+          "reason": "exact symbol + BM25-style lexical relevance; dependency neighbor of src/server.ts (relationships are navigation hints, not runtime proof)"
+        },
+        {
+          "path": "src/auth/routes.ts",
+          "startLine": 6,
+          "startColumn": 1,
+          "endLine": 19,
+          "endColumn": 2,
+          "content": "export function registerAuthRoutes(app: Express, config: AppConfig) {\n  app.post(\"/auth/login\", async (req, res) => {\n    const email = String(req.body.email ?? \"\").toLowerCase();\n    const password = String(req.body.password ?? \"\");\n    const user = findUserByEmail(email);\n\n    if (!user || !(await verifyPassword(user, password))) {\n      res.status(401).json({ error: \"Invalid credentials\" });\n      return;\n    }\n\n    res.json({ token: createSessionToken(user.id, config.jwtSecret), user });\n  });\n}",
+          "reason": "BM25-style lexical relevance + term overlap; dependency neighbor of src/server.ts (relationships are navigation hints, not runtime proof); dependency neighbor of src/auth/session.ts (relationships are navigation hints, not runtime proof)"
+        },
+        {
+          "path": "src/config.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 5,
+          "endColumn": 3,
+          "content": "export type AppConfig = {\n  port: number;\n  jwtSecret: string;\n  allowSignup: boolean;\n};",
+          "reason": "BM25-style lexical relevance + term overlap; dependency neighbor of src/server.ts (relationships are navigation hints, not runtime proof); dependency neighbor of src/auth/session.ts (relationships are navigation hints, not runtime proof)"
+        },
+        {
+          "path": "src/config.ts",
+          "startLine": 7,
+          "startColumn": 1,
+          "endLine": 13,
+          "endColumn": 2,
+          "content": "export function loadConfig(env: NodeJS.ProcessEnv): AppConfig {\n  return {\n    port: Number(env.PORT ?? 3000),\n    jwtSecret: env.JWT_SECRET ?? \"dev-secret-change-me\",\n    allowSignup: env.ALLOW_SIGNUP !== \"false\"\n  };\n}",
+          "reason": "BM25-style lexical relevance + term overlap; dependency neighbor of src/server.ts (relationships are navigation hints, not runtime proof); dependency neighbor of src/auth/session.ts (relationships are navigation hints, not runtime proof)"
+        },
+        {
+          "path": "src/main.ts",
+          "startLine": 5,
+          "startColumn": 1,
+          "endLine": 5,
+          "endColumn": 31,
+          "content": "const app = createApp(config);",
+          "reason": "BM25-style lexical relevance + term overlap; dependency neighbor of src/server.ts (relationships are navigation hints, not runtime proof)"
+        },
+        {
+          "path": "src/tasks.ts",
+          "startLine": 15,
+          "startColumn": 1,
+          "endLine": 22,
+          "endColumn": 2,
+          "content": "export function createTask(title: string) {\n  if (title.trim().length < 3) {\n    throw new Error(\"Task title is too short\");\n  }\n  const task = { id: crypto.randomUUID(), title, done: false };\n  tasks.push(task);\n  return task;\n}",
+          "reason": "BM25-style lexical relevance + term overlap; dependency neighbor of src/server.ts (relationships are navigation hints, not runtime proof)"
+        },
+        {
+          "path": "src/auth/session.ts",
+          "startLine": 5,
+          "startColumn": 1,
+          "endLine": 7,
+          "endColumn": 2,
+          "content": "export function createSessionToken(userId: string, secret: string) {\n  return jwt.sign({ sub: userId }, secret, { expiresIn: \"15m\" });\n}",
+          "reason": "BM25-style lexical relevance + term overlap"
+        }
+      ],
+      "answer": "Source evidence:\n\n[1] src/server.ts:7-24\n```typescript\nexport function createApp(config: AppConfig) {\n  const app = express();\n  app.use(express.json());\n  registerAuthRoutes(app, config);\n\n  app.get(\"/health\", (_req, res) => res.json({ ok: true }));\n\n  app.get(\"/tasks\", requireAuth(config), (_req, res) => {\n    res.json({ tasks: listTasks() });\n  });\n\n  app.post(\"/tasks\", requireAuth(config), (req, res) => {\n    const task = createTask(String(req.body.title ?? \"\"));\n    res.status(201).json({ task });\n  });\n\n  return app;\n}\n```\n\n[2] src/auth/session.ts:9-20\n```typescript\nexport function requireAuth(config: AppConfig): RequestHandler {\n  return (req, res, next) => {\n    const header = req.headers.authorization ?? \"\";\n    const token = header.replace(/^Bearer\\s+/i, \"\");\n    try {\n      jwt.verify(token, config.jwtSecret);\n      next();\n    } catch {\n      res.status(401).json({ error: \"Authentication required\" });\n    }\n  };\n}\n```",
+      "recallAtK": 1,
+      "reciprocalRank": 1,
+      "factCoverage": 1,
+      "citationPrecision": 1,
+      "shouldAbstain": false,
+      "abstained": false,
+      "sourceSupported": true,
+      "multifileCoverage": 1,
+      "latencyMs": 3,
+      "contextTokensEstimate": 513,
+      "failure": null
+    },
+    {
+      "id": "misleading",
+      "category": "misleading",
+      "question": "Where does createTask write tasks into PostgreSQL?",
+      "expectedFacts": [],
+      "expectedEvidence": [],
+      "retrieved": [
+        {
+          "path": "src/tasks.ts",
+          "startLine": 15,
+          "startColumn": 1,
+          "endLine": 22,
+          "endColumn": 2,
+          "content": "export function createTask(title: string) {\n  if (title.trim().length < 3) {\n    throw new Error(\"Task title is too short\");\n  }\n  const task = { id: crypto.randomUUID(), title, done: false };\n  tasks.push(task);\n  return task;\n}",
+          "reason": "exact symbol + BM25-style lexical relevance"
+        },
+        {
+          "path": "src/tasks.ts",
+          "startLine": 7,
+          "startColumn": 1,
+          "endLine": 9,
+          "endColumn": 3,
+          "content": "const tasks: Task[] = [\n  { id: \"t1\", title: \"Audit authentication flow\", done: false }\n];",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/server.ts",
+          "startLine": 7,
+          "startColumn": 1,
+          "endLine": 24,
+          "endColumn": 2,
+          "content": "export function createApp(config: AppConfig) {\n  const app = express();\n  app.use(express.json());\n  registerAuthRoutes(app, config);\n\n  app.get(\"/health\", (_req, res) => res.json({ ok: true }));\n\n  app.get(\"/tasks\", requireAuth(config), (_req, res) => {\n    res.json({ tasks: listTasks() });\n  });\n\n  app.post(\"/tasks\", requireAuth(config), (req, res) => {\n    const task = createTask(String(req.body.title ?? \"\"));\n    res.status(201).json({ task });\n  });\n\n  return app;\n}",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/main.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 10,
+          "endColumn": 1,
+          "content": "import { createApp } from \"./server\";\nimport { loadConfig } from \"./config\";\n\nconst config = loadConfig(process.env);\nconst app = createApp(config);\n\napp.listen(config.port, () => {\n  console.log(`TaskPilot listening on ${config.port}`);\n});\n",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "README.md",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 10,
+          "endColumn": 1,
+          "content": "# TaskPilot sample\n\nTaskPilot is a tiny Express and TypeScript task API used as the default CodeMesh sample repository.\n\nInteresting questions:\n\n- How does request authentication work?\n- Which files are involved when creating tasks?\n- What changes would make the auth failure response easier to audit?\n",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/tasks.ts",
+          "startLine": 11,
+          "startColumn": 1,
+          "endLine": 13,
+          "endColumn": 2,
+          "content": "export function listTasks() {\n  return tasks;\n}",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/tasks.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 5,
+          "endColumn": 3,
+          "content": "export type Task = {\n  id: string;\n  title: string;\n  done: boolean;\n};",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/auth/session.ts",
+          "startLine": 5,
+          "startColumn": 1,
+          "endLine": 7,
+          "endColumn": 2,
+          "content": "export function createSessionToken(userId: string, secret: string) {\n  return jwt.sign({ sub: userId }, secret, { expiresIn: \"15m\" });\n}",
+          "reason": "BM25-style lexical relevance + term overlap"
+        }
+      ],
+      "answer": "I couldn't verify this from the indexed repository. Supporting evidence was not found for PostgreSQL. Try indexing the missing files or ask about a more specific function or module.",
+      "recallAtK": null,
+      "reciprocalRank": null,
+      "factCoverage": null,
+      "citationPrecision": null,
+      "shouldAbstain": true,
+      "abstained": true,
+      "sourceSupported": true,
+      "multifileCoverage": null,
+      "latencyMs": 4,
+      "contextTokensEstimate": 401,
+      "failure": null
+    },
+    {
+      "id": "missing",
+      "category": "missing",
+      "question": "What does deleteAccountPermanently return?",
+      "expectedFacts": [],
+      "expectedEvidence": [],
+      "retrieved": [],
+      "answer": "I couldn't verify this from the indexed repository. Supporting evidence was not found for deleteAccountPermanently. Try indexing the missing files or ask about a more specific function or module.",
+      "recallAtK": null,
+      "reciprocalRank": null,
+      "factCoverage": null,
+      "citationPrecision": null,
+      "shouldAbstain": true,
+      "abstained": true,
+      "sourceSupported": true,
+      "multifileCoverage": null,
+      "latencyMs": 2,
+      "contextTokensEstimate": 0,
+      "failure": null
+    },
+    {
+      "id": "ambiguous",
+      "category": "ambiguous",
+      "question": "Explain calculateTotal.",
+      "expectedFacts": [],
+      "expectedEvidence": [],
+      "retrieved": [
+        {
+          "path": "src/shipping/total.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 70,
+          "content": "export function calculateTotal(weight: number) { return weight + 5; }",
+          "reason": "exact symbol + BM25-style lexical relevance"
+        },
+        {
+          "path": "src/billing/total.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 93,
+          "content": "export function calculateTotal(price: number, quantity: number) { return price * quantity; }",
+          "reason": "exact symbol + BM25-style lexical relevance"
+        }
+      ],
+      "answer": "The question is ambiguous. Please clarify the source path for calculateTotal. Matching definitions: src/billing/total.ts, src/shipping/total.ts.",
+      "recallAtK": null,
+      "reciprocalRank": null,
+      "factCoverage": null,
+      "citationPrecision": null,
+      "shouldAbstain": true,
+      "abstained": true,
+      "sourceSupported": true,
+      "multifileCoverage": null,
+      "latencyMs": 2,
+      "contextTokensEstimate": 41,
+      "failure": null
+    },
+    {
+      "id": "general",
+      "category": "unrelated",
+      "question": "Explain binary search in general programming.",
+      "expectedFacts": [],
+      "expectedEvidence": [],
+      "retrieved": [],
+      "answer": "General programming: binary search repeatedly halves a sorted search range. Compare the middle value with the target, keep the appropriate half, and stop when found or the range is empty. It takes O(log n) comparisons. This is general knowledge, not a finding about this repository.",
+      "recallAtK": null,
+      "reciprocalRank": null,
+      "factCoverage": null,
+      "citationPrecision": null,
+      "shouldAbstain": true,
+      "abstained": true,
+      "sourceSupported": true,
+      "multifileCoverage": null,
+      "latencyMs": 2,
+      "contextTokensEstimate": 0,
+      "failure": null
+    },
+    {
+      "id": "regression",
+      "category": "previous-regression",
+      "question": "What does createSessionToken do with the userId?",
+      "expectedFacts": [
+        "sub: userId",
+        "jwt.sign"
+      ],
+      "expectedEvidence": [
+        {
+          "path": "src/auth/session.ts",
+          "quote": "sub: userId",
+          "startLine": 6,
+          "endLine": 6
+        }
+      ],
+      "retrieved": [
+        {
+          "path": "src/auth/session.ts",
+          "startLine": 5,
+          "startColumn": 1,
+          "endLine": 7,
+          "endColumn": 2,
+          "content": "export function createSessionToken(userId: string, secret: string) {\n  return jwt.sign({ sub: userId }, secret, { expiresIn: \"15m\" });\n}",
+          "reason": "exact symbol + BM25-style lexical relevance"
+        },
+        {
+          "path": "src/auth/routes.ts",
+          "startLine": 6,
+          "startColumn": 1,
+          "endLine": 19,
+          "endColumn": 2,
+          "content": "export function registerAuthRoutes(app: Express, config: AppConfig) {\n  app.post(\"/auth/login\", async (req, res) => {\n    const email = String(req.body.email ?? \"\").toLowerCase();\n    const password = String(req.body.password ?? \"\");\n    const user = findUserByEmail(email);\n\n    if (!user || !(await verifyPassword(user, password))) {\n      res.status(401).json({ error: \"Invalid credentials\" });\n      return;\n    }\n\n    res.json({ token: createSessionToken(user.id, config.jwtSecret), user });\n  });\n}",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/auth/users.ts",
+          "startLine": 3,
+          "startColumn": 1,
+          "endLine": 7,
+          "endColumn": 3,
+          "content": "export type User = {\n  id: string;\n  email: string;\n  passwordHash: string;\n};",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/auth/users.ts",
+          "startLine": 9,
+          "startColumn": 1,
+          "endLine": 11,
+          "endColumn": 3,
+          "content": "const users: User[] = [\n  { id: \"u1\", email: \"owner@example.com\", passwordHash: \"$2a$10$sample\" }\n];",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/tasks.ts",
+          "startLine": 15,
+          "startColumn": 1,
+          "endLine": 22,
+          "endColumn": 2,
+          "content": "export function createTask(title: string) {\n  if (title.trim().length < 3) {\n    throw new Error(\"Task title is too short\");\n  }\n  const task = { id: crypto.randomUUID(), title, done: false };\n  tasks.push(task);\n  return task;\n}",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/main.ts",
+          "startLine": 5,
+          "startColumn": 1,
+          "endLine": 5,
+          "endColumn": 31,
+          "content": "const app = createApp(config);",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/auth/users.ts",
+          "startLine": 13,
+          "startColumn": 1,
+          "endLine": 15,
+          "endColumn": 2,
+          "content": "export function findUserByEmail(email: string) {\n  return users.find((user) => user.email === email);\n}",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/auth/users.ts",
+          "startLine": 17,
+          "startColumn": 1,
+          "endLine": 19,
+          "endColumn": 2,
+          "content": "export function verifyPassword(user: User, password: string) {\n  return bcrypt.compare(password, user.passwordHash);\n}",
+          "reason": "BM25-style lexical relevance + term overlap"
+        }
+      ],
+      "answer": "Source evidence:\n\n[1] src/auth/session.ts:5-7\n```typescript\nexport function createSessionToken(userId: string, secret: string) {\n  return jwt.sign({ sub: userId }, secret, { expiresIn: \"15m\" });\n}\n```",
+      "recallAtK": 1,
+      "reciprocalRank": 1,
+      "factCoverage": 1,
+      "citationPrecision": 1,
+      "shouldAbstain": false,
+      "abstained": false,
+      "sourceSupported": true,
+      "multifileCoverage": null,
+      "latencyMs": 5,
+      "contextTokensEstimate": 327,
+      "failure": null
+    },
+    {
+      "id": "deep",
+      "category": "nested",
+      "question": "What does normalizeSlug in src/domain/deep/nested/normalize.ts return?",
+      "expectedFacts": [
+        "toLowerCase()",
+        "replaceAll(\" \", \"-\")"
+      ],
+      "expectedEvidence": [
+        {
+          "path": "src/domain/deep/nested/normalize.ts",
+          "quote": "toLowerCase()",
+          "startLine": 3,
+          "endLine": 3
+        }
+      ],
+      "retrieved": [
+        {
+          "path": "src/domain/deep/nested/normalize.ts",
+          "startLine": 2,
+          "startColumn": 1,
+          "endLine": 4,
+          "endColumn": 2,
+          "content": "export function normalizeSlug(value: string) {\n  return value.trim().toLowerCase().replaceAll(\" \", \"-\");\n}",
+          "reason": "exact symbol + BM25-style lexical relevance"
+        }
+      ],
+      "answer": "Source evidence:\n\n[1] src/domain/deep/nested/normalize.ts:2-4\n```typescript\nexport function normalizeSlug(value: string) {\n  return value.trim().toLowerCase().replaceAll(\" \", \"-\");\n}\n```",
+      "recallAtK": 1,
+      "reciprocalRank": 1,
+      "factCoverage": 1,
+      "citationPrecision": 1,
+      "shouldAbstain": false,
+      "abstained": false,
+      "sourceSupported": true,
+      "multifileCoverage": null,
+      "latencyMs": 2,
+      "contextTokensEstimate": 27,
+      "failure": null
+    },
+    {
+      "id": "duplicate",
+      "category": "similar-symbols",
+      "question": "What does calculateTotal in src/billing/total.ts return?",
+      "expectedFacts": [
+        "price * quantity"
+      ],
+      "expectedEvidence": [
+        {
+          "path": "src/billing/total.ts",
+          "quote": "price * quantity",
+          "startLine": 1,
+          "endLine": 1
+        }
+      ],
+      "retrieved": [
+        {
+          "path": "src/billing/total.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 93,
+          "content": "export function calculateTotal(price: number, quantity: number) { return price * quantity; }",
+          "reason": "exact symbol + BM25-style lexical relevance"
+        },
+        {
+          "path": "src/shipping/total.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 70,
+          "content": "export function calculateTotal(weight: number) { return weight + 5; }",
+          "reason": "exact symbol + BM25-style lexical relevance"
+        }
+      ],
+      "answer": "Source evidence:\n\n[1] src/billing/total.ts:1-1\n```typescript\nexport function calculateTotal(price: number, quantity: number) { return price * quantity; }\n```\n\n[2] src/shipping/total.ts:1-1\n```typescript\nexport function calculateTotal(weight: number) { return weight + 5; }\n```",
+      "recallAtK": 1,
+      "reciprocalRank": 1,
+      "factCoverage": 1,
+      "citationPrecision": 0.5,
+      "shouldAbstain": false,
+      "abstained": false,
+      "sourceSupported": true,
+      "multifileCoverage": null,
+      "latencyMs": 3,
+      "contextTokensEstimate": 41,
+      "failure": null
+    },
+    {
+      "id": "module",
+      "category": "module-code",
+      "question": "What STATUS_READY value does src/constants.ts export?",
+      "expectedFacts": [
+        "\"ready\""
+      ],
+      "expectedEvidence": [
+        {
+          "path": "src/constants.ts",
+          "quote": "STATUS_READY = \"ready\"",
+          "startLine": 2,
+          "endLine": 2
+        }
+      ],
+      "retrieved": [
+        {
+          "path": "src/constants.ts",
+          "startLine": 2,
+          "startColumn": 1,
+          "endLine": 2,
+          "endColumn": 37,
+          "content": "export const STATUS_READY = \"ready\";",
+          "reason": "exact symbol + BM25-style lexical relevance"
+        },
+        {
+          "path": "src/domain/deep/nested/normalize.ts",
+          "startLine": 2,
+          "startColumn": 1,
+          "endLine": 4,
+          "endColumn": 2,
+          "content": "export function normalizeSlug(value: string) {\n  return value.trim().toLowerCase().replaceAll(\" \", \"-\");\n}",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/data/MemoryStore.ts",
+          "startLine": 4,
+          "startColumn": 1,
+          "endLine": 4,
+          "endColumn": 82,
+          "content": "  save(key: string, value: string) { this.values.set(key, value); return value; }",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/tasks.ts",
+          "startLine": 11,
+          "startColumn": 1,
+          "endLine": 13,
+          "endColumn": 2,
+          "content": "export function listTasks() {\n  return tasks;\n}",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/shipping/total.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 70,
+          "content": "export function calculateTotal(weight: number) { return weight + 5; }",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/billing/total.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 93,
+          "content": "export function calculateTotal(price: number, quantity: number) { return price * quantity; }",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/auth/users.ts",
+          "startLine": 13,
+          "startColumn": 1,
+          "endLine": 15,
+          "endColumn": 2,
+          "content": "export function findUserByEmail(email: string) {\n  return users.find((user) => user.email === email);\n}",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/auth/users.ts",
+          "startLine": 3,
+          "startColumn": 1,
+          "endLine": 7,
+          "endColumn": 3,
+          "content": "export type User = {\n  id: string;\n  email: string;\n  passwordHash: string;\n};",
+          "reason": "BM25-style lexical relevance + term overlap"
+        }
+      ],
+      "answer": "Source evidence:\n\n[1] src/constants.ts:2-2\n```typescript\nexport const STATUS_READY = \"ready\";\n```",
+      "recallAtK": 1,
+      "reciprocalRank": 1,
+      "factCoverage": 1,
+      "citationPrecision": 1,
+      "shouldAbstain": false,
+      "abstained": false,
+      "sourceSupported": true,
+      "multifileCoverage": null,
+      "latencyMs": 4,
+      "contextTokensEstimate": 156,
+      "failure": null
+    },
+    {
+      "id": "partial",
+      "category": "multi-part",
+      "question": "Explain createSessionToken and deleteAccountPermanently.",
+      "expectedFacts": [
+        "jwt.sign",
+        "15m"
+      ],
+      "expectedEvidence": [
+        {
+          "path": "src/auth/session.ts",
+          "quote": "jwt.sign",
+          "startLine": 6,
+          "endLine": 6
+        }
+      ],
+      "retrieved": [
+        {
+          "path": "src/auth/session.ts",
+          "startLine": 5,
+          "startColumn": 1,
+          "endLine": 7,
+          "endColumn": 2,
+          "content": "export function createSessionToken(userId: string, secret: string) {\n  return jwt.sign({ sub: userId }, secret, { expiresIn: \"15m\" });\n}",
+          "reason": "exact symbol + BM25-style lexical relevance"
+        },
+        {
+          "path": "src/auth/routes.ts",
+          "startLine": 6,
+          "startColumn": 1,
+          "endLine": 19,
+          "endColumn": 2,
+          "content": "export function registerAuthRoutes(app: Express, config: AppConfig) {\n  app.post(\"/auth/login\", async (req, res) => {\n    const email = String(req.body.email ?? \"\").toLowerCase();\n    const password = String(req.body.password ?? \"\");\n    const user = findUserByEmail(email);\n\n    if (!user || !(await verifyPassword(user, password))) {\n      res.status(401).json({ error: \"Invalid credentials\" });\n      return;\n    }\n\n    res.json({ token: createSessionToken(user.id, config.jwtSecret), user });\n  });\n}",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/main.ts",
+          "startLine": 5,
+          "startColumn": 1,
+          "endLine": 5,
+          "endColumn": 31,
+          "content": "const app = createApp(config);",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/auth/session.ts",
+          "startLine": 9,
+          "startColumn": 1,
+          "endLine": 20,
+          "endColumn": 2,
+          "content": "export function requireAuth(config: AppConfig): RequestHandler {\n  return (req, res, next) => {\n    const header = req.headers.authorization ?? \"\";\n    const token = header.replace(/^Bearer\\s+/i, \"\");\n    try {\n      jwt.verify(token, config.jwtSecret);\n      next();\n    } catch {\n      res.status(401).json({ error: \"Authentication required\" });\n    }\n  };\n}",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/tasks.ts",
+          "startLine": 15,
+          "startColumn": 1,
+          "endLine": 22,
+          "endColumn": 2,
+          "content": "export function createTask(title: string) {\n  if (title.trim().length < 3) {\n    throw new Error(\"Task title is too short\");\n  }\n  const task = { id: crypto.randomUUID(), title, done: false };\n  tasks.push(task);\n  return task;\n}",
+          "reason": "BM25-style lexical relevance + term overlap"
+        },
+        {
+          "path": "src/server.ts",
+          "startLine": 7,
+          "startColumn": 1,
+          "endLine": 24,
+          "endColumn": 2,
+          "content": "export function createApp(config: AppConfig) {\n  const app = express();\n  app.use(express.json());\n  registerAuthRoutes(app, config);\n\n  app.get(\"/health\", (_req, res) => res.json({ ok: true }));\n\n  app.get(\"/tasks\", requireAuth(config), (_req, res) => {\n    res.json({ tasks: listTasks() });\n  });\n\n  app.post(\"/tasks\", requireAuth(config), (req, res) => {\n    const task = createTask(String(req.body.title ?? \"\"));\n    res.status(201).json({ task });\n  });\n\n  return app;\n}",
+          "reason": "BM25-style lexical relevance + term overlap"
+        }
+      ],
+      "answer": "Source evidence:\n\n[1] src/auth/session.ts:5-7\n```typescript\nexport function createSessionToken(userId: string, secret: string) {\n  return jwt.sign({ sub: userId }, secret, { expiresIn: \"15m\" });\n}\n```\n\nI couldn't verify deleteAccountPermanently from the indexed repository.",
+      "recallAtK": 1,
+      "reciprocalRank": 1,
+      "factCoverage": 1,
+      "citationPrecision": 1,
+      "shouldAbstain": false,
+      "abstained": false,
+      "sourceSupported": true,
+      "multifileCoverage": null,
+      "latencyMs": 2,
+      "contextTokensEstimate": 435,
+      "failure": null
+    },
+    {
+      "id": "injection",
+      "category": "untrusted-comments",
+      "question": "What does normalizeSlug return?",
+      "expectedFacts": [
+        "toLowerCase()",
+        "replaceAll(\" \", \"-\")"
+      ],
+      "expectedEvidence": [
+        {
+          "path": "src/domain/deep/nested/normalize.ts",
+          "quote": "toLowerCase()",
+          "startLine": 3,
+          "endLine": 3
+        }
+      ],
+      "retrieved": [
+        {
+          "path": "src/domain/deep/nested/normalize.ts",
+          "startLine": 2,
+          "startColumn": 1,
+          "endLine": 4,
+          "endColumn": 2,
+          "content": "export function normalizeSlug(value: string) {\n  return value.trim().toLowerCase().replaceAll(\" \", \"-\");\n}",
+          "reason": "exact symbol + BM25-style lexical relevance"
+        }
+      ],
+      "answer": "Source evidence:\n\n[1] src/domain/deep/nested/normalize.ts:2-4\n```typescript\nexport function normalizeSlug(value: string) {\n  return value.trim().toLowerCase().replaceAll(\" \", \"-\");\n}\n```",
+      "recallAtK": 1,
+      "reciprocalRank": 1,
+      "factCoverage": 1,
+      "citationPrecision": 1,
+      "shouldAbstain": false,
+      "abstained": false,
+      "sourceSupported": true,
+      "multifileCoverage": null,
+      "latencyMs": 2,
+      "contextTokensEstimate": 27,
+      "failure": null
+    }
+  ],
+  "metrics": {
+    "recallAtK": 1,
+    "mrr": 0.9583333333333334,
+    "expectedFactCoverage": 1,
+    "sourceSupportedAnswerRate": 1,
+    "citationPrecision": 0.96875,
+    "abstentionPrecision": 1,
+    "abstentionRecall": 1,
+    "multifileCoverage": 1,
+    "averageLatencyMs": 6.65,
+    "contextTokensEstimate": 5724
+  },
+  "limitations": [
+    "Fact coverage uses source-anchored string assertions, not semantic proof of arbitrary generated claims.",
+    "Citation precision checks source ranges plus required evidence anchors; human review remains necessary.",
+    "Token counts are context estimates, not billed provider usage.",
+    "Local/mock results do not establish Gemini, Ollama, or other live-model accuracy."
+  ]
+}

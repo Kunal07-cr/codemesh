@@ -88,7 +88,22 @@ export function validateZipArchive(buffer: Buffer, limits: ZipImportLimits = ZIP
 
   let unzipped: Record<string, Uint8Array>;
   try {
-    unzipped = unzipSync(buffer);
+    let entries = 0, advertisedBytes = 0;
+    const seen = new Set<string>();
+    // Inspect central-directory metadata without inflating entries before enforcing budgets.
+    unzipSync(buffer, { filter: (entry) => {
+      entries++; advertisedBytes += entry.originalSize;
+      const path = normalizePath(entry.name);
+      if (/^[\\/]|^[a-z]:/i.test(entry.name) || entry.name.includes("\0") || /(^|\/)\.\.(\/|$)/.test(path)) errors.push("Path traversal or unsafe absolute path is not allowed.");
+      if (path.split("/").length > limits.nesting) errors.push("ZIP contains a path nested too deeply.");
+      if (seen.has(path)) errors.push("ZIP contains duplicate normalized paths.");
+      seen.add(path);
+      return false;
+    } });
+    if (entries > limits.files) errors.push(`ZIP has too many files. Limit is ${limits.files}.`);
+    if (advertisedBytes > limits.extractedBytes) errors.push(`ZIP extracts to too much data. The extracted limit is ${ZIP_EXTRACTED_LIMIT_MB} MB.`);
+    if (errors.length) return { accepted: false, files: [], errors: [...new Set(errors)] };
+    unzipped = unzipSync(buffer, { filter: (entry) => !entry.name.endsWith("/") && !isSensitivePath(entry.name) && !binaryExtensions.has(extension(entry.name)) && isRepositoryTextFile(entry.name, entry.originalSize) });
   } catch {
     return { accepted: false, files: [], errors: ["Could not read ZIP archive."] };
   }
@@ -134,9 +149,9 @@ export function extractRepoFiles(projectId: string, buffer: Buffer, options: Ext
   if (!validation.accepted) {
     throw new Error(validation.errors.join("; "));
   }
-  const unzipped = unzipSync(buffer);
-  const now = new Date().toISOString();
   const accepted = new Set(validation.files.map((file) => file.path));
+  const unzipped = unzipSync(buffer, { filter: (entry) => accepted.has(normalizePath(entry.name)) });
+  const now = new Date().toISOString();
   const acceptedPaths = Object.keys(unzipped).map(normalizePath).filter((filePath) => accepted.has(filePath));
   const commonRoot = options.stripCommonRoot ? findCommonArchiveRoot(acceptedPaths) : null;
   return Object.entries(unzipped)

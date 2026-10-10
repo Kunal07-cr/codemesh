@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@codemesh/shared": "0.1.0",
+    "ignore": "^7.0.12",
     "typescript": "^5.9.2"
   }
 }

@@ -45,6 +45,7 @@ const envSchema = z.object({
   LLM_MODEL: optionalEnvString,
   LLM_TEMPERATURE: z.coerce.number().min(0).max(2).default(0.3),
   LLM_SYSTEM_PROMPT: optionalEnvString,
+  LLM_MAX_PROMPT_CHARS: z.coerce.number().int().min(4000).max(128000).default(32000),
   MAX_CONTEXT_MESSAGES: z.coerce.number().int().min(1).max(100).default(30),
   ASSISTANT_DATASET_PATH: optionalEnvString,
   GITHUB_APP_ID: z.string().optional(),
@@ -88,4 +89,3 @@ export function loadConfig(env = process.env) {
     aiProvider: parsed.LLM_BASE_URL && parsed.LLM_MODEL ? `openai-compatible:${parsed.LLM_MODEL}` : parsed.GEMINI_API_KEY && parsed.GEMINI_MODEL ? `gemini:${parsed.GEMINI_MODEL}` : "local-repository"
   };
 }
-

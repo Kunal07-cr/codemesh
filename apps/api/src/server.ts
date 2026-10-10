@@ -50,7 +50,7 @@ export async function createApp() {
   app.use(createRequestId());
   app.use(
     pinoHttp({
-      redact: ["req.headers.cookie", "req.headers.authorization", "res.headers.set-cookie"],
+      redact: ["req.headers.cookie", "req.headers.authorization", "req.headers.x-csrf-token", "res.headers.set-cookie"],
       customProps: (req: express.Request) => ({ requestId: req.id })
     })
   );
@@ -92,7 +92,7 @@ export async function createApp() {
   app.use("/api/projects", projectRoutes(store, artifacts));
   app.use("/api/projects", advancedRoutes(store));
   app.use("/api/projects", collaborationRoutes(config, store));
-  app.use("/api/projects", aiRoutes(config, store, assistantDataset));
+  app.use("/api/projects", aiRoutes(config, store, assistantDataset, queue));
   app.use("/api/projects", deliveryRoutes(config, store, queue, sandbox, github));
   app.use("/api/projects", operationRoutes(config, store, queue, metrics, artifacts, realtime));
 
@@ -128,4 +128,3 @@ if (fileURLToPath(import.meta.url) === path.resolve(process.argv[1] ?? "")) {
   process.on("SIGINT", () => void shutdown("SIGINT"));
   process.on("SIGTERM", () => void shutdown("SIGTERM"));
 }
-

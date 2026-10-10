@@ -43,6 +43,7 @@ export function RepositoryGraphCanvas({ graph, selectedNodeId, selectedPath = ""
   const [optionsOpen, setOptionsOpen] = useState(false);
   const [instance, setInstance] = useState<ReactFlowInstance<MeshNode, Edge> | null>(null);
   const onSelectRef = useRef(onSelectNode);
+  const stageRef = useRef<HTMLDivElement>(null);
   onSelectRef.current = onSelectNode;
   const reducedMotion = useReducedMotion();
 
@@ -82,6 +83,16 @@ export function RepositoryGraphCanvas({ graph, selectedNodeId, selectedPath = ""
     const frame = requestAnimationFrame(() => void instance.fitView({ padding: immersive ? 0.24 : 0.18, duration: reducedMotion ? 0 : 260, maxZoom: immersive ? 1.25 : 1 }));
     return () => cancelAnimationFrame(frame);
   }, [instance, visibleKey, layout, reducedMotion, immersive]);
+  useEffect(() => {
+    if (!instance || !stageRef.current) return;
+    let frame = 0;
+    const observer = new ResizeObserver(() => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => void instance.fitView({ padding: 0.2, duration: 0, maxZoom: immersive ? 1.25 : 1 }));
+    });
+    observer.observe(stageRef.current);
+    return () => { observer.disconnect(); cancelAnimationFrame(frame); };
+  }, [instance, immersive]);
 
   const matches = query.trim() ? graph.nodes.filter((node) => `${node.label} ${node.filePath ?? ""}`.toLowerCase().includes(query.trim().toLowerCase())) : [];
   const selected = model.selected;
@@ -106,7 +117,7 @@ export function RepositoryGraphCanvas({ graph, selectedNodeId, selectedPath = ""
       {!immersive && <label>Directed path to<select aria-label="Trace destination" value={target} onChange={(event) => setTarget(event.target.value)}><option value="">No path filter</option>{selectList.filter((node) => node.id !== selectedId).map((node) => <option key={node.id} value={node.id}>{node.label} · {node.filePath}</option>)}</select></label>}
       <button type="button" className="cm-icon-button" title="Close graph options" aria-label="Close graph options" onClick={() => setOptionsOpen(false)}><X size={15} /></button>
     </div>}
-    <div className="cm-canvas-stage">
+    <div className="cm-canvas-stage" ref={stageRef}>
       {nodes.length ? <ReactFlow<MeshNode, Edge> nodes={nodes} edges={edges} nodeTypes={nodeTypes} onInit={setInstance} fitView fitViewOptions={{ padding: 0.2 }} minZoom={0.15} maxZoom={2} nodesDraggable={false} nodesConnectable={false} nodesFocusable={false} edgesFocusable={false} panOnScroll={!immersive} zoomOnScroll={!immersive} preventScrolling={!immersive} colorMode="dark">
         <Background color="#283039" gap={28} size={1} />
         <Controls position="bottom-left" showInteractive={false} fitViewOptions={{ padding: 0.2, duration: reducedMotion ? 0 : 260 }} />

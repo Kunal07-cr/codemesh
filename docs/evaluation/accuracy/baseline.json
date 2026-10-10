@@ -1,0 +1,2003 @@
+{
+  "version": "source-facts-v1",
+  "generatedAt": "2026-10-10T16:17:02.505Z",
+  "provider": "local-repository",
+  "scope": "Fixed, independently authored source fixtures; not the user's entire repository",
+  "k": 8,
+  "rows": [
+    {
+      "id": "returns",
+      "category": "function",
+      "question": "What does createSessionToken return and when does it expire?",
+      "expectedFacts": [
+        "jwt.sign",
+        "15m"
+      ],
+      "expectedEvidence": [
+        {
+          "path": "src/auth/session.ts",
+          "quote": "expiresIn: \"15m\"",
+          "startLine": 6,
+          "endLine": 6
+        }
+      ],
+      "retrieved": [
+        {
+          "path": "README.md",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 10,
+          "endColumn": 1,
+          "content": "# TaskPilot sample\n\nTaskPilot is a tiny Express and TypeScript task API used as the default CodeMesh sample repository.\n\nInteresting questions:\n\n- How does request authentication work?\n- Which files are involved when creating tasks?\n- What changes would make the auth failure response easier to audit?\n",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/auth/session.ts",
+          "startLine": 5,
+          "startColumn": 1,
+          "endLine": 7,
+          "endColumn": 2,
+          "content": "export function createSessionToken(userId: string, secret: string) {\n  return jwt.sign({ sub: userId }, secret, { expiresIn: \"15m\" });\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/config.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 5,
+          "endColumn": 3,
+          "content": "export type AppConfig = {\n  port: number;\n  jwtSecret: string;\n  allowSignup: boolean;\n};",
+          "reason": "graph expansion from src/auth/session.ts"
+        },
+        {
+          "path": "src/server.ts",
+          "startLine": 7,
+          "startColumn": 1,
+          "endLine": 24,
+          "endColumn": 2,
+          "content": "export function createApp(config: AppConfig) {\n  const app = express();\n  app.use(express.json());\n  registerAuthRoutes(app, config);\n\n  app.get(\"/health\", (_req, res) => res.json({ ok: true }));\n\n  app.get(\"/tasks\", requireAuth(config), (_req, res) => {\n    res.json({ tasks: listTasks() });\n  });\n\n  app.post(\"/tasks\", requireAuth(config), (req, res) => {\n    const task = createTask(String(req.body.title ?? \"\"));\n    res.status(201).json({ task });\n  });\n\n  return app;\n}",
+          "reason": "graph expansion from src/auth/session.ts"
+        },
+        {
+          "path": "src/auth/routes.ts",
+          "startLine": 6,
+          "startColumn": 1,
+          "endLine": 19,
+          "endColumn": 2,
+          "content": "export function registerAuthRoutes(app: Express, config: AppConfig) {\n  app.post(\"/auth/login\", async (req, res) => {\n    const email = String(req.body.email ?? \"\").toLowerCase();\n    const password = String(req.body.password ?? \"\");\n    const user = findUserByEmail(email);\n\n    if (!user || !(await verifyPassword(user, password))) {\n      res.status(401).json({ error: \"Invalid credentials\" });\n      return;\n    }\n\n    res.json({ token: createSessionToken(user.id, config.jwtSecret), user });\n  });\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/data/MemoryStore.ts",
+          "startLine": 2,
+          "startColumn": 1,
+          "endLine": 6,
+          "endColumn": 2,
+          "content": "export class MemoryStore extends BaseStore {\n  private values = new Map<string, string>();\n  save(key: string, value: string) { this.values.set(key, value); return value; }\n  read(key: string) { return this.values.get(key) ?? null; }\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 13,
+          "endColumn": 2,
+          "content": "{\n  \"name\": \"taskpilot-sample\",\n  \"version\": \"0.1.0\",\n  \"scripts\": {\n    \"dev\": \"vite\",\n    \"test\": \"vitest run\"\n  },\n  \"dependencies\": {\n    \"@vitejs/plugin-react\": \"latest\",\n    \"react\": \"latest\",\n    \"react-dom\": \"latest\"\n  }\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/tasks.ts",
+          "startLine": 11,
+          "startColumn": 1,
+          "endLine": 13,
+          "endColumn": 2,
+          "content": "export function listTasks() {\n  return tasks;\n}",
+          "reason": "hybrid lexical/vector score"
+        }
+      ],
+      "answer": "For \"What does createSessionToken return and when does it expire?\", the repository evidence indicates:\n\n- README.md:1-10 contains \"# TaskPilot sample\".\n\n- src/auth/session.ts:5-7 (createSessionToken) defines the function createSessionToken.\n\n- src/config.ts:1-5 (AppConfig) defines the type AppConfig.\n\n- src/server.ts:7-24 (createApp) defines the GET /health route.\n\nThe graph also connects this evidence to src/main.ts, src/auth/users.ts, src/tasks.ts, src/data/BaseStore.ts, src/constants.ts, which may explain how the behavior is used elsewhere.\n\nOpen the citations to verify the exact implementation and line ranges.",
+      "recallAtK": 1,
+      "reciprocalRank": 0.5,
+      "factCoverage": 0,
+      "citationPrecision": 0.16666666666666666,
+      "shouldAbstain": false,
+      "abstained": false,
+      "sourceSupported": false,
+      "multifileCoverage": null,
+      "latencyMs": 10,
+      "contextTokensEstimate": 260,
+      "failure": "generation"
+    },
+    {
+      "id": "class",
+      "category": "class",
+      "question": "What does MemoryStore extend and how does its save method store a value?",
+      "expectedFacts": [
+        "BaseStore",
+        "this.values.set"
+      ],
+      "expectedEvidence": [
+        {
+          "path": "src/data/MemoryStore.ts",
+          "quote": "extends BaseStore",
+          "startLine": 2,
+          "endLine": 2
+        },
+        {
+          "path": "src/data/MemoryStore.ts",
+          "quote": "this.values.set",
+          "startLine": 4,
+          "endLine": 4
+        }
+      ],
+      "retrieved": [
+        {
+          "path": "src/data/MemoryStore.ts",
+          "startLine": 2,
+          "startColumn": 1,
+          "endLine": 6,
+          "endColumn": 2,
+          "content": "export class MemoryStore extends BaseStore {\n  private values = new Map<string, string>();\n  save(key: string, value: string) { this.values.set(key, value); return value; }\n  read(key: string) { return this.values.get(key) ?? null; }\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "README.md",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 10,
+          "endColumn": 1,
+          "content": "# TaskPilot sample\n\nTaskPilot is a tiny Express and TypeScript task API used as the default CodeMesh sample repository.\n\nInteresting questions:\n\n- How does request authentication work?\n- Which files are involved when creating tasks?\n- What changes would make the auth failure response easier to audit?\n",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/data/MemoryStore.ts",
+          "startLine": 4,
+          "startColumn": 3,
+          "endLine": 4,
+          "endColumn": 82,
+          "content": "  save(key: string, value: string) { this.values.set(key, value); return value; }",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/data/BaseStore.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 53,
+          "content": "export class BaseStore { readonly kind = 'memory'; }",
+          "reason": "graph expansion from src/data/MemoryStore.ts"
+        },
+        {
+          "path": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 13,
+          "endColumn": 2,
+          "content": "{\n  \"name\": \"taskpilot-sample\",\n  \"version\": \"0.1.0\",\n  \"scripts\": {\n    \"dev\": \"vite\",\n    \"test\": \"vitest run\"\n  },\n  \"dependencies\": {\n    \"@vitejs/plugin-react\": \"latest\",\n    \"react\": \"latest\",\n    \"react-dom\": \"latest\"\n  }\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/domain/deep/nested/normalize.ts",
+          "startLine": 2,
+          "startColumn": 1,
+          "endLine": 4,
+          "endColumn": 2,
+          "content": "export function normalizeSlug(value: string) {\n  return value.trim().toLowerCase().replaceAll(\" \", \"-\");\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/auth/session.ts",
+          "startLine": 5,
+          "startColumn": 1,
+          "endLine": 7,
+          "endColumn": 2,
+          "content": "export function createSessionToken(userId: string, secret: string) {\n  return jwt.sign({ sub: userId }, secret, { expiresIn: \"15m\" });\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/tasks.ts",
+          "startLine": 11,
+          "startColumn": 1,
+          "endLine": 13,
+          "endColumn": 2,
+          "content": "export function listTasks() {\n  return tasks;\n}",
+          "reason": "hybrid lexical/vector score"
+        }
+      ],
+      "answer": "For \"What does MemoryStore extend and how does its save method store a value?\", the repository evidence indicates:\n\n- src/data/MemoryStore.ts:2-6 (MemoryStore) defines the class MemoryStore.\n\n- README.md:1-10 contains \"# TaskPilot sample\".\n\n- src/data/MemoryStore.ts:4-4 (save) contains \"save(key: string, value: string) { this.values.set(key, value); return value; }\".\n\n- src/data/BaseStore.ts:1-1 (BaseStore) defines the class BaseStore.\n\nOpen the citations to verify the exact implementation and line ranges.",
+      "recallAtK": 1,
+      "reciprocalRank": 1,
+      "factCoverage": 1,
+      "citationPrecision": 0.3333333333333333,
+      "shouldAbstain": false,
+      "abstained": false,
+      "sourceSupported": true,
+      "multifileCoverage": null,
+      "latencyMs": 3,
+      "contextTokensEstimate": 168,
+      "failure": null
+    },
+    {
+      "id": "imports",
+      "category": "imports",
+      "question": "Where does registerAuthRoutes import verifyPassword from?",
+      "expectedFacts": [
+        "./users"
+      ],
+      "expectedEvidence": [
+        {
+          "path": "src/auth/routes.ts",
+          "quote": "from \"./users\"",
+          "startLine": 4,
+          "endLine": 4
+        }
+      ],
+      "retrieved": [
+        {
+          "path": "src/auth/routes.ts",
+          "startLine": 6,
+          "startColumn": 1,
+          "endLine": 19,
+          "endColumn": 2,
+          "content": "export function registerAuthRoutes(app: Express, config: AppConfig) {\n  app.post(\"/auth/login\", async (req, res) => {\n    const email = String(req.body.email ?? \"\").toLowerCase();\n    const password = String(req.body.password ?? \"\");\n    const user = findUserByEmail(email);\n\n    if (!user || !(await verifyPassword(user, password))) {\n      res.status(401).json({ error: \"Invalid credentials\" });\n      return;\n    }\n\n    res.json({ token: createSessionToken(user.id, config.jwtSecret), user });\n  });\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/auth/users.ts",
+          "startLine": 17,
+          "startColumn": 1,
+          "endLine": 19,
+          "endColumn": 2,
+          "content": "export function verifyPassword(user: User, password: string) {\n  return bcrypt.compare(password, user.passwordHash);\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/config.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 5,
+          "endColumn": 3,
+          "content": "export type AppConfig = {\n  port: number;\n  jwtSecret: string;\n  allowSignup: boolean;\n};",
+          "reason": "graph expansion from src/auth/routes.ts"
+        },
+        {
+          "path": "src/auth/session.ts",
+          "startLine": 5,
+          "startColumn": 1,
+          "endLine": 7,
+          "endColumn": 2,
+          "content": "export function createSessionToken(userId: string, secret: string) {\n  return jwt.sign({ sub: userId }, secret, { expiresIn: \"15m\" });\n}",
+          "reason": "graph expansion from src/auth/routes.ts"
+        },
+        {
+          "path": "README.md",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 10,
+          "endColumn": 1,
+          "content": "# TaskPilot sample\n\nTaskPilot is a tiny Express and TypeScript task API used as the default CodeMesh sample repository.\n\nInteresting questions:\n\n- How does request authentication work?\n- Which files are involved when creating tasks?\n- What changes would make the auth failure response easier to audit?\n",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/server.ts",
+          "startLine": 7,
+          "startColumn": 1,
+          "endLine": 24,
+          "endColumn": 2,
+          "content": "export function createApp(config: AppConfig) {\n  const app = express();\n  app.use(express.json());\n  registerAuthRoutes(app, config);\n\n  app.get(\"/health\", (_req, res) => res.json({ ok: true }));\n\n  app.get(\"/tasks\", requireAuth(config), (_req, res) => {\n    res.json({ tasks: listTasks() });\n  });\n\n  app.post(\"/tasks\", requireAuth(config), (req, res) => {\n    const task = createTask(String(req.body.title ?? \"\"));\n    res.status(201).json({ task });\n  });\n\n  return app;\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 13,
+          "endColumn": 2,
+          "content": "{\n  \"name\": \"taskpilot-sample\",\n  \"version\": \"0.1.0\",\n  \"scripts\": {\n    \"dev\": \"vite\",\n    \"test\": \"vitest run\"\n  },\n  \"dependencies\": {\n    \"@vitejs/plugin-react\": \"latest\",\n    \"react\": \"latest\",\n    \"react-dom\": \"latest\"\n  }\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/tasks.ts",
+          "startLine": 11,
+          "startColumn": 1,
+          "endLine": 13,
+          "endColumn": 2,
+          "content": "export function listTasks() {\n  return tasks;\n}",
+          "reason": "hybrid lexical/vector score"
+        }
+      ],
+      "answer": "Security-relevant mechanisms or review points found in the retrieved code: password hashing; token or session handling; user or permission scoping.\n\nSecurity evidence:\n- src/auth/routes.ts:6-19 (registerAuthRoutes) defines the POST /auth/login route.\n- src/auth/users.ts:17-19 (verifyPassword) defines the function verifyPassword.\n- src/config.ts:1-5 (AppConfig) defines the type AppConfig.\n- src/auth/session.ts:5-7 (createSessionToken) defines the function createSessionToken.\n\nFor a complete audit, trace authentication, authorization at every write boundary, input validation, secret handling, rate limits, and user-scoped data access. A citation shows evidence, not proof that the whole repository is secure.",
+      "recallAtK": 0,
+      "reciprocalRank": 0,
+      "factCoverage": 0,
+      "citationPrecision": 0,
+      "shouldAbstain": false,
+      "abstained": false,
+      "sourceSupported": false,
+      "multifileCoverage": null,
+      "latencyMs": 3,
+      "contextTokensEstimate": 239,
+      "failure": "retrieval"
+    },
+    {
+      "id": "entry",
+      "category": "entrypoint",
+      "question": "How does src/main.ts start the application?",
+      "expectedFacts": [
+        "loadConfig(process.env)",
+        "createApp(config)",
+        "app.listen"
+      ],
+      "expectedEvidence": [
+        {
+          "path": "src/main.ts",
+          "quote": "loadConfig(process.env)",
+          "startLine": 4,
+          "endLine": 4
+        },
+        {
+          "path": "src/server.ts",
+          "quote": "export function createApp",
+          "startLine": 7,
+          "endLine": 7
+        }
+      ],
+      "retrieved": [
+        {
+          "path": "README.md",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 10,
+          "endColumn": 1,
+          "content": "# TaskPilot sample\n\nTaskPilot is a tiny Express and TypeScript task API used as the default CodeMesh sample repository.\n\nInteresting questions:\n\n- How does request authentication work?\n- Which files are involved when creating tasks?\n- What changes would make the auth failure response easier to audit?\n",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/tasks.ts",
+          "startLine": 11,
+          "startColumn": 1,
+          "endLine": 13,
+          "endColumn": 2,
+          "content": "export function listTasks() {\n  return tasks;\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/data/BaseStore.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 53,
+          "content": "export class BaseStore { readonly kind = 'memory'; }",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/main.ts",
+          "startLine": 4,
+          "startColumn": 7,
+          "endLine": 4,
+          "endColumn": 39,
+          "content": "const config = loadConfig(process.env);",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/main.ts",
+          "startLine": 5,
+          "startColumn": 7,
+          "endLine": 5,
+          "endColumn": 30,
+          "content": "const app = createApp(config);",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/server.ts",
+          "startLine": 7,
+          "startColumn": 1,
+          "endLine": 24,
+          "endColumn": 2,
+          "content": "export function createApp(config: AppConfig) {\n  const app = express();\n  app.use(express.json());\n  registerAuthRoutes(app, config);\n\n  app.get(\"/health\", (_req, res) => res.json({ ok: true }));\n\n  app.get(\"/tasks\", requireAuth(config), (_req, res) => {\n    res.json({ tasks: listTasks() });\n  });\n\n  app.post(\"/tasks\", requireAuth(config), (req, res) => {\n    const task = createTask(String(req.body.title ?? \"\"));\n    res.status(201).json({ task });\n  });\n\n  return app;\n}",
+          "reason": "graph expansion from src/tasks.ts"
+        },
+        {
+          "path": "src/data/MemoryStore.ts",
+          "startLine": 2,
+          "startColumn": 1,
+          "endLine": 6,
+          "endColumn": 2,
+          "content": "export class MemoryStore extends BaseStore {\n  private values = new Map<string, string>();\n  save(key: string, value: string) { this.values.set(key, value); return value; }\n  read(key: string) { return this.values.get(key) ?? null; }\n}",
+          "reason": "graph expansion from src/data/BaseStore.ts"
+        },
+        {
+          "path": "src/auth/session.ts",
+          "startLine": 5,
+          "startColumn": 1,
+          "endLine": 7,
+          "endColumn": 2,
+          "content": "export function createSessionToken(userId: string, secret: string) {\n  return jwt.sign({ sub: userId }, secret, { expiresIn: \"15m\" });\n}",
+          "reason": "hybrid lexical/vector score"
+        }
+      ],
+      "answer": "The indexed package manifest identifies taskpilot-sample.\n\nBased on the indexed package metadata, install dependencies first and then use npm run dev.\n\nThe detected scripts are dev, test. Check the cited README or package file for required environment variables and services.\n\nSetup evidence:\n- README.md:1-10 contains \"# TaskPilot sample\".\n- src/tasks.ts:11-13 (listTasks) defines the function listTasks.\n- src/data/BaseStore.ts:1-1 (BaseStore) defines the class BaseStore.\n- src/main.ts:4-4 (config) defines the const config.",
+      "recallAtK": 1,
+      "reciprocalRank": 0.25,
+      "factCoverage": 0,
+      "citationPrecision": 0.3333333333333333,
+      "shouldAbstain": false,
+      "abstained": false,
+      "sourceSupported": false,
+      "multifileCoverage": 1,
+      "latencyMs": 3,
+      "contextTokensEstimate": 189,
+      "failure": "generation"
+    },
+    {
+      "id": "cross",
+      "category": "cross-file",
+      "question": "Trace registerAuthRoutes through verifyPassword and createSessionToken across files.",
+      "expectedFacts": [
+        "verifyPassword(user, password)",
+        "bcrypt.compare",
+        "jwt.sign"
+      ],
+      "expectedEvidence": [
+        {
+          "path": "src/auth/routes.ts",
+          "quote": "verifyPassword(user, password)",
+          "startLine": 12,
+          "endLine": 12
+        },
+        {
+          "path": "src/auth/users.ts",
+          "quote": "bcrypt.compare",
+          "startLine": 18,
+          "endLine": 18
+        },
+        {
+          "path": "src/auth/session.ts",
+          "quote": "jwt.sign",
+          "startLine": 6,
+          "endLine": 6
+        }
+      ],
+      "retrieved": [
+        {
+          "path": "src/auth/routes.ts",
+          "startLine": 6,
+          "startColumn": 1,
+          "endLine": 19,
+          "endColumn": 2,
+          "content": "export function registerAuthRoutes(app: Express, config: AppConfig) {\n  app.post(\"/auth/login\", async (req, res) => {\n    const email = String(req.body.email ?? \"\").toLowerCase();\n    const password = String(req.body.password ?? \"\");\n    const user = findUserByEmail(email);\n\n    if (!user || !(await verifyPassword(user, password))) {\n      res.status(401).json({ error: \"Invalid credentials\" });\n      return;\n    }\n\n    res.json({ token: createSessionToken(user.id, config.jwtSecret), user });\n  });\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/auth/users.ts",
+          "startLine": 17,
+          "startColumn": 1,
+          "endLine": 19,
+          "endColumn": 2,
+          "content": "export function verifyPassword(user: User, password: string) {\n  return bcrypt.compare(password, user.passwordHash);\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/auth/session.ts",
+          "startLine": 5,
+          "startColumn": 1,
+          "endLine": 7,
+          "endColumn": 2,
+          "content": "export function createSessionToken(userId: string, secret: string) {\n  return jwt.sign({ sub: userId }, secret, { expiresIn: \"15m\" });\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/server.ts",
+          "startLine": 7,
+          "startColumn": 1,
+          "endLine": 24,
+          "endColumn": 2,
+          "content": "export function createApp(config: AppConfig) {\n  const app = express();\n  app.use(express.json());\n  registerAuthRoutes(app, config);\n\n  app.get(\"/health\", (_req, res) => res.json({ ok: true }));\n\n  app.get(\"/tasks\", requireAuth(config), (_req, res) => {\n    res.json({ tasks: listTasks() });\n  });\n\n  app.post(\"/tasks\", requireAuth(config), (req, res) => {\n    const task = createTask(String(req.body.title ?? \"\"));\n    res.status(201).json({ task });\n  });\n\n  return app;\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "README.md",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 10,
+          "endColumn": 1,
+          "content": "# TaskPilot sample\n\nTaskPilot is a tiny Express and TypeScript task API used as the default CodeMesh sample repository.\n\nInteresting questions:\n\n- How does request authentication work?\n- Which files are involved when creating tasks?\n- What changes would make the auth failure response easier to audit?\n",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/server.ts",
+          "startLine": 19,
+          "startColumn": 11,
+          "endLine": 19,
+          "endColumn": 58,
+          "content": "    const task = createTask(String(req.body.title ?? \"\"));",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/tasks.ts",
+          "startLine": 15,
+          "startColumn": 1,
+          "endLine": 22,
+          "endColumn": 2,
+          "content": "export function createTask(title: string) {\n  if (title.trim().length < 3) {\n    throw new Error(\"Task title is too short\");\n  }\n  const task = { id: crypto.randomUUID(), title, done: false };\n  tasks.push(task);\n  return task;\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/config.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 5,
+          "endColumn": 3,
+          "content": "export type AppConfig = {\n  port: number;\n  jwtSecret: string;\n  allowSignup: boolean;\n};",
+          "reason": "hybrid lexical/vector score"
+        }
+      ],
+      "answer": "Security-relevant mechanisms or review points found in the retrieved code: password hashing; token or session handling; user or permission scoping.\n\nSecurity evidence:\n- src/auth/routes.ts:6-19 (registerAuthRoutes) defines the POST /auth/login route.\n- src/auth/users.ts:17-19 (verifyPassword) defines the function verifyPassword.\n- src/auth/session.ts:5-7 (createSessionToken) defines the function createSessionToken.\n- src/server.ts:7-24 (createApp) defines the GET /health route.\n\nFor a complete audit, trace authentication, authorization at every write boundary, input validation, secret handling, rate limits, and user-scoped data access. A citation shows evidence, not proof that the whole repository is secure.",
+      "recallAtK": 1,
+      "reciprocalRank": 1,
+      "factCoverage": 0,
+      "citationPrecision": 0.5,
+      "shouldAbstain": false,
+      "abstained": false,
+      "sourceSupported": false,
+      "multifileCoverage": 1,
+      "latencyMs": 2,
+      "contextTokensEstimate": 251,
+      "failure": "generation"
+    },
+    {
+      "id": "config",
+      "category": "configuration",
+      "question": "What are the PORT and ALLOW_SIGNUP defaults in loadConfig?",
+      "expectedFacts": [
+        "env.PORT ?? 3000",
+        "env.ALLOW_SIGNUP !== \"false\""
+      ],
+      "expectedEvidence": [
+        {
+          "path": "src/config.ts",
+          "quote": "env.PORT ?? 3000",
+          "startLine": 9,
+          "endLine": 9
+        }
+      ],
+      "retrieved": [
+        {
+          "path": "README.md",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 10,
+          "endColumn": 1,
+          "content": "# TaskPilot sample\n\nTaskPilot is a tiny Express and TypeScript task API used as the default CodeMesh sample repository.\n\nInteresting questions:\n\n- How does request authentication work?\n- Which files are involved when creating tasks?\n- What changes would make the auth failure response easier to audit?\n",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/config.ts",
+          "startLine": 7,
+          "startColumn": 1,
+          "endLine": 13,
+          "endColumn": 2,
+          "content": "export function loadConfig(env: NodeJS.ProcessEnv): AppConfig {\n  return {\n    port: Number(env.PORT ?? 3000),\n    jwtSecret: env.JWT_SECRET ?? \"dev-secret-change-me\",\n    allowSignup: env.ALLOW_SIGNUP !== \"false\"\n  };\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/server.ts",
+          "startLine": 7,
+          "startColumn": 1,
+          "endLine": 24,
+          "endColumn": 2,
+          "content": "export function createApp(config: AppConfig) {\n  const app = express();\n  app.use(express.json());\n  registerAuthRoutes(app, config);\n\n  app.get(\"/health\", (_req, res) => res.json({ ok: true }));\n\n  app.get(\"/tasks\", requireAuth(config), (_req, res) => {\n    res.json({ tasks: listTasks() });\n  });\n\n  app.post(\"/tasks\", requireAuth(config), (req, res) => {\n    const task = createTask(String(req.body.title ?? \"\"));\n    res.status(201).json({ task });\n  });\n\n  return app;\n}",
+          "reason": "graph expansion from src/config.ts"
+        },
+        {
+          "path": "src/auth/routes.ts",
+          "startLine": 6,
+          "startColumn": 1,
+          "endLine": 19,
+          "endColumn": 2,
+          "content": "export function registerAuthRoutes(app: Express, config: AppConfig) {\n  app.post(\"/auth/login\", async (req, res) => {\n    const email = String(req.body.email ?? \"\").toLowerCase();\n    const password = String(req.body.password ?? \"\");\n    const user = findUserByEmail(email);\n\n    if (!user || !(await verifyPassword(user, password))) {\n      res.status(401).json({ error: \"Invalid credentials\" });\n      return;\n    }\n\n    res.json({ token: createSessionToken(user.id, config.jwtSecret), user });\n  });\n}",
+          "reason": "graph expansion from src/config.ts"
+        },
+        {
+          "path": "src/main.ts",
+          "startLine": 4,
+          "startColumn": 7,
+          "endLine": 4,
+          "endColumn": 39,
+          "content": "const config = loadConfig(process.env);",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/config.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 5,
+          "endColumn": 3,
+          "content": "export type AppConfig = {\n  port: number;\n  jwtSecret: string;\n  allowSignup: boolean;\n};",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/data/MemoryStore.ts",
+          "startLine": 4,
+          "startColumn": 3,
+          "endLine": 4,
+          "endColumn": 82,
+          "content": "  save(key: string, value: string) { this.values.set(key, value); return value; }",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/tasks.ts",
+          "startLine": 15,
+          "startColumn": 1,
+          "endLine": 22,
+          "endColumn": 2,
+          "content": "export function createTask(title: string) {\n  if (title.trim().length < 3) {\n    throw new Error(\"Task title is too short\");\n  }\n  const task = { id: crypto.randomUUID(), title, done: false };\n  tasks.push(task);\n  return task;\n}",
+          "reason": "hybrid lexical/vector score"
+        }
+      ],
+      "answer": "For \"What are the PORT and ALLOW_SIGNUP defaults in loadConfig?\", the repository evidence indicates:\n\n- README.md:1-10 contains \"# TaskPilot sample\".\n\n- src/config.ts:7-13 (loadConfig) defines the function loadConfig.\n\n- src/server.ts:7-24 (createApp) defines the GET /health route.\n\n- src/auth/routes.ts:6-19 (registerAuthRoutes) defines the POST /auth/login route.\n\nThe graph also connects this evidence to src/auth/session.ts, src/auth/users.ts, src/tasks.ts, src/constants.ts, which may explain how the behavior is used elsewhere.\n\nOpen the citations to verify the exact implementation and line ranges.",
+      "recallAtK": 1,
+      "reciprocalRank": 0.5,
+      "factCoverage": 0,
+      "citationPrecision": 0.16666666666666666,
+      "shouldAbstain": false,
+      "abstained": false,
+      "sourceSupported": false,
+      "multifileCoverage": null,
+      "latencyMs": 2,
+      "contextTokensEstimate": 252,
+      "failure": "generation"
+    },
+    {
+      "id": "route",
+      "category": "routes",
+      "question": "What happens in the POST /tasks route?",
+      "expectedFacts": [
+        "app.post(\"/tasks\"",
+        "createTask",
+        "201"
+      ],
+      "expectedEvidence": [
+        {
+          "path": "src/server.ts",
+          "quote": "app.post(\"/tasks\"",
+          "startLine": 18,
+          "endLine": 18
+        }
+      ],
+      "retrieved": [
+        {
+          "path": "README.md",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 10,
+          "endColumn": 1,
+          "content": "# TaskPilot sample\n\nTaskPilot is a tiny Express and TypeScript task API used as the default CodeMesh sample repository.\n\nInteresting questions:\n\n- How does request authentication work?\n- Which files are involved when creating tasks?\n- What changes would make the auth failure response easier to audit?\n",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/server.ts",
+          "startLine": 7,
+          "startColumn": 1,
+          "endLine": 24,
+          "endColumn": 2,
+          "content": "export function createApp(config: AppConfig) {\n  const app = express();\n  app.use(express.json());\n  registerAuthRoutes(app, config);\n\n  app.get(\"/health\", (_req, res) => res.json({ ok: true }));\n\n  app.get(\"/tasks\", requireAuth(config), (_req, res) => {\n    res.json({ tasks: listTasks() });\n  });\n\n  app.post(\"/tasks\", requireAuth(config), (req, res) => {\n    const task = createTask(String(req.body.title ?? \"\"));\n    res.status(201).json({ task });\n  });\n\n  return app;\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/main.ts",
+          "startLine": 4,
+          "startColumn": 7,
+          "endLine": 4,
+          "endColumn": 39,
+          "content": "const config = loadConfig(process.env);",
+          "reason": "graph expansion from src/server.ts"
+        },
+        {
+          "path": "src/config.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 5,
+          "endColumn": 3,
+          "content": "export type AppConfig = {\n  port: number;\n  jwtSecret: string;\n  allowSignup: boolean;\n};",
+          "reason": "graph expansion from src/server.ts"
+        },
+        {
+          "path": "src/auth/routes.ts",
+          "startLine": 6,
+          "startColumn": 1,
+          "endLine": 19,
+          "endColumn": 2,
+          "content": "export function registerAuthRoutes(app: Express, config: AppConfig) {\n  app.post(\"/auth/login\", async (req, res) => {\n    const email = String(req.body.email ?? \"\").toLowerCase();\n    const password = String(req.body.password ?? \"\");\n    const user = findUserByEmail(email);\n\n    if (!user || !(await verifyPassword(user, password))) {\n      res.status(401).json({ error: \"Invalid credentials\" });\n      return;\n    }\n\n    res.json({ token: createSessionToken(user.id, config.jwtSecret), user });\n  });\n}",
+          "reason": "graph expansion from src/server.ts"
+        },
+        {
+          "path": "src/data/MemoryStore.ts",
+          "startLine": 4,
+          "startColumn": 3,
+          "endLine": 4,
+          "endColumn": 82,
+          "content": "  save(key: string, value: string) { this.values.set(key, value); return value; }",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/data/MemoryStore.ts",
+          "startLine": 2,
+          "startColumn": 1,
+          "endLine": 6,
+          "endColumn": 2,
+          "content": "export class MemoryStore extends BaseStore {\n  private values = new Map<string, string>();\n  save(key: string, value: string) { this.values.set(key, value); return value; }\n  read(key: string) { return this.values.get(key) ?? null; }\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/billing/total.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 93,
+          "content": "export function calculateTotal(price: number, quantity: number) { return price * quantity; }",
+          "reason": "hybrid lexical/vector score"
+        }
+      ],
+      "answer": "For \"What happens in the POST /tasks route?\", the repository evidence indicates:\n\n- README.md:1-10 contains \"# TaskPilot sample\".\n\n- src/server.ts:7-24 (createApp) defines the GET /health route.\n\n- src/main.ts:4-4 (config) defines the const config.\n\n- src/config.ts:1-5 (AppConfig) defines the type AppConfig.\n\nThe graph also connects this evidence to src/auth/session.ts, src/auth/users.ts, src/tasks.ts, src/data/BaseStore.ts, src/constants.ts, which may explain how the behavior is used elsewhere.\n\nOpen the citations to verify the exact implementation and line ranges.",
+      "recallAtK": 1,
+      "reciprocalRank": 0.5,
+      "factCoverage": 0,
+      "citationPrecision": 0.16666666666666666,
+      "shouldAbstain": false,
+      "abstained": false,
+      "sourceSupported": false,
+      "multifileCoverage": null,
+      "latencyMs": 2,
+      "contextTokensEstimate": 244,
+      "failure": "generation"
+    },
+    {
+      "id": "data",
+      "category": "data-flow",
+      "question": "How does MemoryStore persist values and read missing keys?",
+      "expectedFacts": [
+        "this.values.set",
+        "this.values.get",
+        "null"
+      ],
+      "expectedEvidence": [
+        {
+          "path": "src/data/MemoryStore.ts",
+          "quote": "this.values.set",
+          "startLine": 4,
+          "endLine": 4
+        },
+        {
+          "path": "src/data/MemoryStore.ts",
+          "quote": "this.values.get(key) ?? null",
+          "startLine": 5,
+          "endLine": 5
+        }
+      ],
+      "retrieved": [
+        {
+          "path": "src/data/MemoryStore.ts",
+          "startLine": 2,
+          "startColumn": 1,
+          "endLine": 6,
+          "endColumn": 2,
+          "content": "export class MemoryStore extends BaseStore {\n  private values = new Map<string, string>();\n  save(key: string, value: string) { this.values.set(key, value); return value; }\n  read(key: string) { return this.values.get(key) ?? null; }\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "README.md",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 10,
+          "endColumn": 1,
+          "content": "# TaskPilot sample\n\nTaskPilot is a tiny Express and TypeScript task API used as the default CodeMesh sample repository.\n\nInteresting questions:\n\n- How does request authentication work?\n- Which files are involved when creating tasks?\n- What changes would make the auth failure response easier to audit?\n",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/data/MemoryStore.ts",
+          "startLine": 5,
+          "startColumn": 3,
+          "endLine": 5,
+          "endColumn": 61,
+          "content": "  read(key: string) { return this.values.get(key) ?? null; }",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 13,
+          "endColumn": 2,
+          "content": "{\n  \"name\": \"taskpilot-sample\",\n  \"version\": \"0.1.0\",\n  \"scripts\": {\n    \"dev\": \"vite\",\n    \"test\": \"vitest run\"\n  },\n  \"dependencies\": {\n    \"@vitejs/plugin-react\": \"latest\",\n    \"react\": \"latest\",\n    \"react-dom\": \"latest\"\n  }\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/tasks.ts",
+          "startLine": 11,
+          "startColumn": 1,
+          "endLine": 13,
+          "endColumn": 2,
+          "content": "export function listTasks() {\n  return tasks;\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/data/BaseStore.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 53,
+          "content": "export class BaseStore { readonly kind = 'memory'; }",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/auth/session.ts",
+          "startLine": 5,
+          "startColumn": 1,
+          "endLine": 7,
+          "endColumn": 2,
+          "content": "export function createSessionToken(userId: string, secret: string) {\n  return jwt.sign({ sub: userId }, secret, { expiresIn: \"15m\" });\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/config.ts",
+          "startLine": 7,
+          "startColumn": 1,
+          "endLine": 13,
+          "endColumn": 2,
+          "content": "export function loadConfig(env: NodeJS.ProcessEnv): AppConfig {\n  return {\n    port: Number(env.PORT ?? 3000),\n    jwtSecret: env.JWT_SECRET ?? \"dev-secret-change-me\",\n    allowSignup: env.ALLOW_SIGNUP !== \"false\"\n  };\n}",
+          "reason": "hybrid lexical/vector score"
+        }
+      ],
+      "answer": "For \"How does MemoryStore persist values and read missing keys?\", the repository evidence indicates:\n\n- src/data/MemoryStore.ts:2-6 (MemoryStore) defines the class MemoryStore.\n\n- README.md:1-10 contains \"# TaskPilot sample\".\n\n- src/data/MemoryStore.ts:5-5 (read) contains \"read(key: string) { return this.values.get(key) ?? null; }\".\n\n- package.json:1-13 contains \"\"name\": \"taskpilot-sample\"\".\n\nThe graph also connects this evidence to src/server.ts, which may explain how the behavior is used elsewhere.\n\nOpen the citations to verify the exact implementation and line ranges.",
+      "recallAtK": 1,
+      "reciprocalRank": 1,
+      "factCoverage": 0.6666666666666666,
+      "citationPrecision": 0.3333333333333333,
+      "shouldAbstain": false,
+      "abstained": false,
+      "sourceSupported": false,
+      "multifileCoverage": null,
+      "latencyMs": 2,
+      "contextTokensEstimate": 174,
+      "failure": "generation"
+    },
+    {
+      "id": "error",
+      "category": "errors",
+      "question": "What happens when createTask gets a title shorter than three characters?",
+      "expectedFacts": [
+        "title.trim().length < 3",
+        "Task title is too short"
+      ],
+      "expectedEvidence": [
+        {
+          "path": "src/tasks.ts",
+          "quote": "Task title is too short",
+          "startLine": 17,
+          "endLine": 17
+        }
+      ],
+      "retrieved": [
+        {
+          "path": "src/tasks.ts",
+          "startLine": 15,
+          "startColumn": 1,
+          "endLine": 22,
+          "endColumn": 2,
+          "content": "export function createTask(title: string) {\n  if (title.trim().length < 3) {\n    throw new Error(\"Task title is too short\");\n  }\n  const task = { id: crypto.randomUUID(), title, done: false };\n  tasks.push(task);\n  return task;\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "README.md",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 10,
+          "endColumn": 1,
+          "content": "# TaskPilot sample\n\nTaskPilot is a tiny Express and TypeScript task API used as the default CodeMesh sample repository.\n\nInteresting questions:\n\n- How does request authentication work?\n- Which files are involved when creating tasks?\n- What changes would make the auth failure response easier to audit?\n",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/tasks.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 5,
+          "endColumn": 3,
+          "content": "export type Task = {\n  id: string;\n  title: string;\n  done: boolean;\n};",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/server.ts",
+          "startLine": 19,
+          "startColumn": 11,
+          "endLine": 19,
+          "endColumn": 58,
+          "content": "    const task = createTask(String(req.body.title ?? \"\"));",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/tasks.ts",
+          "startLine": 19,
+          "startColumn": 9,
+          "endLine": 19,
+          "endColumn": 63,
+          "content": "  const task = { id: crypto.randomUUID(), title, done: false };",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/tasks.ts",
+          "startLine": 7,
+          "startColumn": 7,
+          "endLine": 9,
+          "endColumn": 2,
+          "content": "const tasks: Task[] = [\n  { id: \"t1\", title: \"Audit authentication flow\", done: false }\n];",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/config.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 5,
+          "endColumn": 3,
+          "content": "export type AppConfig = {\n  port: number;\n  jwtSecret: string;\n  allowSignup: boolean;\n};",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/server.ts",
+          "startLine": 7,
+          "startColumn": 1,
+          "endLine": 24,
+          "endColumn": 2,
+          "content": "export function createApp(config: AppConfig) {\n  const app = express();\n  app.use(express.json());\n  registerAuthRoutes(app, config);\n\n  app.get(\"/health\", (_req, res) => res.json({ ok: true }));\n\n  app.get(\"/tasks\", requireAuth(config), (_req, res) => {\n    res.json({ tasks: listTasks() });\n  });\n\n  app.post(\"/tasks\", requireAuth(config), (req, res) => {\n    const task = createTask(String(req.body.title ?? \"\"));\n    res.status(201).json({ task });\n  });\n\n  return app;\n}",
+          "reason": "hybrid lexical/vector score"
+        }
+      ],
+      "answer": "For \"What happens when createTask gets a title shorter than three characters?\", the repository evidence indicates:\n\n- src/tasks.ts:15-22 (createTask) defines the function createTask.\n\n- README.md:1-10 contains \"# TaskPilot sample\".\n\n- src/tasks.ts:1-5 (Task) defines the type Task.\n\n- src/server.ts:19-19 (task) defines the const task.\n\nThe graph also connects this evidence to src/main.ts, src/config.ts, src/auth/routes.ts, src/auth/session.ts, which may explain how the behavior is used elsewhere.\n\nOpen the citations to verify the exact implementation and line ranges.",
+      "recallAtK": 1,
+      "reciprocalRank": 1,
+      "factCoverage": 0,
+      "citationPrecision": 0.16666666666666666,
+      "shouldAbstain": false,
+      "abstained": false,
+      "sourceSupported": false,
+      "multifileCoverage": null,
+      "latencyMs": 6,
+      "contextTokensEstimate": 199,
+      "failure": "generation"
+    },
+    {
+      "id": "multi",
+      "category": "multi-file",
+      "question": "How do createApp and requireAuth protect the GET /tasks route?",
+      "expectedFacts": [
+        "app.get(\"/tasks\", requireAuth(config)",
+        "jwt.verify",
+        "Authentication required"
+      ],
+      "expectedEvidence": [
+        {
+          "path": "src/server.ts",
+          "quote": "app.get(\"/tasks\", requireAuth(config)",
+          "startLine": 14,
+          "endLine": 14
+        },
+        {
+          "path": "src/auth/session.ts",
+          "quote": "jwt.verify",
+          "startLine": 14,
+          "endLine": 14
+        }
+      ],
+      "retrieved": [
+        {
+          "path": "src/server.ts",
+          "startLine": 7,
+          "startColumn": 1,
+          "endLine": 24,
+          "endColumn": 2,
+          "content": "export function createApp(config: AppConfig) {\n  const app = express();\n  app.use(express.json());\n  registerAuthRoutes(app, config);\n\n  app.get(\"/health\", (_req, res) => res.json({ ok: true }));\n\n  app.get(\"/tasks\", requireAuth(config), (_req, res) => {\n    res.json({ tasks: listTasks() });\n  });\n\n  app.post(\"/tasks\", requireAuth(config), (req, res) => {\n    const task = createTask(String(req.body.title ?? \"\"));\n    res.status(201).json({ task });\n  });\n\n  return app;\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "README.md",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 10,
+          "endColumn": 1,
+          "content": "# TaskPilot sample\n\nTaskPilot is a tiny Express and TypeScript task API used as the default CodeMesh sample repository.\n\nInteresting questions:\n\n- How does request authentication work?\n- Which files are involved when creating tasks?\n- What changes would make the auth failure response easier to audit?\n",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/main.ts",
+          "startLine": 4,
+          "startColumn": 7,
+          "endLine": 4,
+          "endColumn": 39,
+          "content": "const config = loadConfig(process.env);",
+          "reason": "graph expansion from src/server.ts"
+        },
+        {
+          "path": "src/config.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 5,
+          "endColumn": 3,
+          "content": "export type AppConfig = {\n  port: number;\n  jwtSecret: string;\n  allowSignup: boolean;\n};",
+          "reason": "graph expansion from src/server.ts"
+        },
+        {
+          "path": "src/auth/routes.ts",
+          "startLine": 6,
+          "startColumn": 1,
+          "endLine": 19,
+          "endColumn": 2,
+          "content": "export function registerAuthRoutes(app: Express, config: AppConfig) {\n  app.post(\"/auth/login\", async (req, res) => {\n    const email = String(req.body.email ?? \"\").toLowerCase();\n    const password = String(req.body.password ?? \"\");\n    const user = findUserByEmail(email);\n\n    if (!user || !(await verifyPassword(user, password))) {\n      res.status(401).json({ error: \"Invalid credentials\" });\n      return;\n    }\n\n    res.json({ token: createSessionToken(user.id, config.jwtSecret), user });\n  });\n}",
+          "reason": "graph expansion from src/server.ts"
+        },
+        {
+          "path": "src/auth/session.ts",
+          "startLine": 9,
+          "startColumn": 1,
+          "endLine": 20,
+          "endColumn": 2,
+          "content": "export function requireAuth(config: AppConfig): RequestHandler {\n  return (req, res, next) => {\n    const header = req.headers.authorization ?? \"\";\n    const token = header.replace(/^Bearer\\s+/i, \"\");\n    try {\n      jwt.verify(token, config.jwtSecret);\n      next();\n    } catch {\n      res.status(401).json({ error: \"Authentication required\" });\n    }\n  };\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/main.ts",
+          "startLine": 5,
+          "startColumn": 7,
+          "endLine": 5,
+          "endColumn": 30,
+          "content": "const app = createApp(config);",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/tasks.ts",
+          "startLine": 11,
+          "startColumn": 1,
+          "endLine": 13,
+          "endColumn": 2,
+          "content": "export function listTasks() {\n  return tasks;\n}",
+          "reason": "hybrid lexical/vector score"
+        }
+      ],
+      "answer": "Security-relevant mechanisms or review points found in the retrieved code: token or session handling; user or permission scoping.\n\nSecurity evidence:\n- src/server.ts:7-24 (createApp) defines the GET /health route.\n- README.md:1-10 contains \"# TaskPilot sample\".\n- src/main.ts:4-4 (config) defines the const config.\n- src/config.ts:1-5 (AppConfig) defines the type AppConfig.\n\nFor a complete audit, trace authentication, authorization at every write boundary, input validation, secret handling, rate limits, and user-scoped data access. A citation shows evidence, not proof that the whole repository is secure.",
+      "recallAtK": 1,
+      "reciprocalRank": 1,
+      "factCoverage": 0,
+      "citationPrecision": 0.3333333333333333,
+      "shouldAbstain": false,
+      "abstained": false,
+      "sourceSupported": false,
+      "multifileCoverage": 1,
+      "latencyMs": 1,
+      "contextTokensEstimate": 233,
+      "failure": "generation"
+    },
+    {
+      "id": "misleading",
+      "category": "misleading",
+      "question": "Where does createTask write tasks into PostgreSQL?",
+      "expectedFacts": [],
+      "expectedEvidence": [],
+      "retrieved": [
+        {
+          "path": "src/server.ts",
+          "startLine": 7,
+          "startColumn": 1,
+          "endLine": 24,
+          "endColumn": 2,
+          "content": "export function createApp(config: AppConfig) {\n  const app = express();\n  app.use(express.json());\n  registerAuthRoutes(app, config);\n\n  app.get(\"/health\", (_req, res) => res.json({ ok: true }));\n\n  app.get(\"/tasks\", requireAuth(config), (_req, res) => {\n    res.json({ tasks: listTasks() });\n  });\n\n  app.post(\"/tasks\", requireAuth(config), (req, res) => {\n    const task = createTask(String(req.body.title ?? \"\"));\n    res.status(201).json({ task });\n  });\n\n  return app;\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/tasks.ts",
+          "startLine": 7,
+          "startColumn": 7,
+          "endLine": 9,
+          "endColumn": 2,
+          "content": "const tasks: Task[] = [\n  { id: \"t1\", title: \"Audit authentication flow\", done: false }\n];",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/tasks.ts",
+          "startLine": 15,
+          "startColumn": 1,
+          "endLine": 22,
+          "endColumn": 2,
+          "content": "export function createTask(title: string) {\n  if (title.trim().length < 3) {\n    throw new Error(\"Task title is too short\");\n  }\n  const task = { id: crypto.randomUUID(), title, done: false };\n  tasks.push(task);\n  return task;\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "README.md",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 10,
+          "endColumn": 1,
+          "content": "# TaskPilot sample\n\nTaskPilot is a tiny Express and TypeScript task API used as the default CodeMesh sample repository.\n\nInteresting questions:\n\n- How does request authentication work?\n- Which files are involved when creating tasks?\n- What changes would make the auth failure response easier to audit?\n",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/main.ts",
+          "startLine": 4,
+          "startColumn": 7,
+          "endLine": 4,
+          "endColumn": 39,
+          "content": "const config = loadConfig(process.env);",
+          "reason": "graph expansion from src/server.ts"
+        },
+        {
+          "path": "src/config.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 5,
+          "endColumn": 3,
+          "content": "export type AppConfig = {\n  port: number;\n  jwtSecret: string;\n  allowSignup: boolean;\n};",
+          "reason": "graph expansion from src/server.ts"
+        },
+        {
+          "path": "src/auth/routes.ts",
+          "startLine": 6,
+          "startColumn": 1,
+          "endLine": 19,
+          "endColumn": 2,
+          "content": "export function registerAuthRoutes(app: Express, config: AppConfig) {\n  app.post(\"/auth/login\", async (req, res) => {\n    const email = String(req.body.email ?? \"\").toLowerCase();\n    const password = String(req.body.password ?? \"\");\n    const user = findUserByEmail(email);\n\n    if (!user || !(await verifyPassword(user, password))) {\n      res.status(401).json({ error: \"Invalid credentials\" });\n      return;\n    }\n\n    res.json({ token: createSessionToken(user.id, config.jwtSecret), user });\n  });\n}",
+          "reason": "graph expansion from src/server.ts"
+        },
+        {
+          "path": "src/server.ts",
+          "startLine": 19,
+          "startColumn": 11,
+          "endLine": 19,
+          "endColumn": 58,
+          "content": "    const task = createTask(String(req.body.title ?? \"\"));",
+          "reason": "hybrid lexical/vector score"
+        }
+      ],
+      "answer": "The strongest implementation locations for this question are:\n\n- src/server.ts:7-24 (createApp) defines the GET /health route.\n\n- src/tasks.ts:7-9 (tasks) defines the const tasks.\n\n- src/tasks.ts:15-22 (createTask) defines the function createTask.\n\n- README.md:1-10 contains \"# TaskPilot sample\".\n\nDependency-graph neighbors worth checking next: src/auth/routes.ts, src/auth/session.ts, src/constants.ts.",
+      "recallAtK": null,
+      "reciprocalRank": null,
+      "factCoverage": null,
+      "citationPrecision": 0,
+      "shouldAbstain": true,
+      "abstained": false,
+      "sourceSupported": false,
+      "multifileCoverage": null,
+      "latencyMs": 1,
+      "contextTokensEstimate": 238,
+      "failure": "abstention"
+    },
+    {
+      "id": "missing",
+      "category": "missing",
+      "question": "What does deleteAccountPermanently return?",
+      "expectedFacts": [],
+      "expectedEvidence": [],
+      "retrieved": [
+        {
+          "path": "README.md",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 10,
+          "endColumn": 1,
+          "content": "# TaskPilot sample\n\nTaskPilot is a tiny Express and TypeScript task API used as the default CodeMesh sample repository.\n\nInteresting questions:\n\n- How does request authentication work?\n- Which files are involved when creating tasks?\n- What changes would make the auth failure response easier to audit?\n",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/data/MemoryStore.ts",
+          "startLine": 2,
+          "startColumn": 1,
+          "endLine": 6,
+          "endColumn": 2,
+          "content": "export class MemoryStore extends BaseStore {\n  private values = new Map<string, string>();\n  save(key: string, value: string) { this.values.set(key, value); return value; }\n  read(key: string) { return this.values.get(key) ?? null; }\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/data/BaseStore.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 53,
+          "content": "export class BaseStore { readonly kind = 'memory'; }",
+          "reason": "graph expansion from src/data/MemoryStore.ts"
+        },
+        {
+          "path": "src/auth/session.ts",
+          "startLine": 5,
+          "startColumn": 1,
+          "endLine": 7,
+          "endColumn": 2,
+          "content": "export function createSessionToken(userId: string, secret: string) {\n  return jwt.sign({ sub: userId }, secret, { expiresIn: \"15m\" });\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/tasks.ts",
+          "startLine": 11,
+          "startColumn": 1,
+          "endLine": 13,
+          "endColumn": 2,
+          "content": "export function listTasks() {\n  return tasks;\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/data/MemoryStore.ts",
+          "startLine": 5,
+          "startColumn": 3,
+          "endLine": 5,
+          "endColumn": 61,
+          "content": "  read(key: string) { return this.values.get(key) ?? null; }",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/domain/deep/nested/normalize.ts",
+          "startLine": 2,
+          "startColumn": 1,
+          "endLine": 4,
+          "endColumn": 2,
+          "content": "export function normalizeSlug(value: string) {\n  return value.trim().toLowerCase().replaceAll(\" \", \"-\");\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/shipping/total.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 70,
+          "content": "export function calculateTotal(weight: number) { return weight + 5; }",
+          "reason": "hybrid lexical/vector score"
+        }
+      ],
+      "answer": "For \"What does deleteAccountPermanently return?\", the repository evidence indicates:\n\n- README.md:1-10 contains \"# TaskPilot sample\".\n\n- src/data/MemoryStore.ts:2-6 (MemoryStore) defines the class MemoryStore.\n\n- src/data/BaseStore.ts:1-1 (BaseStore) defines the class BaseStore.\n\n- src/auth/session.ts:5-7 (createSessionToken) defines the function createSessionToken.\n\nThe graph also connects this evidence to src/config.ts, src/server.ts, src/auth/routes.ts, which may explain how the behavior is used elsewhere.\n\nOpen the citations to verify the exact implementation and line ranges.",
+      "recallAtK": null,
+      "reciprocalRank": null,
+      "factCoverage": null,
+      "citationPrecision": 0,
+      "shouldAbstain": true,
+      "abstained": false,
+      "sourceSupported": false,
+      "multifileCoverage": null,
+      "latencyMs": 1,
+      "contextTokensEstimate": 151,
+      "failure": "abstention"
+    },
+    {
+      "id": "ambiguous",
+      "category": "ambiguous",
+      "question": "Explain calculateTotal.",
+      "expectedFacts": [],
+      "expectedEvidence": [],
+      "retrieved": [],
+      "answer": "I could not find a direct source match for \"Explain calculateTotal.\".\n\nTry including a file name, function, API route, UI label, or exact error text for a more precise repository answer.",
+      "recallAtK": null,
+      "reciprocalRank": null,
+      "factCoverage": null,
+      "citationPrecision": null,
+      "shouldAbstain": true,
+      "abstained": false,
+      "sourceSupported": false,
+      "multifileCoverage": null,
+      "latencyMs": 1,
+      "contextTokensEstimate": 0,
+      "failure": "abstention"
+    },
+    {
+      "id": "general",
+      "category": "unrelated",
+      "question": "Explain binary search in general programming.",
+      "expectedFacts": [],
+      "expectedEvidence": [],
+      "retrieved": [
+        {
+          "path": "src/billing/total.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 93,
+          "content": "export function calculateTotal(price: number, quantity: number) { return price * quantity; }",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/tasks.ts",
+          "startLine": 15,
+          "startColumn": 1,
+          "endLine": 22,
+          "endColumn": 2,
+          "content": "export function createTask(title: string) {\n  if (title.trim().length < 3) {\n    throw new Error(\"Task title is too short\");\n  }\n  const task = { id: crypto.randomUUID(), title, done: false };\n  tasks.push(task);\n  return task;\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/auth/routes.ts",
+          "startLine": 8,
+          "startColumn": 11,
+          "endLine": 8,
+          "endColumn": 61,
+          "content": "    const email = String(req.body.email ?? \"\").toLowerCase();",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/data/BaseStore.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 53,
+          "content": "export class BaseStore { readonly kind = 'memory'; }",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/server.ts",
+          "startLine": 7,
+          "startColumn": 1,
+          "endLine": 24,
+          "endColumn": 2,
+          "content": "export function createApp(config: AppConfig) {\n  const app = express();\n  app.use(express.json());\n  registerAuthRoutes(app, config);\n\n  app.get(\"/health\", (_req, res) => res.json({ ok: true }));\n\n  app.get(\"/tasks\", requireAuth(config), (_req, res) => {\n    res.json({ tasks: listTasks() });\n  });\n\n  app.post(\"/tasks\", requireAuth(config), (req, res) => {\n    const task = createTask(String(req.body.title ?? \"\"));\n    res.status(201).json({ task });\n  });\n\n  return app;\n}",
+          "reason": "graph expansion from src/tasks.ts"
+        },
+        {
+          "path": "src/tasks.ts",
+          "startLine": 19,
+          "startColumn": 9,
+          "endLine": 19,
+          "endColumn": 63,
+          "content": "  const task = { id: crypto.randomUUID(), title, done: false };",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/domain/deep/nested/normalize.ts",
+          "startLine": 2,
+          "startColumn": 1,
+          "endLine": 4,
+          "endColumn": 2,
+          "content": "export function normalizeSlug(value: string) {\n  return value.trim().toLowerCase().replaceAll(\" \", \"-\");\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/tasks.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 5,
+          "endColumn": 3,
+          "content": "export type Task = {\n  id: string;\n  title: string;\n  done: boolean;\n};",
+          "reason": "hybrid lexical/vector score"
+        }
+      ],
+      "answer": "For \"Explain binary search in general programming.\", the repository evidence indicates:\n\n- src/billing/total.ts:1-1 (calculateTotal) defines the function calculateTotal.\n\n- src/tasks.ts:15-22 (createTask) defines the function createTask.\n\n- src/auth/routes.ts:8-8 (email) defines the const email.\n\n- src/data/BaseStore.ts:1-1 (BaseStore) defines the class BaseStore.\n\nThe graph also connects this evidence to src/main.ts, src/config.ts, src/auth/session.ts, src/auth/users.ts, src/data/MemoryStore.ts, which may explain how the behavior is used elsewhere.\n\nOpen the citations to verify the exact implementation and line ranges.",
+      "recallAtK": null,
+      "reciprocalRank": null,
+      "factCoverage": null,
+      "citationPrecision": 0,
+      "shouldAbstain": true,
+      "abstained": true,
+      "sourceSupported": false,
+      "multifileCoverage": null,
+      "latencyMs": 1,
+      "contextTokensEstimate": 153,
+      "failure": "abstention"
+    },
+    {
+      "id": "regression",
+      "category": "previous-regression",
+      "question": "What does createSessionToken do with the userId?",
+      "expectedFacts": [
+        "sub: userId",
+        "jwt.sign"
+      ],
+      "expectedEvidence": [
+        {
+          "path": "src/auth/session.ts",
+          "quote": "sub: userId",
+          "startLine": 6,
+          "endLine": 6
+        }
+      ],
+      "retrieved": [
+        {
+          "path": "src/auth/session.ts",
+          "startLine": 5,
+          "startColumn": 1,
+          "endLine": 7,
+          "endColumn": 2,
+          "content": "export function createSessionToken(userId: string, secret: string) {\n  return jwt.sign({ sub: userId }, secret, { expiresIn: \"15m\" });\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "README.md",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 10,
+          "endColumn": 1,
+          "content": "# TaskPilot sample\n\nTaskPilot is a tiny Express and TypeScript task API used as the default CodeMesh sample repository.\n\nInteresting questions:\n\n- How does request authentication work?\n- Which files are involved when creating tasks?\n- What changes would make the auth failure response easier to audit?\n",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/config.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 5,
+          "endColumn": 3,
+          "content": "export type AppConfig = {\n  port: number;\n  jwtSecret: string;\n  allowSignup: boolean;\n};",
+          "reason": "graph expansion from src/auth/session.ts"
+        },
+        {
+          "path": "src/server.ts",
+          "startLine": 7,
+          "startColumn": 1,
+          "endLine": 24,
+          "endColumn": 2,
+          "content": "export function createApp(config: AppConfig) {\n  const app = express();\n  app.use(express.json());\n  registerAuthRoutes(app, config);\n\n  app.get(\"/health\", (_req, res) => res.json({ ok: true }));\n\n  app.get(\"/tasks\", requireAuth(config), (_req, res) => {\n    res.json({ tasks: listTasks() });\n  });\n\n  app.post(\"/tasks\", requireAuth(config), (req, res) => {\n    const task = createTask(String(req.body.title ?? \"\"));\n    res.status(201).json({ task });\n  });\n\n  return app;\n}",
+          "reason": "graph expansion from src/auth/session.ts"
+        },
+        {
+          "path": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 13,
+          "endColumn": 2,
+          "content": "{\n  \"name\": \"taskpilot-sample\",\n  \"version\": \"0.1.0\",\n  \"scripts\": {\n    \"dev\": \"vite\",\n    \"test\": \"vitest run\"\n  },\n  \"dependencies\": {\n    \"@vitejs/plugin-react\": \"latest\",\n    \"react\": \"latest\",\n    \"react-dom\": \"latest\"\n  }\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/auth/routes.ts",
+          "startLine": 6,
+          "startColumn": 1,
+          "endLine": 19,
+          "endColumn": 2,
+          "content": "export function registerAuthRoutes(app: Express, config: AppConfig) {\n  app.post(\"/auth/login\", async (req, res) => {\n    const email = String(req.body.email ?? \"\").toLowerCase();\n    const password = String(req.body.password ?? \"\");\n    const user = findUserByEmail(email);\n\n    if (!user || !(await verifyPassword(user, password))) {\n      res.status(401).json({ error: \"Invalid credentials\" });\n      return;\n    }\n\n    res.json({ token: createSessionToken(user.id, config.jwtSecret), user });\n  });\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/data/MemoryStore.ts",
+          "startLine": 4,
+          "startColumn": 3,
+          "endLine": 4,
+          "endColumn": 82,
+          "content": "  save(key: string, value: string) { this.values.set(key, value); return value; }",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/data/MemoryStore.ts",
+          "startLine": 2,
+          "startColumn": 1,
+          "endLine": 6,
+          "endColumn": 2,
+          "content": "export class MemoryStore extends BaseStore {\n  private values = new Map<string, string>();\n  save(key: string, value: string) { this.values.set(key, value); return value; }\n  read(key: string) { return this.values.get(key) ?? null; }\n}",
+          "reason": "hybrid lexical/vector score"
+        }
+      ],
+      "answer": "For \"What does createSessionToken do with the userId?\", the repository evidence indicates:\n\n- src/auth/session.ts:5-7 (createSessionToken) defines the function createSessionToken.\n\n- README.md:1-10 contains \"# TaskPilot sample\".\n\n- src/config.ts:1-5 (AppConfig) defines the type AppConfig.\n\n- src/server.ts:7-24 (createApp) defines the GET /health route.\n\nThe graph also connects this evidence to src/main.ts, src/auth/users.ts, src/tasks.ts, src/constants.ts, which may explain how the behavior is used elsewhere.\n\nOpen the citations to verify the exact implementation and line ranges.",
+      "recallAtK": 1,
+      "reciprocalRank": 1,
+      "factCoverage": 0,
+      "citationPrecision": 0.16666666666666666,
+      "shouldAbstain": false,
+      "abstained": false,
+      "sourceSupported": false,
+      "multifileCoverage": null,
+      "latencyMs": 1,
+      "contextTokensEstimate": 266,
+      "failure": "generation"
+    },
+    {
+      "id": "deep",
+      "category": "nested",
+      "question": "What does normalizeSlug in src/domain/deep/nested/normalize.ts return?",
+      "expectedFacts": [
+        "toLowerCase()",
+        "replaceAll(\" \", \"-\")"
+      ],
+      "expectedEvidence": [
+        {
+          "path": "src/domain/deep/nested/normalize.ts",
+          "quote": "toLowerCase()",
+          "startLine": 3,
+          "endLine": 3
+        }
+      ],
+      "retrieved": [
+        {
+          "path": "src/domain/deep/nested/normalize.ts",
+          "startLine": 2,
+          "startColumn": 1,
+          "endLine": 4,
+          "endColumn": 2,
+          "content": "export function normalizeSlug(value: string) {\n  return value.trim().toLowerCase().replaceAll(\" \", \"-\");\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "README.md",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 10,
+          "endColumn": 1,
+          "content": "# TaskPilot sample\n\nTaskPilot is a tiny Express and TypeScript task API used as the default CodeMesh sample repository.\n\nInteresting questions:\n\n- How does request authentication work?\n- Which files are involved when creating tasks?\n- What changes would make the auth failure response easier to audit?\n",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/data/MemoryStore.ts",
+          "startLine": 2,
+          "startColumn": 1,
+          "endLine": 6,
+          "endColumn": 2,
+          "content": "export class MemoryStore extends BaseStore {\n  private values = new Map<string, string>();\n  save(key: string, value: string) { this.values.set(key, value); return value; }\n  read(key: string) { return this.values.get(key) ?? null; }\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/auth/users.ts",
+          "startLine": 17,
+          "startColumn": 1,
+          "endLine": 19,
+          "endColumn": 2,
+          "content": "export function verifyPassword(user: User, password: string) {\n  return bcrypt.compare(password, user.passwordHash);\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/auth/routes.ts",
+          "startLine": 6,
+          "startColumn": 1,
+          "endLine": 19,
+          "endColumn": 2,
+          "content": "export function registerAuthRoutes(app: Express, config: AppConfig) {\n  app.post(\"/auth/login\", async (req, res) => {\n    const email = String(req.body.email ?? \"\").toLowerCase();\n    const password = String(req.body.password ?? \"\");\n    const user = findUserByEmail(email);\n\n    if (!user || !(await verifyPassword(user, password))) {\n      res.status(401).json({ error: \"Invalid credentials\" });\n      return;\n    }\n\n    res.json({ token: createSessionToken(user.id, config.jwtSecret), user });\n  });\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/data/BaseStore.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 53,
+          "content": "export class BaseStore { readonly kind = 'memory'; }",
+          "reason": "graph expansion from src/data/MemoryStore.ts"
+        },
+        {
+          "path": "src/auth/users.ts",
+          "startLine": 13,
+          "startColumn": 1,
+          "endLine": 15,
+          "endColumn": 2,
+          "content": "export function findUserByEmail(email: string) {\n  return users.find((user) => user.email === email);\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/tasks.ts",
+          "startLine": 11,
+          "startColumn": 1,
+          "endLine": 13,
+          "endColumn": 2,
+          "content": "export function listTasks() {\n  return tasks;\n}",
+          "reason": "hybrid lexical/vector score"
+        }
+      ],
+      "answer": "For \"What does normalizeSlug in src/domain/deep/nested/normalize.ts return?\", the repository evidence indicates:\n\n- src/domain/deep/nested/normalize.ts:2-4 (normalizeSlug) defines the function normalizeSlug.\n\n- README.md:1-10 contains \"# TaskPilot sample\".\n\n- src/data/MemoryStore.ts:2-6 (MemoryStore) defines the class MemoryStore.\n\n- src/auth/users.ts:17-19 (verifyPassword) defines the function verifyPassword.\n\nThe graph also connects this evidence to src/config.ts, src/server.ts, src/auth/session.ts, which may explain how the behavior is used elsewhere.\n\nOpen the citations to verify the exact implementation and line ranges.",
+      "recallAtK": 1,
+      "reciprocalRank": 1,
+      "factCoverage": 0,
+      "citationPrecision": 0.16666666666666666,
+      "shouldAbstain": false,
+      "abstained": false,
+      "sourceSupported": false,
+      "multifileCoverage": null,
+      "latencyMs": 1,
+      "contextTokensEstimate": 197,
+      "failure": "generation"
+    },
+    {
+      "id": "duplicate",
+      "category": "similar-symbols",
+      "question": "What does calculateTotal in src/billing/total.ts return?",
+      "expectedFacts": [
+        "price * quantity"
+      ],
+      "expectedEvidence": [
+        {
+          "path": "src/billing/total.ts",
+          "quote": "price * quantity",
+          "startLine": 1,
+          "endLine": 1
+        }
+      ],
+      "retrieved": [
+        {
+          "path": "src/billing/total.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 93,
+          "content": "export function calculateTotal(price: number, quantity: number) { return price * quantity; }",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/shipping/total.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 70,
+          "content": "export function calculateTotal(weight: number) { return weight + 5; }",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "README.md",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 10,
+          "endColumn": 1,
+          "content": "# TaskPilot sample\n\nTaskPilot is a tiny Express and TypeScript task API used as the default CodeMesh sample repository.\n\nInteresting questions:\n\n- How does request authentication work?\n- Which files are involved when creating tasks?\n- What changes would make the auth failure response easier to audit?\n",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/data/MemoryStore.ts",
+          "startLine": 2,
+          "startColumn": 1,
+          "endLine": 6,
+          "endColumn": 2,
+          "content": "export class MemoryStore extends BaseStore {\n  private values = new Map<string, string>();\n  save(key: string, value: string) { this.values.set(key, value); return value; }\n  read(key: string) { return this.values.get(key) ?? null; }\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/tasks.ts",
+          "startLine": 11,
+          "startColumn": 1,
+          "endLine": 13,
+          "endColumn": 2,
+          "content": "export function listTasks() {\n  return tasks;\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/data/MemoryStore.ts",
+          "startLine": 5,
+          "startColumn": 3,
+          "endLine": 5,
+          "endColumn": 61,
+          "content": "  read(key: string) { return this.values.get(key) ?? null; }",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/domain/deep/nested/normalize.ts",
+          "startLine": 2,
+          "startColumn": 1,
+          "endLine": 4,
+          "endColumn": 2,
+          "content": "export function normalizeSlug(value: string) {\n  return value.trim().toLowerCase().replaceAll(\" \", \"-\");\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/auth/users.ts",
+          "startLine": 13,
+          "startColumn": 1,
+          "endLine": 15,
+          "endColumn": 2,
+          "content": "export function findUserByEmail(email: string) {\n  return users.find((user) => user.email === email);\n}",
+          "reason": "hybrid lexical/vector score"
+        }
+      ],
+      "answer": "For \"What does calculateTotal in src/billing/total.ts return?\", the repository evidence indicates:\n\n- src/billing/total.ts:1-1 (calculateTotal) defines the function calculateTotal.\n\n- src/shipping/total.ts:1-1 (calculateTotal) defines the function calculateTotal.\n\n- README.md:1-10 contains \"# TaskPilot sample\".\n\n- src/data/MemoryStore.ts:2-6 (MemoryStore) defines the class MemoryStore.\n\nThe graph also connects this evidence to src/server.ts, src/data/BaseStore.ts, which may explain how the behavior is used elsewhere.\n\nOpen the citations to verify the exact implementation and line ranges.",
+      "recallAtK": 1,
+      "reciprocalRank": 1,
+      "factCoverage": 0,
+      "citationPrecision": 0.16666666666666666,
+      "shouldAbstain": false,
+      "abstained": false,
+      "sourceSupported": false,
+      "multifileCoverage": null,
+      "latencyMs": 1,
+      "contextTokensEstimate": 151,
+      "failure": "generation"
+    },
+    {
+      "id": "module",
+      "category": "module-code",
+      "question": "What STATUS_READY value does src/constants.ts export?",
+      "expectedFacts": [
+        "\"ready\""
+      ],
+      "expectedEvidence": [
+        {
+          "path": "src/constants.ts",
+          "quote": "STATUS_READY = \"ready\"",
+          "startLine": 2,
+          "endLine": 2
+        }
+      ],
+      "retrieved": [
+        {
+          "path": "src/constants.ts",
+          "startLine": 2,
+          "startColumn": 14,
+          "endLine": 2,
+          "endColumn": 36,
+          "content": "export const STATUS_READY = \"ready\";",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/data/MemoryStore.ts",
+          "startLine": 2,
+          "startColumn": 1,
+          "endLine": 6,
+          "endColumn": 2,
+          "content": "export class MemoryStore extends BaseStore {\n  private values = new Map<string, string>();\n  save(key: string, value: string) { this.values.set(key, value); return value; }\n  read(key: string) { return this.values.get(key) ?? null; }\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/config.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 5,
+          "endColumn": 3,
+          "content": "export type AppConfig = {\n  port: number;\n  jwtSecret: string;\n  allowSignup: boolean;\n};",
+          "reason": "graph expansion from src/constants.ts"
+        },
+        {
+          "path": "src/data/MemoryStore.ts",
+          "startLine": 4,
+          "startColumn": 3,
+          "endLine": 4,
+          "endColumn": 82,
+          "content": "  save(key: string, value: string) { this.values.set(key, value); return value; }",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/data/BaseStore.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 53,
+          "content": "export class BaseStore { readonly kind = 'memory'; }",
+          "reason": "graph expansion from src/data/MemoryStore.ts"
+        },
+        {
+          "path": "src/domain/deep/nested/normalize.ts",
+          "startLine": 2,
+          "startColumn": 1,
+          "endLine": 4,
+          "endColumn": 2,
+          "content": "export function normalizeSlug(value: string) {\n  return value.trim().toLowerCase().replaceAll(\" \", \"-\");\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "README.md",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 10,
+          "endColumn": 1,
+          "content": "# TaskPilot sample\n\nTaskPilot is a tiny Express and TypeScript task API used as the default CodeMesh sample repository.\n\nInteresting questions:\n\n- How does request authentication work?\n- Which files are involved when creating tasks?\n- What changes would make the auth failure response easier to audit?\n",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/config.ts",
+          "startLine": 7,
+          "startColumn": 1,
+          "endLine": 13,
+          "endColumn": 2,
+          "content": "export function loadConfig(env: NodeJS.ProcessEnv): AppConfig {\n  return {\n    port: Number(env.PORT ?? 3000),\n    jwtSecret: env.JWT_SECRET ?? \"dev-secret-change-me\",\n    allowSignup: env.ALLOW_SIGNUP !== \"false\"\n  };\n}",
+          "reason": "hybrid lexical/vector score"
+        }
+      ],
+      "answer": "For \"What STATUS_READY value does src/constants.ts export?\", the repository evidence indicates:\n\n- src/constants.ts:2-2 (STATUS_READY) defines the const STATUS_READY.\n\n- src/data/MemoryStore.ts:2-6 (MemoryStore) defines the class MemoryStore.\n\n- src/config.ts:1-5 (AppConfig) defines the type AppConfig.\n\n- src/data/MemoryStore.ts:4-4 (save) contains \"save(key: string, value: string) { this.values.set(key, value); return value; }\".\n\nThe graph also connects this evidence to src/main.ts, src/server.ts, src/auth/routes.ts, src/auth/session.ts, which may explain how the behavior is used elsewhere.\n\nOpen the citations to verify the exact implementation and line ranges.",
+      "recallAtK": 1,
+      "reciprocalRank": 1,
+      "factCoverage": 0,
+      "citationPrecision": 0.16666666666666666,
+      "shouldAbstain": false,
+      "abstained": false,
+      "sourceSupported": false,
+      "multifileCoverage": null,
+      "latencyMs": 1,
+      "contextTokensEstimate": 160,
+      "failure": "generation"
+    },
+    {
+      "id": "partial",
+      "category": "multi-part",
+      "question": "Explain createSessionToken and deleteAccountPermanently.",
+      "expectedFacts": [
+        "jwt.sign",
+        "15m"
+      ],
+      "expectedEvidence": [
+        {
+          "path": "src/auth/session.ts",
+          "quote": "jwt.sign",
+          "startLine": 6,
+          "endLine": 6
+        }
+      ],
+      "retrieved": [
+        {
+          "path": "src/auth/session.ts",
+          "startLine": 5,
+          "startColumn": 1,
+          "endLine": 7,
+          "endColumn": 2,
+          "content": "export function createSessionToken(userId: string, secret: string) {\n  return jwt.sign({ sub: userId }, secret, { expiresIn: \"15m\" });\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/config.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 5,
+          "endColumn": 3,
+          "content": "export type AppConfig = {\n  port: number;\n  jwtSecret: string;\n  allowSignup: boolean;\n};",
+          "reason": "graph expansion from src/auth/session.ts"
+        },
+        {
+          "path": "src/server.ts",
+          "startLine": 7,
+          "startColumn": 1,
+          "endLine": 24,
+          "endColumn": 2,
+          "content": "export function createApp(config: AppConfig) {\n  const app = express();\n  app.use(express.json());\n  registerAuthRoutes(app, config);\n\n  app.get(\"/health\", (_req, res) => res.json({ ok: true }));\n\n  app.get(\"/tasks\", requireAuth(config), (_req, res) => {\n    res.json({ tasks: listTasks() });\n  });\n\n  app.post(\"/tasks\", requireAuth(config), (req, res) => {\n    const task = createTask(String(req.body.title ?? \"\"));\n    res.status(201).json({ task });\n  });\n\n  return app;\n}",
+          "reason": "graph expansion from src/auth/session.ts"
+        },
+        {
+          "path": "README.md",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 10,
+          "endColumn": 1,
+          "content": "# TaskPilot sample\n\nTaskPilot is a tiny Express and TypeScript task API used as the default CodeMesh sample repository.\n\nInteresting questions:\n\n- How does request authentication work?\n- Which files are involved when creating tasks?\n- What changes would make the auth failure response easier to audit?\n",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/auth/routes.ts",
+          "startLine": 6,
+          "startColumn": 1,
+          "endLine": 19,
+          "endColumn": 2,
+          "content": "export function registerAuthRoutes(app: Express, config: AppConfig) {\n  app.post(\"/auth/login\", async (req, res) => {\n    const email = String(req.body.email ?? \"\").toLowerCase();\n    const password = String(req.body.password ?? \"\");\n    const user = findUserByEmail(email);\n\n    if (!user || !(await verifyPassword(user, password))) {\n      res.status(401).json({ error: \"Invalid credentials\" });\n      return;\n    }\n\n    res.json({ token: createSessionToken(user.id, config.jwtSecret), user });\n  });\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/auth/users.ts",
+          "startLine": 9,
+          "startColumn": 7,
+          "endLine": 11,
+          "endColumn": 2,
+          "content": "const users: User[] = [\n  { id: \"u1\", email: \"owner@example.com\", passwordHash: \"$2a$10$sample\" }\n];",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "package.json",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 13,
+          "endColumn": 2,
+          "content": "{\n  \"name\": \"taskpilot-sample\",\n  \"version\": \"0.1.0\",\n  \"scripts\": {\n    \"dev\": \"vite\",\n    \"test\": \"vitest run\"\n  },\n  \"dependencies\": {\n    \"@vitejs/plugin-react\": \"latest\",\n    \"react\": \"latest\",\n    \"react-dom\": \"latest\"\n  }\n}",
+          "reason": "hybrid lexical/vector score"
+        }
+      ],
+      "answer": "For \"Explain createSessionToken and deleteAccountPermanently.\", the repository evidence indicates:\n\n- src/auth/session.ts:5-7 (createSessionToken) defines the function createSessionToken.\n\n- src/config.ts:1-5 (AppConfig) defines the type AppConfig.\n\n- src/server.ts:7-24 (createApp) defines the GET /health route.\n\n- README.md:1-10 contains \"# TaskPilot sample\".\n\nThe graph also connects this evidence to src/main.ts, src/tasks.ts, src/constants.ts, which may explain how the behavior is used elsewhere.\n\nOpen the citations to verify the exact implementation and line ranges.",
+      "recallAtK": 1,
+      "reciprocalRank": 1,
+      "factCoverage": 0,
+      "citationPrecision": 0.16666666666666666,
+      "shouldAbstain": false,
+      "abstained": false,
+      "sourceSupported": false,
+      "multifileCoverage": null,
+      "latencyMs": 3,
+      "contextTokensEstimate": 233,
+      "failure": "generation"
+    },
+    {
+      "id": "injection",
+      "category": "untrusted-comments",
+      "question": "What does normalizeSlug return?",
+      "expectedFacts": [
+        "toLowerCase()",
+        "replaceAll(\" \", \"-\")"
+      ],
+      "expectedEvidence": [
+        {
+          "path": "src/domain/deep/nested/normalize.ts",
+          "quote": "toLowerCase()",
+          "startLine": 3,
+          "endLine": 3
+        }
+      ],
+      "retrieved": [
+        {
+          "path": "src/domain/deep/nested/normalize.ts",
+          "startLine": 2,
+          "startColumn": 1,
+          "endLine": 4,
+          "endColumn": 2,
+          "content": "export function normalizeSlug(value: string) {\n  return value.trim().toLowerCase().replaceAll(\" \", \"-\");\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "README.md",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 10,
+          "endColumn": 1,
+          "content": "# TaskPilot sample\n\nTaskPilot is a tiny Express and TypeScript task API used as the default CodeMesh sample repository.\n\nInteresting questions:\n\n- How does request authentication work?\n- Which files are involved when creating tasks?\n- What changes would make the auth failure response easier to audit?\n",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/data/MemoryStore.ts",
+          "startLine": 2,
+          "startColumn": 1,
+          "endLine": 6,
+          "endColumn": 2,
+          "content": "export class MemoryStore extends BaseStore {\n  private values = new Map<string, string>();\n  save(key: string, value: string) { this.values.set(key, value); return value; }\n  read(key: string) { return this.values.get(key) ?? null; }\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/data/BaseStore.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 53,
+          "content": "export class BaseStore { readonly kind = 'memory'; }",
+          "reason": "graph expansion from src/data/MemoryStore.ts"
+        },
+        {
+          "path": "src/tasks.ts",
+          "startLine": 11,
+          "startColumn": 1,
+          "endLine": 13,
+          "endColumn": 2,
+          "content": "export function listTasks() {\n  return tasks;\n}",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/data/MemoryStore.ts",
+          "startLine": 5,
+          "startColumn": 3,
+          "endLine": 5,
+          "endColumn": 61,
+          "content": "  read(key: string) { return this.values.get(key) ?? null; }",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/shipping/total.ts",
+          "startLine": 1,
+          "startColumn": 1,
+          "endLine": 1,
+          "endColumn": 70,
+          "content": "export function calculateTotal(weight: number) { return weight + 5; }",
+          "reason": "hybrid lexical/vector score"
+        },
+        {
+          "path": "src/auth/users.ts",
+          "startLine": 13,
+          "startColumn": 1,
+          "endLine": 15,
+          "endColumn": 2,
+          "content": "export function findUserByEmail(email: string) {\n  return users.find((user) => user.email === email);\n}",
+          "reason": "hybrid lexical/vector score"
+        }
+      ],
+      "answer": "For \"What does normalizeSlug return?\", the repository evidence indicates:\n\n- src/domain/deep/nested/normalize.ts:2-4 (normalizeSlug) defines the function normalizeSlug.\n\n- README.md:1-10 contains \"# TaskPilot sample\".\n\n- src/data/MemoryStore.ts:2-6 (MemoryStore) defines the class MemoryStore.\n\n- src/data/BaseStore.ts:1-1 (BaseStore) defines the class BaseStore.\n\nThe graph also connects this evidence to src/server.ts, which may explain how the behavior is used elsewhere.\n\nOpen the citations to verify the exact implementation and line ranges.",
+      "recallAtK": 1,
+      "reciprocalRank": 1,
+      "factCoverage": 0,
+      "citationPrecision": 0.16666666666666666,
+      "shouldAbstain": false,
+      "abstained": false,
+      "sourceSupported": false,
+      "multifileCoverage": null,
+      "latencyMs": 1,
+      "contextTokensEstimate": 146,
+      "failure": "generation"
+    }
+  ],
+  "metrics": {
+    "recallAtK": 0.9375,
+    "mrr": 0.796875,
+    "expectedFactCoverage": 0.10416666666666666,
+    "sourceSupportedAnswerRate": 0.05,
+    "citationPrecision": 0.18421052631578944,
+    "abstentionPrecision": 1,
+    "abstentionRecall": 0.25,
+    "multifileCoverage": 1,
+    "averageLatencyMs": 2.3,
+    "contextTokensEstimate": 3904
+  },
+  "limitations": [
+    "Fact coverage uses source-anchored string assertions, not semantic proof of arbitrary generated claims.",
+    "Citation precision checks source ranges plus required evidence anchors; human review remains necessary.",
+    "Token counts are context estimates, not billed provider usage.",
+    "Local/mock results do not establish Gemini, Ollama, or other live-model accuracy."
+  ]
+}

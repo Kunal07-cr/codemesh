@@ -214,7 +214,7 @@ export const aiConversationMessageSchema = z.object({
 export type AiConversationMessage = z.infer<typeof aiConversationMessageSchema>;
 
 export const aiAskSchema = z.object({
-  question: z.string().min(3),
+  question: z.string().min(3).max(8000),
   mode: aiModeSchema,
   retrievalMode: retrievalModeSchema,
   includeWorkspace: z.boolean().default(true),
@@ -253,7 +253,16 @@ export const aiAnswerSchema = z.object({
   uncertainty: z.string().optional(),
   citations: z.array(citationSchema),
   retrieval: retrievalRecordSchema,
-  patch: patchProposalSchema.optional()
+  patch: patchProposalSchema.optional(),
+  sourceFacts: z.array(z.object({ filePath: z.string(), range: sourceRangeSchema, code: z.string(), language: z.string() })).optional(),
+  inference: z.string().optional(),
+  syntheticComparison: z.string().optional(),
+  grounding: z.object({
+    status: z.enum(["source-linked", "abstained", "partial", "general", "provider-fallback"]),
+    questionType: z.string(), strategy: z.string(), revision: z.string(),
+    missing: z.array(z.string()), validatedCitations: z.number(), rejectedCitations: z.number(),
+    limitations: z.array(z.string())
+  }).optional()
 });
 export type AiAnswer = z.infer<typeof aiAnswerSchema>;
 
@@ -393,3 +402,4 @@ export type HealthPayload = {
   version: string;
   dependencies: Record<string, "ok" | "not_configured" | "degraded">;
 };
+export * from "./evaluation.js";

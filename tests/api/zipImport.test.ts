@@ -4,6 +4,15 @@ import { ZIP_UPLOAD_LIMIT_MB } from "@codemesh/shared";
 import { extractRepoFiles, ZIP_IMPORT_LIMITS, validateZipArchive } from "../../apps/api/src/services/zipImport";
 
 describe("ZIP validation", () => {
+  it("rejects advertised extraction limits before inflating highly compressed content", () => {
+    const archive = Buffer.from(zipSync({ "src/large.ts": strToU8("x".repeat(200_000)) }));
+    const result = validateZipArchive(archive, { ...ZIP_IMPORT_LIMITS, extractedBytes: 1000 });
+    expect(result.accepted).toBe(false); expect(result.files).toEqual([]); expect(result.errors.join(" ")).toContain("extracts to too much");
+  });
+  it("rejects absolute paths", () => {
+    const archive = Buffer.from(zipSync({ "/absolute.ts": strToU8("export const bad = true;") }));
+    expect(validateZipArchive(archive).accepted).toBe(false);
+  });
   it("rejects path traversal", () => {
     const archive = Buffer.from(zipSync({ "../evil.ts": strToU8("export const bad = true;") }));
     const result = validateZipArchive(archive);

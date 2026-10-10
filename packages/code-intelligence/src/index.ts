@@ -1,4 +1,6 @@
 import ts from "typescript";
+import ignore from "ignore";
+import { retrieveGroundedEvidence } from "./groundedRetrieval.js";
 import type {
   CodeChunk,
   CodeSymbol,
@@ -14,6 +16,7 @@ import type {
 
 export * from "./advanced.js";
 export * from "./delivery.js";
+export * from "./groundedRetrieval.js";
 
 export type RepositoryIndex = {
   projectId: string;
@@ -36,6 +39,7 @@ export type SearchResult = {
   hits: SearchHit[];
   latencyMs: number;
   expandedFromChunkIds: string[];
+  evidence?: { kind: string; requested: string[]; missing: string[]; ambiguous: string[]; contextTruncated: boolean; strategy: string };
 };
 
 export type GraphOntology = {
@@ -255,6 +259,7 @@ type PendingCall = {
   sourceFilePath: string;
   sourceSymbolId?: string;
   calleeName: string;
+  direct?: boolean;
 };
 
 export const SAMPLE_COMMIT = "sample-commit-2026-09-27";
@@ -533,7 +538,23 @@ export function indexRepository(projectId: string, commitSha: string, files: Rep
   const symbols: CodeSymbol[] = [];
   const chunks: CodeChunk[] = [];
   const pendingCalls: PendingCall[] = [];
-  const repositoryFiles = files.filter((file) => !file.binary && !file.sensitive && isRepositoryTextFile(file.path, file.size));
+  const exclusions = ignore().add(["**/node_modules/", "**/.git/", "**/.venv/", "**/venv/", "**/__pycache__/", "**/dist/", "**/build/", "**/coverage/", "**/.next/", "**/*.min.js", "**/*.map"]);
+  const rules = files.filter((file) => file.projectId === projectId && /(^|\/)\.gitignore$/.test(file.path)).map((file) => ({ root: normalizePath(file.path).replace(/\.?gitignore$/, ""), rules: ignore().add(file.content) })).sort((a, b) => a.root.length - b.root.length);
+  const uniqueFiles = new Map<string, RepoFile>();
+  for (const file of files) {
+    const safePath = normalizePath(file.path).replace(/^\.\//, "");
+    if (file.projectId !== projectId || /(^|\/)\.\.(\/|$)|\0/.test(safePath) || /^[a-z]:/i.test(file.path) || !safePath) continue;
+    if (file.binary || file.sensitive || !isRepositoryTextFile(safePath, file.size) || exclusions.ignores(safePath)) continue;
+    let ignored = false;
+    for (const rule of rules) {
+      if (!safePath.startsWith(rule.root)) continue;
+      const result = rule.rules.test(safePath.slice(rule.root.length));
+      if (result.ignored) ignored = true;
+      else if (result.unignored) ignored = false;
+    }
+    if (!ignored) uniqueFiles.set(safePath, { ...file, path: safePath });
+  }
+  const repositoryFiles = [...uniqueFiles.values()];
   const oversizedFiles = repositoryFiles.filter((file) => file.size > MAX_INDEXABLE_FILE_BYTES);
   if (oversizedFiles.length > 0) {
     warnings.push(`${oversizedFiles.length} large source file(s) remain available in the workspace but were omitted from semantic parsing.`);
@@ -653,7 +674,7 @@ export function indexRepository(projectId: string, commitSha: string, files: Rep
       source,
       target: target.id,
       type: "references",
-      verified: true,
+      verified: Boolean(call.direct) && candidates.length === 1 && target.filePath === call.sourceFilePath,
       label: "calls"
     });
   }
@@ -746,7 +767,7 @@ function parseTypeScriptLikeFile(projectId: string, file: RepoFile, paths: Set<s
         : ts.isPropertyAccessExpression(node.expression)
           ? node.expression.name.text
           : "";
-      if (calleeName) calls.push({ sourceFilePath: file.path, sourceSymbolId: owners.at(-1), calleeName });
+      if (calleeName) calls.push({ sourceFilePath: file.path, sourceSymbolId: owners.at(-1), calleeName, direct: ts.isIdentifier(node.expression) });
     }
 
     if (owner) owners.push(owner.id);
@@ -846,91 +867,39 @@ function resolvePythonImport(fromPath: string, moduleName: string, paths: Set<st
 }
 
 function chunkFile(projectId: string, commitSha: string, file: RepoFile, symbols: CodeSymbol[]): CodeChunk[] {
-  if (symbols.length === 0 || file.language === "markdown" || file.language === "json") {
-    return [
-      {
-        id: chunkId(file.path, "file", 0),
-        projectId,
-        commitSha,
-        filePath: file.path,
-        language: file.language,
-        content: clampContent(file.content),
-        range: fullFileRange(file.content),
-        tokenCount: roughTokenCount(file.content),
-        embeddingModel: "local-hash-demo",
-        embeddingDimensions: 256,
-        sourceRevision: "committed"
-      }
-    ];
+  const lines = file.content.split(/\r?\n/);
+  const chunks: CodeChunk[] = [];
+  const seen = new Set<string>();
+  const append = (start: number, end: number, symbol?: CodeSymbol) => {
+    for (let cursor = start; cursor <= end; cursor += 100) {
+      const last = Math.min(end, cursor + 99);
+      let content = lines.slice(cursor - 1, last).join("\n");
+      if (!content.trim()) continue;
+      // Bounds describe the actual prefix delivered, never an invented truncation comment.
+      content = content.slice(0, 24_000);
+      const delivered = content.split("\n");
+      const key = `${cursor}:${content}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      chunks.push({
+        id: chunkId(file.path, symbol?.name ?? "module", chunks.length), projectId, commitSha,
+        filePath: file.path, language: file.language, symbolId: symbol?.id, symbolName: symbol?.name,
+        content, range: { startLine: cursor, startColumn: 1, endLine: cursor + delivered.length - 1, endColumn: (delivered.at(-1)?.length ?? 0) + 1 },
+        tokenCount: Math.ceil(content.length / 4), embeddingModel: "none-lexical-structural", embeddingDimensions: 0, sourceRevision: "committed"
+      });
+    }
+  };
+  for (const symbol of symbols) {
+    const nestedVariable = symbol.kind === "variable" && symbols.some((parent) => parent.id !== symbol.id && ["function", "class"].includes(parent.kind) && parent.range.startLine <= symbol.range.startLine && parent.range.endLine >= symbol.range.endLine);
+    if (!nestedVariable) append(symbol.range.startLine, symbol.range.endLine, symbol);
   }
-
-  return symbols.map((symbol, index) => {
-    const content = extractRange(file.content, symbol.range);
-    return {
-      id: chunkId(file.path, symbol.name, index),
-      projectId,
-      commitSha,
-      filePath: file.path,
-      language: file.language,
-      symbolId: symbol.id,
-      symbolName: symbol.name,
-      content: clampContent(content),
-      range: symbol.range,
-      tokenCount: roughTokenCount(content),
-      embeddingModel: "local-hash-demo",
-      embeddingDimensions: 256,
-      sourceRevision: "committed"
-    };
-  });
+  // Bounded module windows preserve imports and top-level execution alongside syntax-aware definitions.
+  append(1, lines.length);
+  return chunks;
 }
 
 export function searchRepository(index: RepositoryIndex, query: string, mode: RetrievalMode, limit = 6): SearchResult {
-  const startedAt = performance.now();
-  const terms = tokenize(query);
-  const rawHits = index.chunks
-    .map((chunk) => {
-      const contentTerms = tokenize([chunk.filePath, chunk.symbolName, chunk.content].filter(Boolean).join(" "));
-      const lexical = lexicalScore(terms, contentTerms);
-      const vectorish = cosine(hashVector(terms), hashVector(contentTerms));
-      const score = mode === "vector" ? vectorish : lexical * 0.65 + vectorish * 0.35;
-      return {
-        chunk,
-        score,
-        reason: mode === "vector" ? "local vector-similarity approximation" : "hybrid lexical/vector score"
-      };
-    })
-    .filter((hit) => hit.score > 0)
-    .sort((a, b) => b.score - a.score)
-    .slice(0, limit);
-
-  const expandedFromChunkIds: string[] = [];
-  let hits = rawHits;
-
-  if (mode === "graph") {
-    const byId = new Map(hits.map((hit) => [hit.chunk.id, hit]));
-    for (const hit of rawHits.slice(0, 3)) {
-      const neighbors = relatedFilePaths(index.graph, hit.chunk.filePath);
-      for (const filePath of neighbors.slice(0, 3)) {
-        const related = index.chunks.find((chunk) => chunk.filePath === filePath);
-        if (related && !byId.has(related.id)) {
-          byId.set(related.id, {
-            chunk: related,
-            score: hit.score * 0.72,
-            reason: `graph expansion from ${hit.chunk.filePath}`
-          });
-          expandedFromChunkIds.push(hit.chunk.id);
-        }
-      }
-    }
-    hits = [...byId.values()].sort((a, b) => b.score - a.score).slice(0, limit);
-  }
-
-  return {
-    mode,
-    hits,
-    latencyMs: Math.max(1, Math.round(performance.now() - startedAt)),
-    expandedFromChunkIds
-  };
+  return retrieveGroundedEvidence(index, query, mode, limit);
 }
 
 export function buildGraphOntology(index: RepositoryIndex): GraphOntology {

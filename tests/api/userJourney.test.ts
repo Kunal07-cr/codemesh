@@ -40,6 +40,27 @@ describe("authenticated end-to-end HTTP and realtime journeys", () => {
   }
   const editRequest = { mode: "propose", retrievalMode: "graph", knowledgeScope: "repository", includeWorkspace: true, activeFilePath: "src/main.ts", conversation: [], question: "In src/main.ts replace `alpha` with `beta`." };
 
+  it("executes and persists a private benchmark run with authenticated progress/results", async () => {
+    const base = "/api/projects/project-sample-taskpilot/ai/evaluation";
+    await request(runtime.server).get(base).expect(401);
+    const { agent } = await login();
+    const { agent: viewer } = await login("viewer@codemesh.dev");
+    const status = await agent.get(base).expect(200);
+    expect(status.body.data.index.indexedFiles).toBe(9);
+    expect(status.body.data.baseline.version).toBe("source-facts-v1");
+    await agent.post(base).send({ live: true }).expect(422);
+    const queued = await agent.post(base).send({}).expect(200);
+    let finished = await agent.get(base).expect(200);
+    for (let attempt = 0; attempt < 100 && finished.body.data.runs[0]?.status !== "succeeded"; attempt++) {
+      await new Promise((resolve) => setTimeout(resolve, 10));
+      finished = await agent.get(base).expect(200);
+    }
+    expect(finished.body.data.runs[0]).toMatchObject({ id: queued.body.data.id, status: "succeeded", progress: 100 });
+    expect(finished.body.data.runs[0].output.report.rows).toHaveLength(20);
+    expect((await viewer.get(base).expect(200)).body.data.runs).toEqual([]);
+    expect(runtime.store.snapshot().operationJobs?.find((job) => job.id === queued.body.data.id)?.status).toBe("succeeded");
+  });
+
   it("signs in, creates and imports a project, edits live, guards stale patches and reviews changes", async () => {
     await request(runtime.server).get("/api/projects/dashboard").expect(401);
     await request(runtime.server).post("/api/auth/login").send({ email: "owner@codemesh.dev", password: "wrong-password" }).expect(401);
