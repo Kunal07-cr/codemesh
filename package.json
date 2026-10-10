@@ -22,10 +22,10 @@
     "seed": "npm run seed -w @codemesh/api"
   },
   "devDependencies": {
-    "@types/node": "^24.5.2",
-    "concurrently": "^9.2.1",
+    "@types/node": "^26.6.4",
+    "concurrently": "^10.0.5",
     "tsx": "^4.20.5",
     "typescript": "^5.9.2",
-    "vitest": "^3.2.4"
+    "vitest": "^5.0.3"
   }
 }
