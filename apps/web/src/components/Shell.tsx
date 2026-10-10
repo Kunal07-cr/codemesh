@@ -67,8 +67,10 @@ export function Shell() {
   useEffect(() => {
     const root = document.documentElement;
     root.dataset.routeTone = routeTone(location.pathname);
+    root.dataset.surface = location.pathname.includes("/workspace") || location.pathname.includes("/universe") ? "canvas" : "standard";
     return () => {
       delete root.dataset.routeTone;
+      delete root.dataset.surface;
     };
   }, [location.pathname]);
 
@@ -171,6 +173,7 @@ export function Shell() {
 
   return (
     <div className="cm-app-shell min-h-screen text-slate-100">
+      <a className="cm-skip-link" href="#cm-main-content">Skip to content</a>
       <div className="cm-atmosphere" aria-hidden="true">
         <span className="cm-spectrum-rail cm-spectrum-rail-one" />
         <span className="cm-spectrum-rail cm-spectrum-rail-two" />
@@ -230,7 +233,7 @@ export function Shell() {
         </div>
       </header>
       {projectId && <ProjectSwitchboard projectId={projectId} />}
-      <main key={location.pathname} className="cm-page-enter pb-16 md:pb-0">
+      <main id="cm-main-content" tabIndex={-1} key={location.pathname} className="cm-page-enter pb-16 md:pb-0">
         <Outlet />
       </main>
       <nav className="cm-mobile-nav fixed inset-x-0 bottom-0 z-30 grid h-16 grid-cols-4 border-t border-line bg-ink/95 px-2 backdrop-blur-xl md:hidden" aria-label="Mobile navigation">

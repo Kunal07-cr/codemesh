@@ -1,14 +1,12 @@
-import { useEffect, useMemo, useRef, useState, type MouseEvent } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import Editor, { type OnMount } from "@monaco-editor/react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Background, Controls, MarkerType, MiniMap, ReactFlow, type Edge, type Node } from "@xyflow/react";
 import { Code2, Columns3, Download, FileSearch, GitPullRequest, History, Maximize2, MessageSquare, MessageSquareText, Minimize2, Network, PanelLeftClose, PanelLeftOpen, PanelRightClose, PanelRightOpen, Radio, RotateCcw, Search, Trash2, SlidersHorizontal, Save, X } from "lucide-react";
 import { io, type Socket } from "socket.io-client";
 import * as Y from "yjs";
 import type {
   CodeAnnotation,
-  GraphEdge,
   GraphNode,
   Permission,
   Project,
@@ -18,6 +16,7 @@ import type {
   WorkspaceDoc
 } from "@codemesh/shared";
 import { RepositoryAssistant } from "../components/RepositoryAssistant";
+import { RepositoryGraphCanvas } from "../components/RepositoryGraphCanvas";
 import { LoadingState } from "../components/LoadingState";
 import { StatusPill } from "../components/StatusPill";
 import { API_URL, api } from "../lib/api";
@@ -142,6 +141,11 @@ export function WorkspacePage() {
     if (line) next.set("line", String(line));
     else next.delete("line");
     setSearchParams(next, { replace: true });
+  }
+
+  function openGraphSource(path: string, line?: number) {
+    selectSource(path, line);
+    setView(compact ? "editor" : "split");
   }
 
   useEffect(() => {
@@ -379,7 +383,7 @@ export function WorkspacePage() {
               <EditorPane path={selectedPath} files={data.files} content={content} canEdit={canEdit} onMount={mountEditor} onChange={updateEditor} onSelectPath={selectSource} />
             )}
             {view === "graph" && (
-              <GraphView graph={data.graph} selectedPath={selectedPath} selectedNodeId={selectedNode?.id} onSelectNode={(node) => {
+              <GraphView graph={data.graph} selectedPath={selectedPath} selectedNodeId={selectedNode?.id} onOpenSource={openGraphSource} onSelectNode={(node) => {
                 setSelectedNode(node);
                 if (node.filePath) selectSource(node.filePath, node.range?.startLine);
               }} />
@@ -387,7 +391,7 @@ export function WorkspacePage() {
             {view === "split" && (
               <div className={`grid h-full ${compact ? "grid-cols-1 grid-rows-2" : ""}`} style={compact ? undefined : { gridTemplateColumns: `minmax(0, ${panelSizes.graphPercent}fr) minmax(0, ${100 - panelSizes.graphPercent}fr)` }}>
                 <div className="min-w-0 border-r border-line">
-                  <GraphView graph={data.graph} selectedPath={selectedPath} selectedNodeId={selectedNode?.id} onSelectNode={(node) => {
+                  <GraphView graph={data.graph} selectedPath={selectedPath} selectedNodeId={selectedNode?.id} onOpenSource={openGraphSource} onSelectNode={(node) => {
                     setSelectedNode(node);
                     if (node.filePath) selectSource(node.filePath, node.range?.startLine);
                   }} />
@@ -414,12 +418,18 @@ export function WorkspacePage() {
           <RepositoryAssistant
             projectId={projectId}
             activeFilePath={selectedPath}
+            activeEntity={selectedNode ?? undefined}
             canReview={data.permissions.includes("workspace.review")}
-            onOpenFile={(path) => {
-              selectSource(path);
+            onOpenFile={(path, line) => {
+              selectSource(path, line);
               if (compact) setAssistantPanelOpen(false);
               if (selectedNode?.filePath !== path) setSelectedNode(null);
               setView("editor");
+            }}
+            onRevealEntity={(path, line) => {
+              selectSource(path, line);
+              setView("graph");
+              if (compact) setAssistantPanelOpen(false);
             }}
           />
           <ChatPanel projectId={projectId} workspaceId={data.workspaceId} messages={data.chat} socket={socketRef.current} />
@@ -455,98 +465,16 @@ function GraphView({
   graph,
   selectedPath,
   selectedNodeId,
+  onOpenSource,
   onSelectNode
 }: {
   graph: RepositoryGraph;
   selectedPath: string;
   selectedNodeId?: string;
+  onOpenSource(path: string, line?: number): void;
   onSelectNode(node: GraphNode): void;
 }) {
-  const nodes = useMemo<Node[]>(() => layoutGraphNodes(graph.nodes, selectedPath, selectedNodeId), [graph.nodes, selectedNodeId, selectedPath]);
-  const edges = useMemo<Edge[]>(() => graph.edges.map(toFlowEdge), [graph.edges]);
-  return (
-    <div className="relative h-full">
-      <div className="pointer-events-none absolute left-3 top-3 z-10 flex flex-wrap gap-x-3 gap-y-1 rounded border border-line bg-ink/90 px-3 py-2 font-mono text-[10px] text-steel backdrop-blur">
-        <span><i className="mr-1 inline-block h-2 w-2 rounded-sm bg-mint" />Function</span>
-        <span><i className="mr-1 inline-block h-2 w-2 rounded-sm bg-violet" />Class</span>
-        <span><i className="mr-1 inline-block h-2 w-2 rounded-sm bg-cyan" />File</span>
-        <span className="text-cyan">― Calls</span><span className="text-amber">┈ Imports</span><span>╌ Contains</span>
-      </div>
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        fitView
-        minZoom={0.2}
-        maxZoom={1.8}
-        panOnScroll
-        onNodeClick={(_event: MouseEvent, node: Node) => {
-          onSelectNode(node.data.graphNode as GraphNode);
-        }}
-      >
-        <Background color="#263445" />
-        <Controls />
-        <MiniMap pannable zoomable nodeColor={(node) => String(node.style?.borderColor ?? "#64778b")} maskColor="rgba(8, 13, 20, 0.72)" />
-      </ReactFlow>
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex flex-wrap items-center justify-between gap-2 border-t border-line bg-ink/90 px-3 py-1.5 font-mono text-[10px] text-steel backdrop-blur">
-        <span className="flex gap-3"><span className="text-mint">Functions: {graph.nodes.filter((node) => node.symbolKind === "function").length}</span><span className="text-violet">Classes: {graph.nodes.filter((node) => node.symbolKind === "class").length}</span><span className="text-cyan">Files: {graph.nodes.filter((node) => node.type === "file").length}</span></span>
-        <span className="truncate">Active: {selectedPath}</span>
-      </div>
-    </div>
-  );
-}
-
-function layoutGraphNodes(graphNodes: GraphNode[], selectedPath: string, selectedNodeId?: string): Node[] {
-  const order: GraphNode["type"][] = ["repository", "folder", "file", "symbol"];
-  const columns: Record<GraphNode["type"], number> = { repository: 1, folder: 5, file: 5, symbol: 6 };
-  const offsets = new Map<GraphNode["type"], number>();
-  let nextY = 70;
-  for (const type of order) {
-    offsets.set(type, nextY);
-    const count = graphNodes.filter((node) => node.type === type).length;
-    nextY += Math.max(1, Math.ceil(count / columns[type])) * 105 + 35;
-  }
-  const counters: Record<GraphNode["type"], number> = { repository: 0, folder: 0, file: 0, symbol: 0 };
-  return graphNodes.map((node) => {
-    const index = counters[node.type]++;
-    const color = node.type === "file"
-      ? "#56c7e8"
-      : node.symbolKind === "class"
-        ? "#a78bfa"
-        : node.symbolKind === "function"
-          ? "#64d6af"
-          : node.type === "folder"
-            ? "#f2b86b"
-            : "#ef746f";
-    const selected = node.id === selectedNodeId;
-    return {
-      id: node.id,
-      data: { label: node.label, filePath: node.filePath, graphNode: node },
-      position: { x: (index % columns[node.type]) * 190, y: (offsets.get(node.type) ?? 0) + Math.floor(index / columns[node.type]) * 105 },
-      style: {
-        width: 160,
-        borderColor: selected || node.filePath === selectedPath ? color : "#314154",
-        borderWidth: selected ? 2 : 1,
-        background: `${color}12`,
-        color: selected ? "#ffffff" : "#d7e1ea",
-        boxShadow: selected ? `0 0 0 3px ${color}22` : "none"
-      }
-    };
-  });
-}
-
-function toFlowEdge(edge: GraphEdge): Edge {
-  const relationship = edge.label === "calls" ? "calls" : edge.type;
-  const stroke = relationship === "calls" ? "#56c7e8" : relationship === "imports" ? "#f2b86b" : "#64778b";
-  return {
-    id: edge.id,
-    source: edge.source,
-    target: edge.target,
-    label: relationship === "contains" ? undefined : relationship,
-    animated: relationship === "calls",
-    style: { stroke, strokeDasharray: relationship === "imports" ? "2 5" : relationship === "contains" ? "7 5" : undefined },
-    labelStyle: { fill: stroke, fontSize: 9 },
-    markerEnd: { type: MarkerType.ArrowClosed, color: stroke }
-  };
+  return <RepositoryGraphCanvas graph={graph} selectedPath={selectedPath} selectedNodeId={selectedNodeId} onSelectNode={onSelectNode} onOpenSource={onOpenSource} />;
 }
 
 function NodeInspector({

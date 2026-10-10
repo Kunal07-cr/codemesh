@@ -8,6 +8,7 @@ import {
   Columns2,
   Database,
   FileCode2,
+  GitBranch,
   LoaderCircle,
   MessageSquarePlus,
   SearchCode,
@@ -19,7 +20,7 @@ import {
   WandSparkles,
   X
 } from "lucide-react";
-import { aiAnswerSchema, type AiAnswer, type AiAskRequest, type PatchProposal } from "@codemesh/shared";
+import { aiAnswerSchema, type AiAnswer, type AiAskRequest, type GraphNode, type PatchProposal } from "@codemesh/shared";
 import { ApiClientError, api, jsonBody, streamApi } from "../lib/api";
 import { AssistantFeedback } from "./AssistantFeedback";
 import { useAuth } from "../lib/auth";
@@ -35,9 +36,11 @@ type AssistantMessage = {
 type RepositoryAssistantProps = {
   projectId: string;
   activeFilePath: string;
+  activeEntity?: GraphNode;
   canReview: boolean;
   initialPrompt?: string;
-  onOpenFile(path: string): void;
+  onOpenFile(path: string, line?: number): void;
+  onRevealEntity?(path: string, line?: number): void;
 };
 
 type AskVariables = {
@@ -99,7 +102,7 @@ export function RepositoryAssistant(props: RepositoryAssistantProps) {
   return <RepositoryAssistantSession key={`${user?.id ?? "guest"}:${props.projectId}`} {...props} userId={user?.id ?? "guest"} />;
 }
 
-function RepositoryAssistantSession({ projectId, activeFilePath, canReview, initialPrompt, onOpenFile, userId }: RepositoryAssistantProps & { userId: string }) {
+function RepositoryAssistantSession({ projectId, activeFilePath, activeEntity, canReview, initialPrompt, onOpenFile, onRevealEntity, userId }: RepositoryAssistantProps & { userId: string }) {
   const queryClient = useQueryClient();
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const seededPromptRef = useRef("");
@@ -126,6 +129,14 @@ function RepositoryAssistantSession({ projectId, activeFilePath, canReview, init
   const [loadingConversation, setLoadingConversation] = useState(false);
   const [patchStates, setPatchStates] = useState<Record<string, PatchProposal["status"]>>({});
   const [patchError, setPatchError] = useState("");
+  const context = activeEntity?.filePath === activeFilePath ? `${activeEntity.label} in ${activeFilePath}${activeEntity.range ? `:${activeEntity.range.startLine}` : ""}` : activeFilePath;
+  const contextActions = [
+    { label: "Explain this entity", question: `Explain ${context}. Describe its inputs, outputs, and responsibility with source citations.`, mode: "explain" as const },
+    { label: "Trace dependencies", question: `Trace the recorded imports, callers, and dependencies of ${context}. Distinguish verified relationships from inferred references.`, mode: "investigate" as const },
+    { label: "Assess change impact", question: `What could be affected by changing ${context}? Cite connected source and suggest focused tests.`, mode: "investigate" as const },
+    { label: "Find entry points", question: "Find this repository's entry points and explain how execution reaches the main modules. Cite the source.", mode: "investigate" as const },
+    { label: "Summarize architecture", question: "Summarize this repository's architecture, boundaries, and important dependencies using source evidence.", mode: "explain" as const }
+  ];
 
   const conversations = useQuery({
     queryKey: ["assistant-conversations", projectId, userId],
@@ -291,7 +302,7 @@ function RepositoryAssistantSession({ projectId, activeFilePath, canReview, init
   }
 
   return (
-    <section className="flex min-h-0 flex-[3] flex-col border-b border-line" aria-label="Repository assistant">
+    <section className="cm-native-assistant flex min-h-0 flex-[3] flex-col border-b border-line" aria-label="Repository assistant">
       <header className="border-b border-line p-3">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 font-semibold text-white">
@@ -348,6 +359,10 @@ function RepositoryAssistantSession({ projectId, activeFilePath, canReview, init
           <FileCode2 className="h-3.5 w-3.5 shrink-0" />
           <span className="truncate">{activeFilePath || "No file selected"}</span>
         </button>
+        <details className="cm-context-actions">
+          <summary><GitBranch size={13} /><span>{activeEntity?.filePath === activeFilePath ? activeEntity.label : "Repository context"}</span><ChevronRight size={13} /></summary>
+          <div>{contextActions.map((action) => <button type="button" key={action.label} disabled={ask.isPending || !activeFilePath} onClick={(event) => { setMode(action.mode); setKnowledgeScope("repository"); setPrompt(action.question); event.currentTarget.closest("details")?.removeAttribute("open"); }}>{action.label}<ChevronRight size={13} /></button>)}</div>
+        </details>
         <div className="mt-3 grid grid-cols-3 rounded border border-line bg-ink p-1">
           {modes.map((item) => {
             const Icon = item.icon;
@@ -478,16 +493,15 @@ function RepositoryAssistantSession({ projectId, activeFilePath, canReview, init
                     <span className="truncate">{citation.datasetRepositoryName ?? "dataset"} · {citation.chunkId ?? citation.filePath}</span>
                   </span>
                 ) : (
-                  <button
-                    key={`${citation.filePath}:${citation.range.startLine}`}
+                  <span className="cm-source-citation" key={`${citation.filePath}:${citation.range.startLine}`}><button
                     className="flex max-w-full items-center gap-1 rounded border border-line px-2 py-1 font-mono text-[10px] text-steel hover:border-mint hover:text-white"
                     type="button"
                     title={`${citation.filePath}:${citation.range.startLine}-${citation.range.endLine}`}
-                    onClick={() => onOpenFile(citation.filePath)}
+                    onClick={() => onOpenFile(citation.filePath, citation.range.startLine)}
                   >
                     <span className="truncate">{citation.filePath}:{citation.range.startLine}</span>
                     <ChevronRight className="h-3 w-3 shrink-0" />
-                  </button>
+                  </button>{onRevealEntity && <button type="button" title="Locate citation in graph" aria-label={`Locate ${citation.filePath}:${citation.range.startLine} in graph`} className="cm-citation-graph" onClick={() => onRevealEntity(citation.filePath, citation.range.startLine)}><GitBranch size={12} /></button>}</span>
                 ))}
               </div>
             )}
@@ -512,9 +526,9 @@ function RepositoryAssistantSession({ projectId, activeFilePath, canReview, init
           </article>
         ))}
         {ask.isPending && (
-          <div className="flex items-center gap-2 text-sm text-steel">
-            <LoaderCircle className="h-4 w-4 animate-spin text-mint" />
-            Reading repository context...
+          <div className="cm-assistant-thinking" role="status">
+            <span aria-hidden="true"><i /><i /><i /></span>
+            {messages.at(-1)?.content ? "Receiving answer" : "Preparing repository answer"}
           </div>
         )}
         {patchError && (
@@ -531,6 +545,7 @@ function RepositoryAssistantSession({ projectId, activeFilePath, canReview, init
           value={prompt}
           maxLength={4000}
           placeholder={mode === "propose" ? "Describe the edit for the selected file..." : "Ask about this repository..."}
+          aria-label="Repository question"
           onChange={(event) => setPrompt(event.target.value)}
           onKeyDown={handleComposerKeyDown}
         />

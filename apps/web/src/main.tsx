@@ -9,6 +9,7 @@ import "./landing.css";
 import "./delivery.css";
 import "@xyflow/react/dist/style.css";
 import "./experience.css";
+import "./motion.css";
 
 const queryClient = new QueryClient({
   defaultOptions: {

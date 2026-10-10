@@ -27,9 +27,12 @@ export function AppearancePanel() {
   const [preferences, setPreferences] = useState<Preferences>(() => {
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "null") as Partial<Preferences> | null;
-      return saved ? { ...defaults, ...saved } : defaults;
+      return {
+        accent: accents.some((accent) => accent.value === saved?.accent) ? saved!.accent! : defaults.accent,
+        motion: saved?.motion === "reduced" ? "reduced" : defaults.motion,
+        density: saved?.density === "compact" ? "compact" : defaults.density
+      };
     } catch {
-      localStorage.removeItem(STORAGE_KEY);
       return defaults;
     }
   });
@@ -38,7 +41,7 @@ export function AppearancePanel() {
     document.documentElement.dataset.accent = preferences.accent;
     document.documentElement.dataset.motion = preferences.motion;
     document.documentElement.dataset.density = preferences.density;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(preferences));
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(preferences)); } catch { /* Appearance still works when browser storage is blocked. */ }
   }, [preferences]);
 
   useEffect(() => {
@@ -144,4 +147,3 @@ function PreferenceGroup<T extends string>({
     </div>
   );
 }
-

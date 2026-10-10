@@ -1,10 +1,9 @@
 import { useState, type ReactNode } from "react";
-import { Link } from "react-router-dom";
-import { ArrowDown, ArrowRight, Check, ChevronDown, Sparkles } from "lucide-react";
+import { Check, ChevronDown } from "lucide-react";
 import { ZIP_UPLOAD_LIMIT_MB } from "@codemesh/shared";
 import { AuthPanel } from "../components/AuthPanel";
 import { InteractiveCodeGraph } from "../components/InteractiveCodeGraph";
-import { LivingUniverse } from "../components/LivingUniverse";
+import { ArchitectureHero, RepositoryWorkflow } from "../components/ArchitectureHero";
 import { PlatformFoundations, RetrievalStudio } from "../components/RepositoryExperienceLab";
 import {
   ConsolePreview,
@@ -31,32 +30,7 @@ export function LandingPage() {
 
   return (
     <div className="cm-landing lp-page">
-      {/* Hero */}
-      <section className="cm-landing-hero lp-hero">
-        <LivingUniverse />
-        <div className="cm-hero-content lp-hero-grid mx-auto max-w-7xl px-4 pb-14 pt-14 md:pb-20 md:pt-20">
-          <div>
-            <div className="eyebrow"><Sparkles className="h-3.5 w-3.5" /> Your codebase as a knowledge graph</div>
-            <h1 className="lp-hero-title">
-              Give your AI the <span>exact lines</span>, not the whole repository.
-            </h1>
-            <p className="lp-hero-sub">
-              Agents burn tokens opening file after file to answer one question. CodeMesh indexes your repository into a
-              graph of files, symbols and calls, then hands back the few spans that answer it, with citations.
-            </p>
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Link className="action-primary" to="/discover">Explore a codebase <ArrowRight className="h-4 w-4" /></Link>
-              <a className="action-secondary" href="#demo">Try the live demo <ArrowDown className="h-4 w-4" /></a>
-            </div>
-            <ul className="lp-hero-notes">
-              <li><Check className="h-3.5 w-3.5" /> Seeded sample project</li>
-              <li><Check className="h-3.5 w-3.5" /> Import GitHub or ZIP</li>
-              <li><Check className="h-3.5 w-3.5" /> Source-linked answers</li>
-            </ul>
-          </div>
-          <HeroTokenCard />
-        </div>
-      </section>
+      <ArchitectureHero />
 
       <IntegrationStrip />
 
@@ -65,6 +39,7 @@ export function LandingPage() {
           <nav className="cm-page-index sticky top-24" aria-label="On this page">
             <div className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-steel">On this page</div>
             <a href="#problem">The problem</a>
+            <a href="#workflow">Repository workflow</a>
             <a href="#demo">Live demo</a>
             <a href="#repository-model">Repository model</a>
             <a href="#retrieval-lab">Retrieval lab</a>
@@ -87,6 +62,12 @@ export function LandingPage() {
               body="A crawling agent searches, opens, scrolls and repeats. A graph walk resolves the implementation and its callers in one query."
             />
             <div className="mt-8"><StepTrace /></div>
+            <div className="cm-comparison-example mt-8"><HeroTokenCard /></div>
+          </section>
+
+          <section id="workflow" className="scroll-mt-24" data-reveal>
+            <SectionHeading eyebrow="From files to understanding" title="One repository. A connected workflow." body="Start with source, follow the relationships, and keep every proposed change reviewable." />
+            <RepositoryWorkflow />
           </section>
 
           <section id="demo" className="scroll-mt-24" data-reveal>
@@ -198,7 +179,7 @@ export function LandingPage() {
             <div className="grid gap-6 lg:grid-cols-[1fr_360px] lg:items-start">
               <div className="max-w-2xl">
                 <div className="eyebrow">Start exploring</div>
-                <h2 className="mt-3 text-3xl font-semibold leading-tight text-white md:text-4xl">Stop paying your AI to read code it doesn&apos;t need.</h2>
+                <h2 className="mt-3 text-3xl font-semibold leading-tight text-white md:text-4xl">Stop guessing. Start understanding your codebase.</h2>
                 <p className="mt-4 text-base leading-7 text-steel">Create a CodeMesh account or use a demo identity, then open TaskPilot to explore the graph, ask the assistant, and inspect the full collaborative workflow.</p>
                 <div className="mt-7 space-y-3 text-sm text-slate-200">
                   <Benefit>New accounts receive viewer access to the sample repository.</Benefit>
@@ -233,4 +214,3 @@ function Benefit({ children }: { children: ReactNode }) {
     </div>
   );
 }
-

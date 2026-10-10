@@ -1,4 +1,4 @@
-import { useEffect, useState, type ChangeEvent, type CSSProperties, type DragEvent, type FormEvent } from "react";
+import { useState, type ChangeEvent, type CSSProperties, type DragEvent, type FormEvent } from "react";
 import { CheckCircle2, Github, LoaderCircle, Network, Orbit, UploadCloud } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
@@ -16,14 +16,6 @@ type ImportResult = {
   repository?: string;
 };
 
-const analysisStages = [
-  "Scanning repository...",
-  "Mapping architecture...",
-  "Tracing dependencies...",
-  "Analyzing modules...",
-  "Building CodeMesh..."
-];
-
 export function RepositoryImportPanel({ projectId }: RepositoryImportPanelProps) {
   const queryClient = useQueryClient();
   const [url, setUrl] = useState("");
@@ -31,7 +23,6 @@ export function RepositoryImportPanel({ projectId }: RepositoryImportPanelProps)
   const [archive, setArchive] = useState<File | null>(null);
   const [message, setMessage] = useState("");
   const [dragging, setDragging] = useState(false);
-  const [analysisStage, setAnalysisStage] = useState(0);
 
   const refresh = () => {
     void queryClient.invalidateQueries({ queryKey: ["project", projectId] });
@@ -69,15 +60,6 @@ export function RepositoryImportPanel({ projectId }: RepositoryImportPanelProps)
   const busy = githubImport.isPending || zipImport.isPending;
   const initialized = message.startsWith("Imported");
 
-  useEffect(() => {
-    if (!busy) {
-      setAnalysisStage(0);
-      return;
-    }
-    const timer = window.setInterval(() => setAnalysisStage((current) => Math.min(analysisStages.length - 1, current + 1)), 780);
-    return () => window.clearInterval(timer);
-  }, [busy]);
-
   function submitGitHub(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setMessage("");
@@ -109,6 +91,7 @@ export function RepositoryImportPanel({ projectId }: RepositoryImportPanelProps)
   function dropArchive(event: DragEvent<HTMLLabelElement>) {
     event.preventDefault();
     setDragging(false);
+    if (busy) return;
     acceptArchive(event.dataTransfer.files?.[0] ?? null);
   }
 
@@ -133,13 +116,14 @@ export function RepositoryImportPanel({ projectId }: RepositoryImportPanelProps)
               required
               placeholder="https://github.com/owner/repository"
               value={url}
+              disabled={busy}
               onChange={(event) => setUrl(event.target.value)}
             />
           </label>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
             <label className="min-w-0 flex-1">
               Branch <span className="font-normal text-steel">(optional)</span>
-              <input className="field mt-2" placeholder="main" value={branch} onChange={(event) => setBranch(event.target.value)} />
+              <input className="field mt-2" placeholder="main" value={branch} disabled={busy} onChange={(event) => setBranch(event.target.value)} />
             </label>
             <button className="action-primary" type="submit" disabled={busy || url.trim().length === 0}>
               {githubImport.isPending ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <Github className="h-4 w-4" />}
@@ -159,25 +143,25 @@ export function RepositoryImportPanel({ projectId }: RepositoryImportPanelProps)
               {Array.from({ length: 28 }, (_, index) => <i key={index} style={{ "--particle-index": index } as CSSProperties} />)}
               <b>{busy ? <LoaderCircle className="h-7 w-7 animate-spin" /> : initialized ? <CheckCircle2 className="h-7 w-7" /> : <UploadCloud className="h-7 w-7" />}</b>
             </span>
-            <strong>{busy ? analysisStages[analysisStage] : initialized ? "CODEMESH INITIALIZED" : archive?.name ?? "Drop repository ZIP"}</strong>
+            <strong>{busy ? "Import and indexing in progress" : initialized ? "Repository indexed" : archive?.name ?? "Drop repository ZIP"}</strong>
             <span>
               {busy
-                ? `${Math.round(((analysisStage + 1) / analysisStages.length) * 100)}% architecture assembled`
+                ? "Waiting for the server to finish validating and indexing source"
                 : archive
                   ? `${formatBytes(archive.size)} ready to enter the mesh`
                   : `or click to choose · ${ZIP_UPLOAD_LIMIT_MB} MB compressed / ${ZIP_EXTRACTED_LIMIT_MB} MB extracted`}
             </span>
-            <input className="sr-only" type="file" accept=".zip,application/zip" onChange={selectArchive} />
+            <input className="sr-only" type="file" aria-label="Repository ZIP archive" accept=".zip,application/zip" disabled={busy} onChange={selectArchive} />
           </label>
-          <button className="action-secondary w-full justify-center" type="button" disabled={busy || !archive} onClick={() => zipImport.mutate()}>
+          <button className="action-secondary w-full justify-center" type="button" disabled={busy || !archive} onClick={() => { setMessage(""); zipImport.mutate(); }}>
             {zipImport.isPending ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <UploadCloud className="h-4 w-4" />}
             Build from ZIP
           </button>
         </div>
       </div>
       {busy && (
-        <div className="cm-feed-stages" role="status" aria-live="polite">
-          {analysisStages.map((stage, index) => <span key={stage} className={index < analysisStage ? "is-complete" : index === analysisStage ? "is-active" : ""}><i>{index < analysisStage ? <CheckCircle2 className="h-3 w-3" /> : <Network className="h-3 w-3" />}</i>{stage.replace("...", "")}</span>)}
+        <div className="cm-import-processing" role="status" aria-live="polite">
+          <Network size={16} /><span>{githubImport.isPending ? "GitHub import request is processing" : "ZIP import request is processing"}</span><i aria-hidden="true" />
         </div>
       )}
       {message && (

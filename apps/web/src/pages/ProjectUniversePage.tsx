@@ -38,6 +38,7 @@ import {
 import type { AiAnswer, AiAskRequest, GraphEdge, GraphNode, Project, RepoFile, RepositoryGraph } from "@codemesh/shared";
 import { LoadingState } from "../components/LoadingState";
 import { api, jsonBody } from "../lib/api";
+import { useReducedMotion } from "../lib/useReducedMotion";
 
 type UniversePayload = {
   project: Project;
@@ -65,7 +66,7 @@ type UniverseNodeData = {
 type UniverseFlowNode = Node<UniverseNodeData, "universe">;
 
 const nodeTypes = { universe: UniverseNode };
-const timelineLabels = ["v1", "v2", "v3", "v4", "v5", "HEAD"];
+const timelineLabels = ["Root", "Folders", "Files", "Types", "Functions", "All"];
 const intelligencePrompts = [
   "Explain the most important module in this architecture.",
   "What will break if I change the selected module?",
@@ -85,6 +86,7 @@ export function ProjectUniversePage() {
   const [timeline, setTimeline] = useState(5);
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState<AiAnswer | null>(null);
+  const reducedMotion = useReducedMotion();
 
   const workspace = useQuery({
     queryKey: ["workspace", projectId],
@@ -119,8 +121,9 @@ export function ProjectUniversePage() {
     weather,
     tunnel,
     timeline,
+    reducedMotion,
     intelligenceFiles: new Set(answer?.citations.map((citation) => citation.filePath) ?? [])
-  }) : null, [answer?.citations, data, filter, query, selectedId, timeline, tunnel, weather]);
+  }) : null, [answer?.citations, data, filter, query, selectedId, timeline, tunnel, weather, reducedMotion]);
 
   if (workspace.isLoading) return <LoadingState label="Entering the code universe" />;
   if (!data || !model) return <div className="mx-auto max-w-4xl px-4 py-12 text-coral">The repository universe could not be initialized.</div>;
@@ -193,7 +196,7 @@ export function ProjectUniversePage() {
           setTunnel(false);
           setQuery("");
           setFilter("all");
-          void flowRef.current?.fitView({ duration: 500, padding: 0.16 });
+          void flowRef.current?.fitView({ duration: reducedMotion ? 0 : 260, padding: 0.16 });
         }} />
       </div>
 
@@ -259,9 +262,9 @@ export function ProjectUniversePage() {
       )}
 
       <div className="cm-time-machine">
-        <div className="cm-time-machine-label"><History className="h-3.5 w-3.5" /> Architecture playback</div>
+        <div className="cm-time-machine-label" title="Assembly of the current index, not repository commit history"><History className="h-3.5 w-3.5" /> Index assembly</div>
         <div className="cm-time-machine-track">
-          <input aria-label="Repository version" type="range" min="0" max="5" step="1" value={timeline} onChange={(event) => setTimeline(Number(event.target.value))} />
+          <input aria-label="Index assembly stage" type="range" min="0" max="5" step="1" value={timeline} onChange={(event) => setTimeline(Number(event.target.value))} />
           <div>{timelineLabels.map((label, index) => <button key={label} type="button" className={timeline === index ? "is-active" : ""} onClick={() => setTimeline(index)}>{label}</button>)}</div>
         </div>
         <span>{timeline === 5 ? "current" : "preview"}</span>
@@ -315,7 +318,7 @@ function InsightsPanel({ critical, isolated, cycles, degree, onSelect }: { criti
   return <><div className="eyebrow"><Lightbulb className="h-3.5 w-3.5" /> Architecture insights</div><h2>Signals in the mesh.</h2><div className="cm-insight-summary"><div><strong>{critical[0]?.label ?? "No core"}</strong><span>highest centrality</span></div><div><strong>{cycles}</strong><span>circular relationships</span></div><div><strong>{isolated}</strong><span>isolated nodes</span></div></div><div className="cm-universe-list">{critical.map((node) => <button key={node.id} type="button" onClick={() => onSelect(node.id)}><span><Network className="h-3.5 w-3.5" /></span><div><strong>{node.label}</strong><small>{totalDegree(degree.get(node.id))} direct relationships</small></div></button>)}</div></>;
 }
 
-function buildUniverseModel(graph: RepositoryGraph, state: { selectedId: string | null; query: string; filter: UniverseFilter; weather: boolean; tunnel: boolean; timeline: number; intelligenceFiles: Set<string> }) {
+function buildUniverseModel(graph: RepositoryGraph, state: { selectedId: string | null; query: string; filter: UniverseFilter; weather: boolean; tunnel: boolean; timeline: number; reducedMotion: boolean; intelligenceFiles: Set<string> }) {
   const degree = new Map<string, { incoming: number; outgoing: number }>();
   for (const node of graph.nodes) degree.set(node.id, { incoming: 0, outgoing: 0 });
   for (const edge of graph.edges) {
@@ -337,7 +340,7 @@ function buildUniverseModel(graph: RepositoryGraph, state: { selectedId: string 
   const searchResults = normalizedQuery ? graph.nodes.filter((node) => `${node.label} ${node.filePath ?? ""} ${node.symbolKind ?? ""}`.toLowerCase().includes(normalizedQuery)) : [];
   const searchIds = new Set(searchResults.map((node) => node.id));
   const visibleIds = new Set(graph.nodes.filter((node) => {
-    const introducedAt = node.type === "repository" ? 0 : stableHash(node.id) % 6;
+    const introducedAt = node.type === "repository" ? 0 : node.type === "folder" ? 1 : node.type === "file" ? 2 : ["class", "interface", "type"].includes(node.symbolKind ?? "") ? 3 : node.symbolKind === "function" ? 4 : 5;
     if (introducedAt > state.timeline) return false;
     const nodeDegree = totalDegree(degree.get(node.id));
     if (state.filter === "files" && node.type !== "file" && node.type !== "repository") return false;
@@ -385,7 +388,7 @@ function buildUniverseModel(graph: RepositoryGraph, state: { selectedId: string 
       source: edge.source,
       target: edge.target,
       hidden: !visibleIds.has(edge.source) || !visibleIds.has(edge.target),
-      animated: active || chainEdge,
+      animated: !state.reducedMotion && (active || chainEdge),
       style: { stroke, strokeWidth: active || chainEdge ? 2.2 : 1, opacity: dimmed ? 0.08 : active || chainEdge ? 0.95 : 0.3 },
       markerEnd: { type: MarkerType.ArrowClosed, color: stroke, width: 12, height: 12 }
     };
