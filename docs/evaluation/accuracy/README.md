@@ -36,6 +36,46 @@ Original problems identified in source:
 | `tests/ai/evidence-engine.test.ts` | Retrieval, source isolation, stale/invalid citations, fabricated provider responses, failures and independent benchmark anchors |
 | `tests/api/userJourney.test.ts` | Authenticated queued evaluation and owner-only run visibility, alongside existing import/edit/review journeys |
 
+Supporting accuracy changes:
+
+| File | Reason for change |
+| --- | --- |
+| `packages/shared/src/index.ts` | Export evaluation types and extend answers with source facts, grounding diagnostics and separately labeled inference |
+| `apps/api/src/config.ts` | Bound model prompt characters through existing environment configuration |
+| `apps/api/src/server.ts` | Pass the existing queue into AI routes and redact CSRF headers in request logs |
+| `apps/web/src/router.tsx` | Lazy-load the optional evaluation page |
+| `apps/web/src/pages/ProjectOverviewPage.tsx` | Add the evaluation entry point without removing existing tools |
+| `apps/web/src/components/RepositoryAssistant.tsx` | Render inspectable source answers, actual grounding states and truthful retrieval labels |
+| `apps/web/src/components/InteractiveCodeGraph.tsx` | Label the existing conceptual diagram as illustrative rather than analyzed repository data |
+| `scripts/evaluate-accuracy.mjs` | Reproduce local results and keep paid/live evaluation an explicit separate command |
+| `package.json` | Expose the accuracy benchmark command |
+| `packages/code-intelligence/package.json`, `package-lock.json` | Add the standard `ignore` parser for repository exclusion rules |
+| `tests/ai/assistant.test.ts` | Assert that unchecked provider text never leaks through streaming |
+| `tests/api/zipImport.test.ts` | Cover pre-inflation size limits and absolute-path rejection |
+| `docs/evaluation/accuracy/baseline.json`, `docs/evaluation/accuracy/post-change.json` | Preserve actual per-question evidence, answers, failures and measured results |
+| `docs/evaluation/accuracy/README.md` | Document the audit, file map, measurements, commands and limitations |
+
+The preceding UI release and its responsive follow-up changed these files:
+
+| File | Reason for change |
+| --- | --- |
+| `apps/web/src/components/ArchitectureHero.tsx` | Put the real sample repository graph into an unframed product-first hero |
+| `apps/web/src/components/RepositoryGraphCanvas.tsx` | Shared source-linked React Flow canvas with focus, search, layouts, relationship filters and directed paths; refit on resize |
+| `apps/web/src/lib/graphExploration.ts` | Deterministic layouts, semantic entity colors and cycle-safe graph exploration |
+| `apps/web/src/lib/useReducedMotion.ts` | React to operating-system and application reduced-motion preferences |
+| `apps/web/src/pages/LandingPage.tsx` | Integrate the graph-first experience while preserving supporting product sections |
+| `apps/web/src/pages/WorkspacePage.tsx` | Synchronize graph selection, source navigation and contextual assistant prompts |
+| `apps/web/src/pages/ProjectUniversePage.tsx` | Use actual index assembly states instead of implying unavailable repository history |
+| `apps/web/src/components/RepositoryImportPanel.tsx` | Reflect real pending import states without fabricated percentages |
+| `apps/web/src/components/Shell.tsx` | Add skip navigation and keep workspace ambient motion restrained |
+| `apps/web/src/components/AppearancePanel.tsx` | Preserve appearance preferences safely when local storage is unavailable |
+| `apps/web/src/main.tsx` | Load the shared motion stylesheet |
+| `apps/web/src/landing.css` | Remove obsolete hero layout rules that obstruct the new graph-first layout |
+| `apps/web/src/motion.css` | Multicolor semantic tokens, focused microinteractions, reduced motion, mobile layouts and evaluation styles |
+| `tests/web/graph-exploration.test.ts` | Guard graph layouts, focus neighborhoods, relationship filtering and directed paths |
+
+`RepositoryAssistant.tsx` was also changed in the UI release for contextual graph actions. It is listed above with its subsequent accuracy changes.
+
 Existing graphs, workflow pages, imports, collaboration, tasks, dataset-only answers and patch review remain available. Combined-scope synthetic comparisons are separately labeled and are never current-project evidence.
 
 ## Measurement
