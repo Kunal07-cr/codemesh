@@ -190,3 +190,51 @@
 }
 :root[data-motion="reduced"] :is(.cm-challenge-question, .cm-challenge-feedback) { animation: none; }
 :root[data-motion="reduced"] .cm-challenge-progress progress::-webkit-progress-value { transition: none; }
+
+.cm-layout-anchor { position: relative; }
+.cm-workspace-main { container-type: inline-size; container-name: workspace-content; }
+@container workspace-content (max-width: 800px) { .cm-workspace-activepath { display: none; } }
+@container workspace-content (max-width: 620px) { .cm-workspace-export { display: none; } }
+@container workspace-content (max-width: 460px) { .cm-workspace-history { display: none; } }
+.cm-layout-menu { position: absolute; top: calc(100% + 0.6rem); right: 0; z-index: 65; width: 340px; max-width: calc(100vw - 2rem); padding: 1rem; display: grid; gap: 1rem; border: 1px solid #354854; border-radius: 8px; background: #10181e; box-shadow: 0 12px 32px #0008; }
+.cm-layout-presets { display: flex; gap: 0.4rem; }
+.cm-layout-presets button { flex: 1; justify-content: center; padding: 0.5rem; text-transform: capitalize; font-size: 0.75rem; }
+.cm-layout-range { display: grid; gap: 0.5rem; color: #b6c6d3; }
+.cm-layout-range span { display: flex; justify-content: space-between; }
+.cm-layout-range input { width: 100%; accent-color: #64d8ba; }
+.cm-layout-range output { font-family: monospace; color: #62c8ec; }
+.cm-answer-feedback { margin-top: 0.6rem; font-size: 0.75rem; }
+.cm-feedback-trigger { display: inline-flex; align-items: center; gap: 0.35rem; color: #99afbe; padding: 0.3rem 0; }
+.cm-feedback-trigger:hover { color: #64d8ba; }
+.cm-feedback-body { border-top: 1px solid #293744; margin-top: 0.35rem; padding-top: 0.7rem; display: grid; gap: 0.7rem; }
+.cm-feedback-form { display: grid; gap: 0.7rem; }
+.cm-feedback-form :is(input[type="checkbox"], button[aria-pressed="true"]) { accent-color: #64d8ba; color: #64d8ba; }
+.cm-feedback-form button[aria-pressed="true"] { border-color: #64d8ba; background: #64d8ba18; }
+.cm-feedback-form .action-secondary { font-size: 0.7rem; padding: 0.4rem 0.65rem; }
+.cm-viva-room { min-width: 0; }
+.cm-viva-layout { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: 2rem; padding: 1.5rem 0; }
+.cm-viva-answer { min-width: 0; display: grid; align-content: start; gap: 1rem; }
+.cm-viva-answer h3 { font-size: 1.25rem; color: #f2f6f8; line-height: 1.5; overflow-wrap: anywhere; }
+.cm-viva-answer textarea { width: 100%; min-height: 15rem; resize: vertical; line-height: 1.7; }
+.cm-viva-answer-footer { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; }
+.cm-viva-reference { min-width: 0; border-left: 1px solid #293744; padding-left: 1.5rem; display: grid; align-content: start; gap: 1rem; }
+.cm-viva-reference p { color: #b6c6d3; font-size: 0.85rem; line-height: 1.7; overflow-wrap: anywhere; }
+.cm-viva-reference pre { max-height: 12rem; overflow: auto; padding: 0.8rem; background: #0b1117; border-left: 2px solid #62c8ec; white-space: pre-wrap; overflow-wrap: anywhere; color: #c7d5df; font-size: 0.75rem; }
+.cm-viva-reference .action-secondary { min-width: 0; justify-content: flex-start; font-size: 0.75rem; }
+.cm-viva-reference .action-secondary span { min-width: 0; overflow-wrap: anywhere; }
+.cm-viva-reference .action-secondary svg { flex-shrink: 0; }
+.cm-viva-reference fieldset { display: grid; gap: 0.75rem; border-top: 1px solid #293744; }
+.cm-viva-reference legend { padding: 0.5rem 0; color: #f2f6f8; font-size: 0.8rem; font-weight: 600; }
+.cm-viva-reference fieldset label { display: flex; gap: 0.6rem; align-items: start; color: #b6c6d3; font-size: 0.8rem; line-height: 1.5; }
+.cm-viva-reference input { margin-top: 0.25rem; flex-shrink: 0; accent-color: #64d8ba; }
+.cm-viva-follow-up { border-left: 2px solid #f3bd69; padding: 0.2rem 0 0.2rem 0.8rem; }
+.cm-viva-follow-up strong { color: #f3bd69; font-size: 0.75rem; }
+.cm-viva-controls { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; border-top: 1px solid #293744; padding-top: 1rem; }
+.cm-viva-controls .action-secondary { font-size: 0.8rem; }
+.cm-layout-menu, .cm-feedback-body { animation: cm-disclosure-arrive 180ms ease both; }
+@media (prefers-reduced-motion: reduce) { .cm-layout-menu, .cm-feedback-body { animation: none; } }
+:root[data-motion="reduced"] :is(.cm-layout-menu, .cm-feedback-body) { animation: none; }
+@media (max-width: 900px) {
+  .cm-viva-layout { grid-template-columns: minmax(0, 1fr); gap: 1rem; }
+  .cm-viva-reference { border-left: 0; border-top: 1px solid #293744; padding: 1rem 0 0; }
+}

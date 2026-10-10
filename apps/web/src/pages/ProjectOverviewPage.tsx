@@ -77,6 +77,7 @@ export function ProjectOverviewPage() {
           { icon: FlaskConical, label: "Engineering Labs", to: "labs", tone: "cm-tone-amber", detail: "Simulate impact and review repository evidence." },
           { icon: Fingerprint, label: "Invariant Ledger", to: "labs?lab=invariants", tone: "cm-tone-mint", detail: "Expose hidden code contracts and run failure drills against them." },
           { icon: GraduationCap, label: "Challenge Room", to: "labs?lab=challenge", tone: "cm-tone-rose", detail: "Practice repository knowledge with source-linked questions." },
+          { icon: GraduationCap, label: "Viva Simulator", to: "labs?lab=viva", tone: "cm-tone-cyan", detail: "Rehearse explanations with repository evidence." },
           { icon: Orbit, label: "Advanced Operations", to: "advanced", tone: "cm-tone-violet", detail: "Plan, trace, gate, secure, and evaluate changes." },
           { icon: Gauge, label: "Mesh Control Room", to: "control-room", tone: "cm-tone-coral", detail: "Bring sync, security, Copilot, tasks, and team signals together." },
           { icon: Rocket, label: "Delivery Hub", to: "delivery", tone: "cm-tone-rose", detail: "Forecast change futures, review, verify, sync, trace incidents, and connect engineering agents." },

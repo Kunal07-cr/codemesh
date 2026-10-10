@@ -23,6 +23,22 @@ export function aiRoutes(config: AppConfig, store: JsonStore, assistantDataset: 
     maxContextMessages: config.MAX_CONTEXT_MESSAGES
   });
   const assistantLimiter = createUserRateLimiter(config.AI_REQUESTS_PER_MINUTE);
+  const feedbackSchema = z.object({ rating: z.enum(["helpful", "unhelpful"]).nullable(), incorrectCitation: z.boolean(), note: z.string().trim().max(1000) }).strict();
+
+  router.get("/:projectId/ai/feedback", requireProjectPermission(store, "ai.query"), (req, res) => {
+    ok(res, { examples: store.exportAssistantFeedback(String(req.params.projectId), req.auth!.user.id) });
+  });
+  router.get("/:projectId/ai/feedback/:answerId", requireProjectPermission(store, "ai.query"), (req, res, next) => {
+    const projectId = String(req.params.projectId), answerId = String(req.params.answerId), userId = req.auth!.user.id;
+    if (!store.getOwnedAssistantAnswer(projectId, userId, answerId)) { next(notFound("Answer not found in your conversations.")); return; }
+    ok(res, { feedback: store.getAssistantFeedback(projectId, userId, answerId) });
+  });
+  router.put("/:projectId/ai/feedback/:answerId", requireProjectPermission(store, "ai.query"), assistantLimiter, asyncHandler(async (req, res) => {
+    const input = parseBody(feedbackSchema, req);
+    const feedback = await store.saveAssistantFeedback(String(req.params.projectId), req.auth!.user.id, String(req.params.answerId), input);
+    if (!feedback) throw notFound("Answer not found in your conversations.");
+    ok(res, { feedback });
+  }));
 
   router.get(
     "/:projectId/ai/dataset",

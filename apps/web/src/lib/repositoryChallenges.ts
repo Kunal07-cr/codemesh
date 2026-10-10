@@ -15,6 +15,7 @@ export type RepositoryChallenge = {
 const supportedKinds = new Set(["function", "class", "interface", "type"]);
 const validLine = (line: number | undefined): line is number => Number.isSafeInteger(line) && line! > 0;
 const safePath = (path: string | undefined): path is string => Boolean(path && path.length <= 1000 && !/[\\\r\n]|(^\/)|(^[a-z]+:)|(^|\/)\.\.($|\/)|(^|\/)(\.env(?:\.[^/]*)?|credentials[^/]*|[^/]*\.pem)($|\/)/i.test(path));
+export { safePath as isPracticePath };
 
 // Stable variety across practice rounds, not security-sensitive randomness.
 function rank(value: string, seed: string) {

@@ -24,7 +24,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run typecheck
-      - run: npm test
+      - name: Unit tests and authenticated HTTP / realtime journeys
+        run: npm test
       - run: npm run build
       - name: Production dependency audit
         run: npm audit --omit=dev --audit-level=high

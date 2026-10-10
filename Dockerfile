@@ -5,6 +5,8 @@ WORKDIR /app
 COPY . .
 
 RUN npm ci \
+  && npm run typecheck \
+  && npm test \
   && npm run build \
   && npm prune --omit=dev
 

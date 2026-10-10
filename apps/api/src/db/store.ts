@@ -148,6 +148,19 @@ export type AssistantMessageRecord = {
   createdAt: string;
 };
 
+export type AssistantFeedbackRecord = {
+  id: string;
+  projectId: string;
+  userId: string;
+  conversationId: string;
+  answerId: string;
+  rating: "helpful" | "unhelpful" | null;
+  incorrectCitation: boolean;
+  note: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type OperationJobType = "repository.reindex" | "repository.incremental_sync" | "quality.scan" | "persistence.verify" | "audit.export";
 export type OperationJobStatus = "queued" | "running" | "succeeded" | "failed" | "cancelled";
 
@@ -269,6 +282,7 @@ export type StoreState = {
   architectureDecisions?: ArchitectureDecisionRecord[];
   assistantConversations?: AssistantConversation[];
   assistantMessages?: AssistantMessageRecord[];
+  assistantFeedback?: AssistantFeedbackRecord[];
   operationJobs?: OperationJob[];
   authActionTokens?: AuthActionTokenRecord[];
   webhookDeliveries?: WebhookDeliveryRecord[];
@@ -303,6 +317,7 @@ export class JsonStore {
       this.state.architectureDecisions ??= [];
       this.state.assistantConversations ??= [];
       this.state.assistantMessages ??= [];
+      this.state.assistantFeedback ??= [];
       this.state.operationJobs ??= [];
       this.state.authActionTokens ??= [];
       this.state.webhookDeliveries ??= [];
@@ -667,7 +682,8 @@ export class JsonStore {
       const latestRevision = this.listWorkspaceRevisions(projectId, workspaceId, filePath)[0];
       const shouldSnapshot = existing.content !== content && (!latestRevision || Date.now() - Date.parse(latestRevision.createdAt) > 30_000);
       if (shouldSnapshot) {
-        this.state.workspaceRevisions!.unshift({
+        this.state.workspaceRevisions ??= [];
+        this.state.workspaceRevisions.unshift({
           id: crypto.randomUUID(),
           projectId,
           workspaceId,
@@ -1016,8 +1032,42 @@ export class JsonStore {
     if (index < 0) return false;
     this.state.assistantConversations!.splice(index, 1);
     this.state.assistantMessages = (this.state.assistantMessages ?? []).filter((message) => message.conversationId !== conversationId);
+    this.state.assistantFeedback = (this.state.assistantFeedback ?? []).filter((feedback) => feedback.conversationId !== conversationId);
     await this.save();
     return true;
+  }
+
+  getOwnedAssistantAnswer(projectId: string, userId: string, answerId: string) {
+    const conversations = new Set((this.state.assistantConversations ?? []).filter((item) => item.projectId === projectId && item.userId === userId).map((item) => item.id));
+    return (this.state.assistantMessages ?? []).find((item) => item.role === "assistant" && item.result?.id === answerId && conversations.has(item.conversationId)) ?? null;
+  }
+
+  getAssistantFeedback(projectId: string, userId: string, answerId: string) {
+    return (this.state.assistantFeedback ?? []).find((item) => item.projectId === projectId && item.userId === userId && item.answerId === answerId) ?? null;
+  }
+
+  async saveAssistantFeedback(projectId: string, userId: string, answerId: string, input: Pick<AssistantFeedbackRecord, "rating" | "incorrectCitation" | "note">) {
+    const message = this.getOwnedAssistantAnswer(projectId, userId, answerId);
+    if (!message) return null;
+    const existing = this.getAssistantFeedback(projectId, userId, answerId);
+    const now = new Date().toISOString();
+    const feedback: AssistantFeedbackRecord = { id: existing?.id ?? crypto.randomUUID(), projectId, userId, conversationId: message.conversationId, answerId,
+      ...input, note: input.note.trim().slice(0, 1000), createdAt: existing?.createdAt ?? now, updatedAt: now };
+    this.state.assistantFeedback = (this.state.assistantFeedback ?? []).filter((item) => item.id !== feedback.id);
+    this.state.assistantFeedback.unshift(feedback);
+    await this.save();
+    return feedback;
+  }
+
+  exportAssistantFeedback(projectId: string, userId: string) {
+    const messages = this.state.assistantMessages ?? [];
+    return (this.state.assistantFeedback ?? []).filter((item) => item.projectId === projectId && item.userId === userId).map((feedback) => {
+      const answer = this.getOwnedAssistantAnswer(projectId, userId, feedback.answerId);
+      const conversationMessages = messages.filter((item) => item.conversationId === feedback.conversationId);
+      const index = conversationMessages.findIndex((item) => item.id === answer?.id);
+      const question = conversationMessages.slice(0, index).reverse().find((item) => item.role === "user")?.content ?? "";
+      return { feedback, question, answer: answer?.result };
+    }).filter((item) => item.answer);
   }
 
   listAnnotations(projectId: string) {
@@ -1486,4 +1536,3 @@ function slugify(input: string) {
     .replace(/^-|-$/g, "")
     .slice(0, 60);
 }
-

@@ -27,7 +27,7 @@ export function trailLocation(projectId: string, location: string): Pick<TrailWa
     if (value && value.length <= 1000) query.set(key, value);
   }
   const source = query.get("path") ?? "";
-  const labLabels: Record<string, string> = { invariants: "Invariant Ledger", challenge: "Repository Challenge Room" };
+  const labLabels: Record<string, string> = { invariants: "Invariant Ledger", challenge: "Repository Challenge Room", viva: "Viva Simulator" };
   const label = (section === "labs" ? labLabels[query.get("lab") ?? ""] : undefined) ?? sections[section] ?? "Project overview";
   return { href: `${url.pathname}${query.size ? `?${query}` : ""}`, label, source };
 }

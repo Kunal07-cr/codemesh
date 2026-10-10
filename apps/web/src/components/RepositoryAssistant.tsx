@@ -19,8 +19,10 @@ import {
   WandSparkles,
   X
 } from "lucide-react";
-import type { AiAnswer, AiAskRequest, PatchProposal } from "@codemesh/shared";
+import { aiAnswerSchema, type AiAnswer, type AiAskRequest, type PatchProposal } from "@codemesh/shared";
 import { ApiClientError, api, jsonBody, streamApi } from "../lib/api";
+import { AssistantFeedback } from "./AssistantFeedback";
+import { useAuth } from "../lib/auth";
 
 type AssistantMessage = {
   id: string;
@@ -92,7 +94,12 @@ const modes: Array<{ value: AiAskRequest["mode"]; label: string; icon: typeof Bo
   { value: "propose", label: "Edit", icon: Sparkles }
 ];
 
-export function RepositoryAssistant({ projectId, activeFilePath, canReview, initialPrompt, onOpenFile }: RepositoryAssistantProps) {
+export function RepositoryAssistant(props: RepositoryAssistantProps) {
+  const { user } = useAuth();
+  return <RepositoryAssistantSession key={`${user?.id ?? "guest"}:${props.projectId}`} {...props} userId={user?.id ?? "guest"} />;
+}
+
+function RepositoryAssistantSession({ projectId, activeFilePath, canReview, initialPrompt, onOpenFile, userId }: RepositoryAssistantProps & { userId: string }) {
   const queryClient = useQueryClient();
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const seededPromptRef = useRef("");
@@ -101,10 +108,16 @@ export function RepositoryAssistant({ projectId, activeFilePath, canReview, init
   const [retrievalMode, setRetrievalMode] = useState<AiAskRequest["retrievalMode"]>("graph");
   const [knowledgeScope, setKnowledgeScope] = useState<NonNullable<AiAskRequest["knowledgeScope"]>>("combined");
   const [datasetRepositoryId, setDatasetRepositoryId] = useState("");
-  const conversationKey = `codemesh-assistant:${projectId}`;
+  const conversationKey = `codemesh-assistant:v2:${encodeURIComponent(userId)}:${encodeURIComponent(projectId)}`;
   const [messages, setMessages] = useState<AssistantMessage[]>(() => {
     try {
-      return JSON.parse(localStorage.getItem(conversationKey) ?? "[]") as AssistantMessage[];
+      const stored: unknown = JSON.parse(localStorage.getItem(conversationKey) ?? "[]");
+      if (!Array.isArray(stored)) return [];
+      return stored.slice(-30).flatMap((message): AssistantMessage[] => {
+        if (!message || typeof message.id !== "string" || typeof message.content !== "string" || !["user", "assistant"].includes(message.role)) return [];
+        const result = aiAnswerSchema.safeParse(message.result);
+        return [{ id: message.id, content: message.content, role: message.role, error: message.error === true, result: result.success ? result.data : undefined }];
+      });
     } catch {
       return [];
     }
@@ -115,7 +128,7 @@ export function RepositoryAssistant({ projectId, activeFilePath, canReview, init
   const [patchError, setPatchError] = useState("");
 
   const conversations = useQuery({
-    queryKey: ["assistant-conversations", projectId],
+    queryKey: ["assistant-conversations", projectId, userId],
     queryFn: () => api<ConversationList>(`/api/projects/${projectId}/ai/conversations`)
   });
   const dataset = useQuery({
@@ -200,7 +213,7 @@ export function RepositoryAssistant({ projectId, activeFilePath, canReview, init
   });
 
   useEffect(() => {
-    localStorage.setItem(conversationKey, JSON.stringify(messages.slice(-30)));
+    try { localStorage.setItem(conversationKey, JSON.stringify(messages.slice(-30))); } catch { /* Server conversations remain available when device storage is blocked. */ }
   }, [conversationKey, messages]);
 
   const applyPatch = useMutation({
@@ -452,6 +465,7 @@ export function RepositoryAssistant({ projectId, activeFilePath, canReview, init
               </div>
             )}
             {message.result?.uncertainty && <p className="mt-2 text-xs leading-5 text-amber">{message.result.uncertainty}</p>}
+            {message.result && <AssistantFeedback projectId={projectId} answerId={message.result.id} />}
             {message.result && message.result.citations.length > 0 && (
               <div className="mt-3 flex flex-wrap gap-1.5">
                 {message.result.citations.map((citation) => citation.sourceType === "dataset" ? (

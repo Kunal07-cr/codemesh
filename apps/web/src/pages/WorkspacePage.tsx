@@ -3,7 +3,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 import Editor, { type OnMount } from "@monaco-editor/react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Background, Controls, MarkerType, MiniMap, ReactFlow, type Edge, type Node } from "@xyflow/react";
-import { Code2, Columns3, Download, FileSearch, GitPullRequest, History, Maximize2, MessageSquare, MessageSquareText, Minimize2, Network, PanelLeftClose, PanelLeftOpen, PanelRightClose, PanelRightOpen, Radio, RotateCcw, Search, Trash2 } from "lucide-react";
+import { Code2, Columns3, Download, FileSearch, GitPullRequest, History, Maximize2, MessageSquare, MessageSquareText, Minimize2, Network, PanelLeftClose, PanelLeftOpen, PanelRightClose, PanelRightOpen, Radio, RotateCcw, Search, Trash2, SlidersHorizontal, Save, X } from "lucide-react";
 import { io, type Socket } from "socket.io-client";
 import * as Y from "yjs";
 import type {
@@ -23,6 +23,7 @@ import { StatusPill } from "../components/StatusPill";
 import { API_URL, api } from "../lib/api";
 import { useAuth } from "../lib/auth";
 import { relativeTime } from "../lib/format";
+import { parseWorkspaceLayout, workspaceLayoutKey, workspacePresets, type WorkspaceLayout } from "../lib/workspaceLayout";
 import "../lib/monaco";
 
 type WorkspacePayload = {
@@ -63,6 +64,9 @@ export function WorkspacePage() {
   const [presence, setPresence] = useState<string[]>([]);
   const [filePanelOpen, setFilePanelOpen] = useState(!compact);
   const [assistantPanelOpen, setAssistantPanelOpen] = useState(!compact);
+  const [panelSizes, setPanelSizes] = useState(workspacePresets.explore);
+  const [layoutMenuOpen, setLayoutMenuOpen] = useState(false);
+  const [layoutStatus, setLayoutStatus] = useState("");
   const socketRef = useRef<Socket | null>(null);
   const docRef = useRef<Y.Doc | null>(null);
   const selectedPathRef = useRef(selectedPath);
@@ -87,10 +91,35 @@ export function WorkspacePage() {
     return data?.files.filter((file) => !needle || file.path.toLowerCase().includes(needle)) ?? [];
   }, [data?.files, fileFilter]);
 
+  function applyLayout(layout: WorkspaceLayout, isCompact: boolean) {
+    setPanelSizes(layout);
+    setView(isCompact ? "editor" : layout.view);
+    setFilePanelOpen(!isCompact && layout.filesOpen);
+    setAssistantPanelOpen(!isCompact && layout.assistantOpen);
+  }
+
+  useEffect(() => {
+    if (!user) return;
+    let raw: string | null = null;
+    try { raw = localStorage.getItem(workspaceLayoutKey(user.id, projectId)); } catch { /* Storage may be blocked. */ }
+    applyLayout(parseWorkspaceLayout(raw), window.matchMedia("(max-width: 1023px)").matches);
+    setLayoutStatus("");
+    setLayoutMenuOpen(false);
+  }, [user?.id, projectId]);
+
+  function saveLayout() {
+    if (!user) return;
+    try {
+      localStorage.setItem(workspaceLayoutKey(user.id, projectId), JSON.stringify({ ...panelSizes, view, filesOpen: filePanelOpen, assistantOpen: assistantPanelOpen }));
+      setLayoutStatus("Layout saved");
+    } catch { setLayoutStatus("Layout could not be saved on this device"); }
+  }
+
   useEffect(() => {
     const media = window.matchMedia("(max-width: 1023px)");
     const resize = () => {
       setCompact(media.matches);
+      setLayoutMenuOpen(false);
       if (media.matches) { setFilePanelOpen(false); setAssistantPanelOpen(false); setView("editor"); }
     };
     media.addEventListener("change", resize);
@@ -230,7 +259,7 @@ export function WorkspacePage() {
   }
 
   return (
-    <section className="cm-code-workspace h-[calc(100vh-3.5rem)] overflow-hidden bg-ink" data-compact={compact} onKeyDown={(event) => { if (compact && event.key === "Escape") { setFilePanelOpen(false); setAssistantPanelOpen(false); } }}>
+    <section className="cm-code-workspace h-[calc(100vh-3.5rem)] overflow-hidden bg-ink" data-compact={compact} onKeyDown={(event) => { if (event.key === "Escape") { setLayoutMenuOpen(false); if (compact) { setFilePanelOpen(false); setAssistantPanelOpen(false); } } }}>
       <header className="flex h-12 items-center justify-between border-b border-line px-4">
         <div className="flex min-w-0 items-center gap-3">
           <StatusPill tone={connection === "connected" ? "good" : "warn"}>
@@ -242,6 +271,16 @@ export function WorkspacePage() {
           <span className="hidden text-xs text-steel md:inline">workspace/{data.workspaceId}</span>
         </div>
         <div className="flex items-center gap-2 text-xs text-steel">
+          {!compact && <div className="cm-layout-anchor">
+            <button className="cm-icon-button" type="button" title="Workspace layout" aria-label="Workspace layout" aria-expanded={layoutMenuOpen} aria-controls="workspace-layout-menu" onClick={() => setLayoutMenuOpen((open) => !open)}><SlidersHorizontal className="h-4 w-4" /></button>
+            {layoutMenuOpen && <div id="workspace-layout-menu" className="cm-layout-menu">
+              <div className="flex items-center justify-between"><strong className="text-white">Workspace layout</strong><button className="cm-icon-button" type="button" title="Close layout settings" aria-label="Close layout settings" onClick={() => setLayoutMenuOpen(false)}><X className="h-4 w-4" /></button></div>
+              <div className="cm-layout-presets">{Object.entries(workspacePresets).map(([name, layout]) => <button className="action-secondary" key={name} type="button" onClick={() => { applyLayout({ ...layout }, false); setLayoutStatus(""); }}>{name === "coding" ? <Code2 className="h-4 w-4" /> : name === "explore" ? <Network className="h-4 w-4" /> : <GitPullRequest className="h-4 w-4" />}{name}</button>)}</div>
+              {([{ key: "fileWidth", label: "File tree width", min: 180, max: 320, unit: "px" }, { key: "assistantWidth", label: "Copilot width", min: 280, max: 440, unit: "px" }, { key: "graphPercent", label: "Graph share", min: 25, max: 75, unit: "%" }] as const).map((control) => <label className="cm-layout-range" key={control.key}><span>{control.label}<output>{panelSizes[control.key]}{control.unit}</output></span><input type="range" min={control.min} max={control.max} value={panelSizes[control.key]} onChange={(event) => { setPanelSizes((current) => ({ ...current, [control.key]: Number(event.target.value) })); setLayoutStatus(""); }} /></label>)}
+              <div className="flex items-center gap-2"><button className="action-primary" type="button" onClick={saveLayout}><Save className="h-4 w-4" /> Save layout</button><button className="cm-icon-button" type="button" title="Restore default layout" aria-label="Restore default layout" onClick={() => { applyLayout({ ...workspacePresets.explore }, false); setLayoutStatus(""); }}><RotateCcw className="h-4 w-4" /></button></div>
+              <p className="text-xs text-mint" role="status">{layoutStatus}</p>
+            </div>}
+          </div>}
           {presence.slice(0, 3).map((name) => (
             <span key={name} className="hidden rounded border border-line px-2 py-1 sm:inline-flex">
               {name}
@@ -269,7 +308,7 @@ export function WorkspacePage() {
       </header>
       <div
         className="cm-workspace-grid grid h-[calc(100%-3rem)]"
-        style={{ gridTemplateColumns: compact ? "minmax(0, 1fr)" : `${filePanelOpen ? "260px" : "0px"} minmax(0, 1fr) ${assistantPanelOpen ? "360px" : "0px"}` }}
+        style={{ gridTemplateColumns: compact ? "minmax(0, 1fr)" : `${filePanelOpen ? `min(${panelSizes.fileWidth}px, 21vw)` : "0px"} minmax(0, 1fr) ${assistantPanelOpen ? `min(${panelSizes.assistantWidth}px, 30vw)` : "0px"}` }}
       >
         {compact && (filePanelOpen || assistantPanelOpen) && <button className="cm-workspace-scrim" type="button" aria-label="Close workspace panels" onClick={() => { setFilePanelOpen(false); setAssistantPanelOpen(false); }} />}
         <aside className={`cm-workspace-rail cm-file-rail min-h-0 overflow-hidden border-r border-line bg-panel ${filePanelOpen ? "opacity-100" : "pointer-events-none border-transparent opacity-0"}`} aria-hidden={!filePanelOpen} inert={!filePanelOpen}>
@@ -302,7 +341,7 @@ export function WorkspacePage() {
             {visibleFiles.length === 0 && <div className="p-3 text-xs leading-5 text-steel">No files match this filter.</div>}
           </div>
         </aside>
-        <main className="min-w-0 bg-ink" inert={compact && (filePanelOpen || assistantPanelOpen)}>
+        <main className="cm-workspace-main min-w-0 bg-ink" inert={compact && (filePanelOpen || assistantPanelOpen)}>
           <div className="flex h-11 items-center justify-between border-b border-line px-3">
             <div className="flex items-center gap-2">
               <button
@@ -329,10 +368,10 @@ export function WorkspacePage() {
             </div>
             <div className="flex min-w-0 items-center gap-3">
               <HistoryMenu projectId={projectId} workspaceId={data.workspaceId} path={selectedPath} socket={socketRef.current} canRestore={data.permissions.includes("workspace.review")} />
-              <button className="hidden items-center gap-1.5 rounded border border-line px-2 py-1.5 text-xs text-steel hover:border-mint hover:text-white sm:flex" type="button" title="Export architecture graph" onClick={() => exportGraph(data.project.name, data.graph)}>
+              <button className="cm-workspace-export hidden items-center gap-1.5 rounded border border-line px-2 py-1.5 text-xs text-steel hover:border-mint hover:text-white sm:flex" type="button" title="Export architecture graph" onClick={() => exportGraph(data.project.name, data.graph)}>
                 <Download className="h-3.5 w-3.5" /> Export graph
               </button>
-              <div className="hidden min-w-0 items-center gap-2 sm:flex"><span className="text-xs text-steel">Editing</span><div className="truncate font-mono text-xs text-steel">{selectedPath}</div></div>
+              <div className="cm-workspace-activepath hidden min-w-0 items-center gap-2 sm:flex"><span className="text-xs text-steel">Editing</span><div className="truncate font-mono text-xs text-steel">{selectedPath}</div></div>
             </div>
           </div>
           <div className="h-[calc(100%-2.75rem)]">
@@ -346,7 +385,7 @@ export function WorkspacePage() {
               }} />
             )}
             {view === "split" && (
-              <div className={`grid h-full ${compact ? "grid-cols-1 grid-rows-2" : "grid-cols-2"}`}>
+              <div className={`grid h-full ${compact ? "grid-cols-1 grid-rows-2" : ""}`} style={compact ? undefined : { gridTemplateColumns: `minmax(0, ${panelSizes.graphPercent}fr) minmax(0, ${100 - panelSizes.graphPercent}fr)` }}>
                 <div className="min-w-0 border-r border-line">
                   <GraphView graph={data.graph} selectedPath={selectedPath} selectedNodeId={selectedNode?.id} onSelectNode={(node) => {
                     setSelectedNode(node);
@@ -603,7 +642,7 @@ function HistoryMenu({ projectId, workspaceId, path, socket, canRestore }: { pro
   });
 
   return (
-    <details className="relative hidden sm:block">
+    <details className="cm-workspace-history relative hidden sm:block">
       <summary className="flex cursor-pointer list-none items-center gap-1.5 rounded border border-line px-2 py-1.5 text-xs text-steel hover:border-mint hover:text-white"><History className="h-3.5 w-3.5" /> History</summary>
       <div className="cm-popover absolute right-0 top-9 z-40 w-72 p-3">
         <div className="text-xs font-semibold text-white">File history</div>
