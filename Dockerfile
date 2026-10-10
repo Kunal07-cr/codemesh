@@ -5,9 +5,9 @@ WORKDIR /app
 COPY . .
 
 RUN npm ci \
+  && npm run build \
   && npm run typecheck \
   && npm test \
-  && npm run build \
   && npm prune --omit=dev
 
 FROM node:24-bookworm-slim AS runtime
