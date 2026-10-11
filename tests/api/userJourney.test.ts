@@ -40,6 +40,25 @@ describe("authenticated end-to-end HTTP and realtime journeys", () => {
   }
   const editRequest = { mode: "propose", retrievalMode: "graph", knowledgeScope: "repository", includeWorkspace: true, activeFilePath: "src/main.ts", conversation: [], question: "In src/main.ts replace `alpha` with `beta`." };
 
+  it("reads coherent proof snapshots without exposing private projects to other identities", async () => {
+    const sample = await request(runtime.server).get("/api/projects/project-sample-taskpilot/proof").expect(200);
+    expect(sample.body.data.project.commitSha).toBe("sample-commit-2026-09-27");
+    expect(sample.body.data.graph.nodes.some((node: { filePath?: string }) => node.filePath === "src/auth/session.ts")).toBe(true);
+    const { agent } = await login();
+    const { agent: other } = await login("viewer@codemesh.dev");
+    const created = await agent.post("/api/projects").send({ name: "Private proof repository", description: "Private revision snapshot.", visibility: "private" }).expect(200);
+    const base = `/api/projects/${created.body.data.id}`;
+    await request(runtime.server).get(`${base}/proof`).expect(403);
+    await other.get(`${base}/proof`).expect(403);
+    const imported = await agent.post(`${base}/import/zip`).attach("archive", Buffer.from(zipSync({ "src/snapshot.ts": strToU8("export const snapshot = 1;\n") })), "snapshot.zip").expect(200);
+    const snapshot = await agent.get(`${base}/proof`).expect(200);
+    expect(snapshot.body.data.project.commitSha).toBe(imported.body.data.commitSha);
+    expect(snapshot.body.data.graph.nodes.some((node: { filePath?: string }) => node.filePath === "src/snapshot.ts")).toBe(true);
+    expect(snapshot.body.data).not.toHaveProperty("files");
+    expect(snapshot.body.data).not.toHaveProperty("chat");
+    await agent.post(`${base}/proof`).send({ execute: true }).expect(404);
+  });
+
   it("executes and persists a private benchmark run with authenticated progress/results", async () => {
     const base = "/api/projects/project-sample-taskpilot/ai/evaluation";
     await request(runtime.server).get(base).expect(401);

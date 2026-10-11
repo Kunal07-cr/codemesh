@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@codemesh/shared": "0.1.0",
+    "@dagrejs/graphlib": "^4.0.5",
     "@monaco-editor/react": "^4.7.0",
     "@tanstack/react-query": "^5.90.2",
     "@xyflow/react": "^12.8.6",
@@ -20,7 +21,8 @@
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.9.1",
     "socket.io-client": "^4.8.1",
-    "yjs": "^13.6.27"
+    "yjs": "^13.6.27",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@types/react": "^19.1.13",

@@ -16,6 +16,7 @@ import {
   Download,
   FileCode2,
   Fingerprint,
+  FlaskConical,
   Gauge,
   GitCompareArrows,
   GraduationCap,
@@ -155,7 +156,8 @@ export function ProjectLabsPage() {
           <h1 className="mt-2 text-3xl font-bold text-white">Repository decision laboratory</h1>
           <p className="mt-2 max-w-3xl text-steel">Evidence-backed analysis for change planning, architecture, security, quality, ownership, and onboarding.</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
+          <Link className="action-secondary" to={`/projects/${projectId}/proof-lab`}><FlaskConical className="h-4 w-4" /> Proof Lab</Link>
           <Link className="action-secondary" to={`/projects/${projectId}/intelligence`}><Activity className="h-4 w-4" /> Intelligence</Link>
           <Link className="action-primary" to={`/projects/${projectId}/workspace`}><Code2 className="h-4 w-4" /> Workspace</Link>
         </div>

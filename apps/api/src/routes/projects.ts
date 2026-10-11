@@ -149,6 +149,15 @@ export function projectRoutes(store: JsonStore, artifacts?: ArtifactStorage) {
   );
 
   router.get(
+    "/:projectId/proof",
+    requireVisibleProject(store),
+    (req, res) => {
+      const project = store.getProject(String(req.params.projectId))!;
+      ok(res, { project, graph: store.getIndex(project.id).graph });
+    }
+  );
+
+  router.get(
     "/:projectId/intelligence",
     requireVisibleProject(store),
     (req, res) => {

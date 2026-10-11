@@ -74,6 +74,7 @@ export function ProjectOverviewPage() {
           { icon: Orbit, label: "Code Universe", to: "universe", tone: "cm-tone-cyan", detail: "Enter the living architecture and follow dependency paths." },
           { icon: Bot, label: "AI Assistant", to: "assistant", tone: "cm-tone-violet", detail: "Ask, investigate, and draft changes." },
           { icon: FlaskConical, label: "AI Evaluation", to: "evaluation", tone: "cm-tone-cyan", detail: "Run source-grounded benchmarks and inspect evidence failures." },
+          { icon: Waypoints, label: "Proof Lab", to: "proof-lab", tone: "cm-tone-mint", detail: "Replay dependency waves, compare boundaries, and inspect reproducible evidence." },
           { icon: BrainCircuit, label: "Intelligence", to: "intelligence", tone: "cm-tone-rose", detail: "Inspect health, search, and repository signals." },
           { icon: FlaskConical, label: "Engineering Labs", to: "labs", tone: "cm-tone-amber", detail: "Simulate impact and review repository evidence." },
           { icon: Fingerprint, label: "Invariant Ledger", to: "labs?lab=invariants", tone: "cm-tone-mint", detail: "Expose hidden code contracts and run failure drills against them." },
