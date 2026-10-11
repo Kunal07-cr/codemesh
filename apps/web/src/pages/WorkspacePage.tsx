@@ -484,7 +484,7 @@ function GraphView({
   return (
     <div className="relative h-full">
       {toggle}
-      <div className="pointer-events-none absolute left-3 top-3 z-10 flex flex-wrap gap-x-3 gap-y-1 rounded border border-line bg-ink/90 px-3 py-2 font-mono text-[10px] text-steel backdrop-blur">
+      <div className="pointer-events-none absolute left-3 top-3 z-10 flex max-w-[calc(100%-4rem)] flex-wrap gap-x-3 gap-y-1 rounded border border-line bg-ink/90 px-3 py-2 font-mono text-[10px] text-steel backdrop-blur">
         <span><i className="mr-1 inline-block h-2 w-2 rounded-sm bg-mint" />Function</span>
         <span><i className="mr-1 inline-block h-2 w-2 rounded-sm bg-violet" />Class</span>
         <span><i className="mr-1 inline-block h-2 w-2 rounded-sm bg-cyan" />File</span>
