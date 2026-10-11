@@ -1,12 +1,14 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type MouseEvent } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import Editor, { type OnMount } from "@monaco-editor/react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Background, Controls, MarkerType, MiniMap, ReactFlow, type Edge, type Node } from "@xyflow/react";
 import { Code2, Columns3, Download, FileSearch, GitPullRequest, History, Maximize2, MessageSquare, MessageSquareText, Minimize2, Network, PanelLeftClose, PanelLeftOpen, PanelRightClose, PanelRightOpen, Radio, RotateCcw, Search, Trash2, SlidersHorizontal, Save, X } from "lucide-react";
 import { io, type Socket } from "socket.io-client";
 import * as Y from "yjs";
 import type {
   CodeAnnotation,
+  GraphEdge,
   GraphNode,
   Permission,
   Project,
@@ -474,7 +476,95 @@ function GraphView({
   onOpenSource(path: string, line?: number): void;
   onSelectNode(node: GraphNode): void;
 }) {
-  return <RepositoryGraphCanvas graph={graph} selectedPath={selectedPath} selectedNodeId={selectedNodeId} onSelectNode={onSelectNode} onOpenSource={onOpenSource} />;
+  const [exploring, setExploring] = useState(false);
+  const nodes = useMemo<Node[]>(() => layoutGraphNodes(graph.nodes, selectedPath, selectedNodeId), [graph.nodes, selectedNodeId, selectedPath]);
+  const edges = useMemo<Edge[]>(() => graph.edges.map(toFlowEdge), [graph.edges]);
+  const toggle = <button type="button" className="absolute right-3 top-3 z-20 grid h-7 w-7 place-items-center rounded border border-line bg-ink/90 text-steel hover:border-mint hover:text-white" title={exploring ? "Use original graph view" : "Explore connections"} aria-label={exploring ? "Use original graph view" : "Explore connections"} aria-pressed={exploring} onClick={() => setExploring((value) => !value)}><Network size={14} /></button>;
+  if (exploring) return <div className="flex h-full flex-col"><div className="flex items-center justify-between border-b border-line bg-ink px-3 py-2 text-xs text-steel"><span>Connection explorer</span><button type="button" className="grid h-7 w-7 place-items-center rounded border border-line hover:border-mint hover:text-white" title="Use original graph view" aria-label="Use original graph view" onClick={() => setExploring(false)}><Network size={14} /></button></div><div className="min-h-0 flex-1"><RepositoryGraphCanvas graph={graph} selectedPath={selectedPath} selectedNodeId={selectedNodeId} onSelectNode={onSelectNode} onOpenSource={onOpenSource} /></div></div>;
+  return (
+    <div className="relative h-full">
+      {toggle}
+      <div className="pointer-events-none absolute left-3 top-3 z-10 flex flex-wrap gap-x-3 gap-y-1 rounded border border-line bg-ink/90 px-3 py-2 font-mono text-[10px] text-steel backdrop-blur">
+        <span><i className="mr-1 inline-block h-2 w-2 rounded-sm bg-mint" />Function</span>
+        <span><i className="mr-1 inline-block h-2 w-2 rounded-sm bg-violet" />Class</span>
+        <span><i className="mr-1 inline-block h-2 w-2 rounded-sm bg-cyan" />File</span>
+        <span className="text-cyan">― Calls</span><span className="text-amber">┈ Imports</span><span>╌ Contains</span>
+      </div>
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        fitView
+        minZoom={0.2}
+        maxZoom={1.8}
+        panOnScroll
+        onNodeClick={(_event: MouseEvent, node: Node) => {
+          onSelectNode(node.data.graphNode as GraphNode);
+        }}
+      >
+        <Background color="#263445" />
+        <Controls />
+        <MiniMap pannable zoomable nodeColor={(node) => String(node.style?.borderColor ?? "#64778b")} maskColor="rgba(8, 13, 20, 0.72)" />
+      </ReactFlow>
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex flex-wrap items-center justify-between gap-2 border-t border-line bg-ink/90 px-3 py-1.5 font-mono text-[10px] text-steel backdrop-blur">
+        <span className="flex gap-3"><span className="text-mint">Functions: {graph.nodes.filter((node) => node.symbolKind === "function").length}</span><span className="text-violet">Classes: {graph.nodes.filter((node) => node.symbolKind === "class").length}</span><span className="text-cyan">Files: {graph.nodes.filter((node) => node.type === "file").length}</span></span>
+        <span className="truncate">Active: {selectedPath}</span>
+      </div>
+    </div>
+  );
+}
+
+function layoutGraphNodes(graphNodes: GraphNode[], selectedPath: string, selectedNodeId?: string): Node[] {
+  const order: GraphNode["type"][] = ["repository", "folder", "file", "symbol"];
+  const columns: Record<GraphNode["type"], number> = { repository: 1, folder: 5, file: 5, symbol: 6 };
+  const offsets = new Map<GraphNode["type"], number>();
+  let nextY = 70;
+  for (const type of order) {
+    offsets.set(type, nextY);
+    const count = graphNodes.filter((node) => node.type === type).length;
+    nextY += Math.max(1, Math.ceil(count / columns[type])) * 105 + 35;
+  }
+  const counters: Record<GraphNode["type"], number> = { repository: 0, folder: 0, file: 0, symbol: 0 };
+  return graphNodes.map((node) => {
+    const index = counters[node.type]++;
+    const color = node.type === "file"
+      ? "#56c7e8"
+      : node.symbolKind === "class"
+        ? "#a78bfa"
+        : node.symbolKind === "function"
+          ? "#64d6af"
+          : node.type === "folder"
+            ? "#f2b86b"
+            : "#ef746f";
+    const selected = node.id === selectedNodeId;
+    return {
+      id: node.id,
+      data: { label: node.label, filePath: node.filePath, graphNode: node },
+      position: { x: (index % columns[node.type]) * 190, y: (offsets.get(node.type) ?? 0) + Math.floor(index / columns[node.type]) * 105 },
+      style: {
+        width: 160,
+        borderColor: selected || node.filePath === selectedPath ? color : "#314154",
+        borderWidth: selected ? 2 : 1,
+        background: `${color}12`,
+        color: selected ? "#ffffff" : "#d7e1ea",
+        boxShadow: selected ? `0 0 0 3px ${color}22` : "none"
+      }
+    };
+  });
+}
+
+function toFlowEdge(edge: GraphEdge): Edge {
+  const relationship = edge.label === "calls" ? "calls" : edge.type;
+  const stroke = relationship === "calls" ? "#56c7e8" : relationship === "imports" ? "#f2b86b" : "#64778b";
+  return {
+    id: edge.id,
+    source: edge.source,
+    target: edge.target,
+    label: relationship === "contains" ? undefined : relationship,
+    animated: relationship === "calls",
+    style: { stroke, strokeDasharray: relationship === "imports" ? "2 5" : relationship === "contains" ? "7 5" : undefined },
+    labelStyle: { fill: stroke, fontSize: 9 },
+    markerEnd: { type: MarkerType.ArrowClosed, color: stroke }
+  };
 }
 
 function NodeInspector({

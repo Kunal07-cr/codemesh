@@ -76,6 +76,10 @@ The preceding UI release and its responsive follow-up changed these files:
 
 `RepositoryAssistant.tsx` was also changed in the UI release for contextual graph actions. It is listed above with its subsequent accuracy changes.
 
+### Requested design restoration
+
+The subsequent user request restores the design preceding the overhaul (`b81aede1a69ad3bb3a5447d1f797bdf5f90386d8`) while retaining the new functionality. `LandingPage.tsx` and `landing.css` match that saved version. The new global color, typography, page-transition and background overrides were removed from `motion.css`; it now styles only added tools and the keyboard skip link. `WorkspacePage.tsx` uses the original graph appearance by default, with an optional connection explorer. Source-grounded answers, source navigation, import safety, evaluation runs, existing workflows and collaboration remain available. The graph-first `ArchitectureHero.tsx` is retained in source but is not the active landing experience.
+
 Existing graphs, workflow pages, imports, collaboration, tasks, dataset-only answers and patch review remain available. Combined-scope synthetic comparisons are separately labeled and are never current-project evidence.
 
 ## Measurement
