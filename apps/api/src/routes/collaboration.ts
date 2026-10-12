@@ -1,11 +1,12 @@
 import { Router } from "express";
 import { z } from "zod";
 import { applyWholeFilePatch } from "@codemesh/code-intelligence";
+import { taskSchema } from "@codemesh/shared";
 import type { AppConfig } from "../config.js";
 import type { JsonStore } from "../db/store.js";
 import { badRequest, conflict, failedDependency, notFound } from "../errors.js";
 import { requireProjectPermission } from "../services/security.js";
-import { asyncHandler, ok } from "./helpers.js";
+import { asyncHandler, ok, parseBody } from "./helpers.js";
 
 export function collaborationRoutes(config: AppConfig, store: JsonStore) {
   const router = Router();
@@ -66,6 +67,19 @@ export function collaborationRoutes(config: AppConfig, store: JsonStore) {
     }
   );
 
+  router.put("/:projectId/tasks/:taskId/work", requireProjectPermission(store, "task.manage"), asyncHandler(async (req, res) => {
+    const input = parseBody(taskSchema.shape.work.unwrap().pick({ paths: true, patchIds: true, checks: true, notes: true }).extend({ expectedVersion: z.number().int().nonnegative() }).strict(), req);
+    const projectId = String(req.params.projectId);
+    if (input.paths.some((path) => !store.getFile(projectId, path))) throw badRequest("A linked file is not in this project.");
+    if (input.patchIds.some((id) => !store.getPatch(projectId, id))) throw badRequest("A linked patch is not in this project.");
+    if (new Set(input.checks.map((check) => check.id)).size !== input.checks.length) throw badRequest("Verification check IDs must be unique.");
+    const { expectedVersion, ...work } = input;
+    const saved = await store.saveTaskWork(projectId, String(req.params.taskId), req.auth!.user.id, expectedVersion, work);
+    if (!saved) throw notFound("Task not found.");
+    if ("conflict" in saved) throw conflict("Task work changed. Reload before saving your changes.");
+    ok(res, saved.task);
+  }));
+
   router.post(
     "/:projectId/tasks",
     requireProjectPermission(store, "task.manage"),
@@ -122,7 +136,9 @@ export function collaborationRoutes(config: AppConfig, store: JsonStore) {
       const projectId = String(req.params.projectId);
       const patch = store.getPatch(projectId, String(req.params.patchId));
       if (!patch) throw notFound("Patch not found.");
+      if (patch.status !== "proposed") throw conflict("Only proposed patches can be applied.");
       const applied: string[] = [];
+      const prepared: Array<{ path: string; content: string }> = [];
       for (const file of patch.files) {
         const doc = store.getWorkspaceDoc(projectId, patch.workspaceId, file.path);
         if (!doc) throw notFound(`Workspace file missing: ${file.path}`);
@@ -132,9 +148,11 @@ export function collaborationRoutes(config: AppConfig, store: JsonStore) {
           await store.savePatch(patch);
           throw conflict(result.reason, { path: file.path });
         }
-        await store.upsertWorkspaceDoc(projectId, patch.workspaceId, file.path, result.content);
+        prepared.push({ path: file.path, content: result.content });
         applied.push(file.path);
       }
+      // Validate every file before writing any: stale multi-file patches must not partly apply.
+      for (const file of prepared) await store.upsertWorkspaceDoc(projectId, patch.workspaceId, file.path, file.content);
       patch.status = "applied";
       patch.executedVerification = [];
       await store.savePatch(patch);
@@ -157,6 +175,7 @@ export function collaborationRoutes(config: AppConfig, store: JsonStore) {
     asyncHandler(async (req, res) => {
       const patch = store.getPatch(String(req.params.projectId), String(req.params.patchId));
       if (!patch) throw notFound("Patch not found.");
+      if (!["proposed", "stale"].includes(patch.status)) throw conflict("Only proposed or stale patches can be rejected.");
       patch.status = "rejected";
       await store.savePatch(patch);
       ok(res, patch);

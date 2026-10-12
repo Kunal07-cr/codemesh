@@ -132,6 +132,13 @@ export function aiRoutes(config: AppConfig, store: JsonStore, assistantDataset: 
     })
   );
 
+  router.post("/:projectId/ai/conversations/:conversationId/fork", requireProjectPermission(store, "ai.query"), assistantLimiter, asyncHandler(async (req, res) => {
+    const input = parseBody(z.object({ answerId: z.string().min(1).max(100), title: z.string().trim().min(2).max(64) }).strict(), req);
+    const branch = await store.forkAssistantConversation(String(req.params.projectId), req.auth!.user.id, String(req.params.conversationId), input.answerId, input.title);
+    if (!branch) throw notFound("Owned branch point not found or snapshot exceeds 200 messages / 1 MB.");
+    ok(res, branch);
+  }));
+
   router.post(
     "/:projectId/ai/stream",
     requireProjectPermission(store, "ai.query"),

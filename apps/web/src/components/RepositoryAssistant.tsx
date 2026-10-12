@@ -25,6 +25,9 @@ import { ApiClientError, api, jsonBody, streamApi } from "../lib/api";
 import { AssistantFeedback } from "./AssistantFeedback";
 import { AssistantSourceAnswer } from "./AssistantSourceAnswer";
 import { useAuth } from "../lib/auth";
+import { useComposerDraft } from "../lib/useComposerDraft";
+import { AssistantBranches, type BranchConversation, type BranchDetail } from "./AssistantBranches";
+import "../workspace-tools.css";
 
 type AssistantMessage = {
   id: string;
@@ -51,12 +54,7 @@ type AskVariables = {
   history: AiAskRequest["conversation"];
 };
 
-type AssistantConversation = {
-  id: string;
-  title: string;
-  createdAt: string;
-  updatedAt: string;
-};
+type AssistantConversation = BranchConversation;
 
 type AssistantMessageRecord = {
   id: string;
@@ -107,7 +105,7 @@ function RepositoryAssistantSession({ projectId, activeFilePath, activeEntity, c
   const queryClient = useQueryClient();
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const seededPromptRef = useRef("");
-  const [prompt, setPrompt] = useState("");
+  const { text: prompt, setText: setPrompt, saved: promptSaved } = useComposerDraft({ userId, projectId, workspaceId: "main", kind: "assistant", path: "question" });
   const [mode, setMode] = useState<AiAskRequest["mode"]>("explain");
   const [retrievalMode, setRetrievalMode] = useState<AiAskRequest["retrievalMode"]>("graph");
   const [knowledgeScope, setKnowledgeScope] = useState<NonNullable<AiAskRequest["knowledgeScope"]>>("combined");
@@ -195,14 +193,14 @@ function RepositoryAssistantSession({ projectId, activeFilePath, activeEntity, c
         { id: crypto.randomUUID(), role: "user", content: question },
         { id: streamId, role: "assistant", content: "" }
       ]);
-      setPrompt("");
       window.setTimeout(scrollToBottom, 0);
     },
-    onSuccess: ({ result, streamId }) => {
+    onSuccess: ({ result, streamId }, variables) => {
       setMessages((current) => current.map((message) => message.id === streamId
         ? { id: result.id, role: "assistant", content: result.answer, result }
         : message));
       void queryClient.invalidateQueries({ queryKey: ["assistant-conversations", projectId] });
+      setPrompt((current) => current.trim() === variables.question ? "" : current);
       window.setTimeout(scrollToBottom, 0);
     },
     onError: (error, variables) => {
@@ -293,6 +291,14 @@ function RepositoryAssistantSession({ projectId, activeFilePath, activeEntity, c
     } finally {
       setLoadingConversation(false);
     }
+  }
+
+  function openBranch(detail: BranchDetail) {
+    setConversationId(detail.conversation.id);
+    setMessages(detail.messages);
+    setPatchError("");
+    setPatchStates({});
+    window.setTimeout(scrollToBottom, 0);
   }
 
   function handleComposerKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {
@@ -412,6 +418,7 @@ function RepositoryAssistantSession({ projectId, activeFilePath, activeEntity, c
         </div>
       </header>
 
+      <AssistantBranches key={conversationId ?? "new"} projectId={projectId} conversationId={conversationId} conversations={conversations.data?.conversations ?? []} answerId={[...messages].reverse().find((message) => message.result)?.result?.id} busy={ask.isPending || loadingConversation} onOpen={openBranch} />
       <div ref={scrollRef} className="cm-scrollbar min-h-0 flex-1 space-y-3 overflow-y-auto p-3">
         {messages.length === 0 && (
           <div className="flex h-full min-h-36 flex-col items-center justify-center text-center">
@@ -542,6 +549,8 @@ function RepositoryAssistantSession({ projectId, activeFilePath, activeEntity, c
       </div>
 
       <form className="border-t border-line p-3" onSubmit={submit}>
+        {initialPrompt && prompt !== initialPrompt && <button type="button" className="mb-2 text-xs text-mint" disabled={ask.isPending} onClick={() => setPrompt(initialPrompt.slice(0, 4000))}>Use linked task or source context</button>}
+        {!promptSaved && <p className="mb-1 text-xs text-amber" role="status">Device storage unavailable. Keep this page open to retain your unsent question.</p>}
         <textarea
           className="h-20 w-full resize-none rounded border border-line bg-ink px-3 py-2 text-sm text-white outline-none placeholder:text-steel focus:border-mint"
           value={prompt}

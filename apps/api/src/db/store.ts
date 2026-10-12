@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs";
+import { createHash } from "node:crypto";
 import {
   analyzeRepository,
   buildSampleRepoFiles,
@@ -137,6 +138,8 @@ export type AssistantConversation = {
   title: string;
   createdAt: string;
   updatedAt: string;
+  parentId?: string;
+  forkAnswerId?: string;
 };
 
 export type AssistantMessageRecord = {
@@ -904,6 +907,16 @@ export class JsonStore {
     return task;
   }
 
+  async saveTaskWork(projectId: string, taskId: string, userId: string, expectedVersion: number, input: Pick<NonNullable<ProjectTask["work"]>, "paths" | "patchIds" | "checks" | "notes">) {
+    const task = this.state.tasks.find((item) => item.projectId === projectId && item.id === taskId);
+    if (!task) return null;
+    if ((task.work?.version ?? 0) !== expectedVersion) return { conflict: true as const };
+    task.work = { ...input, paths: [...new Set(input.paths)], patchIds: [...new Set(input.patchIds)], revision: this.getProject(projectId)!.commitSha, version: expectedVersion + 1, updatedBy: userId, updatedAt: new Date().toISOString() };
+    await this.recordAudit({ projectId, userId, action: "task.work_saved", metadata: { taskId, paths: task.work.paths, checks: task.work.checks.length } });
+    await this.save();
+    return { task };
+  }
+
   async deleteTask(projectId: string, taskId: string) {
     const index = this.state.tasks.findIndex((task) => task.projectId === projectId && task.id === taskId);
     if (index < 0) return false;
@@ -1017,6 +1030,24 @@ export class JsonStore {
     return conversation;
   }
 
+  async forkAssistantConversation(projectId: string, userId: string, parentId: string, answerId: string, title: string) {
+    const parent = this.getAssistantConversation(projectId, parentId, userId);
+    if (!parent) return null;
+    const end = parent.messages.findIndex((message) => message.role === "assistant" && message.result?.id === answerId);
+    if (end < 0 || end >= 200) return null;
+    if (JSON.stringify(parent.messages.slice(0, end + 1)).length > 1_000_000) return null;
+    const now = new Date().toISOString();
+    const conversation: AssistantConversation = { id: crypto.randomUUID(), projectId, userId, title, parentId, forkAnswerId: answerId, createdAt: now, updatedAt: now };
+    // Copy a bounded snapshot; later turns in either branch cannot alter the other.
+    const messages = parent.messages.slice(0, end + 1).map((message) => ({ ...structuredClone(message), id: crypto.randomUUID(), conversationId: conversation.id }));
+    this.state.assistantConversations ??= [];
+    this.state.assistantMessages ??= [];
+    this.state.assistantConversations.unshift(conversation);
+    this.state.assistantMessages.push(...messages);
+    await this.save();
+    return { conversation, messages };
+  }
+
   async addAssistantMessage(conversationId: string, role: AssistantMessageRecord["role"], content: string, result?: AiAnswer) {
     const message: AssistantMessageRecord = { id: crypto.randomUUID(), conversationId, role, content, result, createdAt: new Date().toISOString() };
     this.state.assistantMessages ??= [];
@@ -1071,7 +1102,11 @@ export class JsonStore {
   }
 
   listAnnotations(projectId: string) {
-    return this.state.annotations.filter((annotation) => annotation.projectId === projectId);
+    return this.state.annotations.filter((annotation) => annotation.projectId === projectId).map((annotation) => {
+      const content = this.getWorkspaceDoc(projectId, "main", annotation.filePath)?.content ?? this.getFile(projectId, annotation.filePath)?.content;
+      const revision = content === undefined ? "missing" : `workspace-sha256:${createHash("sha256").update(content).digest("hex")}`;
+      return { ...annotation, outdated: annotation.outdated || (annotation.sourceRevision.startsWith("workspace-sha256:") ? annotation.sourceRevision !== revision : annotation.sourceRevision !== this.getProject(projectId)?.commitSha) };
+    });
   }
 
   async createAnnotation(input: {
@@ -1082,9 +1117,11 @@ export class JsonStore {
     body: string;
     authorId: string;
     sourceRevision: string;
+    kind?: CodeAnnotation["kind"];
   }) {
     const annotation: CodeAnnotation = {
       ...input,
+      sourceRevision: `workspace-sha256:${createHash("sha256").update(this.getWorkspaceDoc(input.projectId, "main", input.filePath)?.content ?? this.getFile(input.projectId, input.filePath)?.content ?? "").digest("hex")}`,
       id: crypto.randomUUID(),
       outdated: false,
       createdAt: new Date().toISOString()
@@ -1096,6 +1133,15 @@ export class JsonStore {
       action: "annotation.created",
       metadata: { annotationId: annotation.id, filePath: input.filePath, symbolId: input.symbolId }
     });
+    await this.save();
+    return annotation;
+  }
+
+  async resolveAnnotation(projectId: string, annotationId: string, userId: string, resolved: boolean, canManage = false) {
+    const annotation = this.state.annotations.find((item) => item.projectId === projectId && item.id === annotationId);
+    if (!annotation || (annotation.authorId !== userId && !canManage)) return null;
+    annotation.resolved = resolved;
+    await this.recordAudit({ projectId, userId, action: "annotation.resolved", metadata: { annotationId, resolved } });
     await this.save();
     return annotation;
   }

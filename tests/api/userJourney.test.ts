@@ -5,6 +5,7 @@ import request from "supertest";
 import { strToU8, zipSync } from "fflate";
 import { io, type Socket } from "socket.io-client";
 import * as Y from "yjs";
+import { hashContent } from "@codemesh/code-intelligence";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createApp } from "../../apps/api/src/server";
 
@@ -39,6 +40,104 @@ describe("authenticated end-to-end HTTP and realtime journeys", () => {
     return { agent, cookie: cookies.map((cookie) => cookie.split(";")[0]).join("; "), userId: response.body.data.user.id };
   }
   const editRequest = { mode: "propose", retrievalMode: "graph", knowledgeScope: "repository", includeWorkspace: true, activeFilePath: "src/main.ts", conversation: [], question: "In src/main.ts replace `alpha` with `beta`." };
+
+  async function connect(cookie: string) {
+    const address = runtime.server.address();
+    if (!address || typeof address === "string") throw new Error("No TCP address");
+    const socket = io(`http://127.0.0.1:${address.port}`, { transports: ["websocket"], extraHeaders: { cookie }, reconnection: false, timeout: 3000 });
+    sockets.push(socket);
+    await new Promise<void>((resolve, reject) => { socket.once("connect", resolve); socket.once("connect_error", reject); });
+    return socket;
+  }
+
+  it("forks immutable owned conversation snapshots without sharing future turns", async () => {
+    const { agent, userId } = await login();
+    const { agent: viewer } = await login("viewer@codemesh.dev");
+    const base = "/api/projects/project-sample-taskpilot/ai/conversations";
+    const parent = await runtime.store.createAssistantConversation("project-sample-taskpilot", userId, "Original approach");
+    const stream = await agent.post("/api/projects/project-sample-taskpilot/ai/stream").send({ question: "Where is authentication handled?", mode: "explain", retrievalMode: "graph", knowledgeScope: "repository", includeWorkspace: true, conversation: [], conversationId: parent.id }).expect(200);
+    const result = JSON.parse(stream.text.split("\n\n").find((event) => event.startsWith("event: result\n"))!.split("\ndata: ")[1]!);
+    const requestBody = { answerId: result.result.id, title: "Alternative approach" };
+    await viewer.post(`${base}/${parent.id}/fork`).send(requestBody).expect(404);
+    await agent.post(`${base}/${parent.id}/fork`).send({ ...requestBody, title: "x" }).expect(422);
+    await agent.post(`${base}/${parent.id}/fork`).send({ ...requestBody, answerId: "missing" }).expect(404);
+    const branch = await agent.post(`${base}/${parent.id}/fork`).send(requestBody).expect(200);
+    expect(branch.body.data.conversation.parentId).toBe(parent.id);
+    expect(branch.body.data.messages).toHaveLength(2);
+    await runtime.store.addAssistantMessage(parent.id, "user", "Only in parent");
+    await runtime.store.addAssistantMessage(branch.body.data.conversation.id, "user", "Only in branch");
+    const left = await agent.get(`${base}/${parent.id}`).expect(200), right = await agent.get(`${base}/${branch.body.data.conversation.id}`).expect(200);
+    expect(left.body.data.messages.map((item: { content: string }) => item.content)).not.toContain("Only in branch");
+    expect(right.body.data.messages.map((item: { content: string }) => item.content)).not.toContain("Only in parent");
+    await viewer.get(`${base}/${branch.body.data.conversation.id}`).expect(404);
+    await runtime.store.addAssistantMessage(parent.id, "user", "x".repeat(1_000_001));
+    await runtime.store.addAssistantMessage(parent.id, "assistant", "Large snapshot", { ...result.result, id: "large-answer" });
+    await agent.post(`${base}/${parent.id}/fork`).send({ ...requestBody, answerId: "large-answer" }).expect(404);
+    await agent.delete(`${base}/${parent.id}`).expect(200);
+    expect((await agent.get(`${base}/${branch.body.data.conversation.id}`).expect(200)).body.data.messages).toHaveLength(3);
+  });
+
+  it("persists task-linked code and manual checks with project and version guards", async () => {
+    const { agent } = await login();
+    const { agent: viewer } = await login("viewer@codemesh.dev");
+    const base = "/api/projects/project-sample-taskpilot";
+    const task = await agent.post(`${base}/tasks`).send({ title: "Review authentication" }).expect(200);
+    const work = { expectedVersion: 0, paths: ["src/auth/session.ts"], patchIds: [], checks: [{ id: "manual-1", label: "Session expiry", status: "pending", note: "" }], notes: "Inspect boundary conditions" };
+    await viewer.put(`${base}/tasks/${task.body.data.id}/work`).send(work).expect(403);
+    await agent.put(`${base}/tasks/${task.body.data.id}/work`).send({ ...work, paths: ["../private.ts"] }).expect(400);
+    await agent.put(`${base}/tasks/${task.body.data.id}/work`).send({ ...work, patchIds: ["another-project-patch"] }).expect(400);
+    const saved = await agent.put(`${base}/tasks/${task.body.data.id}/work`).send(work).expect(200);
+    expect(saved.body.data.work).toMatchObject({ paths: work.paths, version: 1, checks: work.checks });
+    expect(saved.body.data.work).not.toHaveProperty("expectedVersion");
+    await agent.put(`${base}/tasks/${task.body.data.id}/work`).send(work).expect(409);
+    const manual = await agent.put(`${base}/tasks/${task.body.data.id}/work`).send({ ...work, expectedVersion: 1, checks: [{ ...work.checks[0], status: "passed", note: "Observed manually" }] }).expect(200);
+    expect(manual.body.data.work.version).toBe(2);
+    expect(runtime.store.listTasks("project-sample-taskpilot").find((item) => item.id === task.body.data.id)?.work?.checks[0]?.note).toBe("Observed manually");
+    await agent.put(`${base}/tasks/missing/work`).send(work).expect(404);
+  });
+
+  it("recovers code only against the current server content and tracks annotation staleness", async () => {
+    const { agent, cookie } = await login();
+    const { cookie: viewerCookie } = await login("viewer@codemesh.dev");
+    const projectId = "project-sample-taskpilot", workspaceId = "main", path = "src/auth/session.ts";
+    const socket = await connect(cookie), viewer = await connect(viewerCookie);
+    await socket.timeout(3000).emitWithAck("workspace:join", { projectId, workspaceId });
+    const initial = runtime.store.getWorkspaceDoc(projectId, workspaceId, path)!.content;
+    const recovered = `${initial}\n// recovered local draft\n`;
+    expect(await viewer.timeout(3000).emitWithAck("doc:replace", { projectId, workspaceId, path, expectedContent: initial, content: recovered })).toMatchObject({ ok: false });
+    expect(await socket.timeout(3000).emitWithAck("doc:replace", { projectId, workspaceId, path, expectedContent: "older version", content: recovered })).toMatchObject({ ok: false });
+    expect(runtime.store.getWorkspaceDoc(projectId, workspaceId, path)!.content).toBe(initial);
+    expect(await socket.timeout(3000).emitWithAck("doc:open", { projectId, workspaceId, path: "missing.ts" })).toMatchObject({ ok: false });
+    expect(await socket.timeout(3000).emitWithAck("doc:replace", { projectId, workspaceId, path, expectedContent: initial, content: recovered })).toMatchObject({ ok: true });
+    const added = await socket.timeout(3000).emitWithAck("annotation:create", { projectId, workspaceId, filePath: path, range: { startLine: 1, startColumn: 1, endLine: 1, endColumn: 1 }, body: "Expiry is checked at this boundary", kind: "decision", sourceRevision: "workspace" });
+    expect(added).toMatchObject({ ok: true, annotation: { kind: "decision" } });
+    expect(await viewer.timeout(3000).emitWithAck("annotation:resolve", { projectId, workspaceId, annotationId: added.annotation.id, resolved: true })).toMatchObject({ ok: false });
+    expect(await socket.timeout(3000).emitWithAck("annotation:resolve", { projectId, workspaceId, annotationId: added.annotation.id, resolved: true })).toMatchObject({ ok: true });
+    expect(runtime.store.listAnnotations(projectId)[0]).toMatchObject({ resolved: true, outdated: false });
+    const changed = recovered + "// teammate changed this\n";
+    await runtime.store.upsertWorkspaceDoc(projectId, workspaceId, path, changed);
+    expect(runtime.store.listAnnotations(projectId)[0]?.outdated).toBe(true);
+    const opened = await socket.timeout(3000).emitWithAck("doc:open", { projectId, workspaceId, path });
+    const doc = new Y.Doc(); try { Y.applyUpdate(doc, Uint8Array.from(opened.update)); expect(doc.getText("content").toString()).toBe(changed); } finally { doc.destroy(); }
+    expect(await socket.timeout(3000).emitWithAck("doc:replace", { projectId, workspaceId, path, expectedContent: recovered, content: "conflicting local copy" })).toMatchObject({ ok: false });
+    const workspace = await agent.get(`/api/projects/${projectId}/workspace`).expect(200);
+    expect(workspace.body.data.annotations[0].outdated).toBe(true);
+    expect(await socket.timeout(3000).emitWithAck("annotation:create", { projectId, workspaceId, filePath: path, range: { startLine: 1, startColumn: 1, endLine: 999999, endColumn: 1 }, body: "Invalid source", sourceRevision: "workspace" })).toMatchObject({ ok: false });
+    expect(await socket.timeout(3000).emitWithAck("annotation:create", null)).toMatchObject({ ok: false });
+  });
+
+  it("does not partly apply a stale multi-file suggestion and prevents repeated review", async () => {
+    const { agent } = await login();
+    const projectId = "project-sample-taskpilot", workspaceId = "main";
+    const paths = ["src/auth/session.ts", "src/server.ts"];
+    const originals = paths.map((path) => runtime.store.getWorkspaceDoc(projectId, workspaceId, path)!.content);
+    const patch = { id: "multi-stale", projectId, workspaceId, title: "Two-file correction", summary: "Controlled test patch", files: paths.map((path, index) => ({ path, baseContent: index === 0 ? originals[index]! : "stale base", proposedContent: "changed", baseHash: hashContent(index === 0 ? originals[index]! : "stale base") })), suggestedVerification: [], executedVerification: [], status: "proposed" as const, createdAt: new Date().toISOString() };
+    await runtime.store.savePatch(patch);
+    await agent.post(`/api/projects/${projectId}/patches/${patch.id}/apply`).send({}).expect(409);
+    expect(paths.map((path) => runtime.store.getWorkspaceDoc(projectId, workspaceId, path)!.content)).toEqual(originals);
+    await agent.post(`/api/projects/${projectId}/patches/${patch.id}/reject`).send({}).expect(200);
+    await agent.post(`/api/projects/${projectId}/patches/${patch.id}/apply`).send({}).expect(409);
+  });
 
   it("reads coherent proof snapshots without exposing private projects to other identities", async () => {
     const sample = await request(runtime.server).get("/api/projects/project-sample-taskpilot/proof").expect(200);

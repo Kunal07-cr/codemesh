@@ -4,6 +4,7 @@ import { Redis } from "ioredis";
 import { createAdapter } from "@socket.io/redis-adapter";
 import { Server } from "socket.io";
 import * as Y from "yjs";
+import { z } from "zod";
 import { hasPermission, permissionsForRole, type ProjectRole } from "@codemesh/shared";
 import type { AppConfig } from "../config.js";
 import type { JsonStore } from "../db/store.js";
@@ -107,6 +108,10 @@ export async function attachRealtime(server: HttpServer, config: AppConfig, stor
           callback({ ok: false, error: "Not authorized." });
           return;
         }
+        if (payload.workspaceId !== "main" || !store.getFile(payload.projectId, payload.path)) {
+          callback({ ok: false, error: "Workspace file not found." });
+          return;
+        }
         const doc = ensureDoc(docs, store, payload.projectId, payload.workspaceId, payload.path);
         callback({
           ok: true,
@@ -127,9 +132,13 @@ export async function attachRealtime(server: HttpServer, config: AppConfig, stor
           callback({ ok: false, error: "Editing is not permitted for this role." });
           return;
         }
+        if (payload.workspaceId !== "main" || !store.getFile(payload.projectId, payload.path) || !Array.isArray(payload.update) || payload.update.length > 2_000_000) {
+          callback({ ok: false, error: "Invalid workspace update." });
+          return;
+        }
         const doc = ensureDoc(docs, store, payload.projectId, payload.workspaceId, payload.path);
         const update = Uint8Array.from(payload.update);
-        Y.applyUpdate(doc, update, socket.id);
+        try { Y.applyUpdate(doc, update, socket.id); } catch { callback({ ok: false, error: "Invalid document update." }); return; }
         const text = doc.getText("content").toString();
         await store.upsertWorkspaceDoc(payload.projectId, payload.workspaceId, payload.path, text);
         socket
@@ -138,6 +147,23 @@ export async function attachRealtime(server: HttpServer, config: AppConfig, stor
         callback({ ok: true });
       }
     );
+
+    socket.on("doc:replace", async (payload: unknown, callback: (response: unknown) => void) => {
+      const parsed = z.object({ projectId: z.string(), workspaceId: z.literal("main"), path: z.string(), expectedContent: z.string().max(500_000), content: z.string().max(500_000) }).strict().safeParse(payload);
+      if (!parsed.success) { callback({ ok: false, error: "Invalid draft recovery request." }); return; }
+      const input = parsed.data;
+      const role = getRole(store, input.projectId, socket.data.user.id);
+      if (!role || !hasPermission(role, "workspace.edit")) { callback({ ok: false, error: "Editing is not permitted for this role." }); return; }
+      if (!store.getFile(input.projectId, input.path)) { callback({ ok: false, error: "Workspace file not found." }); return; }
+      const doc = ensureDoc(docs, store, input.projectId, input.workspaceId, input.path);
+      const text = doc.getText("content");
+      if (text.toString() !== input.expectedContent) { callback({ ok: false, error: "The server file changed. Compare the latest version before restoring." }); return; }
+      doc.transact(() => { text.delete(0, text.length); text.insert(0, input.content); }, "draft-recovery");
+      await store.upsertWorkspaceDoc(input.projectId, input.workspaceId, input.path, input.content);
+      const update = Array.from(Y.encodeStateAsUpdate(doc));
+      io.to(roomName(input.projectId, input.workspaceId)).emit("doc:restored", { path: input.path, update });
+      callback({ ok: true, update });
+    });
 
     socket.on(
       "doc:restore",
@@ -181,6 +207,9 @@ export async function attachRealtime(server: HttpServer, config: AppConfig, stor
           callback({ ok: false, error: "Chat is not permitted for this role." });
           return;
         }
+        if (payload.workspaceId !== "main" || typeof payload.body !== "string" || payload.body.trim().length === 0 || payload.body.length > 4000) {
+          callback({ ok: false, error: "Chat messages must contain 1 to 4000 characters." }); return;
+        }
         const message = await store.addWorkspaceChat(payload.projectId, payload.workspaceId, socket.data.user.id, payload.body);
         io.to(roomName(payload.projectId, payload.workspaceId)).emit("workspace:chat:message", message);
         callback({ ok: true, message });
@@ -201,14 +230,15 @@ export async function attachRealtime(server: HttpServer, config: AppConfig, stor
         },
         callback: (response: unknown) => void
       ) => {
-        const role = getRole(store, payload.projectId, socket.data.user.id);
-        if (!role || !hasPermission(role, "project.read")) {
-          callback({ ok: false, error: "Not authorized to annotate this project." });
-          return;
-        }
-        const body = payload.body.trim();
-        if (body.length < 2 || body.length > 1000) {
-          callback({ ok: false, error: "Annotation must contain between 2 and 1000 characters." });
+        const parsed = z.object({ projectId: z.string(), workspaceId: z.literal("main"), filePath: z.string(), symbolId: z.string().optional(), range: z.object({ startLine: z.number().int().positive(), endLine: z.number().int().positive(), startColumn: z.number().int().positive(), endColumn: z.number().int().positive() }), body: z.string().trim().min(2).max(1000), sourceRevision: z.string().max(200), kind: z.enum(["comment", "question", "decision"]).optional() }).strict().safeParse(payload);
+        if (!parsed.success) { callback({ ok: false, error: "Invalid annotation." }); return; }
+        const input = parsed.data;
+        const role = getRole(store, input.projectId, socket.data.user.id);
+        if (!role || !hasPermission(role, "project.read")) { callback({ ok: false, error: "Not authorized to annotate this project." }); return; }
+        const file = store.getWorkspaceDoc(input.projectId, "main", input.filePath) ?? store.getFile(input.projectId, input.filePath);
+        const knownSymbol = !input.symbolId || store.getIndex(input.projectId).graph.nodes.some((node) => node.filePath === input.filePath && node.symbolId === input.symbolId);
+        if (!file || !knownSymbol || input.range.endLine < input.range.startLine || input.range.endLine > file.content.split("\n").length) {
+          callback({ ok: false, error: "Annotation source range or symbol does not exist." });
           return;
         }
         const annotation = await store.createAnnotation({
@@ -216,7 +246,8 @@ export async function attachRealtime(server: HttpServer, config: AppConfig, stor
           filePath: payload.filePath,
           symbolId: payload.symbolId,
           range: payload.range,
-          body,
+          body: input.body,
+          kind: input.kind,
           authorId: socket.data.user.id,
           sourceRevision: payload.sourceRevision
         });
@@ -224,6 +255,17 @@ export async function attachRealtime(server: HttpServer, config: AppConfig, stor
         callback({ ok: true, annotation });
       }
     );
+
+    socket.on("annotation:resolve", async (payload: unknown, callback: (response: unknown) => void) => {
+      const parsed = z.object({ projectId: z.string(), workspaceId: z.literal("main"), annotationId: z.string(), resolved: z.boolean() }).strict().safeParse(payload);
+      if (!parsed.success) { callback({ ok: false, error: "Invalid annotation action." }); return; }
+      const input = parsed.data, role = getRole(store, input.projectId, socket.data.user.id);
+      if (!role || !hasPermission(role, "project.read")) { callback({ ok: false, error: "Not authorized." }); return; }
+      const annotation = await store.resolveAnnotation(input.projectId, input.annotationId, socket.data.user.id, input.resolved, role === "owner" || role === "maintainer");
+      if (!annotation) { callback({ ok: false, error: "Only the author or a maintainer can resolve this annotation." }); return; }
+      io.to(roomName(input.projectId, input.workspaceId)).emit("annotation:created", annotation);
+      callback({ ok: true });
+    });
 
     socket.on(
       "annotation:delete",
@@ -268,7 +310,12 @@ export async function attachRealtime(server: HttpServer, config: AppConfig, stor
 function ensureDoc(docs: Map<DocKey, Y.Doc>, store: JsonStore, projectId: string, workspaceId: string, filePath: string) {
   const key: DocKey = `${projectId}:${workspaceId}:${filePath}`;
   const existing = docs.get(key);
-  if (existing) return existing;
+  if (existing) {
+    const saved = store.getWorkspaceDoc(projectId, workspaceId, filePath)?.content ?? store.getFile(projectId, filePath)?.content ?? "";
+    const text = existing.getText("content");
+    if (text.toString() !== saved) existing.transact(() => { text.delete(0, text.length); text.insert(0, saved); }, "external-patch");
+    return existing;
+  }
   const doc = new Y.Doc();
   const text = doc.getText("content");
   const workspaceDoc = store.getWorkspaceDoc(projectId, workspaceId, filePath);

@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useMemo, useState, type PropsWith
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { LoginInput, PublicUser, RegisterInput } from "@codemesh/shared";
 import { api, AUTH_EXPIRED_EVENT, jsonBody } from "./api";
+import { clearUserDrafts } from "./workspaceDrafts";
 
 type AuthContextValue = {
   user: PublicUser | null;
@@ -52,6 +53,8 @@ export function AuthProvider({ children }: PropsWithChildren) {
   const logoutMutation = useMutation({
     mutationFn: () => api<{ ok: boolean }>("/api/auth/logout", { method: "POST" }),
     onSettled: () => {
+      const userId = optimisticUser?.id ?? me.data?.user?.id;
+      if (userId) clearUserDrafts(localStorage, userId);
       setOptimisticUser(null);
       queryClient.clear();
     }

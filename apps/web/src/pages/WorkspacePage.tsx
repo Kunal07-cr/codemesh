@@ -3,7 +3,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 import Editor, { type OnMount } from "@monaco-editor/react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Background, Controls, MarkerType, MiniMap, ReactFlow, type Edge, type Node } from "@xyflow/react";
-import { Code2, Columns3, Download, FileSearch, GitPullRequest, History, Maximize2, MessageSquare, MessageSquareText, Minimize2, Network, PanelLeftClose, PanelLeftOpen, PanelRightClose, PanelRightOpen, Radio, RotateCcw, Search, Trash2, SlidersHorizontal, Save, X } from "lucide-react";
+import { Check, Code2, Columns3, Download, FileSearch, GitPullRequest, History, ListTodo, Maximize2, MessageSquare, MessageSquareText, Minimize2, Network, PanelLeftClose, PanelLeftOpen, PanelRightClose, PanelRightOpen, Radio, RotateCcw, Search, Trash2, SlidersHorizontal, Save, X } from "lucide-react";
 import { io, type Socket } from "socket.io-client";
 import * as Y from "yjs";
 import type {
@@ -25,6 +25,14 @@ import { API_URL, api } from "../lib/api";
 import { useAuth } from "../lib/auth";
 import { relativeTime } from "../lib/format";
 import { parseWorkspaceLayout, workspaceLayoutKey, workspacePresets, type WorkspaceLayout } from "../lib/workspaceLayout";
+import { classifyDraft, draftKey, readDraft, writeDraft, type DraftScope, type LocalDraft } from "../lib/workspaceDrafts";
+import { annotationsForNode, nodeAtLine, parsePinnedPaths } from "../lib/workspaceNavigation";
+import { useComposerDraft } from "../lib/useComposerDraft";
+import { WorkspaceFileTree, WorkspaceTabs } from "../components/WorkspaceNavigation";
+import { WorkspaceDiff } from "../components/WorkspaceDiff";
+import { InlineCopilot } from "../components/InlineCopilot";
+import { TaskWorkspace } from "../components/TaskWorkspace";
+import "../workspace-tools.css";
 import "../lib/monaco";
 
 type WorkspacePayload = {
@@ -50,6 +58,12 @@ type ChatMessage = {
 
 export function WorkspacePage() {
   const { projectId = "" } = useParams();
+  const { user } = useAuth();
+  return <WorkspaceSession key={`${user?.id ?? "guest"}:${projectId}`} />;
+}
+
+function WorkspaceSession() {
+  const { projectId = "" } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const { user } = useAuth();
   const queryClient = useQueryClient();
@@ -68,6 +82,24 @@ export function WorkspacePage() {
   const [panelSizes, setPanelSizes] = useState(workspacePresets.explore);
   const [layoutMenuOpen, setLayoutMenuOpen] = useState(false);
   const [layoutStatus, setLayoutStatus] = useState("");
+  const [taskOpen, setTaskOpen] = useState(Boolean(searchParams.get("task")));
+  const [taskPrompt, setTaskPrompt] = useState("");
+  const [pinned, setPinned] = useState<string[]>([]);
+  const [saveStatus, setSaveStatus] = useState("Opening file");
+  const [docReady, setDocReady] = useState(false);
+  const [reloadDoc, setReloadDoc] = useState(0);
+  const [recovery, setRecovery] = useState<LocalDraft | null>(null);
+  const [compareDraft, setCompareDraft] = useState(false);
+  const [compared, setCompared] = useState(false);
+  const [recovering, setRecovering] = useState(false);
+  const [draftsEnabled, setDraftsEnabled] = useState(true);
+  const serverBaseRef = useRef("");
+  const pendingDrafts = useRef(new Map<string, LocalDraft>());
+  const contentRef = useRef("");
+  const writeSequence = useRef(0);
+  const sourceOrigin = useRef<"cursor" | "navigation">("navigation");
+  const cursorListener = useRef<{ dispose(): void } | null>(null);
+  const graphRef = useRef<RepositoryGraph | undefined>(undefined);
   const socketRef = useRef<Socket | null>(null);
   const docRef = useRef<Y.Doc | null>(null);
   const selectedPathRef = useRef(selectedPath);
@@ -79,11 +111,14 @@ export function WorkspacePage() {
   selectedPathRef.current = selectedPath;
 
   const workspace = useQuery({
-    queryKey: ["workspace", projectId],
+    queryKey: ["workspace", projectId, user?.id],
     queryFn: () => api<WorkspacePayload>(`/api/projects/${projectId}/workspace`),
     enabled: Boolean(user)
   });
   const data = workspace.data;
+  graphRef.current = data?.graph;
+  contentRef.current = content;
+  const draftScope: DraftScope = { userId: user?.id ?? "guest", projectId, workspaceId: data?.workspaceId ?? "main", kind: "code", path: selectedPath };
   const selectedDoc = data?.docs.find((doc) => doc.path === selectedPath);
   const canEdit = data?.permissions.includes("workspace.edit") ?? false;
   const focusMode = !filePanelOpen && !assistantPanelOpen;
@@ -91,6 +126,18 @@ export function WorkspacePage() {
     const needle = fileFilter.trim().toLowerCase();
     return data?.files.filter((file) => !needle || file.path.toLowerCase().includes(needle)) ?? [];
   }, [data?.files, fileFilter]);
+
+  useEffect(() => {
+    if (!data) return;
+    if (!data.files.some((file) => file.path === selectedPath)) setSelectedPath(data.files[0]?.path ?? "");
+    try { setPinned(parsePinnedPaths(localStorage.getItem(`codemesh-pins:${user?.id}:${projectId}`), data.files.map((file) => file.path))); } catch { setPinned([]); }
+  }, [data?.project.commitSha, data?.files, projectId, user?.id]);
+
+  function togglePin(path: string) {
+    const next = pinned.includes(path) ? pinned.filter((item) => item !== path) : [...pinned, path].slice(-12);
+    setPinned(next);
+    try { localStorage.setItem(`codemesh-pins:${user?.id}:${projectId}`, JSON.stringify(next)); } catch { setLayoutStatus("Pinned tabs could not be saved on this device"); }
+  }
 
   function applyLayout(layout: WorkspaceLayout, isCompact: boolean) {
     setPanelSizes(layout);
@@ -137,6 +184,8 @@ export function WorkspacePage() {
   }, [data, requestedLine, requestedPath]);
 
   function selectSource(path: string, line?: number) {
+    if (!data?.files.some((file) => file.path === path)) return;
+    sourceOrigin.current = "navigation";
     setSelectedPath(path);
     const next = new URLSearchParams(searchParams);
     next.set("path", path);
@@ -155,11 +204,13 @@ export function WorkspacePage() {
     const socket = io(API_URL, { withCredentials: true });
     socketRef.current = socket;
     socket.on("connect", () => {
-      setConnection("connected");
-      socket.emit("workspace:join", { projectId, workspaceId: data.workspaceId }, () => undefined);
+      socket.timeout(8000).emit("workspace:join", { projectId, workspaceId: data.workspaceId }, (error: Error | null, response: { ok: boolean; error?: string }) => {
+        if (error || !response?.ok) { setConnection("offline"); setSaveStatus(response?.error ?? "Workspace connection timed out"); return; }
+        setConnection("connected"); setReloadDoc((value) => value + 1);
+      });
     });
-    socket.on("disconnect", () => setConnection("reconnecting"));
-    socket.on("connect_error", (error) => setConnection(error.message));
+    socket.on("disconnect", () => { setConnection("reconnecting"); setDocReady(false); setSaveStatus("Reconnecting - local drafts only"); });
+    socket.on("connect_error", (error) => { setConnection("offline"); setDocReady(false); setSaveStatus(error.message); });
     socket.on("presence:joined", (payload: { user: { name: string } }) => {
       setPresence((current) => [...new Set([...current, payload.user.name])]);
     });
@@ -179,7 +230,9 @@ export function WorkspacePage() {
       if (payload.path !== selectedPathRef.current || !docRef.current) return;
       applyingRemote.current = true;
       Y.applyUpdate(docRef.current, Uint8Array.from(payload.update));
-      setContent(docRef.current.getText("content").toString());
+      const remote = docRef.current.getText("content").toString();
+      serverBaseRef.current = remote;
+      setContent(remote);
       applyingRemote.current = false;
     });
     socket.on("doc:restored", (payload: { path: string; update: number[] }) => {
@@ -188,40 +241,61 @@ export function WorkspacePage() {
       if (payload.path !== selectedPathRef.current || !docRef.current) return;
       applyingRemote.current = true;
       Y.applyUpdate(docRef.current, Uint8Array.from(payload.update));
-      setContent(docRef.current.getText("content").toString());
+      const remote = docRef.current.getText("content").toString();
+      serverBaseRef.current = remote;
+      setContent(remote);
       applyingRemote.current = false;
     });
     return () => {
       socket.disconnect();
       socketRef.current = null;
     };
-  }, [data?.workspaceId, projectId, queryClient, user]);
+  }, [data?.workspaceId, projectId, queryClient, user?.id]);
 
   useEffect(() => {
-    if (!data || !selectedPath || !socketRef.current) {
-      setContent(selectedDoc?.content ?? "");
+    if (!data || !selectedPath) return;
+    let current = true;
+    const scope: DraftScope = { userId: user?.id ?? "guest", projectId, workspaceId: data.workspaceId, kind: "code", path: selectedPath };
+    const draft = pendingDrafts.current.get(selectedPath) ?? (draftsEnabled ? readDraft(localStorage, scope) : null);
+    writeSequence.current++;
+    setCompared(false); setCompareDraft(false); setDocReady(false);
+    if (connection !== "connected" || !socketRef.current?.connected) {
+      const remote = selectedDoc?.content ?? data.files.find((file) => file.path === selectedPath)?.content ?? "";
+      serverBaseRef.current = draft?.baseContent ?? remote;
+      setContent(draft?.content ?? remote);
+      setRecovery(draft);
+      setSaveStatus(draft ? "Local draft - waiting for connection" : "Offline");
       return;
     }
     const doc = new Y.Doc();
     docRef.current = doc;
-    socketRef.current.emit(
+    setSaveStatus("Opening file");
+    socketRef.current.timeout(8000).emit(
       "doc:open",
       { projectId, workspaceId: data.workspaceId, path: selectedPath },
-      (response: { ok: boolean; update?: number[]; error?: string }) => {
-        if (response.ok && response.update) {
+      (error: Error | null, response: { ok: boolean; update?: number[]; error?: string }) => {
+        if (!current) return;
+        if (!error && response?.ok && response.update) {
           Y.applyUpdate(doc, Uint8Array.from(response.update));
-          setContent(doc.getText("content").toString());
+          const remote = doc.getText("content").toString();
+          serverBaseRef.current = remote;
+          setContent(remote); setDocReady(true);
+          const state = draft ? classifyDraft(draft, remote, data.project.commitSha) : "synced";
+          if (state === "synced") { setRecovery(null); pendingDrafts.current.delete(selectedPath); try { localStorage.removeItem(draftKey(scope)); } catch { /* Storage blocked. */ } setSaveStatus("Saved"); }
+          else { setRecovery(draft); setSaveStatus(state === "conflict" ? "Draft conflict - review required" : "Local draft available"); }
         } else {
           setContent(selectedDoc?.content ?? "");
+          setSaveStatus(response?.error ?? "File opening timed out");
         }
       }
     );
     socketRef.current.emit("presence:update", { projectId, workspaceId: data.workspaceId, path: selectedPath });
     return () => {
-      docRef.current?.destroy();
-      docRef.current = null;
+      current = false;
+      doc.destroy();
+      if (docRef.current === doc) docRef.current = null;
     };
-  }, [data, projectId, selectedDoc?.content, selectedPath]);
+  }, [data?.workspaceId, data?.project.commitSha, projectId, selectedDoc?.content, selectedPath, connection, reloadDoc, user?.id, draftsEnabled]);
 
   useEffect(() => {
     const editor = editorRef.current;
@@ -237,35 +311,86 @@ export function WorkspacePage() {
           }]
         : []
     );
-    if (range) editor.revealLinesInCenter(range.startLine, range.endLine);
-  }, [content, selectedNode, selectedPath, view]);
+    if (range && sourceOrigin.current !== "cursor") editor.revealLinesInCenter(range.startLine, range.endLine);
+  }, [selectedNode, selectedPath, view]);
 
   const mountEditor: OnMount = (editor, monaco) => {
     editorRef.current = editor;
     monacoRef.current = monaco;
+    cursorListener.current?.dispose();
+    cursorListener.current = editor.onDidChangeCursorPosition((event) => {
+      if (event.reason !== monaco.editor.CursorChangeReason.Explicit) return;
+      const node = nodeAtLine(graphRef.current?.nodes ?? [], selectedPathRef.current, event.position.lineNumber);
+      sourceOrigin.current = "cursor";
+      setSelectedNode(node ?? null);
+    });
   };
+
+  useEffect(() => () => cursorListener.current?.dispose(), []);
 
   function updateEditor(value = "") {
     setContent(value);
-    if (!canEdit || applyingRemote.current || !docRef.current || !data || !socketRef.current) return;
+    contentRef.current = value;
+    if (!canEdit || applyingRemote.current || !data) return;
+    const draft: LocalDraft = { content: value, baseContent: serverBaseRef.current, revision: data.project.commitSha, savedAt: Date.now() };
+    pendingDrafts.current.set(selectedPath, draft);
+    const saved = draftsEnabled && writeDraft(localStorage, draftScope, draft);
+    if (!docRef.current || !socketRef.current?.connected || connection !== "connected" || !docReady || recovery) {
+      setRecovery(draft); setSaveStatus(saved ? "Local draft saved" : "Unsynced - device storage unavailable or disabled"); return;
+    }
+    const sequence = ++writeSequence.current;
+    const path = selectedPath;
+    const scope = { ...draftScope };
     const text = docRef.current.getText("content");
     docRef.current.transact(() => {
       text.delete(0, text.length);
       text.insert(0, value);
     }, "local-editor");
     const update = Array.from(Y.encodeStateAsUpdate(docRef.current));
-    socketRef.current.emit("doc:update", { projectId, workspaceId: data.workspaceId, path: selectedPath, update }, () => undefined);
+    setSaveStatus(saved ? "Saving..." : "Saving... local backup unavailable");
+    socketRef.current.timeout(8000).emit("doc:update", { projectId, workspaceId: data.workspaceId, path, update }, (error: Error | null, response: { ok: boolean; error?: string }) => {
+      if (sequence !== writeSequence.current || path !== selectedPathRef.current) return;
+      if (error || !response?.ok) { setSaveStatus(response?.error ?? "Save not confirmed - draft retained"); setReloadDoc((current) => current + 1); return; }
+      serverBaseRef.current = docRef.current?.getText("content").toString() ?? value;
+      setSaveStatus("Saved");
+      if (contentRef.current === value) { pendingDrafts.current.delete(path); try { localStorage.removeItem(draftKey(scope)); } catch { /* Storage blocked. */ } }
+    });
+  }
+
+  function restoreDraft() {
+    if (!recovery || !socketRef.current?.connected || !data || !canEdit || !compared) return;
+    const draft = recovery, path = selectedPath, scope = { ...draftScope };
+    setRecovering(true);
+    socketRef.current.timeout(8000).emit("doc:replace", { projectId, workspaceId: data.workspaceId, path, expectedContent: serverBaseRef.current, content: draft.content }, (error: Error | null, response: { ok: boolean; error?: string }) => {
+      setRecovering(false);
+      if (path !== selectedPathRef.current) return;
+      if (error || !response?.ok) { setSaveStatus(response?.error ?? "Restore not confirmed - draft retained"); setReloadDoc((current) => current + 1); return; }
+      try { localStorage.removeItem(draftKey(scope)); } catch { /* Storage blocked. */ }
+      pendingDrafts.current.delete(path);
+      setRecovery(null); setCompareDraft(false); setContent(draft.content); serverBaseRef.current = draft.content; setSaveStatus("Draft restored and saved");
+      void queryClient.invalidateQueries({ queryKey: ["workspace", projectId] });
+    });
   }
 
   if (!user) {
     return <div className="mx-auto max-w-3xl px-4 py-12 text-steel">Sign in to join a workspace.</div>;
   }
+  if (workspace.isError) return <div className="mx-auto max-w-3xl p-8 text-coral" role="alert">{workspace.error.message}<button type="button" className="ml-3 text-mint" onClick={() => void workspace.refetch()}>Retry workspace</button></div>;
   if (workspace.isLoading || !data) {
     return <LoadingState label="Loading collaborative workspace" />;
   }
 
+  const recoveryActions = recovery && <div className="cm-draft-recovery" role="status"><span>{classifyDraft(recovery, serverBaseRef.current, data.project.commitSha) === "conflict" ? "Local draft differs from server" : "Unsent local draft"}</span><button type="button" disabled={!docReady || recovering} onClick={() => { setCompareDraft(true); setCompared(true); }}>Compare</button><button type="button" disabled={!canEdit || !docReady || !compared || recovering} onClick={restoreDraft}>Restore draft</button><button type="button" disabled={recovering} onClick={() => {
+    try { localStorage.removeItem(draftKey(draftScope)); } catch { setSaveStatus("Device draft could not be removed"); return; }
+    pendingDrafts.current.delete(selectedPath);
+    setRecovery(null); setCompareDraft(false); setContent(serverBaseRef.current); setSaveStatus(connection === "connected" ? "Saved" : "Offline");
+  }}>Discard draft</button></div>;
+  const editorProps = { path: selectedPath, files: data.files, content, canEdit: canEdit && (connection !== "connected" || (docReady && !recovery)), onMount: mountEditor, onChange: updateEditor, onSelectPath: selectSource, pinned, onPin: togglePin, onFilter: (prefix: string) => { setFileFilter(prefix); setFilePanelOpen(true); }, modelKey: `${user.id}/${projectId}/${selectedPath}`, saveStatus, recoveryActions, projectId, canReview: data.permissions.includes("workspace.review"), connected: connection === "connected" && docReady && !recovery, onApplied: () => setReloadDoc((value) => value + 1) };
+
   return (
     <section className="cm-code-workspace h-[calc(100vh-3.5rem)] overflow-hidden bg-ink" data-compact={compact} onKeyDown={(event) => { if (event.key === "Escape") { setLayoutMenuOpen(false); if (compact) { setFilePanelOpen(false); setAssistantPanelOpen(false); } } }}>
+      {taskOpen && <TaskWorkspace projectId={projectId} userId={user.id} taskId={searchParams.get("task") ?? ""} paths={data.files.map((file) => file.path)} revision={data.project.commitSha} canManage={data.permissions.includes("task.manage")} onClose={() => setTaskOpen(false)} onOpenFile={(path) => { selectSource(path); setView("editor"); setTaskOpen(false); }} onAsk={(prompt) => { setTaskPrompt(prompt); setAssistantPanelOpen(true); if (compact) setFilePanelOpen(false); setTaskOpen(false); }} />}
+      {compareDraft && recovery && <WorkspaceDiff title="Compare local draft with server" path={selectedPath} before={serverBaseRef.current} after={recovery.content} onClose={() => setCompareDraft(false)}>{recoveryActions}</WorkspaceDiff>}
       <header className="flex h-12 items-center justify-between border-b border-line px-4">
         <div className="flex min-w-0 items-center gap-3">
           <StatusPill tone={connection === "connected" ? "good" : "warn"}>
@@ -284,6 +409,7 @@ export function WorkspacePage() {
               <div className="cm-layout-presets">{Object.entries(workspacePresets).map(([name, layout]) => <button className="action-secondary" key={name} type="button" onClick={() => { applyLayout({ ...layout }, false); setLayoutStatus(""); }}>{name === "coding" ? <Code2 className="h-4 w-4" /> : name === "explore" ? <Network className="h-4 w-4" /> : <GitPullRequest className="h-4 w-4" />}{name}</button>)}</div>
               {([{ key: "fileWidth", label: "File tree width", min: 180, max: 320, unit: "px" }, { key: "assistantWidth", label: "Copilot width", min: 280, max: 440, unit: "px" }, { key: "graphPercent", label: "Graph share", min: 25, max: 75, unit: "%" }] as const).map((control) => <label className="cm-layout-range" key={control.key}><span>{control.label}<output>{panelSizes[control.key]}{control.unit}</output></span><input type="range" aria-label={control.label} min={control.min} max={control.max} value={panelSizes[control.key]} onChange={(event) => { setPanelSizes((current) => ({ ...current, [control.key]: Number(event.target.value) })); setLayoutStatus(""); }} /></label>)}
               <div className="flex items-center gap-2"><button className="action-primary" type="button" onClick={saveLayout}><Save className="h-4 w-4" /> Save layout</button><button className="cm-icon-button" type="button" title="Restore default layout" aria-label="Restore default layout" onClick={() => { applyLayout({ ...workspacePresets.explore }, false); setLayoutStatus(""); }}><RotateCcw className="h-4 w-4" /></button></div>
+              <label className="mt-3 flex items-center gap-2 text-xs text-steel"><input type="checkbox" checked={draftsEnabled} disabled={Boolean(recovery) || saveStatus.startsWith("Saving")} onChange={(event) => setDraftsEnabled(event.target.checked)} />Keep code drafts on this device (7 days)</label>
               <p className="text-xs text-mint" role="status">{layoutStatus}</p>
             </div>}
           </div>}
@@ -317,7 +443,7 @@ export function WorkspacePage() {
         style={{ gridTemplateColumns: compact ? "minmax(0, 1fr)" : `${filePanelOpen ? `min(${panelSizes.fileWidth}px, 21vw)` : "0px"} minmax(0, 1fr) ${assistantPanelOpen ? `min(${panelSizes.assistantWidth}px, 30vw)` : "0px"}` }}
       >
         {compact && (filePanelOpen || assistantPanelOpen) && <button className="cm-workspace-scrim" type="button" aria-label="Close workspace panels" onClick={() => { setFilePanelOpen(false); setAssistantPanelOpen(false); }} />}
-        <aside className={`cm-workspace-rail cm-file-rail min-h-0 overflow-hidden border-r border-line bg-panel ${filePanelOpen ? "opacity-100" : "pointer-events-none border-transparent opacity-0"}`} aria-hidden={!filePanelOpen} inert={!filePanelOpen}>
+        <aside className={`cm-workspace-rail cm-file-rail flex min-h-0 flex-col overflow-hidden border-r border-line bg-panel ${filePanelOpen ? "opacity-100" : "pointer-events-none border-transparent opacity-0"}`} aria-hidden={!filePanelOpen} inert={!filePanelOpen}>
           <div className="border-b border-line p-3">
             <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wide text-steel">
               <span className="flex items-center gap-2"><FileSearch className="h-3.5 w-3.5 text-mint" /> Files</span>
@@ -328,22 +454,8 @@ export function WorkspacePage() {
               <input className="field py-2 pl-8 text-xs" aria-label="Search files" placeholder="Filter files" value={fileFilter} onChange={(event) => setFileFilter(event.target.value)} />
             </label>
           </div>
-          <div className="cm-scrollbar h-full overflow-auto p-2">
-            {visibleFiles.map((file) => (
-              <button
-                key={file.path}
-                className={`mb-1 block w-full truncate rounded px-2 py-1.5 text-left font-mono text-xs ${
-                  file.path === selectedPath ? "bg-mint/15 text-mint" : "text-steel hover:bg-ink hover:text-white"
-                }`}
-                onClick={() => {
-                  selectSource(file.path);
-                  if (compact) setFilePanelOpen(false);
-                  setView("editor");
-                }}
-              >
-                {file.path}
-              </button>
-            ))}
+          <div className="cm-scrollbar min-h-0 flex-1 overflow-auto p-2">
+            <WorkspaceFileTree paths={visibleFiles.map((file) => file.path)} selectedPath={selectedPath} filtered={Boolean(fileFilter.trim())} onSelect={(path) => { selectSource(path); if (compact) setFilePanelOpen(false); setView("editor"); }} />
             {visibleFiles.length === 0 && <div className="p-3 text-xs leading-5 text-steel">No files match this filter.</div>}
           </div>
         </aside>
@@ -373,6 +485,7 @@ export function WorkspacePage() {
               </button>
             </div>
             <div className="flex min-w-0 items-center gap-3">
+              <button type="button" className="cm-icon-button" title="Issue-to-change workspace" aria-label="Issue-to-change workspace" onClick={() => setTaskOpen(true)}><ListTodo size={16} /></button>
               <HistoryMenu projectId={projectId} workspaceId={data.workspaceId} path={selectedPath} socket={socketRef.current} canRestore={data.permissions.includes("workspace.review")} />
               <button className="cm-workspace-export hidden items-center gap-1.5 rounded border border-line px-2 py-1.5 text-xs text-steel hover:border-mint hover:text-white sm:flex" type="button" title="Export architecture graph" onClick={() => exportGraph(data.project.name, data.graph)}>
                 <Download className="h-3.5 w-3.5" /> Export graph
@@ -382,10 +495,10 @@ export function WorkspacePage() {
           </div>
           <div className="h-[calc(100%-2.75rem)]">
             {view === "editor" && (
-              <EditorPane path={selectedPath} files={data.files} content={content} canEdit={canEdit} onMount={mountEditor} onChange={updateEditor} onSelectPath={selectSource} />
+              <EditorPane {...editorProps} />
             )}
             {view === "graph" && (
-              <GraphView graph={data.graph} selectedPath={selectedPath} selectedNodeId={selectedNode?.id} onOpenSource={openGraphSource} onSelectNode={(node) => {
+              <GraphView graph={data.graph} annotations={data.annotations} selectedPath={selectedPath} selectedNodeId={selectedNode?.id} onOpenSource={openGraphSource} onSelectNode={(node) => {
                 setSelectedNode(node);
                 if (node.filePath) selectSource(node.filePath, node.range?.startLine);
               }} />
@@ -393,13 +506,13 @@ export function WorkspacePage() {
             {view === "split" && (
               <div className={`grid h-full ${compact ? "grid-cols-1 grid-rows-2" : ""}`} style={compact ? undefined : { gridTemplateColumns: `minmax(0, ${panelSizes.graphPercent}fr) minmax(0, ${100 - panelSizes.graphPercent}fr)` }}>
                 <div className="min-w-0 border-r border-line">
-                  <GraphView graph={data.graph} selectedPath={selectedPath} selectedNodeId={selectedNode?.id} onOpenSource={openGraphSource} onSelectNode={(node) => {
+                  <GraphView graph={data.graph} annotations={data.annotations} selectedPath={selectedPath} selectedNodeId={selectedNode?.id} onOpenSource={openGraphSource} onSelectNode={(node) => {
                     setSelectedNode(node);
                     if (node.filePath) selectSource(node.filePath, node.range?.startLine);
                   }} />
                 </div>
                 <div className="min-w-0">
-                  <EditorPane path={selectedPath} files={data.files} content={content} canEdit={canEdit} onMount={mountEditor} onChange={updateEditor} onSelectPath={selectSource} />
+                  <EditorPane {...editorProps} />
                 </div>
               </div>
             )}
@@ -415,6 +528,8 @@ export function WorkspacePage() {
               projectId={projectId}
               workspaceId={data.workspaceId}
               socket={socketRef.current}
+              sourceContent={docReady ? content : selectedDoc?.content ?? data.files.find((file) => file.path === selectedPath)?.content ?? ""}
+              canManage={data.role === "owner" || data.role === "maintainer"}
             />
           )}
           <RepositoryAssistant
@@ -422,6 +537,7 @@ export function WorkspacePage() {
             activeFilePath={selectedPath}
             activeEntity={selectedNode ?? undefined}
             canReview={data.permissions.includes("workspace.review")}
+            initialPrompt={taskPrompt}
             onOpenFile={(path, line) => {
               selectSource(path, line);
               if (compact) setAssistantPanelOpen(false);
@@ -434,50 +550,57 @@ export function WorkspacePage() {
               if (compact) setAssistantPanelOpen(false);
             }}
           />
-          <ChatPanel projectId={projectId} workspaceId={data.workspaceId} messages={data.chat} socket={socketRef.current} />
+          <ChatPanel projectId={projectId} userId={user.id} workspaceId={data.workspaceId} messages={data.chat} socket={socketRef.current} canPost={data.permissions.includes("discussion.post")} connected={connection === "connected"} />
         </aside>
       </div>
     </section>
   );
 }
 
-function EditorPane({ path, files, content, canEdit, onMount, onChange, onSelectPath }: { path: string; files: RepoFile[]; content: string; canEdit: boolean; onMount: OnMount; onChange(value: string): void; onSelectPath(path: string): void }) {
-  const tabs = [files.find((file) => file.path === path), ...files.filter((file) => file.path !== path)].filter((file): file is RepoFile => Boolean(file)).slice(0, 6);
+function EditorPane({ path, files, content, canEdit, onMount, onChange, onSelectPath, pinned, onPin, onFilter, modelKey, saveStatus, recoveryActions, projectId, canReview, connected, onApplied }: { path: string; files: RepoFile[]; content: string; canEdit: boolean; onMount: OnMount; onChange(value: string): void; onSelectPath(path: string): void; pinned: string[]; onPin(path: string): void; onFilter(prefix: string): void; modelKey: string; saveStatus: string; recoveryActions: React.ReactNode; projectId: string; canReview: boolean; connected: boolean; onApplied(): void }) {
   return (
     <div className="flex h-full min-h-0 flex-col">
-      <div className="cm-scrollbar flex h-9 shrink-0 overflow-x-auto border-b border-line bg-panel/70">
-        {tabs.map((file) => <button key={file.path} className={`flex shrink-0 items-center gap-2 border-r border-line px-3 font-mono text-[11px] ${file.path === path ? "bg-ink text-white" : "text-steel hover:bg-ink/60 hover:text-white"}`} type="button" title={file.path} onClick={() => onSelectPath(file.path)}><span className={`h-1.5 w-1.5 rounded-full ${file.language === "python" ? "bg-mint" : file.language === "typescript" ? "bg-cyan" : file.language === "javascript" ? "bg-amber" : "bg-violet"}`} />{baseName(file.path)}</button>)}
-      </div>
+      {recoveryActions}
+      <WorkspaceTabs path={path} paths={files.map((file) => file.path)} pinned={pinned} onSelect={onSelectPath} onPin={onPin} onFilter={onFilter} />
+      <InlineCopilot key={modelKey} projectId={projectId} path={path} content={content} canReview={canReview} connected={connected} onApplied={onApplied} />
       <div className="min-h-0 flex-1">
         <Editor
           height="100%"
+          path={modelKey}
           language={languageForPath(path)}
           theme="vs-dark"
           value={content}
           onMount={onMount}
-          options={{ minimap: { enabled: false }, fontSize: 13, wordWrap: "on", readOnly: !canEdit, glyphMargin: true, smoothScrolling: true }}
+          options={{ minimap: { enabled: false }, fontSize: 13, wordWrap: "on", readOnly: !canEdit, glyphMargin: true, smoothScrolling: !window.matchMedia("(prefers-reduced-motion: reduce)").matches, automaticLayout: true }}
           onChange={(value) => onChange(value ?? "")}
         />
       </div>
+      <div className="cm-editor-save-status" role="status"><span className={saveStatus === "Saved" ? "text-mint" : "text-amber"}>{saveStatus}</span><span>{content.split("\n").length} lines</span></div>
     </div>
   );
 }
 
 function GraphView({
   graph,
+  annotations,
   selectedPath,
   selectedNodeId,
   onOpenSource,
   onSelectNode
 }: {
   graph: RepositoryGraph;
+  annotations: CodeAnnotation[];
   selectedPath: string;
   selectedNodeId?: string;
   onOpenSource(path: string, line?: number): void;
   onSelectNode(node: GraphNode): void;
 }) {
   const [exploring, setExploring] = useState(false);
-  const nodes = useMemo<Node[]>(() => layoutGraphNodes(graph.nodes, selectedPath, selectedNodeId), [graph.nodes, selectedNodeId, selectedPath]);
+  const nodes = useMemo<Node[]>(() => layoutGraphNodes(graph.nodes, selectedPath, selectedNodeId).map((node) => {
+    const source = node.data.graphNode as GraphNode;
+    const count = annotationsForNode(annotations, source).filter((note) => !note.resolved).length;
+    return { ...node, data: { ...node.data, label: <span className="cm-annotated-node" title={source.label}><span>{source.label}</span>{count > 0 && <em title={`${count} open annotations`}><MessageSquareText size={10} />{count}</em>}</span> } };
+  }), [graph.nodes, annotations, selectedNodeId, selectedPath]);
   const edges = useMemo<Edge[]>(() => graph.edges.map(toFlowEdge), [graph.edges]);
   const toggle = <button type="button" className="absolute right-3 top-3 z-20 grid h-7 w-7 place-items-center rounded border border-line bg-ink/90 text-steel hover:border-mint hover:text-white" title={exploring ? "Use original graph view" : "Explore connections"} aria-label={exploring ? "Use original graph view" : "Explore connections"} aria-pressed={exploring} onClick={() => setExploring((value) => !value)}><Network size={14} /></button>;
   if (exploring) return <div className="flex h-full flex-col"><div className="flex items-center justify-between border-b border-line bg-ink px-3 py-2 text-xs text-steel"><span>Connection explorer</span><button type="button" className="grid h-7 w-7 place-items-center rounded border border-line hover:border-mint hover:text-white" title="Use original graph view" aria-label="Use original graph view" onClick={() => setExploring(false)}><Network size={14} /></button></div><div className="min-h-0 flex-1"><RepositoryGraphCanvas graph={graph} selectedPath={selectedPath} selectedNodeId={selectedNodeId} onSelectNode={onSelectNode} onOpenSource={onOpenSource} /></div></div>;
@@ -560,7 +683,7 @@ function toFlowEdge(edge: GraphEdge): Edge {
     source: edge.source,
     target: edge.target,
     label: relationship === "contains" ? undefined : relationship,
-    animated: relationship === "calls",
+    animated: relationship === "calls" && !window.matchMedia("(prefers-reduced-motion: reduce)").matches,
     style: { stroke, strokeDasharray: relationship === "imports" ? "2 5" : relationship === "contains" ? "7 5" : undefined },
     labelStyle: { fill: stroke, fontSize: 9 },
     markerEnd: { type: MarkerType.ArrowClosed, color: stroke }
@@ -574,7 +697,9 @@ function NodeInspector({
   currentUserId,
   projectId,
   workspaceId,
-  socket
+  socket,
+  sourceContent,
+  canManage
 }: {
   node: GraphNode;
   graph: RepositoryGraph;
@@ -583,10 +708,14 @@ function NodeInspector({
   projectId: string;
   workspaceId: string;
   socket: Socket | null;
+  sourceContent: string;
+  canManage: boolean;
 }) {
   const [body, setBody] = useState("");
   const [error, setError] = useState("");
-  const related = annotations.filter((annotation) => annotation.symbolId === node.symbolId || (!node.symbolId && annotation.filePath === node.filePath));
+  const [kind, setKind] = useState<NonNullable<CodeAnnotation["kind"]>>("comment");
+  const [pending, setPending] = useState(false);
+  const related = annotationsForNode(annotations, node);
   const incoming = graph.edges.filter((edge) => edge.target === node.id);
   const outgoing = graph.edges.filter((edge) => edge.source === node.id);
   const affectedFiles = new Set(
@@ -597,19 +726,23 @@ function NodeInspector({
   );
 
   function addAnnotation() {
-    if (!socket || !node.filePath || !node.range || body.trim().length < 2) return;
+    if (!socket?.connected || !node.filePath || body.trim().length < 2) return;
     setError("");
-    socket.emit("annotation:create", {
+    setPending(true);
+    const sent = body;
+    socket.timeout(8000).emit("annotation:create", {
       projectId,
       workspaceId,
       filePath: node.filePath,
       symbolId: node.symbolId,
-      range: node.range,
+      range: node.range ?? { startLine: 1, startColumn: 1, endLine: Math.max(1, sourceContent.split("\n").length), endColumn: 1 },
       body: body.trim(),
-      sourceRevision: "workspace"
-    }, (response: { ok: boolean; error?: string }) => {
-      if (response.ok) setBody("");
-      else setError(response.error ?? "Annotation could not be saved.");
+      sourceRevision: "workspace",
+      kind
+    }, (error: Error | null, response: { ok: boolean; error?: string }) => {
+      setPending(false);
+      if (!error && response?.ok) setBody((current) => current === sent ? "" : current);
+      else setError(response?.error ?? "Annotation could not be saved.");
     });
   }
 
@@ -630,18 +763,17 @@ function NodeInspector({
       </div>
       <div className="mt-2 space-y-1.5">
         {related.map((annotation) => (
-          <div key={annotation.id} className="flex gap-2 border-l-2 border-violet pl-2 text-xs leading-5 text-steel">
-            <span className="min-w-0 flex-1">{annotation.body}</span>
-            {annotation.authorId === currentUserId && socket && (
-              <button type="button" className="shrink-0 text-steel hover:text-coral" title="Remove annotation" aria-label="Remove annotation" onClick={() => socket.emit("annotation:delete", { projectId, workspaceId, annotationId: annotation.id }, () => undefined)}><Trash2 className="h-3.5 w-3.5" /></button>
-            )}
+          <div key={annotation.id} className={`cm-graph-note cm-note-${annotation.kind ?? "comment"} ${annotation.resolved ? "is-resolved" : ""}`}>
+            <div><span>{annotation.kind ?? "comment"}{annotation.resolved ? " - resolved" : ""}{annotation.outdated ? " - source changed" : ""}</span><p>{annotation.body}</p></div>
+            {(annotation.authorId === currentUserId || canManage) && socket && <div className="cm-note-actions"><button type="button" disabled={!socket.connected} title={annotation.resolved ? "Reopen annotation" : "Resolve annotation"} aria-label={annotation.resolved ? "Reopen annotation" : "Resolve annotation"} onClick={() => socket.timeout(8000).emit("annotation:resolve", { projectId, workspaceId, annotationId: annotation.id, resolved: !annotation.resolved }, (error: Error | null, response: { ok: boolean; error?: string }) => { if (error || !response?.ok) setError(response?.error ?? "Annotation update timed out."); })}><Check size={14} /></button><button type="button" disabled={!socket.connected} title="Remove annotation" aria-label="Remove annotation" onClick={() => socket.timeout(8000).emit("annotation:delete", { projectId, workspaceId, annotationId: annotation.id }, (error: Error | null, response: { ok: boolean; error?: string }) => { if (error || !response?.ok) setError(response?.error ?? "Annotation removal timed out."); })}><Trash2 size={14} /></button></div>}
           </div>
         ))}
       </div>
-      {node.filePath && node.range && (
-        <div className="mt-2 flex gap-2">
-          <input className="field min-w-0 py-1.5 text-xs" value={body} maxLength={1000} placeholder="Add a node annotation" onChange={(event) => setBody(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter") addAnnotation(); }} />
-          <button className="rounded bg-violet px-2 text-ink disabled:opacity-40" type="button" title="Add annotation" aria-label="Add annotation" disabled={!socket || body.trim().length < 2} onClick={addAnnotation}><MessageSquareText className="h-4 w-4" /></button>
+      {node.filePath && (
+        <div className="cm-note-composer">
+          <select aria-label="Annotation type" value={kind} onChange={(event) => setKind(event.target.value as typeof kind)}><option value="comment">Comment</option><option value="question">Question</option><option value="decision">Decision</option></select>
+          <input className="field min-w-0 py-1.5 text-xs" aria-label="Graph annotation" value={body} maxLength={1000} placeholder="Add a node annotation" onChange={(event) => setBody(event.target.value)} onKeyDown={(event) => { if (event.key === "Enter") addAnnotation(); }} />
+          <button className="rounded bg-violet px-2 text-ink disabled:opacity-40" type="button" title="Add annotation" aria-label="Add annotation" disabled={!socket?.connected || pending || body.trim().length < 2} onClick={addAnnotation}><MessageSquareText className="h-4 w-4" /></button>
         </div>
       )}
       {error && <p className="mt-1 text-[11px] text-coral">{error}</p>}
@@ -680,14 +812,19 @@ function HistoryMenu({ projectId, workspaceId, path, socket, canRestore }: { pro
   );
 }
 
-function ChatPanel({ projectId, workspaceId, messages, socket }: { projectId: string; workspaceId: string; messages: ChatMessage[]; socket: Socket | null }) {
-  const [body, setBody] = useState("");
+function ChatPanel({ projectId, userId, workspaceId, messages, socket, connected, canPost }: { projectId: string; userId: string; workspaceId: string; messages: ChatMessage[]; socket: Socket | null; connected: boolean; canPost: boolean }) {
+  const { text: body, setText: setBody, saved } = useComposerDraft({ projectId, userId, workspaceId, kind: "chat", path: "message" });
+  const [error, setError] = useState("");
+  const [pending, setPending] = useState(false);
+  const [chatOpen, setChatOpen] = useState(false);
   return (
-    <div className="flex min-h-0 flex-[2] flex-col p-3">
-      <div className="flex items-center gap-2 font-semibold text-white">
+    <div className="cm-workspace-chat shrink-0 border-t border-line p-3">
+      <button type="button" className="flex w-full items-center gap-2 text-left font-semibold text-white" aria-expanded={chatOpen} onClick={() => setChatOpen(!chatOpen)}>
         <MessageSquare className="h-4 w-4 text-mint" />
         Workspace chat
-      </div>
+        <span className="ml-auto text-xs text-steel">{messages.length}</span>
+      </button>
+      {chatOpen && <div className="cm-workspace-chat-body">
       <div className="cm-scrollbar mt-3 flex-1 space-y-2 overflow-auto">
         {messages.map((message) => (
           <div key={message.id} className="rounded border border-line bg-ink px-2 py-1.5 text-sm">
@@ -700,8 +837,13 @@ function ChatPanel({ projectId, workspaceId, messages, socket }: { projectId: st
         className="mt-3 flex gap-2"
         onSubmit={(event) => {
           event.preventDefault();
-          if (!body.trim() || !socket) return;
-          socket.emit("workspace:chat:send", { projectId, workspaceId, body }, () => setBody(""));
+          if (!body.trim() || !socket?.connected || !canPost || !connected || pending) return;
+          const sent = body; setPending(true); setError("");
+          socket.timeout(8000).emit("workspace:chat:send", { projectId, workspaceId, body }, (error: Error | null, response: { ok: boolean; error?: string }) => {
+            setPending(false);
+            if (!error && response?.ok) setBody((current) => current === sent ? "" : current);
+            else setError(response?.error ?? "Message not confirmed. Draft retained; check chat before retrying.");
+          });
         }}
       >
         <input
@@ -709,11 +851,15 @@ function ChatPanel({ projectId, workspaceId, messages, socket }: { projectId: st
           value={body}
           onChange={(event) => setBody(event.target.value)}
           placeholder="Message"
+          aria-label="Workspace message"
+          maxLength={4000}
         />
-        <button className="rounded border border-line px-2 text-steel hover:text-white">
+        <button className="rounded border border-line px-2 text-steel hover:text-white disabled:opacity-40" title="Send workspace message" aria-label="Send workspace message" disabled={!canPost || !connected || pending || !body.trim()}>
           <GitPullRequest className="h-4 w-4" />
         </button>
       </form>
+      {(error || !saved || !connected) && <p className="mt-1 text-[10px] text-amber" role="status">{error || (!saved ? "Device storage unavailable; keep this draft open." : "Offline - message draft retained")}</p>}
+      </div>}
     </div>
   );
 }

@@ -304,7 +304,17 @@ export const taskSchema = z.object({
   title: z.string(),
   status: z.enum(["todo", "doing", "review", "done"]),
   assigneeId: z.string().optional(),
-  createdAt: z.string()
+  createdAt: z.string(),
+  work: z.object({
+    paths: z.array(z.string()).max(30),
+    patchIds: z.array(z.string()).max(30),
+    checks: z.array(z.object({ id: z.string(), label: z.string().trim().min(2).max(300), status: z.enum(["pending", "passed", "failed"]), note: z.string().max(1000) })).max(30),
+    notes: z.string().max(2000),
+    revision: z.string(),
+    version: z.number().int().nonnegative(),
+    updatedBy: z.string(),
+    updatedAt: z.string()
+  }).optional()
 });
 export type ProjectTask = z.infer<typeof taskSchema>;
 
@@ -332,6 +342,8 @@ export const annotationSchema = z.object({
   authorId: z.string(),
   sourceRevision: z.string(),
   outdated: z.boolean(),
+  kind: z.enum(["comment", "question", "decision"]).optional(),
+  resolved: z.boolean().optional(),
   createdAt: z.string()
 });
 export type CodeAnnotation = z.infer<typeof annotationSchema>;

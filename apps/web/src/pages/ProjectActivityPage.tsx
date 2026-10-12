@@ -231,6 +231,7 @@ function Tasks({ projectId }: { projectId: string }) {
                 <option value="done">Done</option>
               </select>
             </div>
+            <Link className="mt-3 inline-flex items-center gap-2 text-sm text-mint hover:text-white" to={`/projects/${projectId}/workspace?task=${encodeURIComponent(task.id)}`}><GitPullRequest size={14} />Open change workspace</Link>
           </article>
         ))}
         {!tasks.isLoading && visibleTasks.length === 0 && (
