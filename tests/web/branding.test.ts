@@ -14,6 +14,26 @@ function sourceFiles(directory: string): string[] {
 }
 
 describe("Codaventra branding", () => {
+  it("uses one transparent logo asset in the header, error screen and browser icons", () => {
+    const asset = "/brand/codaventra-pathfinder-v1.png";
+    const png = readFileSync(path.join(root, "apps/web/public", asset));
+    expect(png.subarray(0, 8).toString("hex")).toBe("89504e470d0a1a0a");
+    expect(png[25]).toBe(6);
+    expect(png.readUInt32BE(16)).toBe(png.readUInt32BE(20));
+    const component = read("apps/web/src/components/CodaventraLogo.tsx");
+    expect(component).toContain(`src="${asset}"`);
+    expect(component).toContain('alt=""');
+    expect(component).toContain('aria-hidden="true"');
+    expect(component).toContain("width={32}");
+    expect(component).toContain("height={32}");
+    for (const file of ["components/Shell.tsx", "pages/NotFoundPage.tsx"]) {
+      expect(read(`apps/web/src/${file}`)).toContain("<CodaventraLogo");
+      expect(read(`apps/web/src/${file}`)).not.toContain("<Boxes");
+    }
+    expect(read("apps/web/index.html")).toContain(`rel="icon" type="image/png" href="${asset}"`);
+    expect(read("apps/web/index.html")).toContain(`rel="apple-touch-icon" href="${asset}"`);
+  });
+
   it("uses the new name in project metadata, the browser title and the main heading", () => {
     const manifest = JSON.parse(read("package.json"));
     const lock = JSON.parse(read("package-lock.json"));

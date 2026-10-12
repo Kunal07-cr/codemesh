@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { useIsFetching } from "@tanstack/react-query";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
-import { ArrowUp, Boxes, Gauge, House, LogOut, Network, Search, Shield, Workflow } from "lucide-react";
+import { ArrowUp, Gauge, House, LogOut, Network, Search, Shield, Workflow } from "lucide-react";
 import { useAuth } from "../lib/auth";
 import { initials } from "../lib/format";
 import { AmbientCodeStream } from "./AmbientCodeStream";
 import { AppearancePanel } from "./AppearancePanel";
 import { CommandPalette } from "./CommandPalette";
+import { CodaventraLogo } from "./CodaventraLogo";
 import { ProjectSwitchboard } from "./ProjectSwitchboard";
 
 export function Shell() {
@@ -185,7 +186,7 @@ export function Shell() {
       <header className="cm-shell-header sticky top-0 z-20 border-b border-line bg-ink/90 backdrop-blur-xl">
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
           <Link to="/" className="cm-brand group flex shrink-0 items-center gap-2 font-semibold text-white" aria-label="Codaventra home">
-            <Boxes className="cm-logo-mark h-5 w-5 text-mint" />
+            <CodaventraLogo className="h-8 w-8" />
             Codaventra
           </Link>
           <nav className="hidden items-center gap-1 text-sm md:flex">

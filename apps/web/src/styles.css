@@ -417,19 +417,24 @@ a:active {
 }
 
 .cm-brand:hover .cm-logo-mark {
-  transform: rotate(8deg) scale(1.08);
+  transform: translateX(1px) scale(1.06);
 }
 
 .cm-logo-mark {
-  filter: drop-shadow(0 0 8px rgb(var(--cm-accent-rgb) / 0.28));
-  transition: transform 260ms var(--cm-ease), filter 260ms ease;
+  display: block;
+  flex-shrink: 0;
+  object-fit: contain;
+  transition: transform 220ms var(--cm-ease);
 }
 
-.cm-logo-mark path,
-.cm-logo-mark line,
-.cm-logo-mark polyline {
-  stroke-dasharray: 48;
-  animation: cm-draw 1.2s var(--cm-ease) both;
+:root[data-motion="reduced"] .cm-brand:hover .cm-logo-mark {
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce), (hover: none) {
+  .cm-brand:hover .cm-logo-mark {
+    transform: none;
+  }
 }
 
 .cm-avatar {
@@ -1277,10 +1282,6 @@ a:active {
   color: var(--cm-route-a);
 }
 
-:root[data-accent="spectrum"] .cm-logo-mark {
-  animation: cm-logo-spectrum 7s ease-in-out infinite;
-}
-
 :root[data-accent="spectrum"] .lp-hero-title span {
   background-image: var(--cm-spectrum);
   background-size: 190% 100%;
@@ -1400,13 +1401,6 @@ a:active {
 @keyframes cm-button-spectrum {
   from { background-position: 0% 50%; }
   to { background-position: 100% 50%; }
-}
-
-@keyframes cm-logo-spectrum {
-  0%, 100% { color: #64d6af; filter: drop-shadow(0 0 8px rgba(100, 214, 175, 0.32)); }
-  35% { color: #56c7e8; filter: drop-shadow(0 0 9px rgba(86, 199, 232, 0.34)); }
-  68% { color: #a78bfa; filter: drop-shadow(0 0 9px rgba(167, 139, 250, 0.34)); }
-  84% { color: #f472b6; filter: drop-shadow(0 0 9px rgba(244, 114, 182, 0.28)); }
 }
 
 @keyframes cm-loading-spectrum {
