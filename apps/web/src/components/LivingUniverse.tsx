@@ -11,11 +11,11 @@ type UniversePoint = {
 };
 
 const points: UniversePoint[] = [
-  { id: "core", label: "CodeMesh", kind: "repository core", x: 53, y: 45, size: 1.35, tone: "core" },
+  { id: "core", label: "Codaventra", kind: "repository core", x: 53, y: 45, size: 1.35, tone: "core" },
   { id: "web", label: "web", kind: "frontend", x: 27, y: 25, size: 1, tone: "frontend" },
   { id: "api", label: "api", kind: "backend", x: 75, y: 23, size: 1.08, tone: "backend" },
   { id: "graph", label: "graph index", kind: "architecture", x: 72, y: 59, size: 1.18, tone: "database" },
-  { id: "ai", label: "Mesh AI", kind: "intelligence", x: 36, y: 67, size: 1.12, tone: "ai" },
+  { id: "ai", label: "Codaventra AI", kind: "intelligence", x: 36, y: 67, size: 1.12, tone: "ai" },
   { id: "auth", label: "auth", kind: "critical path", x: 55, y: 18, size: 0.9, tone: "critical" },
   { id: "github", label: "GitHub", kind: "external API", x: 88, y: 43, size: 0.84, tone: "external" },
   { id: "editor", label: "workspace", kind: "collaboration", x: 15, y: 51, size: 0.92, tone: "frontend" },

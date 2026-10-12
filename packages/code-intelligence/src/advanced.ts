@@ -144,7 +144,7 @@ export function planAutonomousChange(index: RepositoryIndex, objective: string):
     ],
     verificationCommands,
     constraints: [
-      "CodeMesh does not apply or publish the plan automatically.",
+      "Codaventra does not apply or publish the plan automatically.",
       "Imported package scripts are queued for a trusted runner and are never executed by the analysis API.",
       "Every generated patch must pass stale-base and permission checks."
     ]
@@ -227,7 +227,7 @@ export function verifyVirtualSandbox(index: RepositoryIndex, plan: AutonomousCha
     executedCommands: [],
     repairAttempts,
     recommendedRepairs,
-    disclaimer: "Static checks ran inside CodeMesh. Repository package scripts are displayed but not executed because imported code is untrusted."
+    disclaimer: "Static checks ran inside Codaventra. Repository package scripts are displayed but not executed because imported code is untrusted."
   };
 }
 

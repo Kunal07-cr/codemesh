@@ -2,7 +2,7 @@
 
 ## Runtime Shape
 
-CodeMesh is a modular monolith plus frontend:
+Codaventra is a modular monolith plus frontend:
 
 - Web client: React app served by Vite during development.
 - API server: Express handles REST, authentication, authorization, imports, AI requests, patch review, and health checks.

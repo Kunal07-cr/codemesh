@@ -23,7 +23,7 @@ export function mcpRoutes(store: JsonStore) {
 
   router.get("/", (_req, res) => {
     res.json({
-      name: "CodeMesh MCP",
+      name: "Codaventra MCP",
       protocolVersion: "2025-11-25",
       transport: "streamable-http-json",
       authentication: "Bearer cmcp_*",
@@ -34,8 +34,8 @@ export function mcpRoutes(store: JsonStore) {
   router.post("/", async (req, res) => {
     const access = authorizeMcp(req, store);
     if (!access) {
-      res.setHeader("www-authenticate", 'Bearer realm="CodeMesh MCP"');
-      res.status(401).json(rpcError(req.body?.id, -32001, "A valid CodeMesh MCP bearer token is required."));
+      res.setHeader("www-authenticate", 'Bearer realm="Codaventra MCP"');
+      res.status(401).json(rpcError(req.body?.id, -32001, "A valid Codaventra MCP bearer token is required."));
       return;
     }
     await store.touchAgentAccessToken(access.id);
@@ -53,7 +53,7 @@ export function mcpRoutes(store: JsonStore) {
       const result = await handleMcpRequest(store, access, request.method, request.params ?? {});
       res.json({ jsonrpc: "2.0", id: request.id ?? null, result });
     } catch (error) {
-      const message = error instanceof Error ? error.message : "CodeMesh MCP request failed.";
+      const message = error instanceof Error ? error.message : "Codaventra MCP request failed.";
       res.status(message.includes("Unknown") ? 404 : 400).json(rpcError(request.id, message.includes("Unknown") ? -32601 : -32602, message));
     }
   });
@@ -73,7 +73,7 @@ async function handleMcpRequest(
     return {
       protocolVersion: typeof params.protocolVersion === "string" ? params.protocolVersion : "2025-11-25",
       capabilities: { tools: { listChanged: false }, resources: { subscribe: false, listChanged: false }, prompts: { listChanged: false } },
-      serverInfo: { name: "CodeMesh", version: "0.2.0", description: "Source-linked repository graph and delivery intelligence" },
+      serverInfo: { name: "Codaventra", version: "0.2.0", description: "Source-linked repository graph and delivery intelligence" },
       instructions: "Read graph_ontology once, then use code_context for questions, search_code for exact text, query_context for relationships, and fetch_code only for identified ranges. Cite every returned file path and range."
     };
   }
@@ -94,7 +94,7 @@ async function handleMcpRequest(
     const uri = String(params.uri ?? "");
     const filePath = parseFileUri(projectId, uri);
     const file = filePath ? store.getFile(projectId, filePath) : null;
-    if (!file || file.sensitive) throw new Error("Unknown or protected CodeMesh resource.");
+    if (!file || file.sensitive) throw new Error("Unknown or protected Codaventra resource.");
     return { contents: [{ uri, mimeType: mimeForLanguage(file.language), text: file.content }] };
   }
   if (method === "prompts/list") {
@@ -188,7 +188,7 @@ function callTool(store: JsonStore, access: NonNullable<ReturnType<typeof author
     if (!access.scopes.includes("propose")) throw new Error("This token does not include the propose scope.");
     return buildAutomationMission(index, requiredString(args.objective, "objective"));
   }
-  throw new Error(`Unknown CodeMesh tool: ${name}`);
+  throw new Error(`Unknown Codaventra tool: ${name}`);
 }
 
 function authorizeMcp(req: Request, store: JsonStore) {
@@ -206,7 +206,7 @@ function toolDefinitions(canPropose: boolean) {
     { name: "search_code", description: "Find an exact identifier or string and return matching lines with source ranges.", inputSchema: { type: "object", properties: { query: { type: "string" }, limit: { type: "number", minimum: 1, maximum: 100 } }, required: ["query"] } },
     { name: "fetch_code", description: "Read a bounded source span after its file and range have been identified.", inputSchema: { type: "object", properties: { filePath: { type: "string" }, startLine: { type: "number", minimum: 1 }, endLine: { type: "number", minimum: 1 } }, required: ["filePath"] } },
     { name: "query_context", description: "Walk verified repository relationships from a file, symbol, path, or node id.", inputSchema: { type: "object", properties: { selector: { type: "string" }, relationship: { type: "string", enum: ["all", "contains", "imports", "exports", "references"] }, direction: { type: "string", enum: ["incoming", "outgoing", "both"] }, depth: { type: "number", minimum: 1, maximum: 4 }, limit: { type: "number", minimum: 1, maximum: 100 } }, required: ["selector"] } },
-    { name: "repository_search", description: "Search CodeMesh chunks and graph neighbors with source ranges.", inputSchema: { type: "object", properties: { query: { type: "string" }, mode: { type: "string", enum: ["graph", "hybrid", "vector"] }, limit: { type: "number", minimum: 1, maximum: 20 } }, required: ["query"] } },
+    { name: "repository_search", description: "Search Codaventra chunks and graph neighbors with source ranges.", inputSchema: { type: "object", properties: { query: { type: "string" }, mode: { type: "string", enum: ["graph", "hybrid", "vector"] }, limit: { type: "number", minimum: 1, maximum: 20 } }, required: ["query"] } },
     { name: "impact_analysis", description: "Find incoming, outgoing, and affected files for a graph node or file.", inputSchema: { type: "object", properties: { nodeId: { type: "string" }, filePath: { type: "string" } } } },
     { name: "repository_health", description: "Return repository health, coverage estimate, issues, and suggested tests.", inputSchema: { type: "object", properties: {} } },
     { name: "architecture_documentation", description: "Generate module inventory, entry points, Mermaid architecture, and health evidence.", inputSchema: { type: "object", properties: {} } },
@@ -219,11 +219,11 @@ function toolDefinitions(canPropose: boolean) {
 }
 
 function getPrompt(name: string, args: Record<string, string> = {}) {
-  if (name === "review-change") return { description: "Review repository changes", messages: [{ role: "user", content: { type: "text", text: `Review these changed files using CodeMesh impact_analysis and generate_test_plan: ${args.changedFiles ?? ""}` } }] };
+  if (name === "review-change") return { description: "Review repository changes", messages: [{ role: "user", content: { type: "text", text: `Review these changed files using Codaventra impact_analysis and generate_test_plan: ${args.changedFiles ?? ""}` } }] };
   if (name === "investigate-incident") return { description: "Investigate an incident", messages: [{ role: "user", content: { type: "text", text: `Trace this incident to source and return evidence plus a runbook:\n${args.stackTrace ?? ""}` } }] };
   if (name === "compare-change-futures") return { description: "Compare repository futures", messages: [{ role: "user", content: { type: "text", text: `Use simulate_change_futures to compare distinct implementation strategies before editing. Preserve the prediction receipt and explain uncertainty:\n${args.objective ?? ""}` } }] };
   if (name === "explain-architecture") return { description: "Explain repository architecture", messages: [{ role: "user", content: { type: "text", text: "Use architecture_documentation and repository_health to explain the system, its entry points, and its highest-priority risks." } }] };
-  throw new Error(`Unknown CodeMesh prompt: ${name}`);
+  throw new Error(`Unknown Codaventra prompt: ${name}`);
 }
 
 function fileUri(projectId: string, filePath: string) {

@@ -657,11 +657,11 @@ function AgentsView(props: {
         </div>
       </section>
       <section>
-        <SectionTitle icon={Code2} eyebrow="Editor companion" title="VS Code extension" detail="Use CodeMesh search and impact analysis beside the code without copying repository context into a chat." />
+        <SectionTitle icon={Code2} eyebrow="Editor companion" title="VS Code extension" detail="Use Codaventra search and impact analysis beside the code without copying repository context into a chat." />
         <ol className="mt-5 space-y-5">
           <Step number="01" title="Open the extension folder" detail={props.data.integrations.vscode.extensionPath} />
           <Step number="02" title="Configure three settings" detail="codemesh.endpoint, codemesh.token, and codemesh.projectId" />
-          <Step number="03" title="Run CodeMesh commands" detail="Open Graph, Explain Selection, and Show Impact from the command palette." />
+          <Step number="03" title="Run Codaventra commands" detail="Open Graph, Explain Selection, and Show Impact from the command palette." />
         </ol>
         <div className="mt-8 border-t border-line pt-5">
           <div className="eyebrow"><Webhook className="h-3.5 w-3.5" /> GitHub App</div>
@@ -677,7 +677,7 @@ function IncidentView(props: { value: { title: string; stackTrace: string }; set
   return (
     <div className="grid gap-8 xl:grid-cols-2">
       <section>
-        <SectionTitle icon={Zap} eyebrow="Production evidence" title="Trace an incident to source" detail="Paste stack frames, error text, file paths, or symbol names. CodeMesh maps them into the repository graph and builds a response runbook." />
+        <SectionTitle icon={Zap} eyebrow="Production evidence" title="Trace an incident to source" detail="Paste stack frames, error text, file paths, or symbol names. Codaventra maps them into the repository graph and builds a response runbook." />
         <label className="mt-5 block text-xs text-steel">Incident title<input className="field mt-1" value={props.value.title} onChange={(event) => props.setValue({ ...props.value, title: event.target.value })} /></label>
         <label className="mt-3 block text-xs text-steel">Stack trace or logs<textarea className="field cm-scrollbar mt-1 min-h-60 resize-y font-mono text-xs leading-6" value={props.value.stackTrace} onChange={(event) => props.setValue({ ...props.value, stackTrace: event.target.value })} /></label>
         <button className="action-primary mt-3" type="button" disabled={props.pending || props.value.stackTrace.length < 10} onClick={props.run}><Search className="h-4 w-4" /> Trace incident</button>
@@ -725,7 +725,7 @@ function FuturesView(props: {
             icon={Sparkles}
             eyebrow="Self-calibrating change twin"
             title="Explore the codebase before it exists"
-            detail="Describe one engineering outcome. CodeMesh creates three competing implementation futures, freezes their assumptions in a prediction receipt, and learns when reality arrives."
+            detail="Describe one engineering outcome. Codaventra creates three competing implementation futures, freezes their assumptions in a prediction receipt, and learns when reality arrives."
           />
           <label className="mt-5 block text-xs text-steel">
             Outcome to model
@@ -830,7 +830,7 @@ function FuturesView(props: {
               </section>
 
               <section>
-                <SectionTitle icon={RefreshCw} eyebrow="Reality reconciliation" title="Make the forecast answer for itself" detail="The currently selected PR files become observed implementation evidence. CodeMesh compares measurable outcomes with the frozen forecast bands." />
+                <SectionTitle icon={RefreshCw} eyebrow="Reality reconciliation" title="Make the forecast answer for itself" detail="The currently selected PR files become observed implementation evidence. Codaventra compares measurable outcomes with the frozen forecast bands." />
                 <div className="mt-5 grid grid-cols-2 gap-3">
                   <Mini label="Observed files" value={String(props.observedFiles.length)} tone="text-cyan" />
                   <Mini label="Reversibility" value={selected.reversibility + "%"} tone="text-mint" />
@@ -845,7 +845,7 @@ function FuturesView(props: {
                 >
                   <RefreshCw className={"h-4 w-4 " + (props.pending ? "animate-spin" : "")} /> Reconcile with selected files
                 </button>
-                {props.observedFiles.length === 0 && <p className="mt-3 text-xs leading-5 text-amber">Select implemented files in PR Review first. CodeMesh will not invent an outcome without observed evidence.</p>}
+                {props.observedFiles.length === 0 && <p className="mt-3 text-xs leading-5 text-amber">Select implemented files in PR Review first. Codaventra will not invent an outcome without observed evidence.</p>}
                 <div className="mt-6 border-y border-line py-4">
                   <div className="text-[10px] uppercase text-steel">Architecture signature</div>
                   <code className="mt-1 block font-mono text-xs text-cyan">{props.simulation.receipt.architectureSignature}</code>

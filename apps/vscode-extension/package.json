@@ -1,7 +1,7 @@
 {
   "name": "codemesh-vscode",
-  "displayName": "CodeMesh",
-  "description": "Source-linked repository search, impact analysis, and graph navigation for CodeMesh.",
+  "displayName": "Codaventra",
+  "description": "Source-linked repository search, impact analysis, and graph navigation for Codaventra.",
   "version": "0.1.0",
   "private": true,
   "publisher": "codemesh",
@@ -22,17 +22,17 @@
     "commands": [
       {
         "command": "codemesh.openGraph",
-        "title": "CodeMesh: Open Repository Graph",
+        "title": "Codaventra: Open Repository Graph",
         "icon": "$(type-hierarchy)"
       },
       {
         "command": "codemesh.explainSelection",
-        "title": "CodeMesh: Explain Selection",
+        "title": "Codaventra: Explain Selection",
         "icon": "$(sparkle)"
       },
       {
         "command": "codemesh.showImpact",
-        "title": "CodeMesh: Show File Impact",
+        "title": "Codaventra: Show File Impact",
         "icon": "$(references)"
       }
     ],
@@ -51,22 +51,22 @@
       ]
     },
     "configuration": {
-      "title": "CodeMesh",
+      "title": "Codaventra",
       "properties": {
         "codemesh.endpoint": {
           "type": "string",
           "default": "http://localhost:4200/api/mcp",
-          "description": "CodeMesh MCP HTTP endpoint."
+          "description": "Codaventra MCP HTTP endpoint."
         },
         "codemesh.token": {
           "type": "string",
           "default": "",
-          "markdownDescription": "Scoped token created in the CodeMesh Delivery Hub. Treat it as a secret."
+          "markdownDescription": "Scoped token created in the Codaventra Delivery Hub. Treat it as a secret."
         },
         "codemesh.projectId": {
           "type": "string",
           "default": "project-sample-taskpilot",
-          "description": "CodeMesh project ID used for graph links."
+          "description": "Codaventra project ID used for graph links."
         }
       }
     }

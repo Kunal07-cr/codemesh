@@ -1,8 +1,8 @@
 {
-  "name": "codemesh",
+  "name": "codaventra",
   "version": "0.1.0",
   "private": true,
-  "description": "CodeMesh: graph-assisted repository understanding and AI-supported collaborative development.",
+  "description": "Codaventra: graph-assisted repository understanding and AI-supported collaborative development.",
   "type": "module",
   "workspaces": [
     "apps/*",

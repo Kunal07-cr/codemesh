@@ -17,7 +17,7 @@ export function ArchitectureHero() {
     </div>
     <div className="cm-architecture-copy">
       <span className="eyebrow"><Boxes size={15} /> Repository intelligence workspace</span>
-      <h1>CodeMesh<span>Understand your codebase.<br />See the bigger picture.</span></h1>
+      <h1>Codaventra<span>Understand your codebase.<br />See the bigger picture.</span></h1>
       <p>Turn complex repositories into interactive maps. Discover dependencies, explore architecture, and investigate your code with source-linked AI.</p>
       <div className="cm-architecture-actions"><Link className="action-primary" to="/discover">Explore your codebase <ArrowRight size={16} /></Link><a className="action-secondary" href="#workflow">See how it works <ArrowDown size={16} /></a></div>
       <div className="cm-hero-proof"><span><i data-tone="cyan" /> Source-linked graphs</span><span><i data-tone="mint" /> Live collaboration</span><span><i data-tone="violet" /> Reviewable AI edits</span></div>

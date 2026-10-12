@@ -1,10 +1,10 @@
 # Literature Survey
 
-Project title: **CodeMesh: Graph-Assisted Repository Understanding and AI-Supported Real-Time Collaborative Development**
+Project title: **Codaventra: Graph-Assisted Repository Understanding and AI-Supported Real-Time Collaborative Development**
 
 Objective: To investigate whether graph-assisted retrieval and awareness of current workspace edits improve repository-grounded AI assistance within a real-time collaborative development environment.
 
-This survey uses accessible primary sources where available. It separates what CodeMesh implements from what it adapts or uses only as motivation.
+This survey uses accessible primary sources where available. It separates what Codaventra implements from what it adapts or uses only as motivation.
 
 ## Surveyed Papers
 
@@ -17,7 +17,7 @@ This survey uses accessible primary sources where available. It separates what C
 - Methodology: Combines a pretrained seq2seq generator with retrieved passages from a dense non-parametric index.
 - Findings supported by source: The authors report stronger results on several knowledge-intensive NLP tasks and more factual/specific generation than a parametric-only baseline.
 - Scope boundary: This is not a live code collaboration system and does not evaluate repository patch review.
-- CodeMesh relation: Adapts the retrieval-plus-generation pattern and citation discipline, not the exact RAG architecture.
+- Codaventra relation: Adapts the retrieval-plus-generation pattern and citation discipline, not the exact RAG architecture.
 
 ### RepoCoder: Repository-Level Code Completion Through Iterative Retrieval and Generation
 
@@ -28,7 +28,7 @@ This survey uses accessible primary sources where available. It separates what C
 - Methodology: Similarity-based retrieval plus pretrained code LM in an iterative retrieval-generation pipeline.
 - Findings supported by source: The ACL abstract reports over 10% improvement over an in-file baseline across settings and introduces RepoBench.
 - Scope boundary: Code completion differs from question answering, collaborative editing, and patch review.
-- CodeMesh relation: Adapts repository-context retrieval motivation and evaluation separation.
+- Codaventra relation: Adapts repository-context retrieval motivation and evaluation separation.
 
 ### GraphCodeBERT: Pre-Training Code Representations with Data Flow
 
@@ -38,8 +38,8 @@ This survey uses accessible primary sources where available. It separates what C
 - Problem: Token-only code models ignore structure important to code semantics.
 - Methodology: Uses data-flow information during pretraining with structure-aware objectives.
 - Findings supported by source: The source reports improvements on code search, clone detection, translation, and refinement.
-- Scope boundary: Data-flow pretraining is not the same as CodeMesh's import/symbol graph.
-- CodeMesh relation: Draws motivation from structural code representations; does not implement GraphCodeBERT.
+- Scope boundary: Data-flow pretraining is not the same as Codaventra's import/symbol graph.
+- Codaventra relation: Draws motivation from structural code representations; does not implement GraphCodeBERT.
 
 ### RepoGraph: Enhancing AI Software Engineering with Repository-Level Code Graph
 
@@ -49,8 +49,8 @@ This survey uses accessible primary sources where available. It separates what C
 - Problem: AI software engineering requires repository-level understanding beyond function/file-level coding.
 - Methodology: A plug-in repository-level graph module used to guide AI software engineering systems.
 - Findings supported by source: The authors report improved performance when plugged into multiple systems and evaluate on SWE-bench and CrossCodeEval.
-- Scope boundary: CodeMesh adapts the idea of graph-assisted context, not the authors' implementation or results.
-- CodeMesh relation: Adapts bounded graph-neighborhood retrieval as one experimental retrieval mode.
+- Scope boundary: Codaventra adapts the idea of graph-assisted context, not the authors' implementation or results.
+- Codaventra relation: Adapts bounded graph-neighborhood retrieval as one experimental retrieval mode.
 
 ### Conflict-Free Replicated Data Types
 
@@ -61,7 +61,7 @@ This survey uses accessible primary sources where available. It separates what C
 - Methodology: Formalizes state-based and operation-based CRDT conditions for strong eventual consistency.
 - Findings supported by source: The paper defines sufficient conditions under which replicas converge.
 - Scope boundary: Convergent text does not guarantee syntactically valid or semantically correct code.
-- CodeMesh relation: Uses Yjs CRDTs for collaborative text convergence and explicitly relies on review/tests for correctness.
+- Codaventra relation: Uses Yjs CRDTs for collaborative text convergence and explicitly relies on review/tests for correctness.
 
 ### Yjs: A Framework for Near Real-Time P2P Shared Editing on Arbitrary Data Types
 
@@ -72,7 +72,7 @@ This survey uses accessible primary sources where available. It separates what C
 - Methodology: Presents the Yjs framework for shared editing.
 - Findings supported by source: The accessible abstract describes near real-time shared editing over arbitrary data types.
 - Scope boundary: Current Yjs implementation details should be taken from current official docs, not only the 2015 paper.
-- CodeMesh relation: Implements current Yjs documents as the authority for workspace text.
+- Codaventra relation: Implements current Yjs documents as the authority for workspace text.
 
 ### CodeCity: 3D Visualization of Large-Scale Software
 
@@ -82,8 +82,8 @@ This survey uses accessible primary sources where available. It separates what C
 - Problem: Large software systems are difficult to comprehend.
 - Methodology: Interactive 3D city metaphor mapping classes and packages to buildings and districts.
 - Findings supported by source: The authors describe CodeCity as a language-independent interactive visualization used on large industrial systems.
-- Scope boundary: A city metaphor does not validate CodeMesh's dependency graph UI.
-- CodeMesh relation: Draws motivation from interactive visualization for comprehension; CodeMesh implements a 2D dependency/symbol graph.
+- Scope boundary: A city metaphor does not validate Codaventra's dependency graph UI.
+- Codaventra relation: Draws motivation from interactive visualization for comprehension; Codaventra implements a 2D dependency/symbol graph.
 
 ### SWE-bench: Can Language Models Resolve Real-World GitHub Issues?
 
@@ -93,8 +93,8 @@ This survey uses accessible primary sources where available. It separates what C
 - Problem: Evaluate whether language models can resolve real-world GitHub issues.
 - Methodology: Benchmark using real issues and repository tests.
 - Findings supported by source: The citation page identifies the ICLR 2024 paper and benchmark family.
-- Scope boundary: CodeMesh's small evaluation is not SWE-bench and must not be reported as such.
-- CodeMesh relation: Uses SWE-bench as motivation for patch-task evaluation with executable checks.
+- Scope boundary: Codaventra's small evaluation is not SWE-bench and must not be reported as such.
+- Codaventra relation: Uses SWE-bench as motivation for patch-task evaluation with executable checks.
 
 ## Comparison Table
 
@@ -111,4 +111,4 @@ This survey uses accessible primary sources where available. It separates what C
 
 ## Research Positioning
 
-CodeMesh is an engineering integration with a research hypothesis. It does not claim firstness. The implemented prototype currently supports vector-only, hybrid, and graph-expanded retrieval over a seeded TypeScript repository. It records retrieval rows for a small evaluation dataset, but results are preliminary and not statistically sufficient.
+Codaventra is an engineering integration with a research hypothesis. It does not claim firstness. The implemented prototype currently supports vector-only, hybrid, and graph-expanded retrieval over a seeded TypeScript repository. It records retrieval rows for a small evaluation dataset, but results are preliminary and not statistically sufficient.

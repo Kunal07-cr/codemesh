@@ -32,7 +32,7 @@ function VivaSession({ storageKey, project, prompts }: { storageKey: string; pro
   function navigate(next: number) { setPosition(next); setResetConfirm(false); requestAnimationFrame(() => heading.current?.focus()); }
   function download() {
     const url = URL.createObjectURL(new Blob([exportVivaNotes(project.name, project.commitSha, prompts, responses)], { type: "text/markdown;charset=utf-8" }));
-    const anchor = document.createElement("a"); anchor.href = url; anchor.download = "codemesh-viva-rehearsal.md"; anchor.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+    const anchor = document.createElement("a"); anchor.href = url; anchor.download = "codaventra-viva-rehearsal.md"; anchor.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
   return <>
     <div className="cm-challenge-progress"><div><span>Source-backed rehearsal</span><strong>{reviewed} / {prompts.length} reviewed</strong></div><progress aria-label="Viva progress" value={reviewed} max={prompts.length} /></div>

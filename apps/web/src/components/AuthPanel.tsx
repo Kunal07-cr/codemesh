@@ -101,9 +101,9 @@ export function AuthPanel() {
         </button>
       </div> : <button className="inline-flex items-center gap-1 text-sm text-steel hover:text-white" type="button" onClick={() => selectMode("login")}><ArrowLeft className="h-4 w-4" /> Back to sign in</button>}
       <div className="mt-4">
-        <h2 className="text-lg font-semibold text-white">{mode === "login" ? "Welcome back" : mode === "register" ? "Join CodeMesh" : "Recover account"}</h2>
+        <h2 className="text-lg font-semibold text-white">{mode === "login" ? "Welcome back" : mode === "register" ? "Join Codaventra" : "Recover account"}</h2>
         <p className="mt-1 text-sm text-steel">
-          {mode === "login" ? "Use your CodeMesh email and password." : mode === "register" ? "Create an account with your email address." : "Request a secure, time-limited password reset link."}
+          {mode === "login" ? "Use your Codaventra email and password." : mode === "register" ? "Create an account with your email address." : "Request a secure, time-limited password reset link."}
         </p>
       </div>
       {mode === "register" && (

@@ -1,8 +1,8 @@
-# CodeMesh Progress and Handoff
+# Codaventra Progress and Handoff
 
 ## Current State
 
-CodeMesh is implemented as an npm workspace monorepo:
+Codaventra is implemented as an npm workspace monorepo:
 
 - `apps/web`: React/Vite UI.
 - `apps/api`: Express API and Socket.IO realtime server.

@@ -3,10 +3,10 @@ const vscode = require("vscode");
 let requestId = 0;
 
 function activate(context) {
-  const output = vscode.window.createOutputChannel("CodeMesh");
+  const output = vscode.window.createOutputChannel("Codaventra");
   const status = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 90);
-  status.name = "CodeMesh";
-  status.text = "$(type-hierarchy) CodeMesh";
+  status.name = "Codaventra";
+  status.text = "$(type-hierarchy) Codaventra";
   status.tooltip = "Explain the current selection with repository evidence";
   status.command = "codemesh.explainSelection";
   status.show();
@@ -32,7 +32,7 @@ async function explainSelection(output) {
   if (!config) return;
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
-    void vscode.window.showInformationMessage("Open a source file before running CodeMesh.");
+    void vscode.window.showInformationMessage("Open a source file before running Codaventra.");
     return;
   }
   const selection = editor.document.getText(editor.selection).trim();
@@ -41,7 +41,7 @@ async function explainSelection(output) {
   const query = selection
     ? "Explain this code and find its repository relationships: " + selection.slice(0, 1200)
     : "Explain " + filePath + " near line " + line + " and find related symbols.";
-  await withProgress("Searching CodeMesh repository evidence", async () => {
+  await withProgress("Searching Codaventra repository evidence", async () => {
     const value = await callTool(config, "repository_search", { query, mode: "graph", limit: 8 });
     showResult(output, "Explain Selection", { source: filePath + ":" + line, ...value });
   });
@@ -52,7 +52,7 @@ async function showImpact(output) {
   if (!config) return;
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
-    void vscode.window.showInformationMessage("Open a source file before running CodeMesh impact analysis.");
+    void vscode.window.showInformationMessage("Open a source file before running Codaventra impact analysis.");
     return;
   }
   const filePath = workspacePath(editor.document.uri);
@@ -92,7 +92,7 @@ async function callTool(config, name, args) {
   });
   const payload = await response.json();
   if (!response.ok || payload.error) {
-    throw new Error(payload.error?.message || "CodeMesh request failed with status " + response.status + ".");
+    throw new Error(payload.error?.message || "Codaventra request failed with status " + response.status + ".");
   }
   return payload.result?.structuredContent || payload.result;
 }
@@ -101,13 +101,13 @@ async function withProgress(title, task) {
   try {
     await vscode.window.withProgress({ location: vscode.ProgressLocation.Notification, title }, task);
   } catch (error) {
-    void vscode.window.showErrorMessage(error instanceof Error ? error.message : "CodeMesh request failed.");
+    void vscode.window.showErrorMessage(error instanceof Error ? error.message : "Codaventra request failed.");
   }
 }
 
 function showResult(output, title, value) {
   output.clear();
-  output.appendLine("CodeMesh - " + title);
+  output.appendLine("Codaventra - " + title);
   output.appendLine("=".repeat(64));
   output.appendLine(JSON.stringify(value, null, 2));
   output.show(true);

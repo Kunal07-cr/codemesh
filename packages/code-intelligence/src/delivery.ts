@@ -222,7 +222,7 @@ export function buildIncrementalIndexPlan(index: RepositoryIndex, requestedPaths
     estimatedFilesAvoided: strategy === "incremental" ? Math.max(0, index.files.length - affectedFiles.size) : 0,
     strategy,
     reason: strategy === "incremental"
-      ? "The changed set is contained, so CodeMesh can refresh the touched files and their graph neighborhood."
+      ? "The changed set is contained, so Codaventra can refresh the touched files and their graph neighborhood."
       : "The changed set is broad or contains many removals, so a full consistency rebuild is safer."
   };
 }
@@ -271,7 +271,7 @@ export function buildIncidentReport(index: RepositoryIndex, title: string, stack
     blastRadius: [...blastRadius].slice(0, 30),
     runbook,
     summary: matchedFiles.length
-      ? `CodeMesh mapped ${matchedFiles.length} source files and ${matchedSymbols.length} symbols from the incident evidence.`
+      ? `Codaventra mapped ${matchedFiles.length} source files and ${matchedSymbols.length} symbols from the incident evidence.`
       : "No indexed source location matched the supplied incident evidence. Add file paths, function names, or stack frames for a stronger trace."
   };
 }
@@ -471,7 +471,7 @@ export function buildFutureReconciliation(
       dimensions: [],
       lessons: ["Import or select the implemented files, then reconcile again to score this forecast against evidence."],
       notes,
-      summary: "The repository still matches the forecast baseline, so CodeMesh preserved the receipt without inventing an outcome."
+      summary: "The repository still matches the forecast baseline, so Codaventra preserved the receipt without inventing an outcome."
     };
   }
 
@@ -507,7 +507,7 @@ export function buildFutureReconciliation(
     dimensions,
     lessons,
     notes,
-    summary: `CodeMesh compared ${dimensions.length} predicted dimensions with the observed repository and scored this forecast ${calibrationScore}/100.`
+    summary: `Codaventra compared ${dimensions.length} predicted dimensions with the observed repository and scored this forecast ${calibrationScore}/100.`
   };
 }
 

@@ -201,7 +201,7 @@ export function StepTrace() {
   return (
     <div ref={ref} className="lp-trace">
       <TraceColumn tone="bad" title="Without a graph" steps={withoutSteps} tick={tick} />
-      <TraceColumn tone="good" title="With CodeMesh" steps={withSteps} tick={tick} />
+      <TraceColumn tone="good" title="With Codaventra" steps={withSteps} tick={tick} />
     </div>
   );
 }
@@ -428,7 +428,7 @@ const installTabs = [
     label: "Editor",
     steps: [
       { title: "Open the repository", body: "Import a public GitHub branch, upload a ZIP, or start from the seeded sample.", code: "npm run seed" },
-      { title: "Build the mesh", body: "CodeMesh indexes files and symbols, then resolves calls, imports and containment.", code: "npm run build && npm run dev" },
+      { title: "Build the mesh", body: "Codaventra indexes files and symbols, then resolves calls, imports and containment.", code: "npm run build && npm run dev" },
       { title: "Ask with context", body: "Open the assistant or the graph and inspect answers with source citations.", code: "http://localhost:4200" }
     ]
   },

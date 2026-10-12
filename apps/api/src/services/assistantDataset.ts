@@ -315,7 +315,7 @@ export async function loadAssistantDataset(customPath?: string) {
     read<DatasetFile[]>("files.json"), read<DatasetSymbol[]>("symbols.json"), read<DatasetEdge[]>("edges.json"), read<DatasetContributor[]>("contributors.json"),
     read<DatasetCommit[]>("commits.json"), read<DatasetIssue[]>("issues.json"), read<DatasetPullRequest[]>("pull_requests.json"), read<DatasetActivity[]>("activity.json"), read<DatasetCollaborationEvent[]>("collaboration_events.json")
   ]);
-  if (!manifest.is_synthetic) throw new Error("CodeMesh assistant dataset must declare its provenance.");
+  if (!manifest.is_synthetic) throw new Error("Codaventra assistant dataset must declare its provenance.");
   return new AssistantDataset(manifest, repositories, chunks, qaExamples, files, symbols, edges, contributors, commits, issues, pullRequests, activity, collaborationEvents);
 }
 

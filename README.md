@@ -1,6 +1,16 @@
-# CodeMesh
+# Codaventra
 
-CodeMesh is a major-project prototype for graph-assisted repository understanding and AI-supported real-time collaborative development.
+Codaventra is a major-project prototype for graph-assisted repository understanding and AI-supported real-time collaborative development.
+
+## Branding and Compatibility
+
+The platform is now named Codaventra. The checkout directory, `@codemesh/*`
+workspace packages, VS Code command/settings IDs, authentication cookies, and
+browser-storage keys retain their existing names for compatibility. Existing
+accounts, saved drafts, and exported evidence remain valid. Seeded demo emails
+and the password below are unchanged. The GitHub required-check context retains
+`CodeMesh repository intelligence` so existing branch protections keep working.
+Captured evaluation results and user-owned project names are not rewritten.
 
 Implemented in this repository:
 
@@ -55,7 +65,7 @@ docker compose -f infra/docker-compose.yml up -d
 
 Copy `.env.example` to `.env` for local overrides. Leave Gemini and GitHub fields blank to use the deterministic local AI provider and honest GitHub-disabled UI state.
 
-Without infrastructure variables, CodeMesh runs with an atomic JSON datastore and single-instance realtime collaboration. Optional adapters activate automatically:
+Without infrastructure variables, Codaventra runs with an atomic JSON datastore and single-instance realtime collaboration. Optional adapters activate automatically:
 
 - `DATABASE_URL`: PostgreSQL-backed durable application state.
 - `REDIS_URL`: multi-instance Socket.IO fan-out.

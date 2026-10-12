@@ -184,9 +184,9 @@ export function Shell() {
       <div className={`cm-network-progress ${fetching > 0 ? "is-active" : ""}`} aria-hidden="true" />
       <header className="cm-shell-header sticky top-0 z-20 border-b border-line bg-ink/90 backdrop-blur-xl">
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
-          <Link to="/" className="cm-brand group flex items-center gap-2 font-semibold tracking-wide text-white">
+          <Link to="/" className="cm-brand group flex shrink-0 items-center gap-2 font-semibold text-white" aria-label="Codaventra home">
             <Boxes className="cm-logo-mark h-5 w-5 text-mint" />
-            CodeMesh
+            Codaventra
           </Link>
           <nav className="hidden items-center gap-1 text-sm md:flex">
             {location.pathname === "/" ? (

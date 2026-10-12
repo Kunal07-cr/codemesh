@@ -29,7 +29,7 @@ export function DiscoverPage() {
         </label>
       </div>
       <div className="mt-6 flex items-center justify-between border-y border-line py-3 text-xs text-steel">
-        <span>Public projects indexed by CodeMesh</span>
+        <span>Public projects indexed by Codaventra</span>
         <span className="font-mono text-mint">{projects.data?.length ?? 0} matches</span>
       </div>
       <div className="mt-5 grid gap-4 lg:grid-cols-2">

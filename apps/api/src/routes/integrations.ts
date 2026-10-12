@@ -210,7 +210,7 @@ async function handlePullRequest(input: {
         repository: input.repository,
         installationId,
         headSha,
-        title: "CodeMesh review: " + review.status,
+        title: "Codaventra review: " + review.status,
         summary: review.summary + "\n\nRisk score: " + review.score + "/100",
         conclusion: review.status === "pass" ? "success" : review.status === "block" ? "failure" : "neutral",
         annotations: review.annotations

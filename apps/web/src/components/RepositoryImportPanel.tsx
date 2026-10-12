@@ -101,7 +101,7 @@ export function RepositoryImportPanel({ projectId }: RepositoryImportPanelProps)
         <div>
           <div className="eyebrow"><Orbit className="h-3.5 w-3.5" /> Repository intake</div>
           <h2>Feed the Mesh</h2>
-          <p>Drop your repository or ZIP here. CodeMesh will rebuild the graph and ground the assistant in the new source.</p>
+          <p>Drop your repository or ZIP here. Codaventra will rebuild the graph and ground the assistant in the new source.</p>
         </div>
         <div className="cm-feed-limit"><span>{ZIP_UPLOAD_LIMIT_MB} MB</span> compressed ceiling</div>
       </div>

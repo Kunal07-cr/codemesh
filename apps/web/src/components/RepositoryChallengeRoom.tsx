@@ -55,7 +55,7 @@ function ChallengeSession({ project, deck, restart }: { project: RoomProps["proj
     const url = URL.createObjectURL(new Blob([exportChallengeNotes(project.name, project.commitSha, sequence, answers)], { type: "text/markdown;charset=utf-8" }));
     const anchor = document.createElement("a");
     anchor.href = url;
-    anchor.download = "codemesh-challenge-notes.md";
+    anchor.download = "codaventra-challenge-notes.md";
     anchor.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }

@@ -99,7 +99,7 @@ export function ProjectOperationsPage() {
 
       <div className="mt-8 grid gap-8 xl:grid-cols-[1.15fr_0.85fr]">
         <section>
-          <SectionTitle icon={Cloud} eyebrow="Runtime topology" title="Service dependencies" detail="Live adapter state from this running CodeMesh instance." />
+          <SectionTitle icon={Cloud} eyebrow="Runtime topology" title="Service dependencies" detail="Live adapter state from this running Codaventra instance." />
           <div className="mt-4 divide-y divide-line border-y border-line">
             {data.dependencies.map((dependency, index) => <DependencyRow key={dependency.id} dependency={dependency} index={index} />)}
           </div>

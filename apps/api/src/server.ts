@@ -36,7 +36,7 @@ export async function createApp() {
   const config = loadConfig();
   const store = await createStore(config.dataPath, config.DATABASE_URL);
   const assistantDataset = await loadAssistantDataset(config.ASSISTANT_DATASET_PATH).catch((error: unknown) => {
-    console.warn(`CodeMesh assistant dataset unavailable: ${error instanceof Error ? error.message : "unknown error"}`);
+    console.warn(`Codaventra assistant dataset unavailable: ${error instanceof Error ? error.message : "unknown error"}`);
     return null;
   });
   const app = express();
@@ -112,8 +112,8 @@ export async function createApp() {
 if (fileURLToPath(import.meta.url) === path.resolve(process.argv[1] ?? "")) {
   const runtime = await createApp();
   runtime.server.listen(runtime.config.API_PORT, () => {
-    runtime.app.locals.logger?.info?.(`CodeMesh API listening on ${runtime.config.API_PORT}`);
-    console.log(`CodeMesh API listening on http://localhost:${runtime.config.API_PORT}`);
+    runtime.app.locals.logger?.info?.(`Codaventra API listening on ${runtime.config.API_PORT}`);
+    console.log(`Codaventra API listening on http://localhost:${runtime.config.API_PORT}`);
   });
 
   const shutdown = async (signal: string) => {

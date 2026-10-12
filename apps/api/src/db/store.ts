@@ -1439,7 +1439,7 @@ async function seedState(): Promise<StoreState> {
     id: projectId,
     name: "TaskPilot Sample",
     slug: "taskpilot-sample",
-    description: "A seeded Express and TypeScript repository for exploring CodeMesh without external credentials.",
+    description: "A seeded Express and TypeScript repository for exploring Codaventra without external credentials.",
     tags: ["sample", "typescript", "express", "auth"],
     languages: [...new Set(files.map((file) => file.language))].sort(),
     visibility: "public",

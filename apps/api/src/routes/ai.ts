@@ -205,7 +205,7 @@ function buildSupplementalContext(input: AiAskRequest, assistantDataset: Assista
   const result = assistantDataset.search(input.question, input.datasetRepositoryId, input.knowledgeScope);
   if (input.knowledgeScope === "combined" && result.relevance < 0.25) return undefined;
   return {
-    label: `CodeMesh synthetic dataset · ${result.repositoryIds.length} repositor${result.repositoryIds.length === 1 ? "y" : "ies"}`,
+    label: `Codaventra synthetic dataset · ${result.repositoryIds.length} repositor${result.repositoryIds.length === 1 ? "y" : "ies"}`,
     context: result.context,
     answer: result.answer,
     citations: result.citations,

@@ -96,7 +96,7 @@ function ProofWorkbench({ data, refresh, refreshing }: { data: LabData; refresh(
       const text = exportProofCapsule(context, experiment);
       setCapsule(text); setCapsuleError("");
       const url = URL.createObjectURL(new Blob([text], { type: "application/json" }));
-      const anchor = document.createElement("a"); anchor.href = url; anchor.download = "codemesh-proof-capsule.json"; anchor.click();
+      const anchor = document.createElement("a"); anchor.href = url; anchor.download = "codaventra-proof-capsule.json"; anchor.click();
       window.setTimeout(() => URL.revokeObjectURL(url), 1000);
       setNotice("Experiment exported. Source code and chat history were not included.");
     } catch (error) { setCapsuleError(error instanceof Error ? error.message : "Export failed."); }

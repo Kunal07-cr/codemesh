@@ -880,7 +880,7 @@ function exportGraph(projectName: string, graph: RepositoryGraph) {
   const url = URL.createObjectURL(new Blob([payload], { type: "application/json" }));
   const link = document.createElement("a");
   link.href = url;
-  link.download = `${projectName.toLowerCase().replace(/[^a-z0-9]+/g, "-") || "codemesh"}-architecture.json`;
+  link.download = `${projectName.toLowerCase().replace(/[^a-z0-9]+/g, "-") || "codaventra"}-architecture.json`;
   link.click();
   URL.revokeObjectURL(url);
 }

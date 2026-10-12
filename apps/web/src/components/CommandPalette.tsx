@@ -3,7 +3,7 @@ import { BookOpen, Command, Gauge, Home, Search, X } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const commands = [
-  { label: "Home", hint: "Return to the CodeMesh overview", path: "/", icon: Home },
+  { label: "Home", hint: "Return to the Codaventra overview", path: "/", icon: Home },
   { label: "Dashboard", hint: "Open your project control room", path: "/dashboard", icon: Gauge },
   { label: "Discover projects", hint: "Search public repositories", path: "/discover", icon: Search },
   { label: "Documentation", hint: "Review API and workflow notes", path: "/docs", icon: BookOpen }
@@ -62,7 +62,7 @@ export function CommandPalette() {
               <input
                 ref={inputRef}
                 className="min-w-0 flex-1 bg-transparent py-4 text-sm text-white outline-none placeholder:text-steel"
-                placeholder="Jump to a CodeMesh surface..."
+                placeholder="Jump to a Codaventra surface..."
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
               />

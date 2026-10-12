@@ -183,7 +183,7 @@ describe("repository assistant", () => {
         retrieval: searchRepository(index, question, "graph", 8),
         workspaceDocs: files.map((file) => ({ projectId, workspaceId: "main", path: file.path, content: file.content, version: 1, updatedAt: new Date(0).toISOString() })),
         supplemental: {
-          label: "CodeMesh synthetic dataset · 1 repository",
+          label: "Codaventra synthetic dataset · 1 repository",
           context: "Synthetic retail-inventory source fixture.",
           answer: "save_item validates the item and returns a copy with a fixed demo ID; it does not persist data.",
           citations: [{

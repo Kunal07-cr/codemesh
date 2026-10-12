@@ -175,7 +175,7 @@ export function RetrievalStudio() {
           <div className="cm-console-prompt"><span>question</span><p>{query.prompt}</p></div>
           <div className="cm-console-answer">
             <Bot className="h-5 w-5" />
-            <div><span>CodeMesh assistant</span><p>{query.answer}</p></div>
+            <div><span>Codaventra assistant</span><p>{query.answer}</p></div>
           </div>
           <div className="cm-console-citations">
             {query.citations.map((citation, index) => <span key={citation}>[{index + 1}] {citation}</span>)}
@@ -288,13 +288,13 @@ export function PlatformFoundations() {
         <div className="cm-trust-copy">
           <span className="cm-lab-label"><ShieldCheck className="h-4 w-4" /> Trust center</span>
           <h3>Permissions remain visible at every layer</h3>
-          <p>CodeMesh separates viewing, collaboration, maintenance, and ownership. Assistant output is evidence for a reviewable change, never a hidden write.</p>
+          <p>Codaventra separates viewing, collaboration, maintenance, and ownership. Assistant output is evidence for a reviewable change, never a hidden write.</p>
           <div className="cm-role-strip" aria-label="Project roles">
             <span>Viewer</span><i /><span>Contributor</span><i /><span>Maintainer</span><i /><span>Owner</span>
           </div>
         </div>
         <div className="cm-trust-checks">
-          <TrustCheck icon={KeyRound} title="Session authentication" detail="Protected APIs require a signed-in CodeMesh identity." />
+          <TrustCheck icon={KeyRound} title="Session authentication" detail="Protected APIs require a signed-in Codaventra identity." />
           <TrustCheck icon={UsersRound} title="Role-scoped actions" detail="Project capabilities are checked server-side before mutation." />
           <TrustCheck icon={LockKeyhole} title="Review-first AI" detail="Citations and proposed changes stay inspectable before publishing." />
           <TrustCheck icon={GitBranch} title="Revision awareness" detail="Answers and graph data carry repository revision context." />

@@ -12,7 +12,7 @@ export function NotFoundPage() {
         <Boxes className="mx-auto h-8 w-8 text-mint" />
         <div className="mt-5 font-mono text-sm text-steel">{status}</div>
         <h1 className="mt-2 text-3xl font-bold text-white">{title}</h1>
-        <p className="mt-3 text-steel">The requested CodeMesh page is unavailable.</p>
+        <p className="mt-3 text-steel">The requested Codaventra page is unavailable.</p>
         <Link className="mt-6 inline-flex items-center gap-2 rounded bg-mint px-4 py-2 font-semibold text-ink" to="/dashboard">
           <ArrowLeft className="h-4 w-4" />
           Return to Dashboard

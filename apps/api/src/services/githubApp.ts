@@ -88,6 +88,7 @@ export class GitHubAppService {
     return this.request(`/repos/${input.repository}/check-runs`, token, {
       method: "POST",
       body: JSON.stringify({
+        // Existing branch protections may require this exact check context.
         name: "CodeMesh repository intelligence",
         head_sha: input.headSha,
         status: "completed",
@@ -105,7 +106,7 @@ export class GitHubAppService {
             message: annotation.message.slice(0, 65_535)
           }))
         },
-        actions: [{ label: "Re-run CodeMesh", description: "Rebuild the graph review for this commit", identifier: "rerun_codemesh" }]
+        actions: [{ label: "Re-run Codaventra", description: "Rebuild the graph review for this commit", identifier: "rerun_codemesh" }]
       })
     });
   }
@@ -142,7 +143,7 @@ export class GitHubAppService {
       accept: "application/vnd.github+json",
       authorization: `Bearer ${token}`,
       "content-type": "application/json",
-      "user-agent": "CodeMesh GitHub App",
+      "user-agent": "Codaventra GitHub App",
       "x-github-api-version": "2022-11-28"
     };
   }

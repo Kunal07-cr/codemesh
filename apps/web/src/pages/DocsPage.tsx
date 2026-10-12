@@ -38,9 +38,9 @@ export function DocsPage() {
   return (
     <section className="mx-auto max-w-7xl px-4 py-8">
       <div className="border-b border-line pb-6">
-        <p className="text-sm font-semibold uppercase text-mint">CodeMesh documentation</p>
+        <p className="text-sm font-semibold uppercase text-mint">Codaventra documentation</p>
         <h1 className="mt-2 text-3xl font-bold text-white">Build, understand, and edit repositories</h1>
-        <p className="mt-3 max-w-3xl leading-7 text-steel">Use this guide to run CodeMesh, create a project, work with the repository assistant, and review changes safely.</p>
+        <p className="mt-3 max-w-3xl leading-7 text-steel">Use this guide to run Codaventra, create a project, work with the repository assistant, and review changes safely.</p>
       </div>
 
       <div className="mt-8 grid gap-10 lg:grid-cols-[220px_minmax(0,1fr)]">
@@ -65,7 +65,7 @@ export function DocsPage() {
 
         <article className="min-w-0 space-y-12">
           <DocSection id="getting-started" icon={Play} title="Getting started">
-            <p>Run these commands from the CodeMesh project directory. On Windows, use <code className="text-mint">npm.cmd</code> because PowerShell may block <code className="text-mint">npm.ps1</code>.</p>
+            <p>Run these commands from the Codaventra project directory. On Windows, use <code className="text-mint">npm.cmd</code> because PowerShell may block <code className="text-mint">npm.ps1</code>.</p>
             <CodeBlock code={quickStart} />
             <p>Open <a className="text-mint hover:underline" href="http://localhost:4200">http://localhost:4200</a>. The seeded accounts use password <code className="text-mint">CodeMesh123!</code>.</p>
             <div className="overflow-x-auto border-y border-line">
@@ -184,7 +184,7 @@ export function DocsPage() {
           </DocSection>
 
           <DocSection id="configuration" icon={ShieldCheck} title="Configuration">
-            <p>CodeMesh runs with the local repository assistant by default. To enable Gemini, place these values in the project <code className="text-mint">.env</code> file and restart the API.</p>
+            <p>Codaventra runs with the local repository assistant by default. To enable Gemini, place these values in the project <code className="text-mint">.env</code> file and restart the API.</p>
             <CodeBlock code={geminiConfig} />
             <p>Alternatively, connect any OpenAI-compatible service such as Ollama, LM Studio, vLLM, or a hosted gateway. The endpoint must expose <code className="text-mint">/chat/completions</code>.</p>
             <CodeBlock code={compatibleConfig} />

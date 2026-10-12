@@ -18,18 +18,25 @@
     gap: 1.5rem;
   }
 
-  .lp-hero-title {
-    font-size: clamp(2.7rem, 4.7vw, 3.75rem);
-  }
 }
 
 .lp-hero-title {
   margin-top: 1.25rem;
   color: #fff;
-  font-size: clamp(2.4rem, 5.6vw, 4.4rem);
+  font-size: 3rem;
   font-weight: 700;
   line-height: 1.04;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
+}
+
+.lp-hero-tagline {
+  margin-top: 1rem;
+  max-width: 30rem;
+  color: #fff;
+  font-size: 1.6rem;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: 0;
 }
 
 .lp-hero-title span {

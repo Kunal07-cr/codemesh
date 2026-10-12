@@ -479,7 +479,7 @@ export function createTask(title: string) {
     sensitive: false,
     content: `# TaskPilot sample
 
-TaskPilot is a tiny Express and TypeScript task API used as the default CodeMesh sample repository.
+TaskPilot is a tiny Express and TypeScript task API used as the default Codaventra sample repository.
 
 Interesting questions:
 

@@ -19,7 +19,7 @@ import {
 } from "../components/landing/LandingSections";
 
 const questions = [
-  { question: "Does CodeMesh replace the editor?", answer: "No. It adds repository structure, team context, retrieval, and review around a full code workspace so the editor has better context." },
+  { question: "Does Codaventra replace the editor?", answer: "No. It adds repository structure, team context, retrieval, and review around a full code workspace so the editor has better context." },
   { question: "Can the assistant change repository code?", answer: "It can investigate and propose edits. Changes remain visible for review, permissions, and verification before they become contribution work." },
   { question: "Can I import my own project?", answer: `Yes. Owners can connect a public GitHub repository or upload a ZIP archive up to ${ZIP_UPLOAD_LIMIT_MB} MB. The index and assistant context rebuild after import.` },
   { question: "How are answers grounded?", answer: "Repository retrieval combines text relevance with graph relationships. Every answer can carry citations to files, symbols, ranges, and the indexed revision." },
@@ -38,10 +38,11 @@ export function LandingPage() {
           <div>
             <div className="eyebrow"><Sparkles className="h-3.5 w-3.5" /> Your codebase as a knowledge graph</div>
             <h1 className="lp-hero-title">
-              Give your AI the <span>exact lines</span>, not the whole repository.
+              <span>Codaventra</span>
             </h1>
+            <p className="lp-hero-tagline">Give your AI the exact lines, not the whole repository.</p>
             <p className="lp-hero-sub">
-              Agents burn tokens opening file after file to answer one question. CodeMesh indexes your repository into a
+              Agents burn tokens opening file after file to answer one question. Codaventra indexes your repository into a
               graph of files, symbols and calls, then hands back the few spans that answer it, with citations.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -102,7 +103,7 @@ export function LandingPage() {
             <SectionHeading
               eyebrow="Repository model"
               title="See architecture as a living system"
-              body="Files are only one layer. CodeMesh exposes the relationships between symbols, services, permissions, work, and proposed changes so you can investigate from the system level down to a source range."
+              body="Files are only one layer. Codaventra exposes the relationships between symbols, services, permissions, work, and proposed changes so you can investigate from the system level down to a source range."
             />
             <div className="mt-8"><InteractiveCodeGraph /></div>
           </section>
@@ -199,7 +200,7 @@ export function LandingPage() {
               <div className="max-w-2xl">
                 <div className="eyebrow">Start exploring</div>
                 <h2 className="mt-3 text-3xl font-semibold leading-tight text-white md:text-4xl">Stop paying your AI to read code it doesn&apos;t need.</h2>
-                <p className="mt-4 text-base leading-7 text-steel">Create a CodeMesh account or use a demo identity, then open TaskPilot to explore the graph, ask the assistant, and inspect the full collaborative workflow.</p>
+                <p className="mt-4 text-base leading-7 text-steel">Create a Codaventra account or use a demo identity, then open TaskPilot to explore the graph, ask the assistant, and inspect the full collaborative workflow.</p>
                 <div className="mt-7 space-y-3 text-sm text-slate-200">
                   <Benefit>New accounts receive viewer access to the sample repository.</Benefit>
                   <Benefit>Assistant answers include repository citations.</Benefit>

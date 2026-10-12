@@ -476,7 +476,7 @@ function RepositoryAssistantSession({ projectId, activeFilePath, activeEntity, c
         {messages.map((message, messageIndex) => (
           <article key={message.id} className={message.role === "user" ? "ml-7 rounded border border-mint/25 bg-mint/10 p-3" : "mr-2"}>
             <div className={`text-[10px] font-semibold uppercase text-steel ${message.role === "user" ? "text-right" : ""}`}>
-              {message.role === "user" ? "You" : "CodeMesh"}
+              {message.role === "user" ? "You" : "Codaventra"}
             </div>
             {message.result?.sourceFacts?.length ? <AssistantSourceAnswer result={message.result} /> : <p className={`mt-1 whitespace-pre-wrap text-sm leading-6 ${message.error ? "text-coral" : "text-slate-100"}`}>{message.content}</p>}
             {message.result && (

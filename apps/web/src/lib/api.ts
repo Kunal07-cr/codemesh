@@ -146,7 +146,7 @@ async function request(path: string, init: RequestInit) {
     throw new ApiClientError(
       0,
       "API_UNAVAILABLE",
-      `CodeMesh API is not reachable at ${API_URL}. Deploy the API and set VITE_API_URL for public sign-in. (${detail})`
+      `Codaventra API is not reachable at ${API_URL}. Deploy the API and set VITE_API_URL for public sign-in. (${detail})`
     );
   }
 }

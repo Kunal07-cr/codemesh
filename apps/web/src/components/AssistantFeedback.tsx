@@ -17,7 +17,7 @@ export function AssistantFeedback({ projectId, answerId }: { projectId: string; 
     try {
       const data = await api(`/api/projects/${projectId}/ai/feedback`);
       const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: "application/json" }));
-      const anchor = document.createElement("a"); anchor.href = url; anchor.download = "codemesh-assistant-feedback.json"; anchor.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+      const anchor = document.createElement("a"); anchor.href = url; anchor.download = "codaventra-assistant-feedback.json"; anchor.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
     } catch (error) { setExportError(error instanceof Error ? error.message : "Export failed"); }
   }
   return <div className="cm-answer-feedback">

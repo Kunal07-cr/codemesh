@@ -328,7 +328,7 @@ export function projectRoutes(store: JsonStore, artifacts?: ArtifactStorage) {
       for (const branch of branchCandidates) {
         try {
           const response = await fetch(`https://github.com/${repository.owner}/${repository.name}/archive/refs/heads/${encodeURIComponent(branch)}.zip`, {
-            headers: { "accept": "application/zip", "user-agent": "CodeMesh repository importer" },
+            headers: { "accept": "application/zip", "user-agent": "Codaventra repository importer" },
             signal: AbortSignal.timeout(20_000)
           });
           if (!response.ok) continue;
@@ -427,7 +427,7 @@ export function parseGitHubRepository(value: string) {
 async function discoverGitHubDefaultBranch(repository: { owner: string; name: string }) {
   try {
     const response = await fetch(`https://api.github.com/repos/${repository.owner}/${repository.name}`, {
-      headers: { accept: "application/vnd.github+json", "user-agent": "CodeMesh repository importer" },
+      headers: { accept: "application/vnd.github+json", "user-agent": "Codaventra repository importer" },
       signal: AbortSignal.timeout(8_000)
     });
     if (!response.ok) return null;
