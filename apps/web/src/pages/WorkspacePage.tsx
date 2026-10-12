@@ -176,9 +176,7 @@ function WorkspaceSession() {
 
   useEffect(() => {
     if (!data || !requestedPath) return;
-    const matchingNode = data.graph.nodes.find((node) =>
-      node.filePath === requestedPath && node.range && requestedLine >= node.range.startLine && requestedLine <= node.range.endLine
-    ) ?? data.graph.nodes.find((node) => node.filePath === requestedPath && node.type === "file");
+    const matchingNode = nodeAtLine(data.graph.nodes, requestedPath, requestedLine);
     setSelectedNode(matchingNode ?? null);
     setSelectedPath(requestedPath);
   }, [data, requestedLine, requestedPath]);
@@ -886,3 +884,4 @@ function exportGraph(projectName: string, graph: RepositoryGraph) {
   link.click();
   URL.revokeObjectURL(url);
 }
+
