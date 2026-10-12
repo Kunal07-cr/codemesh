@@ -30,6 +30,7 @@ describe("Codaventra branding", () => {
       expect(readFileSync(file, "utf8"), path.relative(root, file)).not.toMatch(/\bCodeMesh\b|\bMesh AI\b/);
     }
     expect(read("packages/ai/src/index.ts")).toContain("You are Codaventra, a careful repository assistant.");
+    expect(read("apps/web/src/components/landing/LandingSections.tsx")).toContain("agent · Codaventra connected");
     const extension = JSON.parse(read("apps/vscode-extension/package.json"));
     expect(extension.displayName).toBe("Codaventra");
     expect(extension.contributes.commands.every((command: { title: string }) => command.title.startsWith("Codaventra:"))).toBe(true);

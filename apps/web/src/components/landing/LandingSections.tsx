@@ -320,7 +320,7 @@ export function QueryDemo() {
       </div>
 
       <div className="lp-terminal-body" aria-live="polite">
-        <div className="lp-terminal-bar"><span /><span /><span /> <em>agent · codemesh connected</em></div>
+        <div className="lp-terminal-bar"><span /><span /><span /> <em>agent · Codaventra connected</em></div>
         {phase === "idle" ? (
           <div className="lp-terminal-empty">
             <p>Pick a question, then run it against the sample graph.</p>
