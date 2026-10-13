@@ -11,6 +11,7 @@ accounts, saved drafts, and exported evidence remain valid. Seeded demo emails
 and the password below are unchanged. The GitHub required-check context retains
 `CodeMesh repository intelligence` so existing branch protections keep working.
 Captured evaluation results and user-owned project names are not rewritten.
+Renaming the source does not change the existing hosted URL or deploy the update.
 
 Implemented in this repository:
 
@@ -28,6 +29,8 @@ Implemented in this repository:
 - Optional Redis Socket.IO fan-out, S3-compatible encrypted repository archives, verified GitHub webhooks, and account-email delivery hooks.
 - Password recovery, email verification, session inventory/revocation, per-user AI limits, Prometheus metrics, CI, CodeQL, and Dependabot.
 - Unit/integration tests and a reproducible retrieval evaluation script.
+- Engineering Studio: persistent source-grounded tasks, bounded proposal retries, frozen source manifests, reviewable diffs, scoped worker evidence, benchmark provenance/imports, held-out reference isolation, source-history comparisons, and human-confirmed cross-repository links. See [setup and limits](docs/engineering-studio.md).
+- Change Experiment Lab: before/after module probes, export-event replay, boundary cases, controlled file reversions, regression-test drafts, and integrity receipts. Repository execution requires the separate restricted Docker worker; the built-in example is executable without imported code. See [setup and limits](docs/change-experiment-lab.md).
 
 ## Quick Start on Windows
 
@@ -114,6 +117,7 @@ and an email webhook can be enabled independently without rebuilding the image.
 ## Documentation
 
 - `docs/progress.md`
+- `docs/engineering-studio.md`
 - `docs/architecture.md`
 - `docs/api.md`
 - `docs/websocket-events.md`
@@ -122,4 +126,3 @@ and an email webhook can be enabled independently without rebuilding the image.
 - `docs/gemini-setup.md`
 - `docs/deployment-backup.md`
 - `docs/research/literature-survey.md`
-

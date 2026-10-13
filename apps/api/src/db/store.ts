@@ -11,6 +11,10 @@ import {
 } from "@codemesh/code-intelligence";
 import type {
   AiAnswer,
+  BenchmarkCorpus,
+  ContractLink,
+  EngineeringRun,
+  LabRun,
   CodeAnnotation,
   Contribution,
   DiscussionReply,
@@ -164,7 +168,7 @@ export type AssistantFeedbackRecord = {
   updatedAt: string;
 };
 
-export type OperationJobType = "repository.reindex" | "repository.incremental_sync" | "quality.scan" | "persistence.verify" | "audit.export" | "assistant.evaluate";
+export type OperationJobType = "repository.reindex" | "repository.incremental_sync" | "quality.scan" | "persistence.verify" | "audit.export" | "assistant.evaluate" | "engineering.run" | "engineering.evaluate";
 export type OperationJobStatus = "queued" | "running" | "succeeded" | "failed" | "cancelled";
 
 export type OperationJob = {
@@ -293,6 +297,10 @@ export type StoreState = {
   agentAccessTokens?: AgentAccessToken[];
   projectShares?: ProjectShare[];
   notifications?: UserNotification[];
+  changeLabRuns?: LabRun[];
+  engineeringRuns?: EngineeringRun[];
+  benchmarkCorpora?: BenchmarkCorpus[];
+  contractLinks?: ContractLink[];
 };
 
 export class JsonStore {
@@ -951,6 +959,83 @@ export class JsonStore {
     else this.state.patches.unshift(patch);
     await this.save();
     return patch;
+  }
+
+  listEngineeringRuns(projectId: string, userId: string) {
+    return structuredClone((this.state.engineeringRuns ?? []).filter((run) => run.projectId === projectId && run.createdBy === userId));
+  }
+
+  getEngineeringRun(projectId: string, id: string) {
+    return structuredClone((this.state.engineeringRuns ?? []).find((run) => run.projectId === projectId && run.id === id) ?? null);
+  }
+
+  async saveEngineeringRun(run: EngineeringRun) {
+    this.state.engineeringRuns ??= [];
+    const position = this.state.engineeringRuns.findIndex((item) => item.id === run.id && item.projectId === run.projectId);
+    if (position >= 0 && this.state.engineeringRuns[position]!.status === "cancelled" && run.status !== "cancelled") return structuredClone(this.state.engineeringRuns[position]!);
+    if (position < 0) this.state.engineeringRuns.unshift(structuredClone(run));
+    else this.state.engineeringRuns[position] = structuredClone(run);
+    let total = 0, project = 0;
+    this.state.engineeringRuns = this.state.engineeringRuns.filter((item) => {
+      if (["running", "queued"].includes(item.status)) return true;
+      total++; if (item.projectId === run.projectId) project++;
+      return total <= 30 && (item.projectId !== run.projectId || project <= 10);
+    });
+    await this.save();
+    return structuredClone(run);
+  }
+
+  listBenchmarkCorpora(projectId: string) {
+    return structuredClone((this.state.benchmarkCorpora ?? []).filter((corpus) => corpus.projectId === projectId));
+  }
+
+  getBenchmarkCorpus(projectId: string, id: string) {
+    return structuredClone((this.state.benchmarkCorpora ?? []).find((corpus) => corpus.projectId === projectId && corpus.id === id) ?? null);
+  }
+
+  async saveBenchmarkCorpus(corpus: BenchmarkCorpus) {
+    this.state.benchmarkCorpora ??= [];
+    if (this.listBenchmarkCorpora(corpus.projectId).length >= 5) throw new Error("A project can retain five benchmark corpora.");
+    if (this.state.benchmarkCorpora.length >= 20) throw new Error("The instance benchmark corpus limit was reached.");
+    this.state.benchmarkCorpora.unshift(structuredClone(corpus));
+    await this.save();
+    return structuredClone(corpus);
+  }
+
+  listContractLinks(projectId: string) {
+    return structuredClone((this.state.contractLinks ?? []).filter((link) => link.projectId === projectId || link.consumerProjectId === projectId));
+  }
+
+  async saveContractLink(link: ContractLink) {
+    this.state.contractLinks ??= [];
+    if (this.listContractLinks(link.projectId).length >= 20) throw new Error("A project can retain twenty contract links.");
+    this.state.contractLinks.unshift(structuredClone(link));
+    await this.save();
+    return structuredClone(link);
+  }
+
+  listChangeLabRuns(projectId: string) {
+    return structuredClone((this.state.changeLabRuns ?? []).filter((run) => run.projectId === projectId));
+  }
+
+  getChangeLabRun(projectId: string, runId: string) {
+    return structuredClone((this.state.changeLabRuns ?? []).find((run) => run.projectId === projectId && run.id === runId) ?? null);
+  }
+
+  async saveChangeLabRun(run: LabRun) {
+    this.state.changeLabRuns ??= [];
+    const index = this.state.changeLabRuns.findIndex((item) => item.id === run.id && item.projectId === run.projectId);
+    if (index >= 0) this.state.changeLabRuns[index] = structuredClone(run);
+    else this.state.changeLabRuns.unshift(structuredClone(run));
+    let completed = 0, projectCompleted = 0;
+    this.state.changeLabRuns = this.state.changeLabRuns.filter((item) => {
+      if (item.status === "queued" || item.status === "running") return true;
+      completed++;
+      if (item.projectId === run.projectId) projectCompleted++;
+      return completed <= 40 && (item.projectId !== run.projectId || projectCompleted <= 10);
+    });
+    await this.save();
+    return structuredClone(run);
   }
 
   getPatch(projectId: string, patchId: string) {

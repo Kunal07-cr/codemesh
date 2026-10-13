@@ -29,6 +29,9 @@ import { mcpRoutes } from "./routes/mcp.js";
 import { metricsRoutes, operationRoutes } from "./routes/operations.js";
 import { GitHubAppService } from "./services/githubApp.js";
 import { SandboxRunner } from "./services/sandboxRunner.js";
+import { changeLabRoutes } from "./routes/changeLab.js";
+import { engineeringRoutes } from "./routes/engineering.js";
+import { EngineeringEngine } from "./services/engineeringEngine.js";
 
 const pinoHttp = pinoHttpModule as unknown as (options: Record<string, unknown>) => express.RequestHandler;
 
@@ -80,7 +83,8 @@ export async function createApp() {
   app.use(csrfProtection());
 
   const realtime = await attachRealtime(server, config, store);
-  const queue = new OperationQueue(store, metrics, config.JOB_CONCURRENCY);
+  const engineering = new EngineeringEngine(store, config);
+  const queue = new OperationQueue(store, metrics, config.JOB_CONCURRENCY, engineering);
   await queue.start();
 
   app.use("/api", healthRoutes(config, store, artifacts, realtime, queue, Boolean(assistantDataset)));
@@ -91,6 +95,8 @@ export async function createApp() {
   app.use("/api/integrations", integrationRoutes(config, store, queue, github));
   app.use("/api/projects", projectRoutes(store, artifacts));
   app.use("/api/projects", advancedRoutes(store));
+  app.use("/api/projects", changeLabRoutes(config, store));
+  app.use("/api/projects", engineeringRoutes(config, store, queue, engineering));
   app.use("/api/projects", collaborationRoutes(config, store));
   app.use("/api/projects", aiRoutes(config, store, assistantDataset, queue));
   app.use("/api/projects", deliveryRoutes(config, store, queue, sandbox, github));

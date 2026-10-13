@@ -3,6 +3,7 @@ import { createAiProvider, evaluateRepositoryBenchmark } from "@codemesh/ai";
 import { analyzeRepository, buildIncrementalIndexPlan } from "@codemesh/code-intelligence";
 import type { JsonStore, OperationJob, OperationJobType } from "../db/store.js";
 import type { MetricsRegistry } from "./metrics.js";
+import type { EngineeringEngine } from "./engineeringEngine.js";
 
 export class OperationQueue {
   private timer?: NodeJS.Timeout;
@@ -12,7 +13,8 @@ export class OperationQueue {
   constructor(
     private readonly store: JsonStore,
     private readonly metrics: MetricsRegistry,
-    private readonly concurrency = 2
+    private readonly concurrency = 2,
+    private readonly engineering?: EngineeringEngine
   ) {}
 
   async start() {
@@ -104,6 +106,10 @@ export class OperationQueue {
   }
 
   private async execute(job: OperationJob): Promise<Record<string, unknown>> {
+    if (job.type === "engineering.run" || job.type === "engineering.evaluate") {
+      if (!this.engineering) throw new Error("Engineering engine is unavailable.");
+      return this.engineering.execute(job);
+    }
     if (job.type === "assistant.evaluate") {
       const provider = createAiProvider({});
       const report = await evaluateRepositoryBenchmark((request, index, retrieval) => provider.answer(request, { projectId: index.projectId, workspaceId: "main", commitSha: index.commitSha, index, retrieval, workspaceDocs: [] }), {

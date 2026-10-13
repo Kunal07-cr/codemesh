@@ -19,7 +19,10 @@
     "typecheck": "npm run typecheck -w @codemesh/web && npm run typecheck -w @codemesh/api && npm run typecheck -w @codemesh/shared && npm run typecheck -w @codemesh/code-intelligence && npm run typecheck -w @codemesh/ai",
     "evaluate:retrieval": "node scripts/evaluate-retrieval.mjs",
     "evaluate:accuracy": "node scripts/evaluate-accuracy.mjs",
-    "seed": "npm run seed -w @codemesh/api"
+    "evaluate:datasets": "tsx scripts/evaluate-engineering.ts",
+    "seed": "npm run seed -w @codemesh/api",
+    "lab:worker": "tsx apps/api/src/workers/changeLab.ts",
+    "lab:replay": "tsx apps/api/src/workers/replayChangeLab.ts"
   },
   "devDependencies": {
     "@types/node": "^24.5.2",

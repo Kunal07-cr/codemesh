@@ -16,6 +16,8 @@ import { AccountActionPage } from "./pages/AccountActionPage";
 const WorkspacePage = lazy(() => import("./pages/WorkspacePage").then((module) => ({ default: module.WorkspacePage })));
 const ProjectEvaluationPage = lazy(() => import("./pages/ProjectEvaluationPage").then((module) => ({ default: module.ProjectEvaluationPage })));
 const ProjectProofLabPage = lazy(() => import("./pages/ProjectProofLabPage").then((module) => ({ default: module.ProjectProofLabPage })));
+const ProjectChangeLabPage = lazy(() => import("./pages/ProjectChangeLabPage").then((module) => ({ default: module.ProjectChangeLabPage })));
+const ProjectEngineeringPage = lazy(() => import("./pages/ProjectEngineeringPage").then((module) => ({ default: module.ProjectEngineeringPage })));
 const ProjectLabsPage = lazy(() => import("./pages/ProjectLabsPage").then((module) => ({ default: module.ProjectLabsPage })));
 const ProjectAdvancedPage = lazy(() => import("./pages/ProjectAdvancedPage").then((module) => ({ default: module.ProjectAdvancedPage })));
 const ProjectUniversePage = lazy(() => import("./pages/ProjectUniversePage").then((module) => ({ default: module.ProjectUniversePage })));
@@ -44,6 +46,8 @@ export const router = createBrowserRouter([
       { path: "projects/:projectId/assistant", element: <AssistantPage /> },
       { path: "projects/:projectId/evaluation", element: <Suspense fallback={<LoadingState label="Loading source evaluation" />}><ProjectEvaluationPage /></Suspense> },
       { path: "projects/:projectId/proof-lab", element: <Suspense fallback={<LoadingState label="Loading repository experiments" />}><ProjectProofLabPage /></Suspense> },
+      { path: "projects/:projectId/change-lab", element: <Suspense fallback={<LoadingState label="Loading change experiments" />}><ProjectChangeLabPage /></Suspense> },
+      { path: "projects/:projectId/engineering", element: <Suspense fallback={<LoadingState label="Opening Engineering Studio" />}><ProjectEngineeringPage /></Suspense> },
       {
         path: "projects/:projectId/workspace",
         element: <Suspense fallback={<LoadingState label="Loading code workspace" />}><WorkspacePage /></Suspense>

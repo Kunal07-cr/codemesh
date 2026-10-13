@@ -38,6 +38,8 @@ const envSchema = z.object({
   JOB_CONCURRENCY: z.coerce.number().int().min(1).max(10).default(2),
   SANDBOX_EXECUTION_ENABLED: envBoolean.default(false),
   SANDBOX_TIMEOUT_MS: z.coerce.number().int().min(1_000).max(300_000).default(30_000),
+  CHANGE_LAB_WORKER_URL: optionalEnvUrl.refine((value) => !value || new URL(value).protocol === "https:" || ["localhost", "127.0.0.1", "[::1]"].includes(new URL(value).hostname), "Worker HTTP is allowed only on loopback; use HTTPS remotely"),
+  CHANGE_LAB_WORKER_TOKEN: optionalEnvString.refine((value) => !value || value.length >= 32, "Use a worker token of at least 32 characters"),
   GEMINI_API_KEY: z.string().optional(),
   GEMINI_MODEL: z.string().optional(),
   LLM_BASE_URL: optionalEnvUrl,

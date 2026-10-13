@@ -1,4 +1,5 @@
 import { z } from "zod";
+export * from "./changeLab.js";
 
 export const ZIP_UPLOAD_LIMIT_MB = 100;
 export const ZIP_UPLOAD_LIMIT_BYTES = ZIP_UPLOAD_LIMIT_MB * 1024 * 1024;
@@ -415,3 +416,4 @@ export type HealthPayload = {
   dependencies: Record<string, "ok" | "not_configured" | "degraded">;
 };
 export * from "./evaluation.js";
+export * from "./engineering.js";
