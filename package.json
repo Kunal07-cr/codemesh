@@ -24,7 +24,8 @@
     "lab:worker": "tsx apps/api/src/workers/changeLab.ts",
     "lab:replay": "tsx apps/api/src/workers/replayChangeLab.ts",
     "verification:worker": "tsx apps/api/src/workers/verification.ts",
-    "history:export": "tsx scripts/export-git-revision.ts"
+    "history:export": "tsx scripts/export-git-revision.ts",
+    "evaluate:conversations": "tsx scripts/evaluate-conversations.ts"
   },
   "devDependencies": {
     "@types/node": "^24.5.2",

@@ -44,3 +44,13 @@
 @keyframes systems-enter { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 @media (max-width: 767px) { .systems-header, .systems-header > div { flex-wrap: wrap; } .systems-form { grid-template-columns: minmax(0, 1fr); } .systems-header > div { width: 100%; } .systems-header label { flex: 1; } .systems-header select { max-width: 100%; } .systems-span { grid-template-columns: minmax(0, 1fr) 80px; } .systems-span > .studio-badge { grid-column: 1 / -1; } }
 @media (prefers-reduced-motion: reduce) { .systems-pane { animation: none; } .systems-span > i { transition: none; } }
+.conversation-selector { margin-top: 1rem; }
+.conversation-transcript { max-height: 520px; overflow-y: auto; scrollbar-width: thin; }
+.conversation-transcript li { padding: 1rem 0; border-bottom: 1px solid #263342; }
+.conversation-user, .conversation-agent { padding: .7rem 0; }
+.conversation-user small { color: #f2b86b; }
+.conversation-agent small { color: #64d6af; }
+.conversation-transcript p { white-space: pre-wrap; overflow-wrap: anywhere; margin-top: .3rem; }
+.conversation-events { display: flex; flex-wrap: wrap; gap: .5rem 1rem; padding-top: .6rem; color: #91a9bc; font-size: .7rem; }
+.conversation-composer { display: grid; grid-template-columns: minmax(0, 1fr) 48px; gap: .7rem; align-items: end; }
+.conversation-composer button { width: 48px; height: 44px; justify-content: center; }

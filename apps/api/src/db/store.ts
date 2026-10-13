@@ -17,6 +17,7 @@ import type {
   SystemRevision,
   VerificationRun,
   Publication,
+  ConversationRun,
   LabRun,
   CodeAnnotation,
   Contribution,
@@ -307,6 +308,7 @@ export type StoreState = {
   systemRevisions?: SystemRevision[];
   verificationRuns?: VerificationRun[];
   publications?: Publication[];
+  conversationRuns?: ConversationRun[];
   telemetryTokens?: Array<{ id: string; projectId: string; createdBy: string; name: string; hash: string; createdAt: string; expiresAt: string; revokedAt?: string }>;
 };
 
@@ -998,6 +1000,18 @@ export class JsonStore {
 
   listSystemRevisions(projectId: string) {
     return structuredClone((this.state.systemRevisions ?? []).filter((item) => item.projectId === projectId));
+  }
+
+  listConversationRuns(projectId: string, userId: string) {
+    return structuredClone((this.state.conversationRuns ?? []).filter((item) => item.projectId === projectId && item.createdBy === userId));
+  }
+
+  async saveConversationRun(run: ConversationRun) {
+    this.state.conversationRuns ??= [];
+    const index = this.state.conversationRuns.findIndex((item) => item.id === run.id && item.projectId === run.projectId && item.createdBy === run.createdBy);
+    if (index >= 0) this.state.conversationRuns[index] = structuredClone(run);
+    else { this.state.conversationRuns.unshift(structuredClone(run)); this.state.conversationRuns = this.state.conversationRuns.slice(0, 50); }
+    await this.save(); return structuredClone(run);
   }
 
   listTelemetryTokens(projectId: string) {

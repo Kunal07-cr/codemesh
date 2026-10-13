@@ -1,6 +1,6 @@
 import { lazy, Suspense, useState, type FormEvent } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { Activity, ArrowRight, Check, Database, Download, FileDiff, GitBranch, History, Link2, Play, RefreshCw, Square, Upload, Workflow } from "lucide-react";
 import type { BenchmarkSummary, ContractLink, EngineeringRequest, PublicEngineeringRun } from "@codemesh/shared";
 import { LoadingState } from "../components/LoadingState";
@@ -23,7 +23,8 @@ export function ProjectEngineeringPage() {
   const { projectId = "" } = useParams(), client = useQueryClient();
   const base = `/api/projects/${encodeURIComponent(projectId)}/engineering`, projectBase = `/projects/${encodeURIComponent(projectId)}`;
   const query = useQuery({ queryKey: ["engineering", projectId], queryFn: () => api<Studio>(base), refetchInterval: (state) => state.state.data?.jobs.some((job) => ["queued", "running"].includes(job.status)) ? 1500 : false });
-  const [tab, setTab] = useState("tasks"), [selected, setSelected] = useState(""), [objective, setObjective] = useState("");
+  const [params, setParams] = useSearchParams();
+  const [tab, setTab] = useState(() => ["tasks", "datasets", "connections", "history", "systems"].includes(params.get("tab") ?? "") ? params.get("tab")! : "tasks"), [selected, setSelected] = useState(""), [objective, setObjective] = useState("");
   const [mode, setMode] = useState<EngineeringRequest["mode"]>("investigate"), [attempts, setAttempts] = useState(2), [error, setError] = useState("");
   const [benchmarkChoice, setBenchmarkChoice] = useState("");
   const [diffPath, setDiffPath] = useState<string | null>(null), [labId, setLabId] = useState("");
@@ -45,7 +46,7 @@ export function ProjectEngineeringPage() {
   return <section className="cm-engineering mx-auto max-w-7xl px-4 py-6">
     <header className="studio-heading"><div><div className="eyebrow"><Workflow size={14} /> {data.project.name}</div><h1>Engineering Studio</h1></div><div className="studio-heading-actions"><span className="studio-provider">{data.provider}</span><button className="cm-tool-button" title="Refresh studio" aria-label="Refresh studio" onClick={() => void query.refetch()}><RefreshCw size={17} /></button></div></header>
     <div className="studio-metrics"><div><Activity size={18} /><span>Task runs<strong>{data.runs.length}</strong></span></div><div><Database size={18} /><span>Benchmark corpora<strong>{data.datasets.length}</strong></span></div><div><Link2 size={18} /><span>Confirmed links<strong>{data.links.length}</strong></span></div><div><Check size={18} /><span>Restricted worker<strong>{data.worker.configured ? "Configured" : "Not configured"}</strong></span></div></div>
-    <nav className="studio-tabs" aria-label="Engineering views">{[{ id: "tasks", name: "Tasks", icon: Workflow }, { id: "datasets", name: "Benchmarks", icon: Database }, { id: "connections", name: "Connections", icon: Link2 }, { id: "history", name: "History", icon: History }, { id: "systems", name: "Systems", icon: Activity }].map((item) => <button key={item.id} aria-pressed={tab === item.id} onClick={() => { setTab(item.id); setError(""); }}><item.icon size={16} />{item.name}</button>)}</nav>
+    <nav className="studio-tabs" aria-label="Engineering views">{[{ id: "tasks", name: "Tasks", icon: Workflow }, { id: "datasets", name: "Benchmarks", icon: Database }, { id: "connections", name: "Connections", icon: Link2 }, { id: "history", name: "History", icon: History }, { id: "systems", name: "Systems", icon: Activity }].map((item) => <button key={item.id} aria-pressed={tab === item.id} onClick={() => { setTab(item.id); setParams((current) => { current.set("tab", item.id); return current; }, { replace: true }); setError(""); }}><item.icon size={16} />{item.name}</button>)}</nav>
     {error && <p className="studio-error" role="alert">{error}</p>}
     {tab === "tasks" && <>
       <form className="studio-composer" onSubmit={(event) => { event.preventDefault(); const selection = benchmarkChoice ? JSON.parse(benchmarkChoice) as [string, string] : null; mutation.mutate({ path: "/runs", body: { objective, mode, maxAttempts: attempts, ...(selection ? { corpusId: selection[0], taskId: selection[1] } : {}) } }); }}>

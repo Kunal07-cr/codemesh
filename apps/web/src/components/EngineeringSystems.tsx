@@ -1,11 +1,12 @@
 import { lazy, Suspense, useState, type ChangeEvent } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { Activity, BarChart3, Check, Download, FileDiff, GitCompareArrows, GitPullRequest, KeyRound, Play, RefreshCw, ShieldCheck, Trash2, Upload } from "lucide-react";
 import type { ContractLink, PublicEngineeringRun, Publication, RepositoryGraph, VerificationRun } from "@codemesh/shared";
 import { api, jsonBody } from "../lib/api";
 import { LoadingState } from "./LoadingState";
 import "../systems.css";
+import { ConversationAgentLab } from "./ConversationAgentLab";
 
 const Graph = lazy(() => import("./RepositoryGraphCanvas").then((module) => ({ default: module.RepositoryGraphCanvas })));
 const Diff = lazy(() => import("./WorkspaceDiff").then((module) => ({ default: module.WorkspaceDiff })));
@@ -21,12 +22,14 @@ const tools = [
   { id: "verify", name: "Verified Fix Pipeline", icon: Check }, { id: "history", name: "Architecture Time Machine", icon: GitCompareArrows },
   { id: "contract", name: "API Contract Sentinel", icon: ShieldCheck }, { id: "runtime", name: "Live Runtime Twin", icon: Activity },
   { id: "publish", name: "Review to Pull Request", icon: GitPullRequest }, { id: "score", name: "AI Evaluation Scorecards", icon: BarChart3 },
-  { id: "security", name: "Repository Instruction Boundary", icon: ShieldCheck }
+  { id: "security", name: "Repository Instruction Boundary", icon: ShieldCheck },
+  { id: "conversation", name: "Conversational Agent Lab", icon: Activity }
 ];
 export function EngineeringSystems({ projectId, runs, links }: { projectId: string; runs: PublicEngineeringRun[]; links: ContractLink[] }) {
   const base = `/api/projects/${encodeURIComponent(projectId)}/engineering/systems`, client = useQueryClient();
   const query = useQuery({ queryKey: ["engineering-systems", projectId], queryFn: () => api<SystemsData>(base), refetchInterval: (state) => state.state.data?.jobs.some((job) => ["queued", "running"].includes(job.status)) ? 1500 : 10_000 });
-  const [tool, setTool] = useState("verify"), [busy, setBusy] = useState(false), [error, setError] = useState("");
+  const [params, setParams] = useSearchParams();
+  const [tool, setTool] = useState(() => tools.some((item) => item.id === params.get("view")) ? params.get("view")! : "verify"), [busy, setBusy] = useState(false), [error, setError] = useState("");
   const [before, setBefore] = useState(""), [after, setAfter] = useState(""), [comparison, setComparison] = useState<Comparison | null>(null), [contract, setContract] = useState<ContractResult | null>(null);
   const [diff, setDiff] = useState<{ path: string; before: string; after: string } | null>(null), [token, setToken] = useState("");
   async function action(path: string, body: unknown = {}, method = "POST") {
@@ -51,8 +54,9 @@ export function EngineeringSystems({ projectId, runs, links }: { projectId: stri
   const data = query.data, activeTool = tools.find((item) => item.id === tool)!, Icon = activeTool.icon;
   const eligible = runs.filter((run) => run.patch?.status === "proposed" && !["queued", "running", "cancelled"].includes(run.status));
   return <div className="engineering-systems">
-    <header className="systems-header"><h2><Icon size={19} />{activeTool.name}</h2><div><label>Systems tool<select className="field" value={tool} onChange={(event) => { setTool(event.target.value); setError(""); setToken(""); }}>{tools.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label><button className="cm-tool-button" title="Refresh systems" aria-label="Refresh systems" onClick={() => void query.refetch()}><RefreshCw size={17} /></button></div></header>
+    <header className="systems-header"><h2><Icon size={19} />{activeTool.name}</h2><div><label>Systems tool<select className="field" value={tool} onChange={(event) => { setTool(event.target.value); setParams((current) => { current.set("view", event.target.value); return current; }, { replace: true }); setError(""); setToken(""); }}>{tools.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label><button className="cm-tool-button" title="Refresh systems" aria-label="Refresh systems" onClick={() => void query.refetch()}><RefreshCw size={17} /></button></div></header>
     {error && <p className="studio-error" role="alert">{error}</p>}
+    {tool === "conversation" && <ConversationAgentLab projectId={projectId} />}
     {tool === "verify" && <div className="systems-pane">
       <Status value={data.worker.configured ? "Worker configured" : "Worker not configured"} />
       {data.permissions.review && <form className="systems-form" onSubmit={(event) => { event.preventDefault(); const fields = new FormData(event.currentTarget); void action("/verification", { runId: fields.get("run"), stages: fields.getAll("stage"), approved: fields.get("approved") === "on" }); }}>

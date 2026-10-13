@@ -3,6 +3,7 @@ import { EvidenceGroundedProvider, EVIDENCE_SYSTEM_RULES } from "./evidence.js";
 export * from "./benchmark.js";
 export * from "./evidence.js";
 export * from "./trustBoundary.js";
+export * from "./conversations.js";
 import type {
   AiAnswer,
   AiAskRequest,
