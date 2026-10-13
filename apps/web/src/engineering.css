@@ -10,7 +10,7 @@
 .studio-metrics > div:nth-child(3) svg { color: #f9b660; }
 .studio-metrics span { color: #91a9bc; font-size: .75rem; }
 .studio-metrics strong { display: block; margin-top: .3rem; color: #edf2f7; font-size: 1rem; }
-.studio-tabs { display: flex; gap: .5rem; overflow-x: auto; border-bottom: 1px solid #263342; margin-bottom: 1.25rem; }
+.studio-tabs { display: flex; gap: .5rem; overflow-x: auto; scrollbar-width: thin; scrollbar-color: #314153 transparent; border-bottom: 1px solid #263342; margin-bottom: 1.25rem; }
 .studio-tabs button { display: flex; align-items: center; gap: .5rem; padding: .75rem; color: #91a9bc; border-bottom: 2px solid transparent; white-space: nowrap; }
 .studio-tabs button[aria-pressed="true"] { border-bottom-color: var(--studio-cyan); color: var(--studio-cyan); }
 .cm-engineering h2 { font-size: 1.1rem; font-weight: 650; overflow-wrap: anywhere; }

@@ -3,6 +3,7 @@ import { exportTrail, parseTrail, recordTrailVisit, trailLocation } from "../../
 
 describe("investigation trail", () => {
   it("keeps only same-project locations and removes prompt or secret query parameters", () => {
+    expect(trailLocation("p", "/projects/p/engineering?run=run-1&token=private")).toEqual({ href: "/projects/p/engineering?run=run-1", label: "Engineering Studio", source: "" });
     expect(trailLocation("p", "/projects/p/workspace?path=src%2Fauth.ts&line=7&token=private&prompt=secret")).toEqual({ href: "/projects/p/workspace?path=src%2Fauth.ts&line=7", label: "Source workspace", source: "src/auth.ts" });
     for (const href of ["https://evil.test/projects/p", "//evil.test/projects/p", "/projects/p2/workspace", "/projects/p/../../dashboard", "/projects/p/unknown", "/projects/p\\evil"]) expect(trailLocation("p", href)).toBeNull();
   });
