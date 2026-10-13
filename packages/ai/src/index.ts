@@ -2,6 +2,7 @@ import { applyWholeFilePatch, hashContent, type RepositoryIndex, type SearchResu
 import { EvidenceGroundedProvider, EVIDENCE_SYSTEM_RULES } from "./evidence.js";
 export * from "./benchmark.js";
 export * from "./evidence.js";
+export * from "./trustBoundary.js";
 import type {
   AiAnswer,
   AiAskRequest,

@@ -4,7 +4,7 @@ import type { Citation, PatchProposal, RepoFile } from "./index.js";
 export function safeEngineeringPath(value: string): boolean {
   return value.length > 0 && value.length <= 500 && !/[\\\u0000-\u001f:]/.test(value) &&
     !value.startsWith("/") && !value.split("/").some((part) => !part || part === "." || part === ".." || part === ".git" || part === "node_modules") &&
-    !/(^|\/)\.env(?:\.|$)|\.(?:pem|key|p12)$/i.test(value);
+    !/(^|\/)\.(?:env(?:\.|$)|npmrc$|pypirc$)|(^|\/)(?:id_rsa|id_ed25519|credentials\.json)$|\.(?:pem|key|p12)$/i.test(value);
 }
 
 export const benchmarkSources = ["swe-bench", "defects4j", "codesearchnet", "codexglue", "sard", "custom"] as const;

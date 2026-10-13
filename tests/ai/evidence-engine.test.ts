@@ -53,7 +53,7 @@ describe("source evidence safety", () => {
     expect(String(options[1].body)).toContain("untrusted"); expect(options[1].signal).toBeDefined();
   });
   it("never streams a hallucinated response before it has been checked", async () => {
-    const question = "Explain normalizeSlug.";
+    const question = "Explain createSessionToken.";
     vi.stubGlobal("fetch", vi.fn(async () => Response.json({ choices: [{ message: { content: '{"facts":[{"evidence":1,"quote":"admin.ts grants universal access"}]}' } }] })));
     const tokens: string[] = [];
     const answer = await createAiProvider({ llmBaseUrl: "http://model.test/v1", llmModel: "mock" }).streamAnswer!(request(question), context(question), (token) => tokens.push(token));
@@ -70,10 +70,11 @@ describe("source evidence safety", () => {
     const answer = await createAiProvider({}).answer(request(question), context(question));
     expect(answer.grounding?.status).toBe("general"); expect(answer.answer).toContain("O(log n)"); expect(answer.citations).toEqual([]);
   });
-  it("keeps malicious source comments as data rather than following their instructions", async () => {
+  it("abstains before generation when malicious source comments impersonate instructions", async () => {
     const question = "Explain normalizeSlug.";
     const answer = await createAiProvider({}).answer(request(question), context(question));
-    expect(answer.sourceFacts?.[0]?.code).not.toContain("ignore prior instructions"); expect(answer.answer).toContain("toLowerCase()");
+    expect(answer.grounding?.status).toBe("abstained"); expect(answer.citations).toEqual([]); expect(answer.sourceFacts).toBeUndefined();
+    expect(answer.answer).toContain("Repository instruction boundary:"); expect(answer.answer).not.toContain("ignore prior instructions");
   });
   it("runs all independent source anchors and categories with actual per-question progress", async () => {
     const progress: number[] = [];

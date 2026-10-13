@@ -22,7 +22,9 @@
     "evaluate:datasets": "tsx scripts/evaluate-engineering.ts",
     "seed": "npm run seed -w @codemesh/api",
     "lab:worker": "tsx apps/api/src/workers/changeLab.ts",
-    "lab:replay": "tsx apps/api/src/workers/replayChangeLab.ts"
+    "lab:replay": "tsx apps/api/src/workers/replayChangeLab.ts",
+    "verification:worker": "tsx apps/api/src/workers/verification.ts",
+    "history:export": "tsx scripts/export-git-revision.ts"
   },
   "devDependencies": {
     "@types/node": "^24.5.2",

@@ -99,6 +99,13 @@ retrieval records; no reference-patch fields enter that index.
 
 ## Verification and Remaining Integrations
 
+Engineering > Systems adds selected npm-script verification, retained Git source
+comparisons, conservative OpenAPI checks, a scoped OTLP JSON collector, draft-PR
+approval/publishing, evidence scorecards and repository instruction boundary
+checks. See [Engineering Systems](engineering-systems.md) for setup and limits.
+Separate workers, instrumented producers and an explicitly authorized GitHub App
+are required; no infrastructure or account permissions are enabled automatically.
+
 The Studio distinguishes PASS, FAIL and NOT RUN. PASS for an investigation/plan
 means that stage completed, not that a defect is fixed. A completed worker
 experiment can be attached only when its project, patch, revision, baseline

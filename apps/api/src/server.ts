@@ -32,6 +32,9 @@ import { SandboxRunner } from "./services/sandboxRunner.js";
 import { changeLabRoutes } from "./routes/changeLab.js";
 import { engineeringRoutes } from "./routes/engineering.js";
 import { EngineeringEngine } from "./services/engineeringEngine.js";
+import { SystemsEngine } from "./services/systemsEngine.js";
+import { systemsRoutes } from "./routes/systems.js";
+import { telemetryRoutes } from "./routes/telemetry.js";
 
 const pinoHttp = pinoHttpModule as unknown as (options: Record<string, unknown>) => express.RequestHandler;
 
@@ -79,12 +82,15 @@ export async function createApp() {
     }
   }));
   app.use(cookieParser());
+  // This exact collector surface uses scoped bearer authentication, never cookies.
+  app.use("/api/telemetry", telemetryRoutes(store));
   app.use(authenticate(config, store));
   app.use(csrfProtection());
 
   const realtime = await attachRealtime(server, config, store);
   const engineering = new EngineeringEngine(store, config);
-  const queue = new OperationQueue(store, metrics, config.JOB_CONCURRENCY, engineering);
+  const systems = new SystemsEngine(store, config, engineering.provider);
+  const queue = new OperationQueue(store, metrics, config.JOB_CONCURRENCY, engineering, systems);
   await queue.start();
 
   app.use("/api", healthRoutes(config, store, artifacts, realtime, queue, Boolean(assistantDataset)));
@@ -97,6 +103,7 @@ export async function createApp() {
   app.use("/api/projects", advancedRoutes(store));
   app.use("/api/projects", changeLabRoutes(config, store));
   app.use("/api/projects", engineeringRoutes(config, store, queue, engineering));
+  app.use("/api/projects", systemsRoutes(config, store, queue, systems, github));
   app.use("/api/projects", collaborationRoutes(config, store));
   app.use("/api/projects", aiRoutes(config, store, assistantDataset, queue));
   app.use("/api/projects", deliveryRoutes(config, store, queue, sandbox, github));

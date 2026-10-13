@@ -14,6 +14,9 @@ import type {
   BenchmarkCorpus,
   ContractLink,
   EngineeringRun,
+  SystemRevision,
+  VerificationRun,
+  Publication,
   LabRun,
   CodeAnnotation,
   Contribution,
@@ -168,7 +171,7 @@ export type AssistantFeedbackRecord = {
   updatedAt: string;
 };
 
-export type OperationJobType = "repository.reindex" | "repository.incremental_sync" | "quality.scan" | "persistence.verify" | "audit.export" | "assistant.evaluate" | "engineering.run" | "engineering.evaluate";
+export type OperationJobType = "repository.reindex" | "repository.incremental_sync" | "quality.scan" | "persistence.verify" | "audit.export" | "assistant.evaluate" | "engineering.run" | "engineering.evaluate" | "engineering.verify" | "engineering.redteam";
 export type OperationJobStatus = "queued" | "running" | "succeeded" | "failed" | "cancelled";
 
 export type OperationJob = {
@@ -301,6 +304,10 @@ export type StoreState = {
   engineeringRuns?: EngineeringRun[];
   benchmarkCorpora?: BenchmarkCorpus[];
   contractLinks?: ContractLink[];
+  systemRevisions?: SystemRevision[];
+  verificationRuns?: VerificationRun[];
+  publications?: Publication[];
+  telemetryTokens?: Array<{ id: string; projectId: string; createdBy: string; name: string; hash: string; createdAt: string; expiresAt: string; revokedAt?: string }>;
 };
 
 export class JsonStore {
@@ -987,6 +994,64 @@ export class JsonStore {
 
   listBenchmarkCorpora(projectId: string) {
     return structuredClone((this.state.benchmarkCorpora ?? []).filter((corpus) => corpus.projectId === projectId));
+  }
+
+  listSystemRevisions(projectId: string) {
+    return structuredClone((this.state.systemRevisions ?? []).filter((item) => item.projectId === projectId));
+  }
+
+  listTelemetryTokens(projectId: string) {
+    return structuredClone((this.state.telemetryTokens ?? []).filter((item) => item.projectId === projectId));
+  }
+
+  async saveTelemetryToken(token: NonNullable<StoreState["telemetryTokens"]>[number]) {
+    this.state.telemetryTokens ??= [];
+    const index = this.state.telemetryTokens.findIndex((item) => item.id === token.id && item.projectId === token.projectId);
+    if (index >= 0) this.state.telemetryTokens[index] = structuredClone(token);
+    else {
+      if (this.state.telemetryTokens.filter((item) => !item.revokedAt && new Date(item.expiresAt).getTime() > Date.now()).length >= 30) throw new Error("Telemetry token limit reached.");
+      this.state.telemetryTokens = this.state.telemetryTokens.filter((item) => !item.revokedAt && new Date(item.expiresAt).getTime() > Date.now());
+      this.state.telemetryTokens.unshift(structuredClone(token));
+    }
+    await this.save(); return token;
+  }
+
+  async saveSystemRevision(revision: SystemRevision) {
+    this.state.systemRevisions ??= [];
+    if (this.state.systemRevisions.length >= 60 || this.listSystemRevisions(revision.projectId).length >= 12) throw new Error("Revision capture limit reached (12 per project / 60 per instance).");
+    const bytes = this.state.systemRevisions.reduce((sum, item) => sum + item.files.reduce((size, file) => size + Buffer.byteLength(file.content), 0), 0) + revision.files.reduce((sum, file) => sum + Buffer.byteLength(file.content), 0);
+    if (bytes > 20_000_000) throw new Error("Retained revision source exceeds the 20 MB instance limit.");
+    this.state.systemRevisions.unshift(structuredClone(revision));
+    await this.save(); return structuredClone(revision);
+  }
+
+  listVerificationRuns(projectId: string, userId: string) {
+    return structuredClone((this.state.verificationRuns ?? []).filter((item) => item.projectId === projectId && item.createdBy === userId));
+  }
+
+  async saveVerificationRun(run: VerificationRun) {
+    this.state.verificationRuns ??= [];
+    const index = this.state.verificationRuns.findIndex((item) => item.id === run.id && item.projectId === run.projectId);
+    if (index >= 0) this.state.verificationRuns[index] = structuredClone(run);
+    else this.state.verificationRuns.unshift(structuredClone(run));
+    let retained = 0;
+    this.state.verificationRuns = this.state.verificationRuns.filter((item) => ["queued", "running"].includes(item.status) || ++retained <= 60);
+    await this.save(); return structuredClone(run);
+  }
+
+  listPublications(projectId: string, userId: string) {
+    return structuredClone((this.state.publications ?? []).filter((item) => item.projectId === projectId && item.createdBy === userId));
+  }
+
+  async savePublication(publication: Publication) {
+    this.state.publications ??= [];
+    const index = this.state.publications.findIndex((item) => item.id === publication.id && item.projectId === publication.projectId);
+    if (index >= 0) this.state.publications[index] = structuredClone(publication);
+    else {
+      if (this.state.publications.length >= 100) throw new Error("Publication record limit reached.");
+      this.state.publications.unshift(structuredClone(publication));
+    }
+    await this.save(); return structuredClone(publication);
   }
 
   getBenchmarkCorpus(projectId: string, id: string) {

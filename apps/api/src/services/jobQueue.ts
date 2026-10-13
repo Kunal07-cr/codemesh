@@ -4,6 +4,7 @@ import { analyzeRepository, buildIncrementalIndexPlan } from "@codemesh/code-int
 import type { JsonStore, OperationJob, OperationJobType } from "../db/store.js";
 import type { MetricsRegistry } from "./metrics.js";
 import type { EngineeringEngine } from "./engineeringEngine.js";
+import type { SystemsEngine } from "./systemsEngine.js";
 
 export class OperationQueue {
   private timer?: NodeJS.Timeout;
@@ -14,7 +15,8 @@ export class OperationQueue {
     private readonly store: JsonStore,
     private readonly metrics: MetricsRegistry,
     private readonly concurrency = 2,
-    private readonly engineering?: EngineeringEngine
+    private readonly engineering?: EngineeringEngine,
+    private readonly systems?: SystemsEngine
   ) {}
 
   async start() {
@@ -106,6 +108,10 @@ export class OperationQueue {
   }
 
   private async execute(job: OperationJob): Promise<Record<string, unknown>> {
+    if (job.type === "engineering.verify" || job.type === "engineering.redteam") {
+      if (!this.systems) throw new Error("Systems engine unavailable.");
+      return this.systems.execute(job);
+    }
     if (job.type === "engineering.run" || job.type === "engineering.evaluate") {
       if (!this.engineering) throw new Error("Engineering engine is unavailable.");
       return this.engineering.execute(job);

@@ -1,6 +1,6 @@
 import crypto from "node:crypto";
 import { inferLanguage, isRepositoryTextFile } from "@codemesh/code-intelligence";
-import type { RepoFile } from "@codemesh/shared";
+import { safeEngineeringPath, type PatchProposal, type RepoFile } from "@codemesh/shared";
 import type { AppConfig } from "../config.js";
 
 type PullRequestFile = {
@@ -24,6 +24,72 @@ export class GitHubAppService {
         ? ["private repository access", "incremental content sync", "pull request checks", "line annotations"]
         : ["public repository import", "signed webhook support when configured"]
     };
+  }
+
+  publicationAllowed(repository: string, installationId: number) {
+    return this.config.GITHUB_PUBLISH_ENABLED && this.config.githubConfigured &&
+      (this.config.GITHUB_PUBLISH_REPOSITORIES ?? "").split(",").map((entry) => entry.trim().toLowerCase()).includes(`${repository.toLowerCase()}:${installationId}`);
+  }
+
+  async publishDraft(input: { repository: string; installationId: number; base: string; revision: string; branch: string; publicationId: string; title: string; patch: PatchProposal; body: string; assertAllowed(): void }) {
+    if (!this.publicationAllowed(input.repository, input.installationId) || !/^[\w.-]+\/[\w.-]+$/.test(input.repository) || !/^[a-f0-9]{40}$/.test(input.revision) || !/^codaventra\/[a-f0-9-]{36}$/.test(input.branch)) throw new Error("Publication destination not allowlisted or source identity invalid");
+    if (input.patch.files.some((file) => !safeEngineeringPath(file.path) || /^\.github\/workflows\//.test(file.path))) throw new Error("Unsafe publication path; workflow changes require a separate review");
+    const appJwt = createAppJwt(this.config.GITHUB_APP_ID!, this.config.GITHUB_PRIVATE_KEY_BASE64!);
+    const token = await this.request<{ token: string }>(`/app/installations/${input.installationId}/access_tokens`, appJwt, { method: "POST", body: JSON.stringify({ repositories: [input.repository.split("/")[1]], permissions: { contents: "write", pull_requests: "write" } }) });
+    const root = `/repos/${input.repository}`;
+    const request = <T = Record<string, unknown>>(suffix: string, init: RequestInit = {}) => { input.assertAllowed(); return this.request<T>(`${root}${suffix}`, token.token, init); };
+    const optional = async <T>(suffix: string): Promise<T | null> => {
+      input.assertAllowed();
+      const response = await fetch(`https://api.github.com${root}${suffix}`, { headers: this.headers(token.token), signal: AbortSignal.timeout(20_000), redirect: "error" });
+      if (response.status === 404) return null;
+      if (!response.ok) throw new Error("GitHub publication lookup failed");
+      return response.json() as Promise<T>;
+    };
+    const base = await request<{ object: { sha: string } }>(`/git/ref/heads/${encodeURIComponent(input.base)}`);
+    if (base.object.sha !== input.revision) throw new Error("Upstream base moved; capture a fresh run before publication");
+    const message = `Codaventra reviewed proposal ${input.publicationId}`;
+    for (const file of input.patch.files) {
+      const current = await request<{ encoding: string; content: string; type: string }>(`/contents/${file.path.split("/").map(encodeURIComponent).join("/")}?ref=${input.revision}`);
+      if (current.type !== "file" || current.encoding !== "base64" || Buffer.from(current.content.replace(/\s/g, ""), "base64").toString("utf8") !== file.baseContent) throw new Error("Upstream file differs from reviewed proposal");
+    }
+    const baseCommit = await request<{ tree: { sha: string } }>(`/git/commits/${input.revision}`);
+    type TreeEntry = { path: string; type: string; mode: string; sha: string };
+    const trees = new Map<string, TreeEntry[]>();
+    async function modeFor(filePath: string) {
+      let sha = baseCommit.tree.sha; const parts = filePath.split("/");
+      for (let position = 0; position < parts.length; position++) {
+        let entries = trees.get(sha);
+        if (!entries) { const tree = await request<{ tree: TreeEntry[]; truncated?: boolean }>(`/git/trees/${sha}`); if (tree.truncated) throw new Error("Cannot verify the complete base tree"); entries = tree.tree; trees.set(sha, entries); }
+        const entry = entries.find((item) => item.path === parts[position]);
+        if (!entry || position < parts.length - 1 && entry.type !== "tree") throw new Error("Base file identity missing");
+        if (position === parts.length - 1) { if (entry.type !== "blob" || !["100644", "100755"].includes(entry.mode)) throw new Error("Symlink/submodule publication is unsupported"); return entry.mode; }
+        sha = entry.sha;
+      }
+      throw new Error("Invalid file identity");
+    }
+    const edits = [];
+    for (const file of input.patch.files) edits.push({ path: file.path, mode: await modeFor(file.path), type: "blob", content: file.proposedContent });
+    const expectedTree = await request<{ sha: string }>("/git/trees", { method: "POST", body: JSON.stringify({ base_tree: baseCommit.tree.sha, tree: edits }) });
+    const existing = await optional<{ object: { sha: string } }>(`/git/ref/heads/${encodeURIComponent(input.branch)}`);
+    let commitSha = existing?.object.sha;
+    if (commitSha) {
+      const commit = await request<{ message: string; parents: Array<{ sha: string }>; tree: { sha: string } }>(`/git/commits/${commitSha}`);
+      if (commit.message !== message || commit.parents.length !== 1 || commit.parents[0]?.sha !== input.revision || commit.tree.sha !== expectedTree.sha) throw new Error("Publication branch identity changed");
+      for (const file of input.patch.files) {
+        const current = await request<{ content: string; encoding: string }>(`/contents/${file.path.split("/").map(encodeURIComponent).join("/")}?ref=${commitSha}`);
+        if (current.encoding !== "base64" || Buffer.from(current.content.replace(/\s/g, ""), "base64").toString("utf8") !== file.proposedContent) throw new Error("Existing branch differs from approved patch");
+      }
+    } else {
+      const created = await request<{ sha: string }>("/git/commits", { method: "POST", body: JSON.stringify({ message, tree: expectedTree.sha, parents: [input.revision] }) });
+      commitSha = created.sha;
+      const latest = await request<{ object: { sha: string } }>(`/git/ref/heads/${encodeURIComponent(input.base)}`);
+      if (latest.object.sha !== input.revision) throw new Error("Upstream moved before branch creation");
+      await request("/git/refs", { method: "POST", body: JSON.stringify({ ref: `refs/heads/${input.branch}`, sha: commitSha }) });
+    }
+    const pulls = await request<Array<{ html_url: string; number: number; head: { sha: string }; draft: boolean }>>(`/pulls?state=all&head=${encodeURIComponent(`${input.repository.split("/")[0]}:${input.branch}`)}&base=${encodeURIComponent(input.base)}`);
+    const pull = pulls[0] ?? await request<{ html_url: string; number: number; head: { sha: string }; draft: boolean }>("/pulls", { method: "POST", body: JSON.stringify({ title: input.title, head: input.branch, base: input.base, body: input.body, draft: true, maintainer_can_modify: false }) });
+    if (pull.head.sha !== commitSha || !/^https:\/\/github\.com\/[\w.-]+\/[\w.-]+\/pull\/\d+$/.test(pull.html_url)) throw new Error("Unexpected PR identity");
+    return { commitSha, url: pull.html_url, number: pull.number };
   }
 
   async listPullRequestFiles(repository: string, pullNumber: number, installationId: number) {
@@ -169,4 +235,3 @@ function normalizePath(value: string) {
 function isSensitivePath(value: string) {
   return /(^|\/)(\.env|\.npmrc|\.pypirc|id_rsa|id_ed25519|credentials)(\.|$|\/)/i.test(value);
 }
-
