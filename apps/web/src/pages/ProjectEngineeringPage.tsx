@@ -1,13 +1,15 @@
-import { lazy, Suspense, useState, type FormEvent } from "react";
+import { lazy, Suspense, useRef, useState, type FormEvent } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useParams, useSearchParams } from "react-router-dom";
-import { Activity, ArrowRight, Check, Database, Download, FileDiff, GitBranch, History, Link2, Play, RefreshCw, Square, Upload, Workflow } from "lucide-react";
+import { Activity, ArrowRight, Check, CopyPlus, Database, Download, FileDiff, GitBranch, History, Link2, Play, RefreshCw, Square, Upload, Workflow } from "lucide-react";
 import type { BenchmarkSummary, ContractLink, EngineeringRequest, PublicEngineeringRun } from "@codemesh/shared";
 import { LoadingState } from "../components/LoadingState";
 import { api, jsonBody } from "../lib/api";
 import "../engineering.css";
 import { EngineeringSystems } from "../components/EngineeringSystems";
 import { EngineeringClarification } from "../components/EngineeringClarification";
+import { EngineeringTaskList } from "../components/EngineeringTaskList";
+import { engineeringTaskDraft } from "../lib/engineeringTasks";
 
 const WorkspaceDiff = lazy(() => import("../components/WorkspaceDiff").then((module) => ({ default: module.WorkspaceDiff })));
 type Evaluation = { rows: Array<{ id: string; status: string; recallAtK: number | null; reason: string }>; metrics: { measured: number; notRun: number; recallAtK: number | null }; limitations: string[] };
@@ -29,6 +31,7 @@ export function ProjectEngineeringPage() {
   const [mode, setMode] = useState<EngineeringRequest["mode"]>("investigate"), [attempts, setAttempts] = useState(2), [error, setError] = useState("");
   const [benchmarkChoice, setBenchmarkChoice] = useState("");
   const [diffPath, setDiffPath] = useState<string | null>(null), [labId, setLabId] = useState("");
+  const objectiveField = useRef<HTMLTextAreaElement>(null);
   const run = query.data?.runs.find((item) => item.id === selected) ?? query.data?.runs[0];
   const labs = useQuery({ queryKey: ["engineering-labs", projectId, run?.patch?.id], queryFn: () => api<{ runs: Array<{ id: string; title: string; status: string; request: { patchId: string } }> }>(`/api/projects/${encodeURIComponent(projectId)}/change-lab`), enabled: Boolean(run?.patch && query.data?.reviewAllowed) });
   const mutation = useMutation({ mutationFn: ({ path, method = "POST", body = {} }: { path: string; method?: string; body?: unknown }) => api<unknown>(`${base}${path}`, { method, body: method === "DELETE" ? undefined : jsonBody(body) }),
@@ -51,12 +54,13 @@ export function ProjectEngineeringPage() {
     {error && <p className="studio-error" role="alert">{error}</p>}
     {tab === "tasks" && <>
       <form className="studio-composer" onSubmit={(event) => { event.preventDefault(); const selection = benchmarkChoice ? JSON.parse(benchmarkChoice) as [string, string] : null; mutation.mutate({ path: "/runs", body: { objective, mode, maxAttempts: attempts, ...(selection ? { corpusId: selection[0], taskId: selection[1] } : {}) } }); }}>
-        <label>Engineering task<textarea className="field" value={objective} onChange={(event) => setObjective(event.target.value)} readOnly={Boolean(benchmarkChoice)} minLength={8} maxLength={4000} rows={3} required /></label>
+        <label>Engineering task<textarea ref={objectiveField} className="field" value={objective} onChange={(event) => setObjective(event.target.value)} readOnly={Boolean(benchmarkChoice)} minLength={8} maxLength={4000} rows={3} required /></label>
         <div className="studio-compose-options"><label>Benchmark task<select className="field" value={benchmarkChoice} onChange={(event) => { setBenchmarkChoice(event.target.value); if (event.target.value) { const [corpusId, taskId] = JSON.parse(event.target.value) as [string, string]; const task = data.datasets.find((corpus) => corpus.id === corpusId)?.tasks.find((item) => item.id === taskId); if (task) setObjective(task.issue); } }}><option value="">Custom task</option>{data.datasets.flatMap((corpus) => corpus.tasks.map((task) => <option key={`${corpus.id}:${task.id}`} value={JSON.stringify([corpus.id, task.id])}>{corpus.name}: {task.id}</option>))}</select></label><label>Mode<select className="field" value={mode} onChange={(event) => setMode(event.target.value as EngineeringRequest["mode"])}>{["investigate", "repair", "migration", "security", "review"].map((item) => <option key={item} value={item}>{item[0]!.toUpperCase() + item.slice(1)}</option>)}</select></label><label>Attempt limit<input className="field" type="number" min={1} max={3} value={attempts} onChange={(event) => setAttempts(Number(event.target.value))} required /></label><button type="submit" className="action-primary" disabled={busy}><Play size={16} />{busy ? "Submitting" : "Start task"}</button></div>
       </form>
-      <div className="studio-workspace"><aside className="studio-run-list" aria-label="Task runs">{data.runs.length ? data.runs.map((item) => <button key={item.id} className={run?.id === item.id ? "is-selected" : ""} onClick={() => { setSelected(item.id); setDiffPath(null); setLabId(""); }}><strong>{item.objective}</strong><span><Badge value={item.status} />{item.attempts}/{item.maxAttempts}</span><small>{new Date(item.createdAt).toLocaleString()}</small></button>) : <p className="studio-empty">No task runs</p>}</aside>
+      <div className="studio-workspace"><EngineeringTaskList key={projectId} runs={data.runs} selectedId={run?.id} onSelect={(id) => { setSelected(id); setDiffPath(null); setLabId(""); }} />
       <div className="studio-evidence">{run ? <>
         <div className="studio-report-heading"><div><h2>{run.objective}</h2><span className="studio-revision">{run.revision}</span></div><div className="studio-heading-actions"><Badge value={run.verification.status} /><button className="cm-tool-button" title="Download evidence report" aria-label="Download evidence report" onClick={() => void downloadReport()}><Download size={17} /></button>{["queued", "running"].includes(run.status) && <button className="cm-tool-button" title="Cancel task" aria-label="Cancel task" disabled={busy} onClick={() => mutation.mutate({ path: `/runs/${run.id}`, method: "DELETE" })}><Square size={16} /></button>}{run.attempts < run.maxAttempts && (["failed", "needs_input"].includes(run.status) || run.verification.status === "FAIL") && <button className="action-secondary" disabled={busy} onClick={() => mutation.mutate({ path: `/runs/${run.id}/retry` })}><RefreshCw size={16} /> Retry</button>}</div></div>
+        <div className="studio-task-reuse"><button className="action-secondary" disabled={busy} onClick={() => { const draft = engineeringTaskDraft(run); setObjective(draft.objective); setMode(draft.mode); setAttempts(draft.maxAttempts); setBenchmarkChoice(""); setError(""); objectiveField.current?.focus(); }}><CopyPlus size={16} /> Use as new task</button></div>
         <dl className="studio-run-facts"><div><dt>Captured files</dt><dd>{run.manifest.length}</dd></div><div><dt>Context estimate</dt><dd>{run.telemetry.contextTokensEstimate.toLocaleString()} tokens</dd></div><div><dt>Elapsed</dt><dd>{run.telemetry.durationMs} ms</dd></div><div><dt>Billed cost</dt><dd>{run.telemetry.cost === null ? "Unavailable" : run.telemetry.cost}</dd></div></dl>
         <EngineeringClarification key={`${run.id}:${run.attempts}`} run={run} busy={busy || data.jobs.some((job) => job.metadata?.runId === run.id && ["queued", "running"].includes(job.status))} onSubmit={(instruction, expectedAttempt) => mutation.mutate({ path: `/runs/${run.id}/clarify`, body: { instruction, expectedAttempt } })} />
         <ol className="studio-timeline">{run.steps.map((step, index) => <li key={`${step.stage}-${index}`}><i aria-hidden="true" /><strong>{step.stage}</strong><Badge value={step.status} /><p>{step.detail}</p></li>)}</ol>

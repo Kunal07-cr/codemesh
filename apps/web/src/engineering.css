@@ -20,6 +20,13 @@
 .studio-compose-options { display: grid; gap: .75rem; }
 .studio-workspace { display: grid; grid-template-columns: 250px minmax(0, 1fr); margin-top: 1.25rem; }
 .studio-run-list { border-right: 1px solid #263342; padding-right: 1rem; }
+.studio-task-filters { display: grid; gap: .75rem; padding: 0 .65rem .9rem; border-bottom: 1px solid #263342; }
+.studio-task-filters output { color: #91a9bc; font-size: .7rem; }
+.studio-task-search { display: block; position: relative; min-width: 0; }
+.studio-task-search > svg { position: absolute; top: 50%; left: .7rem; transform: translateY(-50%); color: var(--studio-cyan); pointer-events: none; }
+.studio-task-search input { width: 100%; padding-left: 2rem; }
+.studio-task-reuse { display: flex; justify-content: end; margin-top: .75rem; }
+.studio-task-reuse button { max-width: 100%; white-space: normal; }
 .studio-run-list button { display: block; width: 100%; text-align: left; border-bottom: 1px solid #263342; padding: .9rem .65rem; transition: background-color 180ms ease; }
 .studio-run-list button.is-selected { background: #111e27; box-shadow: inset 2px 0 var(--studio-cyan); }
 .studio-run-list strong { display: -webkit-box; overflow: hidden; -webkit-line-clamp: 2; -webkit-box-orient: vertical; font-size: .8rem; overflow-wrap: anywhere; }
@@ -102,7 +109,10 @@
   .studio-composer, .studio-workspace { grid-template-columns: minmax(0, 1fr); }
   .studio-compose-options { grid-template-columns: minmax(0, 1fr) 100px; align-items: end; }
   .studio-compose-options > button { grid-column: 1 / -1; }
-  .studio-run-list { display: flex; overflow-x: auto; border-right: 0; padding-right: 0; border-bottom: 1px solid #263342; margin-bottom: 1rem; }
+  .studio-run-list { border-right: 0; padding-right: 0; border-bottom: 1px solid #263342; margin-bottom: 1rem; min-width: 0; }
+  .studio-task-filters { grid-template-columns: repeat(2, minmax(0, 1fr)); padding-inline: 0; }
+  .studio-task-filters output { grid-column: 1 / -1; }
+  .studio-task-results { display: flex; overflow-x: auto; }
   .studio-run-list button { flex: 0 0 220px; }
   .studio-evidence { padding-left: 0; }
   .studio-run-facts { grid-template-columns: repeat(2, minmax(0, 1fr)); }

@@ -121,6 +121,13 @@ The existing three-attempt maximum is not increased or reset. Expired budgets,
 cancelled tasks, changed source, and stale/double submissions are rejected.
 Benchmark tasks retain their fixed statements; start a custom task to add instructions.
 Clarification is not verification and never applies a patch automatically.
+The task list supports text searches across objectives, modes, and retained
+clarifications, combined with an exact status filter. Filtering does not delete
+or change runs. **Use as new task** copies the latest clarification (or original
+objective), mode, and attempt limit into the custom-task composer. It does not
+enqueue anything: the user still submits Start task to capture fresh source.
+Run IDs, prior patches, benchmark bindings, verification, and snapshots are not
+copied; the existing run remains unchanged.
 Local requests without a supported explicit edit
 also ask for clarification instead of repeating the same task. Relevant source
 links remain available for that local clarification. Transient provider failures
