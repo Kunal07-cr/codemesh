@@ -14,6 +14,7 @@ import type {
   BenchmarkCorpus,
   ContractLink,
   EngineeringRun,
+  Mission,
   SystemRevision,
   VerificationRun,
   Publication,
@@ -303,6 +304,7 @@ export type StoreState = {
   notifications?: UserNotification[];
   changeLabRuns?: LabRun[];
   engineeringRuns?: EngineeringRun[];
+  missions?: Mission[];
   benchmarkCorpora?: BenchmarkCorpus[];
   contractLinks?: ContractLink[];
   systemRevisions?: SystemRevision[];
@@ -992,6 +994,24 @@ export class JsonStore {
     });
     await this.save();
     return structuredClone(run);
+  }
+
+  listMissions(projectId: string, userId: string) {
+    return structuredClone((this.state.missions ?? []).filter((mission) => mission.projectId === projectId && mission.createdBy === userId));
+  }
+
+  getMission(projectId: string, id: string) {
+    return structuredClone((this.state.missions ?? []).find((mission) => mission.projectId === projectId && mission.id === id) ?? null);
+  }
+
+  async saveMission(mission: Mission, expectedVersion?: number) {
+    this.state.missions ??= [];
+    const index = this.state.missions.findIndex((item) => item.id === mission.id);
+    if (index >= 0 && (this.state.missions[index]!.version !== expectedVersion || this.state.missions[index]!.createdBy !== mission.createdBy || this.state.missions[index]!.projectId !== mission.projectId)) throw new Error("Mission version changed. Refresh the mission.");
+    if (index < 0 && (expectedVersion !== undefined || this.state.missions.length >= 50 || this.state.missions.filter((item) => item.createdBy === mission.createdBy).length >= 10)) throw new Error("Mission retention limit reached or the original plan is missing.");
+    const saved = structuredClone({ ...mission, version: index < 0 ? 1 : expectedVersion! + 1, updatedAt: new Date().toISOString() });
+    if (index < 0) this.state.missions.unshift(saved); else this.state.missions[index] = saved;
+    await this.save(); return structuredClone(saved);
   }
 
   listBenchmarkCorpora(projectId: string) {

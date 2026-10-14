@@ -11,15 +11,11 @@ import type { OperationQueue } from "../services/jobQueue.js";
 import { ChangeLabClient } from "../services/changeLabClient.js";
 import { createUserRateLimiter, requireProjectPermission } from "../services/security.js";
 import { asyncHandler, ok, parseBody } from "./helpers.js";
+import { withEngineeringSubmission } from "../services/engineeringSubmissions.js";
 
 export function engineeringRoutes(config: AppConfig, store: JsonStore, queue: OperationQueue, engine: EngineeringEngine) {
   const router = Router(), worker = new ChangeLabClient(config);
-  const submissions = new Set<string>();
-  async function locked(key: string, action: () => Promise<void>) {
-    if (submissions.has(key)) throw conflict("This submission is already in progress.");
-    submissions.add(key);
-    try { await action(); } finally { submissions.delete(key); }
-  }
+  const locked = (key: string, action: () => Promise<void>) => withEngineeringSubmission(store, key, action);
   const limiter = createUserRateLimiter(Math.min(10, config.AI_REQUESTS_PER_MINUTE));
   const owned = (projectId: string, userId: string, id: string) => {
     const run = store.getEngineeringRun(projectId, id);

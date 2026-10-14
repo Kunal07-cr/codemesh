@@ -36,6 +36,7 @@ import { SystemsEngine } from "./services/systemsEngine.js";
 import { systemsRoutes } from "./routes/systems.js";
 import { telemetryRoutes } from "./routes/telemetry.js";
 import { conversationRoutes } from "./routes/conversations.js";
+import { missionRoutes } from "./routes/missions.js";
 
 const pinoHttp = pinoHttpModule as unknown as (options: Record<string, unknown>) => express.RequestHandler;
 
@@ -104,6 +105,7 @@ export async function createApp() {
   app.use("/api/projects", advancedRoutes(store));
   app.use("/api/projects", changeLabRoutes(config, store));
   app.use("/api/projects", engineeringRoutes(config, store, queue, engineering));
+  app.use("/api/projects", missionRoutes(config, store, queue));
   app.use("/api/projects", systemsRoutes(config, store, queue, systems, github));
   app.use("/api/projects", conversationRoutes(config, store));
   app.use("/api/projects", collaborationRoutes(config, store));

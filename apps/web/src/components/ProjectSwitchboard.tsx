@@ -13,6 +13,7 @@ const destinations = [
   { path: "universe", label: "Graph", icon: Orbit, tone: "cyan" },
   { path: "assistant", label: "Assistant", icon: Bot, tone: "violet" },
   { path: "engineering", label: "Engineering", icon: Rocket, tone: "cyan" },
+  { path: "missions", label: "Missions", icon: GitBranch, tone: "amber" },
   { path: "intelligence", label: "Intelligence", icon: Activity, tone: "rose" },
   { path: "labs", label: "Labs", icon: FlaskConical, tone: "amber" },
   { path: "change-lab", label: "Change Lab", icon: FlaskConical, tone: "cyan" },

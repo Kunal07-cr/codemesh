@@ -27,7 +27,7 @@ export function ProjectEngineeringPage() {
   const base = `/api/projects/${encodeURIComponent(projectId)}/engineering`, projectBase = `/projects/${encodeURIComponent(projectId)}`;
   const query = useQuery({ queryKey: ["engineering", projectId], queryFn: () => api<Studio>(base), refetchInterval: (state) => state.state.data?.jobs.some((job) => ["queued", "running"].includes(job.status)) ? 1500 : false });
   const [params, setParams] = useSearchParams();
-  const [tab, setTab] = useState(() => ["tasks", "datasets", "connections", "history", "systems"].includes(params.get("tab") ?? "") ? params.get("tab")! : "tasks"), [selected, setSelected] = useState(""), [objective, setObjective] = useState("");
+  const [tab, setTab] = useState(() => ["tasks", "datasets", "connections", "history", "systems"].includes(params.get("tab") ?? "") ? params.get("tab")! : "tasks"), [selected, setSelected] = useState(params.get("run") ?? ""), [objective, setObjective] = useState("");
   const [mode, setMode] = useState<EngineeringRequest["mode"]>("investigate"), [attempts, setAttempts] = useState(2), [error, setError] = useState("");
   const [benchmarkChoice, setBenchmarkChoice] = useState("");
   const [diffPath, setDiffPath] = useState<string | null>(null), [labId, setLabId] = useState("");

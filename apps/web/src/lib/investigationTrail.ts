@@ -10,6 +10,7 @@ export type TrailWaypoint = {
 const sections: Record<string, string> = {
   workspace: "Source workspace", universe: "Code universe", assistant: "AI Assistant",
   engineering: "Engineering Studio",
+  missions: "Mission Studio",
   intelligence: "Intelligence", labs: "Engineering labs", advanced: "Advanced operations",
   "control-room": "Control room", delivery: "Delivery hub", operations: "Production center",
   tasks: "Tasks", discussions: "Discussions", contributions: "Contributions", settings: "Settings",
@@ -24,7 +25,7 @@ export function trailLocation(projectId: string, location: string): Pick<TrailWa
   const section = url.pathname.slice(base.length + 1);
   if (section && !sections[section]) return null;
   const query = new URLSearchParams();
-  for (const key of ["path", "line", "lab", "tab", "view", "run"]) {
+  for (const key of ["path", "line", "lab", "tab", "view", "run", "mission"]) {
     const value = url.searchParams.get(key);
     if (value && value.length <= 1000) query.set(key, value);
   }

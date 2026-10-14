@@ -74,6 +74,7 @@ export function ProjectOverviewPage() {
           { icon: Orbit, label: "Code Universe", to: "universe", tone: "cm-tone-cyan", detail: "Enter the living architecture and follow dependency paths." },
           { icon: Bot, label: "AI Assistant", to: "assistant", tone: "cm-tone-violet", detail: "Ask, investigate, and draft changes." },
           { icon: Rocket, label: "Engineering Studio", to: "engineering", tone: "cm-tone-cyan", detail: "Task evidence, proposed diffs, benchmarks, and confirmed repository contracts." },
+          { icon: Split, label: "Mission Studio", to: "missions", tone: "cm-tone-amber", detail: "Cross-repository plans and human-reviewed evidence handoffs." },
           { icon: FlaskConical, label: "AI Evaluation", to: "evaluation", tone: "cm-tone-cyan", detail: "Run source-grounded benchmarks and inspect evidence failures." },
           { icon: Waypoints, label: "Proof Lab", to: "proof-lab", tone: "cm-tone-mint", detail: "Replay dependency waves, compare boundaries, and inspect reproducible evidence." },
           { icon: GitBranch, label: "Change Experiment Lab", to: "change-lab", tone: "cm-tone-cyan", detail: "Compare executed outcomes, inspect counterexamples, and replay captured evidence." },
