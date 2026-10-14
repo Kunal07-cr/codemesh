@@ -109,8 +109,19 @@ for the answer; context-token values remain estimates, not billed usage.
 
 An engineering run that receives an explicit abstention stops after that attempt
 with `needs_input`. It preserves the assistant's reason, records an unattempted
-proposal, and creates no patch. Clarify the task or review the flagged source
-before starting a new run. Local requests without a supported explicit edit
+proposal, and creates no patch. Custom tasks with attempts remaining expose
+**Clarify and continue**: supply 8-2000 characters of additional instructions
+to resume the same run and frozen source. The latest clarification becomes the
+current question, with the original task retained as conversation context;
+older instructions remain in the creator-scoped
+history/report instead of being silently reapplied. `/runs/:runId/clarify` requires
+the observed `expectedAttempt`, ownership, CSRF, current source hashes, an inactive
+job, and `needs_input`. Retry and clarification share a per-run submission lock.
+The existing three-attempt maximum is not increased or reset. Expired budgets,
+cancelled tasks, changed source, and stale/double submissions are rejected.
+Benchmark tasks retain their fixed statements; start a custom task to add instructions.
+Clarification is not verification and never applies a patch automatically.
+Local requests without a supported explicit edit
 also ask for clarification instead of repeating the same task. Relevant source
 links remain available for that local clarification. Transient provider failures
 still use the configured bounded retry policy; human review and restricted-worker requirements are

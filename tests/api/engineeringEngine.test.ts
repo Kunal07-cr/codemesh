@@ -133,6 +133,55 @@ describe("evidence-driven engineering engine", () => {
     } finally { await f.close(); }
   });
 
+  it("continues a frozen task with the latest clarification and creates only an unapplied proposal", async () => {
+    const f = await fixture();
+    try {
+      let run = makeEngineeringRun(f.store, f.projectId, f.userId, engineeringRequestSchema.parse({ objective: "Fix createSessionToken validation", mode: "repair", maxAttempts: 3 }));
+      const baseline = JSON.stringify(f.store.listFiles(f.projectId)), manifest = JSON.stringify(run.manifest);
+      const local = createAiProvider({});
+      let latestQuestion = "", history = "";
+      const provider: AiProvider = { name: "clarified-local", answer(request, context) { latestQuestion = request.question; history = JSON.stringify(request.conversation); return local.answer(request, context); } };
+      const engine = new EngineeringEngine(f.store, loadConfig(), provider);
+      await f.store.saveEngineeringRun(run);
+      const firstJob = await f.store.createOperationJob({ projectId: f.projectId, createdBy: f.userId, type: "engineering.run", metadata: { runId: run.id } });
+      await engine.execute(firstJob);
+      run = f.store.getEngineeringRun(f.projectId, run.id)!;
+      expect(run.status).toBe("needs_input"); expect(run.attempts).toBe(1);
+      const instruction = "In src/auth/session.ts, replace `15m` with `30m`.";
+      run.clarifications = [
+        { instruction: "OLDER_INSTRUCTION: replace `15m` with `60m`.", createdAt: new Date().toISOString(), attempt: 1 },
+        { instruction, createdAt: new Date().toISOString(), attempt: 2 }
+      ];
+      run.status = "queued"; await f.store.saveEngineeringRun(run);
+      const job = await f.store.createOperationJob({ projectId: f.projectId, createdBy: f.userId, type: "engineering.run", metadata: { runId: run.id } });
+      await engine.execute(job);
+      run = f.store.getEngineeringRun(f.projectId, run.id)!;
+      expect(latestQuestion).toBe(instruction); expect(history).toContain(run.objective); expect(history).not.toContain("OLDER_INSTRUCTION");
+      expect(run.status).toBe("awaiting_review"); expect(run.attempts).toBe(2); expect(run.maxAttempts).toBe(3);
+      expect(run.patch?.status).toBe("proposed"); expect(run.patch?.files[0]?.path).toBe("src/auth/session.ts");
+      expect(run.patch?.files[0]?.proposedContent).toContain('expiresIn: "30m"');
+      expect(run.verification.status).toBe("NOT_RUN");
+      expect(JSON.stringify(run.manifest)).toBe(manifest); expect(JSON.stringify(f.store.listFiles(f.projectId))).toBe(baseline);
+      const reopened = await createStore(f.filePath);
+      expect(reopened.getEngineeringRun(f.projectId, run.id)?.clarifications?.at(-1)?.instruction).toBe(instruction);
+      await reopened.close();
+    } finally { await f.close(); }
+  });
+
+  it("does not reapply an original replacement when the latest clarification requests no edit", async () => {
+    const f = await fixture();
+    try {
+      const run = makeEngineeringRun(f.store, f.projectId, f.userId, engineeringRequestSchema.parse({ objective: "In src/auth/session.ts replace `15m` with `60m`", mode: "repair", maxAttempts: 3 }));
+      run.attempts = 1; run.clarifications = [{ instruction: "Do not edit src/auth/session.ts; investigate the expiration first.", createdAt: new Date().toISOString(), attempt: 2 }];
+      await f.store.saveEngineeringRun(run);
+      const job = await f.store.createOperationJob({ projectId: f.projectId, createdBy: f.userId, type: "engineering.run", metadata: { runId: run.id } });
+      await new EngineeringEngine(f.store, loadConfig(), createAiProvider({})).execute(job);
+      const saved = f.store.getEngineeringRun(f.projectId, run.id)!;
+      expect(saved.status).toBe("needs_input"); expect(saved.attempts).toBe(2); expect(saved.patch).toBeUndefined();
+      expect(f.store.listPatches(f.projectId)).toHaveLength(0);
+    } finally { await f.close(); }
+  });
+
   it("cancellation prevents a late provider response from creating a proposal or replacing the cancelled record", async () => {
     const f = await fixture();
     try {

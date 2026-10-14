@@ -75,7 +75,9 @@ export class EngineeringEngine {
     if (run.status === "cancelled") return { runId: run.id, status: "cancelled" };
     const started = performance.now();
     const index = indexRepository(run.projectId, run.revision, run.snapshot);
-    const plan = planAutonomousChange(index, run.objective);
+    const clarification = run.clarifications?.at(-1);
+    const objective = clarification ? `${clarification.instruction}\n\nOriginal task context:\n${run.objective}` : run.objective;
+    const plan = planAutonomousChange(index, objective);
     const step = async (stage: EngineeringStep["stage"], status: EngineeringStep["status"], detail: string, latencyMs = 0) => {
       this.assertActive(job, run);
       run.steps.push({ stage, status, detail: detail.slice(0, 2000), latencyMs: Math.round(latencyMs) });
@@ -85,7 +87,7 @@ export class EngineeringEngine {
       run.status = "running"; run.telemetry.provider = this.provider.name;
       run.targetFiles = plan.targetFiles; run.testsSuggested = plan.verificationCommands;
       await step("understand", "PASS", `${index.files.length} frozen source files and ${index.graph.edges.length} static graph relationships. Revision ${run.revision}.`);
-      const incident = buildIncidentReport(index, "Task investigation", run.objective);
+      const incident = buildIncidentReport(index, "Task investigation", objective);
       run.findings = incident.matchedFiles.slice(0, 5).map((file) => ({ kind: "hypothesis" as const, title: "Source location mentioned in the task", filePath: file.path, detail: "A source match is a candidate, not proof of the defect's cause." }));
       if (run.mode === "security") {
         const security = buildSecurityWorkbench(index);
@@ -97,11 +99,15 @@ export class EngineeringEngine {
         run.attempts++;
         await this.store.saveEngineeringRun(run);
         const before = performance.now();
-        const retrieval = searchRepository(index, run.objective, "graph", 8);
+        const retrieval = searchRepository(index, objective, "graph", 8);
         run.telemetry.contextTokensEstimate += retrieval.hits.reduce((count, hit) => count + Math.ceil(hit.chunk.content.length / 4), 0);
         try {
-          const request = { question: run.objective, mode: run.mode === "repair" || run.mode === "migration" ? "propose" as const : "investigate" as const, retrievalMode: "graph" as const, includeWorkspace: true, knowledgeScope: "repository" as const, conversation: run.repairFeedback ? [{ role: "user" as const, content: `Observed prior worker outcomes, not benchmark reference answers:\n${run.repairFeedback}` }] : [] };
-          // Only the task statement and frozen source enter this provider boundary.
+          const conversation = [
+            ...(clarification ? [{ role: "user" as const, content: `Original task context:\n${run.objective}` }] : []),
+            ...(run.repairFeedback ? [{ role: "user" as const, content: `Observed prior worker outcomes, not benchmark reference answers:\n${run.repairFeedback}` }] : [])
+          ];
+          const request = { question: clarification?.instruction ?? run.objective, mode: run.mode === "repair" || run.mode === "migration" ? "propose" as const : "investigate" as const, retrievalMode: "graph" as const, includeWorkspace: true, knowledgeScope: "repository" as const, conversation };
+          // Latest user clarification takes precedence; benchmark reference data stays excluded.
           const answer = await deadline(this.provider.answer(request, {
             projectId: run.projectId, workspaceId: "main", commitSha: run.revision, index, retrieval,
             workspaceDocs: run.snapshot.map((file) => ({ projectId: run.projectId, workspaceId: "main", path: file.path, content: file.content, version: 0, updatedAt: file.updatedAt }))

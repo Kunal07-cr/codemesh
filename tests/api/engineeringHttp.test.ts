@@ -5,9 +5,81 @@ import request from "supertest";
 import { describe, expect, it } from "vitest";
 import { createApp } from "../../apps/api/src/server";
 import { makeEngineeringRun } from "../../apps/api/src/services/engineeringEngine";
-import { engineeringRequestSchema } from "../../packages/shared/src/index";
+import { engineeringClarificationSchema, engineeringRequestSchema } from "../../packages/shared/src/index";
 
 describe("Engineering Studio HTTP journeys", () => {
+  it.each([
+    { instruction: "short", expectedAttempt: 1 },
+    { instruction: " ".repeat(12), expectedAttempt: 1 },
+    { instruction: "x".repeat(2001), expectedAttempt: 1 },
+    { instruction: "Investigate the session", expectedAttempt: 0 },
+    { instruction: "Investigate the session", expectedAttempt: 1, maxAttempts: 99 }
+  ])("rejects invalid clarification payloads %j", (input) => {
+    expect(engineeringClarificationSchema.safeParse(input).success).toBe(false);
+  });
+
+  it("resumes a creator-owned clarification once without resetting attempts, source or review boundaries", async () => {
+    const directory = await fs.mkdtemp(path.join(os.tmpdir(), "codaventra-clarification-http-"));
+    const keys = ["DATA_PATH", "SESSION_SECRET", "LLM_BASE_URL", "LLM_MODEL", "GEMINI_API_KEY"] as const;
+    const original = Object.fromEntries(keys.map((key) => [key, process.env[key]]));
+    process.env.DATA_PATH = path.join(directory, "state.json"); process.env.SESSION_SECRET = "clarification-test-session-secret-of-at-least-32-characters";
+    process.env.LLM_BASE_URL = ""; process.env.LLM_MODEL = ""; process.env.GEMINI_API_KEY = "";
+    const runtime = await createApp(), owner = request.agent(runtime.app), viewer = request.agent(runtime.app);
+    const projectId = "project-sample-taskpilot", base = `/api/projects/${projectId}/engineering`;
+    try {
+      const login = await owner.post("/api/auth/login").send({ email: "owner@codemesh.dev", password: "CodeMesh123!" }).expect(200);
+      const csrf = (login.headers["set-cookie"] as unknown as string[]).find((cookie) => cookie.startsWith("cm_csrf="))!.split(";")[0]!.slice("cm_csrf=".length);
+      const viewerLogin = await viewer.post("/api/auth/login").send({ email: "viewer@codemesh.dev", password: "CodeMesh123!" }).expect(200);
+      const viewerCsrf = (viewerLogin.headers["set-cookie"] as unknown as string[]).find((cookie) => cookie.startsWith("cm_csrf="))!.split(";")[0]!.slice("cm_csrf=".length);
+      const created = await owner.post(`${base}/runs`).set("x-csrf-token", csrf).send({ objective: "Fix createSessionToken validation", mode: "repair", maxAttempts: 3 }).expect(200);
+      const runId = created.body.data.run.id;
+      for (let count = 0; count < 80 && ["running", "queued"].includes(runtime.store.getOperationJob(created.body.data.job.id)!.status); count++) await new Promise((resolve) => setTimeout(resolve, 50));
+      let run = runtime.store.getEngineeringRun(projectId, runId)!;
+      expect(run.status).toBe("needs_input"); expect(run.attempts).toBe(1);
+      const baseline = JSON.stringify(runtime.store.listFiles(projectId)), manifest = JSON.stringify(run.manifest);
+      const input = { instruction: "In src/auth/session.ts, replace `15m` with `30m`.", expectedAttempt: 1 };
+      await request(runtime.app).post(`${base}/runs/${runId}/clarify`).set("Cookie", "cm_csrf=unauthenticated-fixture").set("x-csrf-token", "unauthenticated-fixture").send(input).expect(401);
+      await owner.post(`${base}/runs/${runId}/clarify`).send(input).expect(403);
+      await viewer.post(`${base}/runs/${runId}/clarify`).set("x-csrf-token", viewerCsrf).send(input).expect(404);
+      await owner.post(`${base}/runs/${runId}/clarify`).set("x-csrf-token", csrf).send({ ...input, maxAttempts: 99 }).expect(422);
+      const continued = await owner.post(`${base}/runs/${runId}/clarify`).set("x-csrf-token", csrf).send(input).expect(200);
+      await owner.post(`${base}/runs/${runId}/clarify`).set("x-csrf-token", csrf).send(input).expect(409);
+      for (let count = 0; count < 80 && ["running", "queued"].includes(runtime.store.getOperationJob(continued.body.data.job.id)!.status); count++) await new Promise((resolve) => setTimeout(resolve, 50));
+      run = runtime.store.getEngineeringRun(projectId, runId)!;
+      expect(run.status).toBe("awaiting_review"); expect(run.attempts).toBe(2); expect(run.maxAttempts).toBe(3);
+      expect(run.objective).toBe("Fix createSessionToken validation"); expect(run.clarifications).toHaveLength(1);
+      expect(run.patch?.status).toBe("proposed"); expect(run.patch?.files[0]?.proposedContent).toContain('expiresIn: "30m"');
+      expect(JSON.stringify(runtime.store.listFiles(projectId))).toBe(baseline); expect(JSON.stringify(run.manifest)).toBe(manifest);
+      const report = await owner.get(`${base}/runs/${runId}/report`).expect(200);
+      expect(report.body.data.payload.run.clarifications[0]).toMatchObject({ instruction: input.instruction, attempt: 2 });
+      expect(report.body.data.payload.commandsExecuted).toEqual([]); expect(report.body.data.payload.run.verification.status).toBe("NOT_RUN");
+      expect(report.body.data.payload.run).not.toHaveProperty("snapshot");
+      await owner.post(`${base}/runs/${runId}/clarify`).set("x-csrf-token", csrf).send({ ...input, expectedAttempt: 2 }).expect(409);
+      await runtime.queue.stop();
+      const blocked = async (status: "needs_input" | "cancelled", attempts = 1) => {
+        const record = makeEngineeringRun(runtime.store, projectId, run.createdBy, engineeringRequestSchema.parse({ objective: "Investigate createSessionToken", maxAttempts: 3 }));
+        record.status = status; record.attempts = attempts; await runtime.store.saveEngineeringRun(record); return record;
+      };
+      const exhausted = await blocked("needs_input", 3);
+      await owner.post(`${base}/runs/${exhausted.id}/clarify`).set("x-csrf-token", csrf).send({ ...input, expectedAttempt: 3 }).expect(409);
+      const cancelled = await blocked("cancelled");
+      await owner.post(`${base}/runs/${cancelled.id}/clarify`).set("x-csrf-token", csrf).send(input).expect(409);
+      const benchmark = await blocked("needs_input"); benchmark.corpusId = "00000000-0000-4000-8000-000000000001"; await runtime.store.saveEngineeringRun(benchmark);
+      await owner.post(`${base}/runs/${benchmark.id}/clarify`).set("x-csrf-token", csrf).send(input).expect(409);
+      const active = await blocked("needs_input");
+      await runtime.store.createOperationJob({ projectId, createdBy: run.createdBy, type: "engineering.run", metadata: { runId: active.id } });
+      await owner.post(`${base}/runs/${active.id}/clarify`).set("x-csrf-token", csrf).send(input).expect(409);
+      const stale = await blocked("needs_input"), file = runtime.store.listFiles(projectId)[0]!;
+      await runtime.store.upsertWorkspaceDoc(projectId, "main", file.path, `${file.content}\n// new revision\n`);
+      await owner.post(`${base}/runs/${stale.id}/clarify`).set("x-csrf-token", csrf).send(input).expect(409);
+      for (const record of [exhausted, cancelled, benchmark, active, stale]) expect(record.clarifications).toBeUndefined();
+    } finally {
+      await runtime.queue.stop(); await runtime.realtime.close(); await runtime.store.close();
+      for (const key of keys) { if (original[key] === undefined) delete process.env[key]; else process.env[key] = original[key]; }
+      await fs.rm(directory, { recursive: true, force: true });
+    }
+  });
+
   it("enforces ownership and CSRF, imports/evaluates fixtures, completes a task and detects stale contract evidence", async () => {
     const directory = await fs.mkdtemp(path.join(os.tmpdir(), "codaventra-engineering-http-"));
     const keys = ["DATA_PATH", "SESSION_SECRET", "LLM_BASE_URL", "LLM_MODEL", "GEMINI_API_KEY"] as const;

@@ -7,6 +7,7 @@ import { LoadingState } from "../components/LoadingState";
 import { api, jsonBody } from "../lib/api";
 import "../engineering.css";
 import { EngineeringSystems } from "../components/EngineeringSystems";
+import { EngineeringClarification } from "../components/EngineeringClarification";
 
 const WorkspaceDiff = lazy(() => import("../components/WorkspaceDiff").then((module) => ({ default: module.WorkspaceDiff })));
 type Evaluation = { rows: Array<{ id: string; status: string; recallAtK: number | null; reason: string }>; metrics: { measured: number; notRun: number; recallAtK: number | null }; limitations: string[] };
@@ -57,6 +58,7 @@ export function ProjectEngineeringPage() {
       <div className="studio-evidence">{run ? <>
         <div className="studio-report-heading"><div><h2>{run.objective}</h2><span className="studio-revision">{run.revision}</span></div><div className="studio-heading-actions"><Badge value={run.verification.status} /><button className="cm-tool-button" title="Download evidence report" aria-label="Download evidence report" onClick={() => void downloadReport()}><Download size={17} /></button>{["queued", "running"].includes(run.status) && <button className="cm-tool-button" title="Cancel task" aria-label="Cancel task" disabled={busy} onClick={() => mutation.mutate({ path: `/runs/${run.id}`, method: "DELETE" })}><Square size={16} /></button>}{run.attempts < run.maxAttempts && (["failed", "needs_input"].includes(run.status) || run.verification.status === "FAIL") && <button className="action-secondary" disabled={busy} onClick={() => mutation.mutate({ path: `/runs/${run.id}/retry` })}><RefreshCw size={16} /> Retry</button>}</div></div>
         <dl className="studio-run-facts"><div><dt>Captured files</dt><dd>{run.manifest.length}</dd></div><div><dt>Context estimate</dt><dd>{run.telemetry.contextTokensEstimate.toLocaleString()} tokens</dd></div><div><dt>Elapsed</dt><dd>{run.telemetry.durationMs} ms</dd></div><div><dt>Billed cost</dt><dd>{run.telemetry.cost === null ? "Unavailable" : run.telemetry.cost}</dd></div></dl>
+        <EngineeringClarification key={`${run.id}:${run.attempts}`} run={run} busy={busy || data.jobs.some((job) => job.metadata?.runId === run.id && ["queued", "running"].includes(job.status))} onSubmit={(instruction, expectedAttempt) => mutation.mutate({ path: `/runs/${run.id}/clarify`, body: { instruction, expectedAttempt } })} />
         <ol className="studio-timeline">{run.steps.map((step, index) => <li key={`${step.stage}-${index}`}><i aria-hidden="true" /><strong>{step.stage}</strong><Badge value={step.status} /><p>{step.detail}</p></li>)}</ol>
         {run.error && <p className="studio-error" role="status">{run.error}</p>}
         {run.answer && <div className="studio-answer"><h3>Investigation</h3><p>{run.answer}</p></div>}

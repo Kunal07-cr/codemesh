@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { Router } from "express";
 import { z } from "zod";
-import { benchmarkImportSchema, contractLinkSchema, engineeringRequestSchema, hasPermission, safeEngineeringPath, type EngineeringRun } from "@codemesh/shared";
+import { benchmarkImportSchema, contractLinkSchema, engineeringClarificationSchema, engineeringRequestSchema, hasPermission, safeEngineeringPath, type EngineeringRun } from "@codemesh/shared";
 import type { AppConfig } from "../config.js";
 import type { JsonStore } from "../db/store.js";
 import { badRequest, conflict, forbidden, notFound } from "../errors.js";
@@ -81,7 +81,7 @@ export function engineeringRoutes(config: AppConfig, store: JsonStore, queue: Op
   router.post("/:projectId/engineering/runs/:runId/retry", requireProjectPermission(store, "ai.query"), limiter, asyncHandler(async (req, res) => {
     parseBody(z.object({}).strict(), req);
     const run = owned(String(req.params.projectId), req.auth!.user.id, String(req.params.runId));
-    await locked(`retry:${run.id}`, async () => {
+    await locked(`resume:${run.id}`, async () => {
       inactive(run); fresh(run);
       if (run.attempts >= run.maxAttempts || run.status === "cancelled" || !(run.status === "needs_input" || run.status === "failed" || run.verification.status === "FAIL")) throw conflict("No repair retry is available for this task.");
       if (run.patch) { run.previousProposals ??= []; run.previousProposals.push({ id: run.patch.id, verification: run.verification.status }); run.patch = undefined; }
@@ -89,6 +89,23 @@ export function engineeringRoutes(config: AppConfig, store: JsonStore, queue: Op
       run.verification = { status: "NOT_RUN", scope: "Retry proposal", detail: "The next proposal needs a new matching worker experiment." };
       await store.saveEngineeringRun(run);
       ok(res, await queue.enqueue(run.projectId, "engineering.run", run.createdBy, { runId: run.id }));
+    });
+  }));
+  router.post("/:projectId/engineering/runs/:runId/clarify", requireProjectPermission(store, "ai.query"), limiter, asyncHandler(async (req, res) => {
+    const input = parseBody(engineeringClarificationSchema, req);
+    const run = owned(String(req.params.projectId), req.auth!.user.id, String(req.params.runId));
+    await locked(`resume:${run.id}`, async () => {
+      inactive(run); fresh(run);
+      if (run.status !== "needs_input" || run.attempts !== input.expectedAttempt || run.attempts >= run.maxAttempts) throw conflict("This task is no longer waiting for input or has no attempts remaining. Refresh the task.");
+      if (run.corpusId) throw conflict("Benchmark tasks keep their fixed statement. Start a custom task for additional instructions.");
+      run.clarifications ??= [];
+      run.clarifications.push({ instruction: input.instruction, createdAt: new Date().toISOString(), attempt: run.attempts + 1 });
+      run.status = "queued"; run.error = undefined; run.completedAt = undefined;
+      run.verification = { status: "NOT_RUN", scope: "Clarified task", detail: "Clarification does not verify a repair. Any new proposal still needs review and a matching worker experiment." };
+      await store.saveEngineeringRun(run);
+      await store.recordAudit({ projectId: run.projectId, userId: run.createdBy, action: "engineering.clarified", metadata: { runId: run.id, attempt: run.attempts + 1 } });
+      const job = await queue.enqueue(run.projectId, "engineering.run", run.createdBy, { runId: run.id });
+      ok(res, { run: publicEngineeringRun(run), job });
     });
   }));
   router.delete("/:projectId/engineering/runs/:runId", requireProjectPermission(store, "ai.query"), asyncHandler(async (req, res) => {

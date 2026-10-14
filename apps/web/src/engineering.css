@@ -36,6 +36,18 @@
 .studio-run-facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .65rem; padding: 1rem 0; border-bottom: 1px solid #263342; }
 .studio-run-facts dt { color: #91a9bc; font-size: .7rem; }
 .studio-run-facts dd { margin-top: .3rem; font-size: .8rem; }
+.studio-clarification { padding: 1rem 0; border-bottom: 1px solid #263342; }
+.studio-clarification form { display: grid; gap: .8rem; }
+.studio-clarification h3, .studio-clarification-actions { display: flex; align-items: center; gap: .5rem; }
+.studio-clarification h3 svg { color: var(--studio-cyan); flex-shrink: 0; }
+.studio-clarification-actions { justify-content: space-between; flex-wrap: wrap; }
+.studio-clarification-actions > span, .studio-clarification-history time { color: #91a9bc; font-size: .75rem; }
+.studio-clarification-actions button { max-width: 100%; white-space: normal; }
+.studio-clarification-history summary { cursor: pointer; color: var(--studio-cyan); font-size: .8rem; }
+.studio-clarification-history + form { margin-top: 1rem; }
+.studio-clarification-history li { padding: .75rem 0; border-bottom: 1px solid #263342; }
+.studio-clarification-history li > div { display: flex; align-items: center; flex-wrap: wrap; gap: .75rem; font-size: .8rem; }
+.studio-clarification-history p { white-space: pre-wrap; overflow-wrap: anywhere; margin-top: .5rem; font-size: .8rem; line-height: 1.7; }
 .studio-timeline { padding: 1rem 0; }
 .studio-timeline li { display: grid; grid-template-columns: 12px 90px auto; gap: .65rem; align-items: center; padding: .65rem 0; }
 .studio-timeline li > i { width: 6px; height: 6px; border-radius: 50%; background: var(--studio-violet); }

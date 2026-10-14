@@ -38,6 +38,10 @@ export const engineeringRequestSchema = z.object({
   corpusId: z.string().uuid().optional(), taskId: z.string().max(200).optional()
 }).strict().refine((value) => Boolean(value.corpusId) === Boolean(value.taskId), "Select both a corpus and task");
 export type EngineeringRequest = z.infer<typeof engineeringRequestSchema>;
+export const engineeringClarificationSchema = z.object({
+  instruction: z.string().trim().min(8).max(2000),
+  expectedAttempt: z.number().int().min(1).max(3)
+}).strict();
 export type EngineeringStep = { stage: "understand" | "investigate" | "plan" | "propose" | "verify" | "report"; status: "PASS" | "FAIL" | "NOT_RUN"; detail: string; latencyMs: number };
 export type EngineeringRun = {
   id: string; projectId: string; createdBy: string; createdAt: string; completedAt?: string;
@@ -52,6 +56,7 @@ export type EngineeringRun = {
   telemetry: { provider: string; durationMs: number; contextTokensEstimate: number; billedTokens: number | null; cost: number | null };
   error?: string;
   repairFeedback?: string;
+  clarifications?: Array<{ instruction: string; createdAt: string; attempt: number }>;
   previousProposals?: Array<{ id: string; verification: "PASS" | "FAIL" | "NOT_RUN" }>;
 };
 export type PublicEngineeringRun = Omit<EngineeringRun, "snapshot">;
