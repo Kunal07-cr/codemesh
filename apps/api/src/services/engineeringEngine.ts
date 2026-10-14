@@ -115,6 +115,11 @@ export class EngineeringEngine {
             return citation.sourceType !== "dataset" && Boolean(lines && citation.excerpt.trim() && lines.includes(citation.excerpt.trim()));
           }).slice(0, 20);
           await step("investigate", run.citations.length ? "PASS" : "FAIL", `${run.citations.length} source-validated citations; provider output is not a verified diagnosis.`, performance.now() - before);
+          if (answer.grounding?.status === "abstained") {
+            await step("propose", "NOT_RUN", "The assistant needs clarified input or reviewed source. No automatic retry or patch was attempted.");
+            run.status = "needs_input";
+            break;
+          }
           if (answer.patch) {
             const patch = validateEngineeringPatch(answer.patch, run);
             this.assertActive(job, run);

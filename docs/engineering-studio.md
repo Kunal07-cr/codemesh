@@ -97,6 +97,30 @@ and base commit. Imported repair/security cases remain NOT RUN in retrieval-only
 evaluation. Retrieval assertions use a joint source index of the imported
 retrieval records; no reference-patch fields enter that index.
 
+## Focused Evidence And Clarification
+
+Repository explain/investigate answers select requested symbols or source paths before
+checking the instruction boundary. Unrelated candidate hits are not sent to the
+model and do not block a focused answer. Full selected files and their included
+workspace drafts are still checked, including comments outside a cited range.
+Proposal mode additionally checks the active or fallback edit document before
+calling the provider. Context records identify the evidence actually selected
+for the answer; context-token values remain estimates, not billed usage.
+
+An engineering run that receives an explicit abstention stops after that attempt
+with `needs_input`. It preserves the assistant's reason, records an unattempted
+proposal, and creates no patch. Clarify the task or review the flagged source
+before starting a new run. Local requests without a supported explicit edit
+also ask for clarification instead of repeating the same task. Relevant source
+links remain available for that local clarification. Transient provider failures
+still use the configured bounded retry policy; human review and restricted-worker requirements are
+unchanged.
+
+The fixed local answer benchmark contains intentional instruction attacks. A
+question about an affected file may remain blocked by this conservative guard,
+even when the underlying function is indexed. Keep these withheld answers
+visible rather than reporting them as successful general LLM answers.
+
 ## Verification and Remaining Integrations
 
 Engineering > Systems adds selected npm-script verification, retained Git source

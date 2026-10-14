@@ -30,7 +30,7 @@ export class EvidenceGroundedProvider implements AiProvider {
     if (context.index.projectId !== context.projectId) throw new Error("Repository evidence does not belong to the selected project.");
     const started = performance.now();
     const plan = classifyRepositoryQuestion(context.index, request.question);
-    const hits = context.retrieval.hits.filter((hit) => isCurrentEvidence(hit, request, context));
+    let hits = context.retrieval.hits.filter((hit) => isCurrentEvidence(hit, request, context));
     const rejected = context.retrieval.hits.length - hits.length;
     const checked = { ...context, retrieval: { ...context.retrieval, hits }, workspaceDocs: request.includeWorkspace ? context.workspaceDocs.filter((doc) => doc.projectId === context.projectId && doc.workspaceId === context.workspaceId) : [] };
     const record = () => ({ id: crypto.randomUUID(), projectId: context.projectId, question: request.question, mode: request.retrievalMode, chunkIds: hits.map((hit) => hit.chunk.id), sourceRevision: request.includeWorkspace ? "workspace-aware" : context.commitSha, model: this.name, embeddingModel: "local lexical/structural (no learned embeddings)", contextTokens: hits.reduce((sum, hit) => sum + hit.chunk.tokenCount, 0), retrievalLatencyMs: context.retrieval.latencyMs, generationLatencyMs: Math.round(performance.now() - started), createdAt: new Date().toISOString() });
@@ -41,15 +41,25 @@ export class EvidenceGroundedProvider implements AiProvider {
       syntheticComparison: request.knowledgeScope === "combined" && context.supplemental && context.supplemental.relevance >= 0.55 ? context.supplemental.answer : undefined,
       uncertainty: limitations.join(" "), grounding: { status, questionType: plan.kind, strategy: context.retrieval.evidence?.strategy ?? "repository lexical/structural retrieval", revision: context.index.commitSha, missing: plan.missing, validatedCitations: citations.filter((item) => item.sourceType === "repository").length, rejectedCitations: invalid, limitations }
     });
-    const exposedPaths = new Set([...hits.map((hit) => hit.chunk.filePath), ...(request.activeFilePath ? [request.activeFilePath] : []),
-      ...(request.mode === "propose" && !hits.length && checked.workspaceDocs[0] ? [checked.workspaceDocs[0].path] : [])]);
-    const inspection = [...context.index.files.filter((file) => exposedPaths.has(file.path)).map((file) => ({ path: file.path, content: file.content })),
-      ...checked.workspaceDocs.filter((doc) => exposedPaths.has(doc.path)).map((doc) => ({ path: doc.path, content: doc.content }))];
-    const unsafe = [...new Set(inspection.filter((item) => repositoryInstructionWarnings(item.content).length).map((item) => item.path))];
-    if (unsafe.length) return finish(`Repository instruction boundary: suspicious assistant-directed instructions were found in ${unsafe.join(", ")}. Review these files before continuing; no provider call or patch was made.`, [], "abstained", ["This is a conservative pattern guard, not a complete prompt-injection detector."]);
+    const unsafeEvidence = (selected: SearchHit[], edit = false) => {
+      const paths = new Set(selected.map((hit) => hit.chunk.filePath));
+      if (edit) {
+        if (request.activeFilePath) paths.add(request.activeFilePath);
+        const target = checked.workspaceDocs.find((doc) => doc.path === request.activeFilePath) ??
+          selected.map((hit) => checked.workspaceDocs.find((doc) => doc.path === hit.chunk.filePath)).find(Boolean) ?? checked.workspaceDocs[0];
+        if (target) paths.add(target.path);
+      }
+      // Scan full selected files, including comments outside a retrieved chunk.
+      const inspection = [...context.index.files.filter((file) => paths.has(file.path)), ...checked.workspaceDocs.filter((doc) => paths.has(doc.path))];
+      return [...new Set(inspection.filter((item) => repositoryInstructionWarnings(item.content).length).map((item) => item.path))];
+    };
+    const blocked = (paths: string[]) => finish(`Repository instruction boundary: suspicious assistant-directed instructions were found in ${paths.join(", ")}. Review these files before continuing; no provider call or patch was made.`, [], "abstained", ["This is a conservative pattern guard, not a complete prompt-injection detector."]);
     if (request.mode === "propose") {
+      const unsafe = unsafeEvidence(hits, true);
+      if (unsafe.length) return blocked(unsafe);
       const result = await this.inner.answer(request, checked);
-      return finish(result.answer, hits.slice(0, 6).map(citation), "source-linked", [result.uncertainty ?? "Proposed edits require human review; no tests were executed."], rejected, result);
+      const status = this.name === "local-repository" && !result.patch ? "abstained" : "source-linked";
+      return finish(result.answer, hits.slice(0, 6).map(citation), status, [result.uncertainty ?? "Proposed edits require human review; no tests were executed."], rejected, result);
     }
     if (/^(hi|hello|hey|what can you do)[!.?\s]*$/i.test(request.question.trim())) return finish("Hello. Ask about a file, symbol, dependency, configuration, or error in this repository. I will show the source and identify missing evidence.", [], "general", []);
     if (plan.kind === "general") {
@@ -83,6 +93,9 @@ export class EvidenceGroundedProvider implements AiProvider {
     }
     const source = focused.slice(0, 8);
     if (!source.length) return finish("I couldn't verify the requested implementation within the indexed source/context budget. Try a specific file or re-index the missing source.", [], "abstained", ["A symbol name alone is not evidence of its behavior."]);
+    hits = source;
+    const unsafe = unsafeEvidence(source);
+    if (unsafe.length) return blocked(unsafe);
     const limitations = ["Source quotes and citation ranges are checked. Interpretations are not mechanically proven; review the cited implementation."];
     if (missingSymbols.length) limitations.push(`Could not verify: ${missingSymbols.join(", ")}. Only the supported parts are answered.`);
     if (context.retrieval.evidence?.contextTruncated) limitations.push("The context budget omitted additional source; this is not a whole-repository inspection.");

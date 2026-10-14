@@ -76,6 +76,28 @@ describe("source evidence safety", () => {
     expect(answer.grounding?.status).toBe("abstained"); expect(answer.citations).toEqual([]); expect(answer.sourceFacts).toBeUndefined();
     expect(answer.answer).toContain("Repository instruction boundary:"); expect(answer.answer).not.toContain("ignore prior instructions");
   });
+  it.each([
+    ["What does MemoryStore extend and how does its save method store a value?", "src/data/MemoryStore.ts", "this.values.set"],
+    ["What STATUS_READY value does src/constants.ts export?", "src/constants.ts", '"ready"']
+  ])("does not let unrelated retrieved files block focused evidence: %s", async (question, path, fact) => {
+    const ctx = context(question);
+    expect(ctx.retrieval.hits.some((hit) => hit.chunk.filePath === "src/domain/deep/nested/normalize.ts")).toBe(true);
+    const answer = await createAiProvider({}).answer(request(question), ctx);
+    expect(answer.grounding?.status).toBe("source-linked"); expect(answer.answer).toContain(fact);
+    expect(answer.citations.every((item) => item.filePath === path)).toBe(true);
+    expect(answer.retrieval.chunkIds).toEqual(answer.citations.map((item) => item.chunkId));
+    expect(answer.retrieval.contextTokens).toBe(ctx.retrieval.hits.filter((hit) => answer.retrieval.chunkIds.includes(hit.chunk.id)).reduce((sum, hit) => sum + hit.chunk.tokenCount, 0));
+  });
+  it("does not send irrelevant suspicious source to a configured model", async () => {
+    const question = "What does MemoryStore extend?";
+    const mocked = vi.fn(async () => Response.json({ choices: [{ message: { content: '{"facts":[{"evidence":1,"quote":"extends BaseStore"}]}' } }] }));
+    vi.stubGlobal("fetch", mocked);
+    const answer = await createAiProvider({ llmBaseUrl: "http://model.test/v1", llmModel: "mock" }).answer(request(question), context(question));
+    expect(answer.grounding?.status).toBe("source-linked"); expect(mocked).toHaveBeenCalledOnce();
+    const options = mocked.mock.calls[0] as unknown as [string, RequestInit];
+    expect(String(options[1].body)).not.toContain("normalizeSlug");
+    expect(String(options[1].body)).not.toContain("ignore prior instructions");
+  });
   it("runs all independent source anchors and categories with actual per-question progress", async () => {
     const progress: number[] = [];
     const provider = createAiProvider({});

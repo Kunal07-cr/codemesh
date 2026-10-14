@@ -92,6 +92,47 @@ describe("evidence-driven engineering engine", () => {
     } finally { await f.close(); }
   });
 
+  it("stops a blocked repair after one attempt and preserves the source for clarification", async () => {
+    const f = await fixture();
+    try {
+      const run = makeEngineeringRun(f.store, f.projectId, f.userId, engineeringRequestSchema.parse({ objective: "Repair guarded source", mode: "repair", maxAttempts: 3 }));
+      const baseline = JSON.stringify(f.store.listFiles(f.projectId));
+      let calls = 0;
+      const local = createAiProvider({});
+      const provider: AiProvider = { name: "blocked-fixture", async answer(request, context) {
+        calls++;
+        const result = await local.answer({ ...request, mode: "explain", question: "Explain missingUnindexedFunction" }, { ...context, retrieval: { ...context.retrieval, hits: [] } });
+        expect(result.grounding?.status).toBe("abstained");
+        return result;
+      } };
+      await f.store.saveEngineeringRun(run);
+      const job = await f.store.createOperationJob({ projectId: f.projectId, createdBy: f.userId, type: "engineering.run", metadata: { runId: run.id } });
+      await new EngineeringEngine(f.store, loadConfig(), provider).execute(job);
+      const saved = f.store.getEngineeringRun(f.projectId, run.id)!;
+      expect(calls).toBe(1); expect(saved.attempts).toBe(1); expect(saved.status).toBe("needs_input");
+      expect(saved.steps.find((step) => step.stage === "propose")?.detail).toContain("No automatic retry");
+      expect(saved.verification.status).toBe("NOT_RUN"); expect(f.store.listPatches(f.projectId)).toHaveLength(0);
+      expect(JSON.stringify(f.store.listFiles(f.projectId))).toBe(baseline);
+    } finally { await f.close(); }
+  });
+
+  it("asks for a clearer local edit rather than repeating an unsupported free-form repair", async () => {
+    const f = await fixture();
+    try {
+      const run = makeEngineeringRun(f.store, f.projectId, f.userId, engineeringRequestSchema.parse({ objective: "Fix createSessionToken validation", mode: "repair", maxAttempts: 3 }));
+      let calls = 0;
+      const local = createAiProvider({});
+      const provider: AiProvider = { name: "local-clarification-fixture", answer(request, context) { calls++; return local.answer(request, context); } };
+      await f.store.saveEngineeringRun(run);
+      const job = await f.store.createOperationJob({ projectId: f.projectId, createdBy: f.userId, type: "engineering.run", metadata: { runId: run.id } });
+      await new EngineeringEngine(f.store, loadConfig(), provider).execute(job);
+      const saved = f.store.getEngineeringRun(f.projectId, run.id)!;
+      expect(calls).toBe(1); expect(saved.attempts).toBe(1); expect(saved.status).toBe("needs_input");
+      expect(saved.answer).toContain("explicit edit instruction"); expect(saved.citations.length).toBeGreaterThan(0);
+      expect(saved.verification.status).toBe("NOT_RUN"); expect(f.store.listPatches(f.projectId)).toHaveLength(0);
+    } finally { await f.close(); }
+  });
+
   it("cancellation prevents a late provider response from creating a proposal or replacing the cancelled record", async () => {
     const f = await fixture();
     try {
