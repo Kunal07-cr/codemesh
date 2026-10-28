@@ -158,6 +158,7 @@ export function ProjectLabsPage() {
         </div>
         <div className="flex flex-wrap gap-2">
           <Link className="action-secondary" to={`/projects/${projectId}/proof-lab`}><FlaskConical className="h-4 w-4" /> Proof Lab</Link>
+          <Link className="action-secondary" to={`/projects/${projectId}/change-lab`}><GitCompareArrows className="h-4 w-4" /> Change Experiment Lab</Link>
           <Link className="action-secondary" to={`/projects/${projectId}/intelligence`}><Activity className="h-4 w-4" /> Intelligence</Link>
           <Link className="action-primary" to={`/projects/${projectId}/workspace`}><Code2 className="h-4 w-4" /> Workspace</Link>
         </div>

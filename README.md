@@ -31,6 +31,15 @@ Implemented in this repository:
 - Unit/integration tests and a reproducible retrieval evaluation script.
 - Engineering Studio: persistent source-grounded tasks, bounded proposal retries, frozen source manifests, reviewable diffs, scoped worker evidence, benchmark provenance/imports, held-out reference isolation, source-history comparisons, and human-confirmed cross-repository links. See [setup and limits](docs/engineering-studio.md).
 - Change Experiment Lab: before/after module probes, export-event replay, boundary cases, controlled file reversions, regression-test drafts, and integrity receipts. Repository execution requires the separate restricted Docker worker; the built-in example is executable without imported code. See [setup and limits](docs/change-experiment-lab.md).
+- Mission Studio: coordinate 2-10 source-grounded tasks across accessible repositories in a dependency graph, with explicit dispatch, reviewed evidence handoffs, clarification follow-ups, stale-source guards, and exportable reports. Missions do not apply patches or publish changes automatically. See [workflow and limits](docs/mission-studio.md).
+- Conversational Agent Lab: synthetic English/Hinglish demo-booking sessions, versioned prompt modes, guarded tool calls, human handoff, and 36 scripted regression cases with Python/SQL analysis. Live voice and telephony integrations are not included. See [evaluation and setup](docs/conversational-agent-lab.md).
+
+## Explore the Current Platform
+
+- [Live Codaventra app](https://codemesh-platform.onrender.com/)
+- [Current source code](https://github.com/Kunal07-cr/codemesh)
+
+After signing in, open a project to access its Workspace, AI Assistant, Engineering Studio, Mission Studio, and Labs. The Labs page links directly to Proof Lab, Change Experiment Lab, Intelligence, and Workspace. Optional integrations and repository-execution workers require the configuration described in their linked guides.
 
 ## Quick Start on Windows
 
