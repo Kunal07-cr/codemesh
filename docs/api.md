@@ -1,83 +1,146 @@
-# API Reference
+# Codaventra API Guide
 
-Base URL: `http://localhost:4200`
+Default local origin: `http://localhost:4200`. Most JSON responses use `{ "data": ... }`; errors use `{ "error": { "code", "message", "details", "requestId" } }`. Streaming, metrics, and external protocols have their own formats.
 
-All successful responses use `{ "data": ... }`. Errors use `{ "error": { "code", "message", "details", "requestId" } }`.
+This guide lists the primary routes. Zod schemas and handlers in [shared types](../packages/shared/src/index.ts) and [API routes](../apps/api/src/routes/) define exact payloads and limits.
 
-## Auth
+## Authentication and Mutation Rules
 
-- `GET /api/auth/me`
-- `POST /api/auth/register`
-- `POST /api/auth/login`
-- `POST /api/auth/refresh`
-- `POST /api/auth/logout`
+Browser clients send session cookies and `x-csrf-token` matching the `cm_csrf` cookie for protected mutations. Login, registration, password recovery/reset, and email verification have dedicated exceptions. Bearer-authenticated MCP, signed GitHub webhooks, and the exact scoped telemetry collector use their own controls.
 
-Unsafe requests require `x-csrf-token` matching the `cm_csrf` cookie, except login and registration.
+Project routes enforce role permissions. Several engineering, mission, conversation, and report records are also creator-scoped. A project role does not grant access to every user's private run.
 
-## Projects
+## Health and Accounts
 
-- `GET /api/projects/discovery?search=`
-- `GET /api/projects/dashboard`
-- `POST /api/projects`
-- `GET /api/projects/:projectId`
-- `GET /api/projects/:projectId/workspace`
-- `GET /api/projects/:projectId/files`
-- `GET /api/projects/:projectId/files/content?path=src/main.ts`
-- `GET /api/projects/:projectId/graph`
-- `POST /api/projects/:projectId/import/sample`
-- `POST /api/projects/:projectId/import/zip/validate`
-- `POST /api/projects/:projectId/import/zip`
-- `GET /api/projects/:projectId/members`
-- `PUT /api/projects/:projectId/members/:userId`
+| Method | Route |
+| --- | --- |
+| GET | `/api/health` |
+| GET | `/api/ready` |
+| GET | `/api/metrics` (configured monitoring bearer token) |
+| GET | `/api/auth/me` |
+| POST | `/api/auth/register`, `/api/auth/login`, `/api/auth/refresh`, `/api/auth/logout` |
+| GET | `/api/auth/sessions` |
+| DELETE | `/api/auth/sessions/:sessionId` |
+| POST | `/api/auth/password/forgot`, `/api/auth/password/reset` |
+| POST | `/api/auth/email/verification`, `/api/auth/email/verify` |
 
-## Collaboration
+Health describes dependency states; readiness returns 503 when persistence is unavailable. An HTTP 200 health response alone does not establish that every optional integration is configured.
 
-- `GET /api/projects/:projectId/discussions`
-- `POST /api/projects/:projectId/discussions`
-- `GET /api/projects/:projectId/discussions/:threadId/replies`
-- `POST /api/projects/:projectId/discussions/:threadId/replies`
-- `GET /api/projects/:projectId/tasks`
-- `POST /api/projects/:projectId/tasks`
-- `PATCH /api/projects/:projectId/tasks/:taskId`
+## Projects and Imports
 
-## AI and Contributions
+Paths below are relative to `/api/projects`.
 
-- `POST /api/projects/:projectId/ai/ask`
-- `GET /api/projects/:projectId/contributions`
-- `POST /api/projects/:projectId/patches/:patchId/apply`
-- `POST /api/projects/:projectId/patches/:patchId/reject`
-- `POST /api/projects/:projectId/contributions/:contributionId/create-pr`
+| Method | Route |
+| --- | --- |
+| GET | `/discovery?search=`, `/dashboard` |
+| POST | `/` |
+| GET | `/:projectId`, `/:projectId/workspace`, `/:projectId/files` |
+| GET | `/:projectId/files/content?path=src/main.ts` |
+| GET | `/:projectId/graph`, `/:projectId/proof`, `/:projectId/intelligence`, `/:projectId/impact` |
+| GET | `/:projectId/labs` |
+| POST | `/:projectId/labs/snapshot` |
+| POST | `/:projectId/import/sample`, `/:projectId/import/github` |
+| POST | `/:projectId/import/zip/validate`, `/:projectId/import/zip` |
+| GET | `/:projectId/members`, `/:projectId/settings/access-check` |
+| PUT | `/:projectId/members/:userId` |
 
-GitHub PR creation currently returns a not-configured or not-completed state unless the GitHub App flow is finished.
+GitHub import accepts `{ "url": "https://github.com/owner/repository", "branch": "optional-branch" }` for public repositories. ZIP endpoints use multipart field `archive`. Import requires management permission and can replace existing indexed source. Path, type, file-count, and archive limits apply.
 
-## Delivery Hub
+## Collaboration and Assistant
 
-- `GET /api/projects/:projectId/delivery`
-- `POST /api/projects/:projectId/delivery/reviews`
-- `POST /api/projects/:projectId/delivery/sandbox`
-- `POST /api/projects/:projectId/delivery/sync`
-- `POST /api/projects/:projectId/delivery/incidents`
-- `POST /api/projects/:projectId/delivery/automation`
-- `POST /api/projects/:projectId/delivery/futures`
-- `POST /api/projects/:projectId/delivery/futures/:runId/reconcile`
-- `POST /api/projects/:projectId/delivery/tokens`
-- `DELETE /api/projects/:projectId/delivery/tokens/:tokenId`
-- `POST /api/projects/:projectId/delivery/shares`
-- `DELETE /api/projects/:projectId/delivery/shares/:shareId`
-- `GET /api/shares/:token`
+Relative to `/api/projects/:projectId`:
 
-## MCP
+| Methods | Route |
+| --- | --- |
+| GET, POST | `/discussions`, `/discussions/:threadId/replies` |
+| GET, POST | `/tasks` |
+| PATCH, DELETE | `/tasks/:taskId` |
+| PUT | `/tasks/:taskId/work` |
+| GET | `/workspace/history`, `/contributions` |
+| POST | `/patches/:patchId/apply`, `/patches/:patchId/reject` |
+| POST | `/ai/ask`, `/ai/stream` |
+| GET | `/ai/conversations`, `/ai/conversations/:conversationId` |
+| DELETE | `/ai/conversations/:conversationId` |
+| POST | `/ai/conversations/:conversationId/fork` |
+| GET, POST | `/ai/evaluation` |
+| GET | `/ai/dataset`, `/ai/feedback`, `/ai/feedback/:answerId` |
+| PUT | `/ai/feedback/:answerId` |
 
-`POST /api/mcp` implements authenticated JSON-RPC over HTTP. Use a `Bearer cmcp_*` token created in Delivery Hub. The `simulate_change_futures` tool exposes the evidence-grounded Futures Lab to connected engineering agents.
+`/ai/stream` emits server-sent events. Patch application requires current source/base checks. The older `POST /contributions/:contributionId/create-pr` endpoint remains distinct from the guarded Engineering Systems publication flow below.
 
-The precise retrieval surface includes `graph_ontology`, `code_answer`, `code_context`, `search_code`, `fetch_code`, and `query_context`. Broader tools provide repository search, impact analysis, repository health, architecture documentation, generated test plans, incident tracing, Futures Lab simulation, and scoped change planning. Successful tool calls update the token handshake timestamp and append a redacted agent-activity audit event. MCP resources expose non-sensitive indexed files through `codemesh://` URIs.
+Realtime document updates, presence, and chat use Socket.IO. See [WebSocket events](websocket-events.md).
 
-`GET /api/projects/:projectId/intelligence` also returns the Context Observatory payload: measured retrieval traces, estimated whole-repository baselines, delivered and avoided tokens, exact source spans, the current content manifest, and unsynced workspace paths.
+## Engineering Studio
 
-## GitHub Integration
+Relative to `/api/projects/:projectId/engineering`:
 
-- `GET /api/integrations/github/status`
-- `POST /api/integrations/github/webhook`
+- `GET /`: runs, datasets, and available state.
+- `POST /runs`: submit a task.
+- `POST /runs/:runId/clarify` and `POST /runs/:runId/retry`.
+- `DELETE /runs/:runId`: cancellation.
+- `POST /runs/:runId/verification` and `GET /runs/:runId/report`.
+- `POST /datasets`, `POST /datasets/example`, `POST /datasets/:corpusId/evaluate`.
+- `POST /contracts`: confirm a source-anchored cross-repository link.
 
-The webhook requires `x-hub-signature-256`. Push events trigger incremental content sync and pull-request events create graph-aware GitHub Checks when installation credentials are configured.
+See [Engineering Studio](engineering-studio.md) for attempt, source, benchmark, and reference-isolation rules.
 
+## Mission Studio
+
+Relative to `/api/projects/:projectId/missions`:
+
+- `GET /` and `POST /`.
+- `POST /:missionId/dispatch` and `POST /:missionId/cancel`.
+- `POST /:missionId/tasks/:taskId/accept`.
+- `POST /:missionId/tasks/:taskId/recapture`.
+- `GET /:missionId/report`.
+
+Mutations use explicit confirmation and version/evidence checks. See [Mission Studio](mission-studio.md) for the exact request contracts and creator-scoped access.
+
+## Engineering Systems and Conversation Lab
+
+Systems base: `/api/projects/:projectId/engineering/systems`.
+
+- `GET /`: tool state and permissions.
+- `POST /revisions`, `POST /revisions/import`.
+- `GET /revisions/compare`, `GET /revisions/source`.
+- `POST /contracts/check`, `POST /verification`, `POST /redteam`.
+- `GET /scorecard`, `POST /traces`.
+- `POST /telemetry-tokens`, `DELETE /telemetry-tokens/:tokenId`.
+- `POST /publications/approve`, `POST /publications/:publicationId/publish`.
+
+The exact `POST /api/telemetry/:projectId/v1/traces` collector accepts scoped bearer credentials and OTLP/HTTP JSON.
+
+Conversation base: `/api/projects/:projectId/engineering/conversations`.
+
+- `GET /`, `POST /`, `POST /evaluate`.
+- `POST /:runId/turns`, `POST /:runId/feedback`.
+
+See [Engineering Systems](engineering-systems.md) and [Conversational Agent Lab](conversational-agent-lab.md) for consent, source freshness, worker, publication, and synthetic-data boundaries.
+
+## Change Experiment Lab
+
+Relative to `/api/projects/:projectId/change-lab`:
+
+- `GET /` and `POST /example`.
+- `POST /runs`, `GET /runs/:runId`, `DELETE /runs/:runId`.
+- `GET /runs/:runId/receipt`.
+
+See [Change Experiment Lab](change-experiment-lab.md) for supported experiments and execution requirements.
+
+## Delivery, Operations, and External Access
+
+Relative to `/api/projects/:projectId/delivery`:
+
+- `GET /`.
+- `POST /reviews`, `POST /sandbox`, `POST /sync`, `POST /incidents`, `POST /automation`.
+- `POST /futures` and `POST /futures/:runId/reconcile`.
+- `POST /tokens`, `DELETE /tokens/:tokenId`.
+- `POST /shares`, `DELETE /shares/:shareId`.
+
+Production Center uses `GET /api/projects/:projectId/operations`, `POST /api/projects/:projectId/operations/jobs`, and `DELETE /api/projects/:projectId/operations/jobs/:jobId`.
+
+Public report lookup uses `GET /api/shares/:token`. The browser page is `/share/:token`; report scope and expiry still apply.
+
+`POST /api/mcp` implements scoped bearer-authenticated JSON-RPC. Tools include ontology, answer, context, exact search, bounded source fetch, relationships, impact, and change planning. See the [VS Code companion](../apps/vscode-extension/README.md).
+
+GitHub uses `GET /api/integrations/github/status` and signed `POST /api/integrations/github/webhook`. See [GitHub setup](github-setup.md).

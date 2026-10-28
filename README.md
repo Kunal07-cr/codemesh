@@ -1,137 +1,194 @@
-# Codaventra
+<p align="center">
+  <img src="apps/web/public/brand/codaventra-pathfinder-v1.png" width="96" height="96" alt="Codaventra logo">
+</p>
 
-Codaventra is a major-project prototype for graph-assisted repository understanding and AI-supported real-time collaborative development.
+<h1 align="center">Codaventra</h1>
+<p align="center"><strong>Understand the repository. Investigate with evidence. Review every change.</strong></p>
+<p align="center">
+  <a href="https://codemesh-platform.onrender.com/">Live app</a> &middot;
+  <a href="docs/README.md">Documentation</a> &middot;
+  <a href="#quick-start">Quick start</a> &middot;
+  <a href="docs/demo-script.md">Demo walkthrough</a>
+</p>
 
-## Branding and Compatibility
+Codaventra is a repository intelligence and collaborative engineering platform. It connects a source-linked code graph, a shared editor, repository-grounded AI, and human-reviewed agent workflows in one workspace.
 
-The platform is now named Codaventra. The checkout directory, `@codemesh/*`
-workspace packages, VS Code command/settings IDs, authentication cookies, and
-browser-storage keys retain their existing names for compatibility. Existing
-accounts, saved drafts, and exported evidence remain valid. Seeded demo emails
-and the password below are unchanged. The GitHub required-check context retains
-`CodeMesh repository intelligence` so existing branch protections keep working.
-Captured evaluation results and user-owned project names are not rewritten.
-Renaming the source does not change the existing hosted URL or deploy the update.
+Import a GitHub repository or ZIP, trace relationships, ask questions with file-and-line citations, and inspect proposed changes against captured source. Engineering Studio and Mission Studio organize investigation, verification evidence, and cross-repository handoffs.
 
-Implemented in this repository:
+This is a working major-project prototype with optional infrastructure adapters. The sections below distinguish local capabilities from integrations that require configuration.
 
-- React/Vite/TypeScript web app with Tailwind, React Router, TanStack Query, React Flow, Monaco, Socket.IO client, and Yjs.
-- Express/TypeScript API with registration, login, HttpOnly cookies, refresh-token rotation, CSRF checks, CORS allowlist, and role permissions.
-- Seeded TaskPilot repository with file browsing, TypeScript import/symbol indexing, architecture graph, retrieval modes, AI answers with citations, and patch preview/application.
-- Socket.IO + Yjs collaborative document updates, presence, and workspace chat.
-- Discussions, tasks, contribution status, repository imports, advanced code intelligence, and a visual Code Universe.
-- Production Center with readiness scoring, SLO telemetry, release/security gates, AI usage, integration state, and durable maintenance jobs.
-- Delivery Hub with graph-aware pull-request reviews, targeted test plans, incremental indexing, incident tracing, guarded automation missions, expiring reports, and a secure verification boundary.
-- Repository Futures Lab with three competing implementation forecasts, immutable prediction receipts, uncertainty bands, and post-change reconciliation that calibrates later confidence from measured outcomes.
-- Context Observatory with measured retrieval-token reduction, per-question source-span traces, content manifests, and live workspace-drift evidence.
-- MCP server and VS Code companion with purpose-built ontology, answer, context, exact-search, bounded-fetch, and relationship-query tools alongside impact analysis, architecture documentation, incident tracing, and read-only change planning.
-- Atomic local persistence with transparent PostgreSQL state storage when `DATABASE_URL` is configured.
-- Optional Redis Socket.IO fan-out, S3-compatible encrypted repository archives, verified GitHub webhooks, and account-email delivery hooks.
-- Password recovery, email verification, session inventory/revocation, per-user AI limits, Prometheus metrics, CI, CodeQL, and Dependabot.
-- Unit/integration tests and a reproducible retrieval evaluation script.
-- Engineering Studio: persistent source-grounded tasks, bounded proposal retries, frozen source manifests, reviewable diffs, scoped worker evidence, benchmark provenance/imports, held-out reference isolation, source-history comparisons, and human-confirmed cross-repository links. See [setup and limits](docs/engineering-studio.md).
-- Change Experiment Lab: before/after module probes, export-event replay, boundary cases, controlled file reversions, regression-test drafts, and integrity receipts. Repository execution requires the separate restricted Docker worker; the built-in example is executable without imported code. See [setup and limits](docs/change-experiment-lab.md).
-- Mission Studio: coordinate 2-10 source-grounded tasks across accessible repositories in a dependency graph, with explicit dispatch, reviewed evidence handoffs, clarification follow-ups, stale-source guards, and exportable reports. Missions do not apply patches or publish changes automatically. See [workflow and limits](docs/mission-studio.md).
-- Conversational Agent Lab: synthetic English/Hinglish demo-booking sessions, versioned prompt modes, guarded tool calls, human handoff, and 36 scripted regression cases with Python/SQL analysis. Live voice and telephony integrations are not included. See [evaluation and setup](docs/conversational-agent-lab.md).
+## What You Can Do
 
-## Explore the Current Platform
+| Area | Capabilities |
+| --- | --- |
+| Repository workspace | GitHub/ZIP imports, file explorer, Monaco editor, synchronized graph/source navigation, source history, and impact views. Import safety and resource limits apply; binaries and excluded files are not indexed. |
+| Repository-grounded assistant | Source-cited answers, conversation history and branches, feedback, retrieval traces, and reviewable patch proposals. Configurable hosted models or a deterministic local provider. |
+| Collaboration | Yjs/Socket.IO document updates, presence, workspace chat, discussions, tasks, and role-controlled editing/review. |
+| Engineering Studio | Frozen source manifests, bounded investigation/proposal attempts, clarification follow-ups, task search/status filters, benchmark imports, and exportable evidence. |
+| Mission Studio | Dependency graphs for 2-10 tasks across accessible repositories, explicit dispatch, reviewed handoffs, source-drift guards, cancellation, and reports. |
+| Change Experiment Lab | Before/after probes, event replay, boundary cases, regression-test drafts, and integrity receipts. Imported-code execution requires a separate restricted worker. |
+| Engineering Systems | Architecture Time Machine, API Contract Sentinel, runtime-span intake, verified-fix pipelines, evaluation scorecards, instruction-boundary checks, and guarded draft-PR publishing. |
+| Delivery and observability | Graph-aware reviews, targeted test plans, incident tracing, Repository Futures Lab, Context Observatory, expiring reports, MCP tokens, and a VS Code companion. |
+| Operations | Persistence/integration health, job status, SLO telemetry, release/security readiness, AI usage controls, Prometheus metrics, and audit events. |
+| Conversational Agent Lab | Synthetic English/Hinglish demo-booking transcripts, four prompt modes, confirmation guards, handoff, and 36 scripted regression cases with Python/SQL analysis. |
 
-- [Live Codaventra app](https://codemesh-platform.onrender.com/)
-- [Current source code](https://github.com/Kunal07-cr/codemesh)
+The interface also includes a multicolor dark theme, animated repository visuals, page/loading transitions, microinteractions, quick-open navigation, and reduced-motion support.
 
-After signing in, open a project to access its Workspace, AI Assistant, Engineering Studio, Mission Studio, and Labs. The Labs page links directly to Proof Lab, Change Experiment Lab, Intelligence, and Workspace. Optional integrations and repository-execution workers require the configuration described in their linked guides.
+## Typical Workflow
 
-## Quick Start on Windows
+~~~mermaid
+flowchart LR
+  A["Import repository"] --> B["Index files and symbols"]
+  B --> C["Explore graph and source"]
+  C --> D["Ask or investigate"]
+  D --> E["Review cited evidence and proposed diff"]
+  E --> F["Verify on separate worker"]
+  F --> G["Accept evidence or approve a draft PR"]
+~~~
 
-```powershell
-cd C:\Users\LENOVO\Documents\Codex\2026-09-27\mak\outputs\codemesh
-npm.cmd install --cache .\.npm-cache
-npm.cmd run build
-npm.cmd test
-npm.cmd run dev
-```
+Verification and GitHub publication are explicit, separately configured steps. A generated answer or accepted mission handoff does not establish that tests passed.
 
-Open:
+## Quick Start
 
-- App: http://localhost:4200
-- API health: http://localhost:4200/api/health
+Use **Node.js 24** and npm. The declared minimum is Node.js 22.12.0; Node.js 24 is used by CI and the Dockerfile. Python is optional for analysis scripts. No external database or model credentials are required for the local demo.
 
-Seeded accounts all use password `CodeMesh123!`:
+~~~bash
+git clone https://github.com/Kunal07-cr/codemesh.git
+cd codemesh
+npm ci
+npm run build
+npm run start -w @codemesh/api
+~~~
 
-- `owner@codemesh.dev`
-- `maintainer@codemesh.dev`
-- `contributor@codemesh.dev`
-- `viewer@codemesh.dev`
+On Windows, use `npm.cmd` instead of `npm` if PowerShell blocks the npm script.
 
-## Useful Commands
+Open [http://localhost:4200](http://localhost:4200). The API serves the built frontend on the same port.
 
-```powershell
-npm.cmd run seed
-npm.cmd run build
-npm.cmd test
-npm.cmd run evaluate:retrieval
-docker compose -f infra/docker-compose.yml up -d
-```
+### Demo Accounts
 
-## Configuration
+A newly initialized datastore seeds the TaskPilot sample and these demonstration accounts:
 
-Copy `.env.example` to `.env` for local overrides. Leave Gemini and GitHub fields blank to use the deterministic local AI provider and honest GitHub-disabled UI state.
+| Role | Email |
+| --- | --- |
+| Owner | `owner@codemesh.dev` |
+| Maintainer | `maintainer@codemesh.dev` |
+| Contributor | `contributor@codemesh.dev` |
+| Viewer | `viewer@codemesh.dev` |
 
-Without infrastructure variables, Codaventra runs with an atomic JSON datastore and single-instance realtime collaboration. Optional adapters activate automatically:
+Demo password: `CodeMesh123!`. These are public sample credentials, not private secrets. Registration is also available.
 
-- `DATABASE_URL`: PostgreSQL-backed durable application state.
-- `REDIS_URL`: multi-instance Socket.IO fan-out.
-- `S3_*`: encrypted repository archive retention in S3, MinIO, or another compatible service.
-- `GITHUB_*`: HMAC-verified push and pull-request webhooks, installation-token access, incremental private-repository sync, and GitHub Check annotations.
-- `SANDBOX_*`: verification timeout and an explicit execution switch. Keep execution disabled on the API host; enable it only on a dedicated restricted worker.
-- `OIDC_*` and `SCIM_BEARER_TOKEN`: enterprise identity readiness controls.
-- `EMAIL_WEBHOOK_URL`: password-reset and email-verification delivery.
-- `METRICS_TOKEN`: bearer-protected Prometheus export at `/api/metrics`.
-- `LLM_*` or `GEMINI_*`: hosted model generation; grounded local repository answers remain available without a key.
+### Development
 
-Project owners can inspect production configuration at `/projects/:projectId/operations` and run delivery workflows at `/projects/:projectId/delivery`.
+`npm run dev` rebuilds the workspaces and starts the API watcher. For frontend hot reload, build once, then run these in separate terminals from the repository root:
 
-## Verification Results
+~~~bash
+npm run dev -w @codemesh/api
+~~~
 
-Use the same gates that run in GitHub Actions:
+~~~bash
+npm run dev -w @codemesh/web
+~~~
 
-```powershell
-npm.cmd run typecheck
-npm.cmd test
-npm.cmd run build
-npm.cmd audit --omit=dev --audit-level=high
-```
+Open [http://localhost:5173](http://localhost:5173) for the Vite development UI. Its default API target is `http://localhost:4200`.
 
-## Permanent Deployment
+### Configuration
 
-The repository includes a production `Dockerfile` and `render.yaml` blueprint.
-The container builds every workspace, serves the React application from the
-Express API, exposes `/api/health`, and listens on port `10000` for Render.
+[.env.example](.env.example) lists the supported settings and local infrastructure examples. The API reads process environment variables; its npm start/dev scripts do not automatically load a root `.env` file. Export settings in your shell or inject them through your host/container.
 
-Connect this repository to Render and use the blueprint. The app remains fully
-usable with local fallbacks, while Production Center clearly marks unconfigured
-external systems. For durable accounts and imports, attach managed PostgreSQL by
-setting `DATABASE_URL`. Redis, object storage, hosted AI, GitHub App credentials,
-and an email webhook can be enabled independently without rebuilding the image.
+For the simplest demo, leave infrastructure variables unset. The example file contains non-empty PostgreSQL, Redis, and MinIO values; loading it unchanged selects those local services and requires them to be running.
 
-## Known Limitations
+| Setting | Purpose |
+| --- | --- |
+| `SESSION_SECRET`, `WEB_ORIGIN`, `API_ORIGIN`, `APP_PUBLIC_URL` | Session signing and deployment origins. |
+| `DATA_PATH` | Local JSON state location when `DATABASE_URL` is unset. |
+| `DATABASE_URL` | PostgreSQL application-state persistence using JSONB. |
+| `LLM_BASE_URL` + `LLM_MODEL`, optional `LLM_API_KEY` | OpenAI-compatible chat provider; takes priority over Gemini when configured. |
+| `GEMINI_API_KEY` + `GEMINI_MODEL` | Optional Gemini generation provider. |
+| `REDIS_URL` | Socket.IO fan-out; not a distributed job queue. |
+| `S3_*` | Optional encrypted repository archive storage. |
+| `GITHUB_*` | GitHub App credentials, webhooks, checks, and separately enabled publishing. |
+| `CHANGE_LAB_WORKER_*`, `VERIFICATION_WORKER_*` | Dedicated execution-worker connections. |
+| `EMAIL_WEBHOOK_URL`, `METRICS_TOKEN` | Account-email delivery and protected metrics export. |
 
-- Upstream branch creation and pull-request publishing remain separate from the implemented GitHub Check workflow. Private content sync and PR annotations require a configured GitHub App installation.
-- Process execution is disabled by default. Static verification is available everywhere; untrusted repository commands belong on a dedicated container or microVM worker.
-- The PostgreSQL adapter persists the complete state transactionally as JSONB. The normalized Prisma schema remains the longer-term high-volume migration path.
-- Retrieval uses deterministic local lexical/hash-vector scoring unless a hosted provider is configured.
-- Durable jobs execute inside the API process. A dedicated worker service is the next scaling step for CPU-heavy indexing.
-- Yjs documents are durably mirrored into the primary store, while active CRDT state remains process-local.
+See [AI provider setup](docs/gemini-setup.md), [GitHub integration](docs/github-setup.md), and [deployment and backup](docs/deployment-backup.md).
+
+## Technology and Structure
+
+| Layer | Implementation |
+| --- | --- |
+| Web | React, TypeScript, Vite, Tailwind CSS, React Router, TanStack Query, Monaco, React Flow. |
+| API | Express, TypeScript, Zod, cookie sessions, CSRF checks, role permissions, structured logging. |
+| Intelligence | TypeScript AST analysis, graph/hybrid retrieval, source manifests, provider adapters, and evidence evaluation. |
+| Realtime | Socket.IO and Yjs; optional Redis fan-out. |
+| Persistence | Atomic local JSON or PostgreSQL JSONB state; optional S3-compatible archive storage. |
+| Tooling | npm workspaces, Vitest, Python/SQL analysis scripts, Docker, GitHub Actions, CodeQL, Dependabot. |
+
+~~~text
+apps/
+  web/                   React UI and repository workspace
+  api/                   REST, realtime, services, and worker entry points
+  vscode-extension/      Read-only repository intelligence companion
+packages/
+  shared/                Types, validation schemas, roles, and permissions
+  code-intelligence/     Indexing, graphs, retrieval, and change analysis
+  ai/                    Providers, evidence checks, and evaluation logic
+docs/                    Setup, architecture, feature guides, and research
+tests/                   Unit, API, realtime, and UI-logic tests
+scripts/                 Evaluation, history export, and worker harnesses
+samples/                 Seeded TaskPilot source
+prisma/                  Normalized schema and migration reference
+infra/                   Local PostgreSQL, Redis, and MinIO Compose stack
+~~~
+
+## Verification
+
+~~~bash
+npm run build
+npm run typecheck
+npm test
+~~~
+
+The local verification run on **28 October 2026** passed the build, type checks, and **215 tests across 44 test files**. This is a dated local result; use [GitHub Actions](https://github.com/Kunal07-cr/codemesh/actions) for later runs.
+
+Additional commands:
+
+~~~bash
+npm run evaluate:retrieval
+npm run evaluate:accuracy
+npm run evaluate:datasets
+npm run evaluate:conversations --silent
+npm audit --omit=dev --audit-level=high
+~~~
+
+Build first for evaluation scripts that import compiled packages. Evaluation commands can write reports. Audit status and live model quality are separate checks and are not implied by the local test count. Scripted fixtures are regression checks, not general AI-accuracy benchmarks.
+
+## Deployment
+
+The [Dockerfile](Dockerfile) builds and verifies the workspaces, then serves the web app through Express on port `10000`. [render.yaml](render.yaml) describes the existing Render-oriented service configuration.
+
+- Health: `/api/health`; persistence readiness: `/api/ready`.
+- Set deployment origins and a strong session secret through the host environment.
+- Use PostgreSQL or properly backed-up persistent storage for retained accounts and imports.
+- Configure model, email, object storage, and GitHub integrations independently.
+- Keep repository execution off the public API host; workers require separate configuration.
+
+The Render service uses the existing URL [codemesh-platform.onrender.com](https://codemesh-platform.onrender.com/). Repository documentation updates do not verify live deployment health.
+
+## Implementation Boundaries
+
+- Default AI answers use deterministic local retrieval and templates; free-form generation requires a configured model. Citations support traceability, not a guarantee of correctness.
+- Indexing is bounded static analysis. Imported source need not include every file, and relationship extraction is strongest for supported JavaScript/TypeScript patterns.
+- PostgreSQL stores the application's complete state as JSONB. The normalized Prisma schema is not the active runtime repository layer.
+- Jobs and concurrency locks are process-local. PostgreSQL and Redis fan-out alone do not make multiple API instances safe.
+- Verified-fix pipelines and imported-code experiments need dedicated workers. Unavailable execution is reported as not run.
+- Draft PR publishing requires a configured and allowlisted GitHub App, fresh source, matching passing test evidence, and explicit approval. It never merges.
+- Mission handoff acceptance is a review acknowledgement, not a passing test or applied repair.
+- Conversational Agent Lab uses synthetic transcripts. It does not provide live calls, speech recognition, speech synthesis, or real calendar bookings.
 
 ## Documentation
 
-- `docs/progress.md`
-- `docs/engineering-studio.md`
-- `docs/architecture.md`
-- `docs/api.md`
-- `docs/websocket-events.md`
-- `docs/demo-script.md`
-- `docs/github-setup.md`
-- `docs/gemini-setup.md`
-- `docs/deployment-backup.md`
-- `docs/research/literature-survey.md`
+Start with the [documentation index](docs/README.md), [architecture](docs/architecture.md), [demo walkthrough](docs/demo-script.md), and [current implementation status](docs/progress.md).
+
+### Naming Compatibility
+
+The product is **Codaventra**. The repository name, `@codemesh/*` package names, demo accounts, cookies, saved-browser keys, MCP resource scheme, and existing hosted URL retain their original identifiers so integrations and saved data remain compatible.
